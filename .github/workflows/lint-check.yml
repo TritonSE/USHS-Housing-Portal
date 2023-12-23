@@ -7,7 +7,7 @@ on:
 
 jobs:
   backend:
-    name: Backend lint and style check
+    name: Backend 
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -20,7 +20,7 @@ jobs:
           bun install --frozen-lockfile
           bun run lint-check
   frontend:
-    name: Frontend lint and style check
+    name: Frontend
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
