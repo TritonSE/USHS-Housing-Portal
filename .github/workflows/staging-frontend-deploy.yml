@@ -1,0 +1,32 @@
+name: Deploy Frontend (Staging)
+on:
+  push:
+    branches:
+      - main
+    # paths:
+    #   - frontend/*
+
+jobs:
+  build_and_deploy:
+    name: Build and Deploy Frontend
+    runs-on: ubuntu-latest
+    environment:
+      name: Staging
+      url: https://ushs-housing-portal-staging.web.app/
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - name: Install bun
+        uses: oven-sh/setup-bun@v1
+      - name: Build Frontend
+        run: |
+          cd frontend
+          bun install --frozen-lockfile
+          bun run build
+      - name: Deploy Frontend to Staging
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_USHS_HOUSING_PORTAL_STAGING }}"
+          channelId: live
+          projectId: ushs-housing-portal-staging

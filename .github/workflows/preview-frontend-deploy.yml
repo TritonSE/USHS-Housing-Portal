@@ -1,0 +1,29 @@
+name: Deploy Frontend (Preview)
+on:
+  pull_request:
+    branches:
+      - main
+    # paths:
+    #   - frontend/*
+
+jobs:
+  build_and_preview:
+    name: Build and Deploy Frontend Preview
+    if: "${{ github.event.pull_request.head.repo.full_name == github.repository }}"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - name: Install bun
+        uses: oven-sh/setup-bun@v1
+      - name: Build Frontend
+        run: |
+          cd frontend
+          bun install --frozen-lockfile
+          bun run build
+      - name: Deploy Frontend to Preview Channel
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_USHS_HOUSING_PORTAL_STAGING }}"
+          projectId: ushs-housing-portal-staging
