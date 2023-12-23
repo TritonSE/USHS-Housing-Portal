@@ -1,0 +1,34 @@
+name: Lint and Style Checks
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  backend:
+    name: Backend lint and style check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - name: Install bun
+        uses: oven-sh/setup-bun@v1
+      - name: Run checks
+        working-directory: backend
+        run: |
+          bun install --frozen-lockfile
+          bun run lint-check
+  frontend:
+    name: Frontend lint and style check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - name: Install bun
+        uses: oven-sh/setup-bun@v1
+      - name: Run checks
+        working-directory: frontend
+        run: |
+          bun install --frozen-lockfile
+          bun run lint-check
