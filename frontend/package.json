@@ -7,10 +7,11 @@
     "start": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "check-git-hooks": "echo Git hooks not configured yet. You SHOULD NOT see this message unless you are still setting up linting.",
-    "format": "npm run check-git-hooks && prettier --write .",
-    "lint-fix": "npm run check-git-hooks && (eslint --fix --cache --report-unused-disable-directives . || true) && prettier --write .",
-    "lint-check": "npm run check-git-hooks && eslint --cache --report-unused-disable-directives . && prettier --check ."
+    "check-git-hooks": "cd .. && node .secret-scan/secret-scan.js -- --check-git-hooks",
+    "format": "bun run check-git-hooks && prettier --write .",
+    "lint-fix": "bun run check-git-hooks && (eslint --fix --cache --report-unused-disable-directives . || true) && prettier --write .",
+    "lint-check": "bun run check-git-hooks && eslint --cache --report-unused-disable-directives . && prettier --check .",
+    "prepare": "cd .. && husky install .husky"
   },
   "dependencies": {
     "@types/node": "^20.10.5",
@@ -33,6 +34,7 @@
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
+    "husky": "^8.0.3",
     "prettier": "^3.1.1",
     "typescript": "^5.2.2",
     "vite": "^5.0.8"
