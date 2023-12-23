@@ -3,10 +3,10 @@
  */
 
 import "dotenv/config";
-import "express-async-errors";
-import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
+import express, { NextFunction, Request, Response } from "express";
 import { isHttpError } from "http-errors";
+
 import env from "@/config/env";
 import apiRouter from "@/routes/api";
 
@@ -23,7 +23,7 @@ app.use(express.json());
 app.use(
   cors({
     origin: env.FRONTEND_ORIGIN,
-  })
+  }),
 );
 
 // Register API router
@@ -38,7 +38,7 @@ app.use("/api", apiRouter);
  * disabled the eslint error. This should be used sparingly and only in situations where the lint
  * error cannot be fixed in another way.
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
   // 500 is the "internal server error" error code, this will be our fallback
   let statusCode = 500;
