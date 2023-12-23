@@ -1,8 +1,9 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
-import { Login, Home } from "@/pages";
-import { GlobalStyle, theme } from "@/theme";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
+
+import { Home, Login } from "@/pages";
+import { GlobalStyle, theme } from "@/theme";
 
 export default function App() {
   return (

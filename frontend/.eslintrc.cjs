@@ -2,8 +2,8 @@ module.exports = {
   root: true,
   env: { browser: true, es2020: true },
   extends: [
-    'eslint:recommended',
-    'plugin:react-hooks/recommended',
+    "eslint:recommended",
+    "plugin:react-hooks/recommended",
     "plugin:react/recommended",
     "plugin:react/jsx-runtime",
     "plugin:jsx-a11y/strict",
@@ -13,8 +13,8 @@ module.exports = {
     "plugin:import/typescript",
     "prettier",
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs'],
-  parser: '@typescript-eslint/parser',
+  ignorePatterns: ["dist", ".eslintrc.cjs"],
+  parser: "@typescript-eslint/parser",
   parserOptions: {
     project: true,
   },
@@ -23,13 +23,12 @@ module.exports = {
       version: "detect",
     },
   },
-  plugins: ['react-refresh'],
+  plugins: ["react-refresh"],
   rules: {
-    'react-refresh/only-export-components': [
-      'warn',
-      { allowConstantExport: true },
-    ],
-    
+    "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
+    // Allow import styled from "styled-components"
+    "import/no-named-as-default": "off",
+
     // Getting the eslint resolver working is left as an exercise to the reader.
     "import/no-unresolved": "off",
 
@@ -87,4 +86,4 @@ module.exports = {
     "@typescript-eslint/no-unnecessary-condition": "off",
     "react-hooks/exhaustive-deps": "off",
   },
-}
+};
