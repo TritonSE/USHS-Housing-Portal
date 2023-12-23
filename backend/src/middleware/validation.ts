@@ -14,7 +14,8 @@ const validateRequest: RequestHandler = (req, res, next) => {
 
   if (result.isEmpty()) {
     // No errors, proceed to next handler in the chain
-    return next();
+    next();
+    return;
   }
 
   const allErrors = result.mapped();

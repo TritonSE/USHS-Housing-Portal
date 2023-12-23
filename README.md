@@ -10,6 +10,7 @@ A web application built for [Union Station Homeless Services (USHS)](https://uni
   - [Tools](#tools)
   - [Backend](#backend)
   - [Frontend](#frontend)
+- [Linting / Formatting](#linting--formatting)
 
 ## Getting Started
 
@@ -38,3 +39,11 @@ To get the Vite development server running, run these commands from the root dir
 1. `cd frontend`
 2. `bun install` to install dependencies
 3. `bun run start` to run the development server
+
+## Linting / Formatting
+
+In both the `backend` and `frontend` directories, these commands are available for linting and formatting code:
+
+- `bun run format` - reformats the code without any linting
+- `bun run lint-fix` - fixes auto-fixable lint errors and reformats the code
+- `bun run lint-check` - just check for lint errors or code style issues without modifying any files (e.g. for Git pre-commit hook and CI/CD check)

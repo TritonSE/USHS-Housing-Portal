@@ -2,7 +2,7 @@
  * Business logic for user related operations.
  */
 
-import UserModel from "@/models/user";
+import { UserModel } from "@/models/user";
 
 // Fetch a user from the database
 export async function getUser(id: string) {
@@ -12,7 +12,7 @@ export async function getUser(id: string) {
 }
 
 // Create and save a new user to the database
-export async function createUser(/* TODO */) {
+export function createUser() {
   // TODO
   console.log("Pretend to create a user.");
 }

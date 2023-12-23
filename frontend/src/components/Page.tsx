@@ -13,9 +13,9 @@ const ContentWrapper = styled.div`
 
 const Content = styled.main``;
 
-export interface PageProps {
+export type PageProps = {
   children: React.ReactNode;
-}
+};
 
 export const Page = ({ children }: PageProps) => {
   return (

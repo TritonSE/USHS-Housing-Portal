@@ -1,4 +1,5 @@
 import { Helmet } from "react-helmet-async";
+
 import { Page } from "@/components";
 
 export function Home() {
