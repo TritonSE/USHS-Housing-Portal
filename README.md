@@ -23,6 +23,14 @@ Before you can start developing, you'll need to install these tools:
 
 ### Backend
 
+To get the backend running, run these commands from the root directory of the project:
+
+1. Copy the backend `.env` file (see Slack) into the `backend` directory
+2. `cd backend`
+3. `bun install` to install dependencies
+4. If running the database locally, make sure to [start `mongod`](https://www.mongodb.com/docs/manual/tutorial/manage-mongodb-processes/#start-mongod-processes)
+5. `bun run start` to start the backend
+
 ### Frontend
 
 To get the Vite development server running, run these commands from the root directory of the project:
