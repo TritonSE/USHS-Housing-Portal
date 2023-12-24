@@ -3,8 +3,8 @@ on:
   push:
     branches:
       - main
-    # paths:
-    #   - frontend/*
+    paths:
+      - frontend/*
 
 jobs:
   build_and_deploy:
