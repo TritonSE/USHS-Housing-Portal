@@ -4,7 +4,7 @@ on:
 
 jobs:
   build_and_preview:
-    name: Build and Deploy Branch Preview
+    name: Build and Deploy
     if: "${{ github.event.pull_request.head.repo.full_name == github.repository }}"
     runs-on: ubuntu-latest
     environment: Preview
@@ -23,9 +23,13 @@ jobs:
           cd backend
           bun install --frozen-lockfile
           bun run build
-          echo $ENV_FILE > .env
-        env:
-          ENV_FILE: ${{ secrets.ENV_FILE }}
+      - name: Create Backend .env
+        run: |
+          cd backend
+          touch .env
+          echo NODE_ENV=${{ vars.NODE_ENV }} >> .env
+          echo MONGODB_URI=${{ secrets.MONGODB_URI }} >> .env
+          echo FRONTEND_ORIGIN=${{ vars.FRONTEND_ORIGIN }} >> .env
       - name: Deploy Branch to Preview Channel
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
