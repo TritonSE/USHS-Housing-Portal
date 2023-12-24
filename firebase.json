@@ -14,7 +14,7 @@
       {
         "source": "/api/**",
         "function": {
-          "functionId": "app",
+          "functionId": "backend",
           "pinTag": true
         }
       },

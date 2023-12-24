@@ -21,7 +21,7 @@
     "lint-fix": "bun run check-git-hooks && (eslint --fix --cache --report-unused-disable-directives . || true) && prettier --write .",
     "lint-check": "bun run check-git-hooks && eslint --cache --report-unused-disable-directives . && prettier --check .",
     "check-git-hooks": "cd .. && bun run .secret-scan/secret-scan.js -- --check-git-hooks",
-    "prepare": "cd .. && husky install .husky"
+    "prepare": "if [ -z \"$GOOGLE_FUNCTION_TARGET\" ]; then cd .. && husky install .husky; fi"
   },
   "keywords": [],
   "author": "",
