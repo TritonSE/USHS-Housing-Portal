@@ -7,6 +7,7 @@ jobs:
     name: Build and Deploy Branch Preview
     if: "${{ github.event.pull_request.head.repo.full_name == github.repository }}"
     runs-on: ubuntu-latest
+    environment: Staging
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
