@@ -12,6 +12,13 @@
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
+        "source": "/api/**",
+        "function": {
+          "functionId": "app",
+          "pinTag": true
+        }
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }
