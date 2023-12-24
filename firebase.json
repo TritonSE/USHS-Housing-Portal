@@ -1,23 +1,15 @@
 {
   "functions": [
     {
-      "source": "functions",
+      "runtime": "nodejs18",
+      "source": "backend",
       "codebase": "default",
-      "ignore": [
-        "venv",
-        ".git",
-        "firebase-debug.log",
-        "firebase-debug.*.log"
-      ]
+      "ignore": [".git", "firebase-debug.log", "firebase-debug.*.log"]
     }
   ],
   "hosting": {
     "public": "frontend/dist",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
         "source": "**",
@@ -26,9 +18,6 @@
     ]
   },
   "emulators": {
-    "auth": {
-      "port": 9099
-    },
     "functions": {
       "port": 5001
     },

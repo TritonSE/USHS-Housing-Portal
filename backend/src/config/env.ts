@@ -7,7 +7,8 @@ import { cleanEnv } from "envalid";
 import { port, str } from "envalid/dist/validators";
 
 export default cleanEnv(process.env, {
-  PORT: port(),
+  NODE_ENV: str({ choices: ["development", "production", "staging"] }),
+  PORT: port({ default: 8000 }),
   MONGODB_URI: str(),
   FRONTEND_ORIGIN: str(),
 });
