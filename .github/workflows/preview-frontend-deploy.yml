@@ -1,12 +1,10 @@
-name: Deploy Frontend (Preview)
+name: Deploy Branch Preview
 on:
   pull_request:
-    paths:
-      - frontend/*
 
 jobs:
   build_and_preview:
-    name: Build and Deploy Frontend Preview
+    name: Build and Deploy Branch Preview
     if: "${{ github.event.pull_request.head.repo.full_name == github.repository }}"
     runs-on: ubuntu-latest
     steps:
@@ -19,9 +17,16 @@ jobs:
           cd frontend
           bun install --frozen-lockfile
           bun run build
-      - name: Deploy Frontend to Preview Channel
+      - name: Build Backend
+        run: |
+          cd backend
+          bun install --frozen-lockfile
+          bun run build
+      - name: Deploy Branch to Preview Channel
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_USHS_HOUSING_PORTAL_STAGING }}"
           projectId: ushs-housing-portal-staging
+        env:
+          FIREBASE_CLI_EXPERIMENTS: pintags
