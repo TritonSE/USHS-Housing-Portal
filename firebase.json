@@ -4,12 +4,19 @@
       "runtime": "nodejs18",
       "source": "backend",
       "codebase": "default",
-      "ignore": [".git", "firebase-debug.log", "firebase-debug.*.log"]
+      "ignore": [
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "**/.*",
+        "**/node_modules/**",
+        "**/dist/**"
+      ]
     }
   ],
   "hosting": {
     "public": "frontend/dist",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**", "**/dist/**"],
     "rewrites": [
       {
         "source": "/api/**",

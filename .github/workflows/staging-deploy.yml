@@ -1,0 +1,16 @@
+name: Deploy to Staging
+on:
+  pull_request:
+  # push:
+  #   branches:
+  #     - main
+
+jobs:
+  deploy_staging:
+    name: Deploy to Staging
+    uses: ./.github/workflows/build-and-deploy.yml
+    with:
+      environment: Staging
+      firebaseProjectId: ushs-housing-portal-staging
+      firebaseHostingChannelId: live
+    secrets: inherit
