@@ -9,14 +9,13 @@
         "firebase-debug.log",
         "firebase-debug.*.log",
         "**/.*",
-        "**/node_modules/**",
-        "**/dist/**"
+        "**/node_modules/**"
       ]
     }
   ],
   "hosting": {
     "public": "frontend/dist",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**", "**/dist/**"],
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
         "source": "/api/**",
