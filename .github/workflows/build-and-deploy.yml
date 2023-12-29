@@ -1,13 +1,26 @@
-name: Deploy Branch Preview
+name: Build and Deploy
+
 on:
-  pull_request:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      firebaseProjectId:
+        required: true
+        type: string
+      firebaseHostingChannelId:
+        required: false
+        type: string
+    secrets:
+      firebaseServiceAccount:
+        required: true
 
 jobs:
   build_and_preview:
     name: Build and Deploy
-    if: "${{ github.event.pull_request.head.repo.full_name == github.repository }}"
     runs-on: ubuntu-latest
-    environment: Preview
+    environment: ${{ inputs.environment }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -30,11 +43,12 @@ jobs:
           echo NODE_ENV=${{ vars.NODE_ENV }} >> .env
           echo MONGODB_URI=${{ secrets.MONGODB_URI }} >> .env
           echo FRONTEND_ORIGIN=${{ vars.FRONTEND_ORIGIN }} >> .env
-      - name: Deploy Branch to Preview Channel
+      - name: Deploy to Firebase
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
-          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_USHS_HOUSING_PORTAL_STAGING }}"
-          projectId: ushs-housing-portal-staging
+          firebaseServiceAccount: "${{ secrets.firebaseServiceAccount }}"
+          projectId: ${{ inputs.firebaseProjectId }}
+          channelId: ${{ inputs.firebaseHostingChannelId }}
         env:
-          FIREBASE_CLI_EXPERIMENTS: pintags
+          FIREBASE_CLI_EXPERIMENTS: pintags # This will deploy both the frontend and backend
