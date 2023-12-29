@@ -15,7 +15,7 @@ export const getUserHandler: RequestHandler = asyncHandler(async (req, res, _) =
   const user = await getUser(id);
 
   if (user === null) {
-    throw createHttpError(404, "testing 123. User not found.");
+    throw createHttpError(404, "User not found.");
   }
 
   res.status(200).json(user);
