@@ -1,0 +1,51 @@
+name: Build and Deploy
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      firebaseProjectId:
+        required: true
+        type: string
+      firebaseHostingChannelId:
+        required: false
+        type: string
+
+jobs:
+  build_and_preview:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - name: Install bun
+        uses: oven-sh/setup-bun@v1
+      - name: Build Frontend
+        run: |
+          cd frontend
+          bun install --frozen-lockfile
+          bun run build
+      - name: Build Backend
+        run: |
+          cd backend
+          bun install --frozen-lockfile
+          bun run build
+      - name: Create Backend .env
+        run: |
+          cd backend
+          touch .env
+          echo NODE_ENV=${{ vars.NODE_ENV }} >> .env
+          echo MONGODB_URI=${{ secrets.MONGODB_URI }} >> .env
+          echo FRONTEND_ORIGIN=${{ vars.FRONTEND_ORIGIN }} >> .env
+      - name: Deploy to Firebase
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
+          projectId: ${{ inputs.firebaseProjectId }}
+          channelId: ${{ inputs.firebaseHostingChannelId }}
+        env:
+          FIREBASE_CLI_EXPERIMENTS: pintags # This will deploy both the frontend and backend
