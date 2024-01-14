@@ -1,15 +1,8 @@
-import { body, param } from "express-validator";
+import { body } from "express-validator";
 
 // more info about validators:
 // https://express-validator.github.io/docs/guides/validation-chain
 // https://github.com/validatorjs/validator.js#validators
-
-const objectIdValidator = param("id")
-  .exists()
-  .withMessage("is required")
-  .bail()
-  .isMongoId()
-  .withMessage("must be a MongoDB object ID");
 
 const nameValidator = body("name")
   // name must exist, if not this message will be displayed
@@ -29,7 +22,5 @@ const emailValidator = body("email")
   .withMessage("is required")
   .isEmail()
   .withMessage("is an invalid format");
-
-export const getUser = [objectIdValidator];
 
 export const createUser = [nameValidator, emailValidator];

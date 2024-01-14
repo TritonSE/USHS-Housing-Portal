@@ -13,7 +13,7 @@ type Method = "GET" | "POST" | "PUT";
  * every request. This means in the rest of our code, we can write "/api/foo"
  * instead of "http://localhost:3001/api/foo".
  */
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+const API_BASE_URL = import.meta.env.DEV ? "http://localhost:8000/api" : "/api";
 
 /**
  * A wrapper around the built-in `fetch()` function that abstracts away some of

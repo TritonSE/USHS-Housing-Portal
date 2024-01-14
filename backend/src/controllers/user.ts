@@ -3,22 +3,15 @@
  */
 
 import { RequestHandler } from "express";
-import createHttpError from "http-errors";
 
 import { asyncHandler } from "./wrappers";
 
-import { createUser, getUser } from "@/services/user";
+import { createUser, getUsers } from "@/services/user";
 
-export const getUserHandler: RequestHandler = asyncHandler(async (req, res, _) => {
-  const { id } = req.params;
+export const getUsersHandler: RequestHandler = asyncHandler(async (_req, res, _next) => {
+  const users = await getUsers();
 
-  const user = await getUser(id);
-
-  if (user === null) {
-    throw createHttpError(404, "User not found.");
-  }
-
-  res.status(200).json(user);
+  res.status(200).json(users);
 });
 
 type CreateUserRequestBody = {

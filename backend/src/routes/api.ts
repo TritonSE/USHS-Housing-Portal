@@ -5,6 +5,6 @@ import userRouter from "@/routes/user";
 const router = express.Router();
 
 // Register routers
-router.use("/user", userRouter);
+router.use("/users", userRouter);
 
 export default router;
