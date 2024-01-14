@@ -4,11 +4,11 @@
 
 import { UserModel } from "@/models/user";
 
-// Fetch a user from the database
-export async function getUser(id: string) {
+// Fetch users from the database
+export async function getUsers() {
   // TODO
-  const user = await UserModel.findById(id);
-  return user;
+  const users = await UserModel.find();
+  return users;
 }
 
 // Create and save a new user to the database

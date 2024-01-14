@@ -10,7 +10,7 @@ import * as UserValidator from "@/validators/user";
 
 const router = express.Router();
 
-router.get("/:id", validateWith(UserValidator.getUser), UserController.getUserHandler);
+router.get("/", UserController.getUsersHandler);
 
 router.post("/", validateWith(UserValidator.createUser), UserController.createUserHandler);
 
