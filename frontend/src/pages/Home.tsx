@@ -2,7 +2,8 @@ import React from "react";
 import { Helmet } from "react-helmet-async";
 
 import { getUsers } from "@/api/users";
-import { Page } from "@/components";
+import { Page } from "@/components/Page";
+import { FilterDropdown } from "@/components/FilterDropdown";
 
 export function Home() {
   React.useEffect(() => {
@@ -16,6 +17,7 @@ export function Home() {
         <title>Home | USHS Housing Portal</title>
       </Helmet>
       <h1>This is the home page.</h1>
+      {/* <FilterDropdown></FilterDropdown> */}
     </Page>
   );
 }
