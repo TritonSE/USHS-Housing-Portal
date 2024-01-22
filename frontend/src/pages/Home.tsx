@@ -4,6 +4,7 @@ import { Helmet } from "react-helmet-async";
 import { getUsers } from "@/api/users";
 import { Page } from "@/components/Page";
 import { FilterDropdown } from "@/components/FilterDropdown";
+import { UnitCardGrid } from "@/components/UnitCardGrid";
 
 export function Home() {
   React.useEffect(() => {
@@ -18,6 +19,7 @@ export function Home() {
       </Helmet>
       <h1>This is the home page.</h1>
       {/* <FilterDropdown></FilterDropdown> */}
+      {/* <UnitCardGrid /> */}
     </Page>
   );
 }

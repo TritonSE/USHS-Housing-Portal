@@ -84,7 +84,8 @@ const BedBathText = styled(NumberText)`
   padding-right: 10px;
 `;
 
-export const UnitCard = ({ unit }) => {
+// Hard coded unit data for testing
+const UnitCard = ({ unit }) => {
   return (
     <UnitCardContainer>
       <AvailabilityRow>
@@ -104,3 +105,5 @@ export const UnitCard = ({ unit }) => {
     </UnitCardContainer>
   )
 }
+
+export default UnitCard;
