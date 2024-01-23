@@ -7,8 +7,8 @@ import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
 import { isHttpError } from "http-errors";
 
-import env from "@/config/env";
-import apiRouter from "@/routes/api";
+// import env from "@/config/env";
+// import apiRouter from "@/routes/api";
 
 const app = express();
 
@@ -22,12 +22,12 @@ app.use(express.json());
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin
 app.use(
   cors({
-    origin: env.FRONTEND_ORIGIN,
+    origin: process.env.FRONTEND_ORIGIN,
   }),
 );
 
 // Register API router
-app.use("/api", apiRouter);
+// app.use("/api", apiRouter);
 
 /**
  * Error handler; all errors thrown by server are handled here.
