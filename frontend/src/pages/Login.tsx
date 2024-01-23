@@ -33,11 +33,8 @@ export function Login() {
 
         createUser({ firstName, lastName, email })
           .then((res) => {
-            if (res.success) {
-              navigate("/"); //filler for now
-            } else {
-              alert(res.error);
-            }
+            console.log(res);
+            navigate("/"); //filler for now
           })
           .catch((error) => {
             console.log(error);
