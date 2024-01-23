@@ -17,9 +17,9 @@ export function Home() {
       <Helmet>
         <title>Home | USHS Housing Portal</title>
       </Helmet>
-      <h1>This is the home page.</h1>
-      {/* <FilterDropdown></FilterDropdown> */}
-      {/* <UnitCardGrid /> */}
+      {/* <h1>This is the home page.</h1> */}
+      <FilterDropdown></FilterDropdown>
+      <UnitCardGrid />
     </Page>
   );
 }

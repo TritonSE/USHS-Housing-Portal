@@ -14,13 +14,14 @@ const UnitCardContainer = styled.div`
   background-color: white;
 
   border-radius: 6.5px;
-  border: 1.3px solid #CDCACA;
-  box-shadow: 1.181px 1.181px 2.362px 0px rgba(188, 186, 183, 0.40);
+  border: 1.3px solid #cdcaca;
+  box-shadow: 1.181px 1.181px 2.362px 0px rgba(188, 186, 183, 0.4);
 `;
 
 const UnitCardText = styled.span`
-  color: ${props => props.theme.colors.text};
-  font-family: "Neutra Text";
+  color: ${(props) => props.theme.colors.text};
+  // font-family: "Neutra Text";
+  font-family: "Montserrat";
 `;
 
 const AvailabilityRow = styled.div`
@@ -103,7 +104,7 @@ const UnitCard = ({ unit }) => {
       </BedBathRow>
       <AddressText>1829 Prospect Ave Pasadena, CA 91776</AddressText>
     </UnitCardContainer>
-  )
-}
+  );
+};
 
 export default UnitCard;
