@@ -4,6 +4,7 @@
 
 import "module-alias/register";
 import { onRequest } from "firebase-functions/v2/https";
+import { HttpsError, beforeUserCreated } from "firebase-functions/v2/identity";
 import mongoose from "mongoose";
 
 import app from "@/app";
@@ -27,6 +28,12 @@ mongoose
     }
   })
   .catch(console.error);
-
 // Register our express app as a Firebase Function
 export const backend = onRequest({ region: "us-west1" }, app);
+
+export const beforecreated = beforeUserCreated((event) => {
+  const user = event.data;
+  if (ENVIRONMENT === "production" && !user.email?.includes("@unionstationhs.org")) {
+    throw new HttpsError("invalid-argument", "Unauthorized email");
+  }
+});

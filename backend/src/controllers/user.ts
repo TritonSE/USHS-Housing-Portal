@@ -23,9 +23,11 @@ type CreateUserRequestBody = {
 export const createUserHandler: RequestHandler = asyncHandler(async (req, res, _) => {
   const { firstName, lastName, email } = req.body as CreateUserRequestBody;
 
-  const response = createUser(firstName, lastName, email);
+  const response = await createUser(firstName, lastName, email);
 
-  response !== null
-    ? res.status(200).json({ user: { firstName, lastName, email } })
-    : res.status(400).send("User Already Exists");
+  if (response !== null) {
+    res.status(200).json({ user: { firstName, lastName, email } });
+  } else {
+    res.status(400).send("User Already Exists");
+  }
 });

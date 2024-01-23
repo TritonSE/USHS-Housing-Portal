@@ -15,11 +15,10 @@ export async function createUser(firstName: string, lastName: string, email: str
   // TODO
 
   const users = await UserModel.find({});
-  console.log(typeof users);
   const user = await UserModel.findOne({ firstName, lastName, email });
   let isHL = false;
 
-  if (user == null) {
+  if (user === null) {
     if (users.length === 0) {
       isHL = true;
     }

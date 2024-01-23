@@ -6,3 +6,4 @@ out/
 public/
 next.config.js
 vite.config.ts
+firebase-admin.ts
