@@ -4,7 +4,7 @@ import { body } from "express-validator";
 // https://express-validator.github.io/docs/guides/validation-chain
 // https://github.com/validatorjs/validator.js#validators
 
-const nameValidator = body("name")
+const nameValidator = body("firstName")
   // name must exist, if not this message will be displayed
   .exists()
   .withMessage("is required")
