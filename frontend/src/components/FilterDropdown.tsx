@@ -1,4 +1,5 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
+import { useState } from "react";
 
 const FilterSortContainer = styled.div`
   display: flex;
@@ -55,13 +56,28 @@ const SearchRow = styled.div`
   box-shadow: 1px 1px 2px 0px rgba(188, 186, 183, 0.4);
 `;
 
-const Dropdown = styled.button`
+const FilterSubContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 5px;
+`;
+
+const Dropdown = styled.button<{ active: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   padding: 10px;
   border-radius: 5px;
-  border: 0.5px solid #cdcaca;
+  ${(props) =>
+    props.active
+      ? css`
+          border: 0.5px solid #ec8537;
+        `
+      : css`
+          border: 0.5px solid #cdcaca;
+        `}
   background-color: #fff;
   box-shadow: 1px 1px 2px 0px rgba(188, 186, 183, 0.4);
 `;
@@ -79,11 +95,56 @@ const DropdownIcon = styled.img`
   width: 20px;
 `;
 
+const AvailabilityDropDown = styled.div`
+  position: absolute;
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 20px;
+  background-color: #fff;
+  border: 0.5px solid #ec8537;
+  border-radius: 5px;
+  box-shadow: 1px 1px 2px 0px rgba(188, 186, 183, 0.4);
+  gap: 12px;
+`;
+
+const AvailabilityRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+`;
+
+const FilterRadioButton = styled.img`
+  height: 20px;
+  width: 20px;
+`;
+
 const FilterText = styled.p`
   color: #000;
   font-family: Montserrat;
   font-size: 16px;
   font-weight: 600;
+`;
+
+const ApplyButton = styled.button`
+  border-radius: 5px;
+  background: #b64201;
+  border: 0;
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+`;
+
+const ApplyButtonText = styled.p`
+  color: #fff;
+  text-align: center;
+  font-family: Montserrat;
+  font-size: 14px;
+  font-weight: 300;
 `;
 
 const ResetFilterButton = styled.button`
@@ -121,6 +182,12 @@ const Sort = styled.button`
   margin-left: 95px;
 `;
 
+const DropdownText = styled(Sort)`
+  margin: 0;
+  font-weight: 300;
+  font-size: 12px;
+`;
+
 const SortRow = styled.div`
   display: flex;
   flex-direction: row;
@@ -130,6 +197,7 @@ const SortRow = styled.div`
 `;
 
 export const FilterDropdown = () => {
+  const [availabilityOpen, setAvailabilityOpen] = useState(false);
   return (
     <FilterSortContainer>
       <FilterContainer>
@@ -138,12 +206,49 @@ export const FilterDropdown = () => {
           <SearchIcon src="/search.svg" />
         </SearchRow>
 
-        <Dropdown>
-          <DropdownRow>
-            <FilterText>Availability</FilterText>
-            <DropdownIcon src="/dropdown.svg" />
-          </DropdownRow>
-        </Dropdown>
+        {availabilityOpen ? (
+          <FilterSubContainer>
+            <Dropdown
+              onClick={() => {
+                setAvailabilityOpen(false);
+              }}
+              active={true}
+            >
+              <DropdownRow>
+                <FilterText>Availability</FilterText>
+                <DropdownIcon src="/up_arrow.svg" />
+              </DropdownRow>
+            </Dropdown>
+
+            <AvailabilityDropDown>
+              <AvailabilityRow>
+                <FilterRadioButton src="/filter_radio_button.svg" />
+                <DropdownText>Available</DropdownText>
+              </AvailabilityRow>
+
+              <AvailabilityRow>
+                <FilterRadioButton src="/filter_radio_button.svg" />
+                <DropdownText>Leased</DropdownText>
+              </AvailabilityRow>
+
+              <ApplyButton>
+                <ApplyButtonText>Apply</ApplyButtonText>
+              </ApplyButton>
+            </AvailabilityDropDown>
+          </FilterSubContainer>
+        ) : (
+          <Dropdown
+            onClick={() => {
+              setAvailabilityOpen(true);
+            }}
+            active={false}
+          >
+            <DropdownRow>
+              <FilterText>Availability</FilterText>
+              <DropdownIcon src="/dropdown.svg" />
+            </DropdownRow>
+          </Dropdown>
+        )}
 
         <Dropdown>
           <DropdownRow>
@@ -174,3 +279,5 @@ export const FilterDropdown = () => {
     </FilterSortContainer>
   );
 };
+
+export default FilterDropdown;
