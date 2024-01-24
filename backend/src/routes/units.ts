@@ -1,9 +1,8 @@
 import express from "express";
 const router = express.Router();
 
-router.get('/units/:id', (req, res) => {
-
-});
+// eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
+router.get("/units/:id", (req, res) => {});
 
 /*
 const Unit = require("../models/UnitModel");
