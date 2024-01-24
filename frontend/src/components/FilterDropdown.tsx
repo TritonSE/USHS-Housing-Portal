@@ -161,6 +161,17 @@ const DownPaymentRow = styled.div`
   box-shadow: 1px 1px 2px 0px rgba(228, 227, 226, 0.4);
 `;
 
+const MinMaxBox = styled(DownPaymentRow)`
+  padding: 7px;
+`;
+
+const MinMaxDash = styled.img`
+  width: 10px;
+  height: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
+`;
+
 const DownPaymentInput = styled.input`
   display: flex;
   flex-direction: column;
@@ -180,6 +191,7 @@ const DownPaymentInput = styled.input`
     font-weight: 600;
   }
 `;
+
 const ApplyButton = styled.button`
   border-radius: 5px;
   background: #b64201;
@@ -290,9 +302,32 @@ const AdjustButton = styled.button`
   padding-right: 7px;
 `;
 
+const PlaceholderText = styled.p`
+  color: #cdcaca;
+  font-family: Montserrat;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 600;
+  padding-right: 5px;
+`;
+
+const DownArrowIcon = styled.img`
+    height = 12px;
+    width: 12px;
+`;
+
+const MinMaxRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 4px;
+`;
 export const FilterDropdown = () => {
   const [availabilityOpen, setAvailabilityOpen] = useState(false);
   const [priceOpen, setPriceOpen] = useState(false);
+  const [minPriceOpen, setMinPriceOpen] = useState(false);
+  const [maxPriceOpen, setMaxPriceOpen] = useState(false);
   const [bnbOpen, setBnbOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
   const [available, setAvailable] = useState(false);
@@ -383,6 +418,17 @@ export const FilterDropdown = () => {
             </Dropdown>
             <DropDownPopup>
               <PopupText>Price</PopupText>
+              <MinMaxRow>
+                <MinMaxBox>
+                  <PlaceholderText>No min</PlaceholderText>
+                  <DownArrowIcon src="/down_arrow.svg" />
+                </MinMaxBox>
+                <MinMaxDash src="/min_max_dash.svg" />
+                <MinMaxBox>
+                  <PlaceholderText>No max</PlaceholderText>
+                  <DownArrowIcon src="/down_arrow.svg" />
+                </MinMaxBox>
+              </MinMaxRow>
               <PopupText>Down Payment</PopupText>
               <DownPaymentRow>
                 <DollarIcon src="/dollar.svg" />
