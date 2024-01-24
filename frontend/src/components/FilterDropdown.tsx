@@ -95,7 +95,7 @@ const DropdownIcon = styled.img`
   width: 20px;
 `;
 
-const AvailabilityDropDown = styled.div`
+const DropDownPopup = styled.div`
   position: absolute;
   margin-top: 50px;
   display: flex;
@@ -110,10 +110,10 @@ const AvailabilityDropDown = styled.div`
   gap: 12px;
 `;
 
-const BnbDropdown = styled(AvailabilityDropDown)`
+const BnbDropdown = styled(DropDownPopup)`
   padding-right: 30px;
 `;
-const SortDropDown = styled(AvailabilityDropDown)`
+const SortDropDown = styled(DropDownPopup)`
   margin-top: 35px;
   padding-right: 70px;
 `;
@@ -144,6 +144,42 @@ const PriceFilterText = styled(FilterText)`
   padding-right: 80px;
 `;
 
+const DollarIcon = styled.img`
+  height: 8x;
+  width: 8px;
+`;
+
+const DownPaymentRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 10px;
+  border-radius: 3px;
+  border: 0.5px solid #cdcaca;
+  background: #f5f5f5;
+  box-shadow: 1px 1px 2px 0px rgba(228, 227, 226, 0.4);
+`;
+
+const DownPaymentInput = styled.input`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 3px;
+  margin-left: 3px;
+  margin-right: 3px;
+  min-width: 100%;
+  border: 0;
+  background-color: transparent;
+
+  &::placeholder {
+    color: #cdcaca;
+    font-family: Montserrat;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+  }
+`;
 const ApplyButton = styled.button`
   border-radius: 5px;
   background: #b64201;
@@ -152,14 +188,11 @@ const ApplyButton = styled.button`
   padding-right: 55px;
   padding-top: 8px;
   padding-bottom: 8px;
-`;
-
-const ApplyButtonText = styled.p`
   color: #fff;
-  text-align: center;
   font-family: Montserrat;
   font-size: 14px;
   font-weight: 300;
+  min-width: 100%;
 `;
 
 const ResetFilterButton = styled.button`
@@ -224,7 +257,7 @@ const SortText = styled(Sort)`
   font-size: 14px;
 `;
 
-const BnbText = styled(Sort)`
+const PopupText = styled(Sort)`
   margin: 0;
   font-weight: 700;
   font-size: 14px;
@@ -288,7 +321,7 @@ export const FilterDropdown = () => {
               </DropdownRow>
             </Dropdown>
 
-            <AvailabilityDropDown>
+            <DropDownPopup>
               <AvailabilityRow
                 onClick={() => {
                   setAvailable(!available);
@@ -317,10 +350,8 @@ export const FilterDropdown = () => {
                 <DropdownText>Leased</DropdownText>
               </AvailabilityRow>
 
-              <ApplyButton>
-                <ApplyButtonText>Apply</ApplyButtonText>
-              </ApplyButton>
-            </AvailabilityDropDown>
+              <ApplyButton>Apply</ApplyButton>
+            </DropDownPopup>
           </FilterSubContainer>
         ) : (
           <Dropdown
@@ -350,7 +381,15 @@ export const FilterDropdown = () => {
                 <DropdownIcon src="/up_arrow.svg" />
               </DropdownRow>
             </Dropdown>
-            <AvailabilityDropDown></AvailabilityDropDown>
+            <DropDownPopup>
+              <PopupText>Price</PopupText>
+              <PopupText>Down Payment</PopupText>
+              <DownPaymentRow>
+                <DollarIcon src="/dollar.svg" />
+                <DownPaymentInput placeholder="0" />
+              </DownPaymentRow>
+              <ApplyButton>Apply</ApplyButton>
+            </DropDownPopup>
           </FilterSubContainer>
         ) : (
           <Dropdown
@@ -366,7 +405,7 @@ export const FilterDropdown = () => {
           </Dropdown>
         )}
 
-        {/* BEDS AND BATH FILTER */}
+        {/* BED AND BATH FILTER */}
         {bnbOpen ? (
           <FilterSubContainer>
             <Dropdown
@@ -381,25 +420,23 @@ export const FilterDropdown = () => {
               </DropdownRow>
             </Dropdown>
             <BnbDropdown>
-              <BnbText>Bedrooms</BnbText>
+              <PopupText>Bedrooms</PopupText>
               <BnbRow>
                 <BedBox>
-                  <BnbText>1+</BnbText>
+                  <PopupText>1+</PopupText>
                 </BedBox>
                 <AdjustButton>+</AdjustButton>
                 <AdjustButton>-</AdjustButton>
               </BnbRow>
-              <BnbText>Baths</BnbText>
+              <PopupText>Baths</PopupText>
               <BnbRow>
                 <BathBox>
-                  <BnbText>0.5+</BnbText>
+                  <PopupText>0.5+</PopupText>
                 </BathBox>
                 <AdjustButton>+</AdjustButton>
                 <AdjustButton>-</AdjustButton>
               </BnbRow>
-              <ApplyButton>
-                <ApplyButtonText>Apply</ApplyButtonText>
-              </ApplyButton>
+              <ApplyButton>Apply</ApplyButton>
             </BnbDropdown>
           </FilterSubContainer>
         ) : (
