@@ -19,7 +19,7 @@ const unitSchema = new Schema(
     dateAvailable: { type: Date, required: true },
     availableNow: { type: Boolean, required: true },
     numBeds: { type: Number, required: true },
-    numBaths: { type: Number, rrequired: true },
+    numBaths: { type: Number, required: true },
     appliances: { type: [String], required: true },
     communityFeatures: { type: [String], required: true },
     parking: { type: [String], required: true },
