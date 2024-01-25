@@ -1,5 +1,5 @@
-import { FirebaseError, FirebaseOptions, initializeApp } from "firebase/app";
-import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
+import { FirebaseError } from "firebase/app";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
@@ -9,14 +9,11 @@ import styled from "styled-components";
 
 import { createUser } from "@/api/users";
 import { Page } from "@/components";
+import { auth } from "@/firebase";
 
 export function Login() {
   const [errorMessage, setError] = useState<string>();
 
-  const app = initializeApp(
-    JSON.parse(import.meta.env.VITE_APP_FIREBASE as string) as FirebaseOptions,
-  );
-  const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
   provider.addScope("email");
   provider.addScope("profile");
