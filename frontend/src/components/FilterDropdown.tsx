@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 import { useState } from "react";
 
-const FilterSortContainer = styled.div`
+const AllFiltersContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -11,7 +11,7 @@ const FilterSortContainer = styled.div`
   margin-right: 95px;
 `;
 
-const FilterContainer = styled.div`
+const FiltersFirstRow = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -23,7 +23,7 @@ const FilterContainer = styled.div`
   flex-wrap: wrap;
 `;
 
-const SearchBar = styled.input`
+const SearchBarInput = styled.input`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -44,7 +44,7 @@ const SearchIcon = styled.img`
   width: 20px;
 `;
 
-const SearchRow = styled.div`
+const SearchBarContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -61,7 +61,6 @@ const FilterSubContainer = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  gap: 5px;
 `;
 
 const Dropdown = styled.button<{ active: boolean }>`
@@ -90,19 +89,18 @@ const DropdownRow = styled.div`
   gap: 50px;
 `;
 
-const DropdownIcon = styled.img`
-  height: 20px;
-  width: 20px;
+const BnbDropdownRow = styled(DropdownRow)`
+  gap: 40px;
 `;
 
 const DropDownPopup = styled.div`
   position: absolute;
-  margin-top: 50px;
+  margin-top: 45px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  padding: 15px;
+  padding: 16px;
   background-color: #fff;
   border: 0.5px solid #ec8537;
   border-radius: 5px;
@@ -110,13 +108,6 @@ const DropDownPopup = styled.div`
   gap: 12px;
 `;
 
-const BnbDropdown = styled(DropDownPopup)`
-  padding-right: 30px;
-`;
-const SortDropDown = styled(DropDownPopup)`
-  margin-top: 35px;
-  padding-right: 70px;
-`;
 const AvailabilityRow = styled.div`
   display: flex;
   flex-direction: row;
@@ -128,26 +119,52 @@ const BnbRow = styled(AvailabilityRow)`
   gap: 13px;
 `;
 
+const DropdownIcon = styled.img`
+  height: 20px;
+  width: 20px;
+`;
+
 const FilterRadioButton = styled.img`
   height: 20px;
   width: 20px;
 `;
 
-const FilterText = styled.p`
-  color: #000;
-  font-family: Montserrat;
-  font-size: 16px;
-  font-weight: 600;
+const MinMaxDash = styled.img`
+  width: 10px;
+  height: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
 `;
 
-const PriceFilterText = styled(FilterText)`
-  padding-right: 80px;
+const ResetIcon = styled.img`
+  height: 25px;
+  width: 25px;
 `;
 
-const DollarIcon = styled.img`
-  height: 8x;
-  width: 8px;
-`;
+// const DollarIcon = styled.img`
+//   height: 8x;
+//   width: 8px;
+// `;
+
+// const DownPaymentInput = styled.input`
+//   display: flex;
+//   flex-direction: column;
+//   align-items: flex-start;
+//   padding: 3px;
+//   margin-left: 3px;
+//   margin-right: 3px;
+//   min-width: 100%;
+//   border: 0;
+//   background-color: transparent;
+
+//   &::placeholder {
+//     color: #cdcaca;
+//     font-family: Montserrat;
+//     font-size: 14px;
+//     font-style: normal;
+//     font-weight: 600;
+//   }
+// `;
 
 const DownPaymentRow = styled.div`
   display: flex;
@@ -165,31 +182,12 @@ const MinMaxBox = styled(DownPaymentRow)`
   padding: 7px;
 `;
 
-const MinMaxDash = styled.img`
-  width: 10px;
-  height: 10px;
-  margin-left: 5px;
-  margin-right: 5px;
-`;
-
-const DownPaymentInput = styled.input`
+const MinMaxRow = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 3px;
-  margin-left: 3px;
-  margin-right: 3px;
-  min-width: 100%;
-  border: 0;
-  background-color: transparent;
-
-  &::placeholder {
-    color: #cdcaca;
-    font-family: Montserrat;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 600;
-  }
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 4px;
 `;
 
 const ApplyButton = styled.button`
@@ -205,6 +203,17 @@ const ApplyButton = styled.button`
   font-size: 14px;
   font-weight: 300;
   min-width: 100%;
+`;
+
+const FilterText = styled.p`
+  color: #000;
+  font-family: Montserrat;
+  font-size: 16px;
+  font-weight: 600;
+`;
+
+const PriceFilterText = styled(FilterText)`
+  padding-right: 80px;
 `;
 
 const ResetFilterButton = styled.button`
@@ -226,11 +235,6 @@ const ResetFilterRow = styled.div`
   gap: 8px;
 `;
 
-const ResetIcon = styled.img`
-  height: 25px;
-  width: 25px;
-`;
-
 const Sort = styled.button<{ active: boolean }>`
   font-family: Montserrat;
   font-size: 15px;
@@ -249,10 +253,9 @@ const Sort = styled.button<{ active: boolean }>`
         `}
 `;
 
-const DropdownText = styled(Sort)`
-  font-weight: 300;
-  font-size: 12px;
-  margin-left: 0;
+const SortDropDown = styled(DropDownPopup)`
+  margin-top: 30px;
+  padding-right: 70px;
 `;
 
 const SortRow = styled.div`
@@ -261,18 +264,6 @@ const SortRow = styled.div`
   justify-content: flex-center;
   align-items: flex-center;
   gap: 15px;
-`;
-
-const SortText = styled(Sort)`
-  margin: 0;
-  font-weight: 300;
-  font-size: 14px;
-`;
-
-const PopupText = styled(Sort)`
-  margin: 0;
-  font-weight: 700;
-  font-size: 14px;
 `;
 
 const BedBox = styled.div`
@@ -302,6 +293,29 @@ const AdjustButton = styled.button`
   padding-right: 7px;
 `;
 
+const DownArrowIcon = styled.img`
+    height = 12px;
+    width: 12px;
+`;
+
+const PopupBodyText = styled(Sort)`
+  font-weight: 300;
+  font-size: 12px;
+  margin-left: 0;
+`;
+
+const PopupSortText = styled(Sort)`
+  margin: 0;
+  font-weight: 300;
+  font-size: 14px;
+`;
+
+const PopupHeaderText = styled(Sort)`
+  margin: 0;
+  font-weight: 700;
+  font-size: 14px;
+`;
+
 const PlaceholderText = styled.p`
   color: #cdcaca;
   font-family: Montserrat;
@@ -311,18 +325,6 @@ const PlaceholderText = styled.p`
   padding-right: 5px;
 `;
 
-const DownArrowIcon = styled.img`
-    height = 12px;
-    width: 12px;
-`;
-
-const MinMaxRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 4px;
-`;
 export const FilterDropdown = () => {
   const [availabilityOpen, setAvailabilityOpen] = useState(false);
   const [priceOpen, setPriceOpen] = useState(false);
@@ -334,12 +336,12 @@ export const FilterDropdown = () => {
   const [leased, setLeased] = useState(false);
 
   return (
-    <FilterSortContainer>
-      <FilterContainer>
-        <SearchRow>
-          <SearchBar placeholder="Search Property" />
+    <AllFiltersContainer>
+      <FiltersFirstRow>
+        <SearchBarContainer>
+          <SearchBarInput placeholder="Search Property" />
           <SearchIcon src="/search.svg" />
-        </SearchRow>
+        </SearchBarContainer>
 
         {/* AVAILABILITY FILTER */}
         {availabilityOpen ? (
@@ -368,7 +370,7 @@ export const FilterDropdown = () => {
                 ) : (
                   <FilterRadioButton src="/filter_radio_button.svg" />
                 )}
-                <DropdownText>Available</DropdownText>
+                <PopupBodyText>Available</PopupBodyText>
               </AvailabilityRow>
 
               <AvailabilityRow
@@ -382,24 +384,26 @@ export const FilterDropdown = () => {
                 ) : (
                   <FilterRadioButton src="/filter_radio_button.svg" />
                 )}
-                <DropdownText>Leased</DropdownText>
+                <PopupBodyText>Leased</PopupBodyText>
               </AvailabilityRow>
 
               <ApplyButton>Apply</ApplyButton>
             </DropDownPopup>
           </FilterSubContainer>
         ) : (
-          <Dropdown
-            onClick={() => {
-              setAvailabilityOpen(true);
-            }}
-            active={false}
-          >
-            <DropdownRow>
-              <FilterText>Availability</FilterText>
-              <DropdownIcon src="/dropdown.svg" />
-            </DropdownRow>
-          </Dropdown>
+          <FilterSubContainer>
+            <Dropdown
+              onClick={() => {
+                setAvailabilityOpen(true);
+              }}
+              active={false}
+            >
+              <DropdownRow>
+                <FilterText>Availability</FilterText>
+                <DropdownIcon src="/dropdown.svg" />
+              </DropdownRow>
+            </Dropdown>
+          </FilterSubContainer>
         )}
 
         {/* PRICE FILTER */}
@@ -417,7 +421,7 @@ export const FilterDropdown = () => {
               </DropdownRow>
             </Dropdown>
             <DropDownPopup>
-              <PopupText>Price</PopupText>
+              <PopupHeaderText>Price</PopupHeaderText>
               <MinMaxRow>
                 <MinMaxBox>
                   <PlaceholderText>No min</PlaceholderText>
@@ -429,11 +433,11 @@ export const FilterDropdown = () => {
                   <DownArrowIcon src="/down_arrow.svg" />
                 </MinMaxBox>
               </MinMaxRow>
-              <PopupText>Down Payment</PopupText>
+              {/* <PopupHeaderText>Down Payment</PopupHeaderText>
               <DownPaymentRow>
                 <DollarIcon src="/dollar.svg" />
                 <DownPaymentInput placeholder="0" />
-              </DownPaymentRow>
+              </DownPaymentRow> */}
               <ApplyButton>Apply</ApplyButton>
             </DropDownPopup>
           </FilterSubContainer>
@@ -460,30 +464,30 @@ export const FilterDropdown = () => {
               }}
               active={true}
             >
-              <DropdownRow>
+              <BnbDropdownRow>
                 <FilterText>Beds & Bath</FilterText>
                 <DropdownIcon src="/up_arrow.svg" />
-              </DropdownRow>
+              </BnbDropdownRow>
             </Dropdown>
-            <BnbDropdown>
-              <PopupText>Bedrooms</PopupText>
+            <DropDownPopup>
+              <PopupHeaderText>Bedrooms</PopupHeaderText>
               <BnbRow>
                 <BedBox>
-                  <PopupText>1+</PopupText>
+                  <PopupHeaderText>1+</PopupHeaderText>
                 </BedBox>
-                <AdjustButton>+</AdjustButton>
                 <AdjustButton>-</AdjustButton>
+                <AdjustButton>+</AdjustButton>
               </BnbRow>
-              <PopupText>Baths</PopupText>
+              <PopupHeaderText>Baths</PopupHeaderText>
               <BnbRow>
                 <BathBox>
-                  <PopupText>0.5+</PopupText>
+                  <PopupHeaderText>0.5+</PopupHeaderText>
                 </BathBox>
-                <AdjustButton>+</AdjustButton>
                 <AdjustButton>-</AdjustButton>
+                <AdjustButton>+</AdjustButton>
               </BnbRow>
               <ApplyButton>Apply</ApplyButton>
-            </BnbDropdown>
+            </DropDownPopup>
           </FilterSubContainer>
         ) : (
           <Dropdown
@@ -492,10 +496,10 @@ export const FilterDropdown = () => {
             }}
             active={false}
           >
-            <DropdownRow>
+            <BnbDropdownRow>
               <FilterText>Beds & Bath</FilterText>
               <DropdownIcon src="/dropdown.svg" />
-            </DropdownRow>
+            </BnbDropdownRow>
           </Dropdown>
         )}
 
@@ -505,7 +509,7 @@ export const FilterDropdown = () => {
             <ResetFilterText> Reset filters</ResetFilterText>
           </ResetFilterRow>
         </ResetFilterButton>
-      </FilterContainer>
+      </FiltersFirstRow>
 
       {sortOpen ? (
         <FilterSubContainer>
@@ -518,11 +522,11 @@ export const FilterDropdown = () => {
             <DropdownIcon src="/up_arrow.svg" />
           </SortRow>
           <SortDropDown>
-            <SortText>Price (High to Low)</SortText>
-            <SortText>Price (Low to High)</SortText>
-            <SortText>Newest</SortText>
-            <SortText>Bedrooms</SortText>
-            <SortText>Baths</SortText>
+            <PopupSortText>Price (High to Low)</PopupSortText>
+            <PopupSortText>Price (Low to High)</PopupSortText>
+            <PopupSortText>Newest</PopupSortText>
+            <PopupSortText>Bedrooms</PopupSortText>
+            <PopupSortText>Baths</PopupSortText>
           </SortDropDown>
         </FilterSubContainer>
       ) : (
@@ -535,7 +539,7 @@ export const FilterDropdown = () => {
           <DropdownIcon src="/dropdown.svg" />
         </SortRow>
       )}
-    </FilterSortContainer>
+    </AllFiltersContainer>
   );
 };
 
