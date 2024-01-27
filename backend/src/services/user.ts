@@ -12,7 +12,6 @@ export async function getUsers() {
 
 // Create and save a new user to the database
 export async function createUser(firstName: string, lastName: string, email: string) {
-  // TODO
 
   const users = await UserModel.find({});
   const user = await UserModel.findOne({ firstName, lastName, email });
