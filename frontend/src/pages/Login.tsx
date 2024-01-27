@@ -5,8 +5,6 @@ import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-// import app from "../../firebase";
-
 import { createUser } from "@/api/users";
 import { Page } from "@/components";
 import { auth } from "@/firebase";
