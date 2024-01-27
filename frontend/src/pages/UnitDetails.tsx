@@ -1,11 +1,4 @@
-import React, { useState } from "react";
-import { Helmet } from "react-helmet-async";
-import { useParams } from "react-router";
-
-import { Unit, getUnit } from "@/api/units";
-import { Page } from "@/components";
-// import { privateDecrypt } from "crypto";
-
+import React from "react";
 import { render } from "react-dom";
 import styled from "styled-components";
 
@@ -31,8 +24,8 @@ const SectionRow = styled(Row)`
   gap: 10px;
 `;
 
-const SubSectionRow = styled(Row)`
-  justify-content: space-evenly;
+const SectionColumn = styled(Column)`
+  width: 50%;
 `;
 
 const RentPerMonth = styled.h1`
@@ -99,51 +92,51 @@ const UnitDetails = () => (
     <SectionRow>
       <Header>Fees</Header>
     </SectionRow>
-    <SubSectionRow>
-      <Column>
+    <Row>
+      <SectionColumn>
         <StrongText>Security Deposit: </StrongText>
         <ListText> $1390</ListText>
         <StrongText>Payment/Renting Criteria: </StrongText>
         <ListText> Credit check required</ListText>
-      </Column>
-      <Column>
+      </SectionColumn>
+      <SectionColumn>
         <StrongText>Applicaton Fee: </StrongText>
         <ListText> $20</ListText>
         <StrongText>Holding Fee: </StrongText>
         <ListText> Not Applicable</ListText>
-      </Column>
-    </SubSectionRow>
+      </SectionColumn>
+    </Row>
 
     <SectionRow>
       <Header>Housing Specifications</Header>
     </SectionRow>
-    <SubSectionRow>
-      <Column>
+    <Row>
+      <SectionColumn>
         <StrongText>Parking: </StrongText>
         <StrongText>Pets/Animals: </StrongText>
         <StrongText>Appliances: </StrongText>
         <StrongText>Housing Authority: </StrongText>
         <StrongText>Additional Comments from Landlord: </StrongText>
-      </Column>
-      <Column>
+      </SectionColumn>
+      <SectionColumn>
         <StrongText>Accessibility Access: </StrongText>
         <StrongText>Sharing House Acceptable: </StrongText>
         <StrongText>Community/Neighborhood Information: </StrongText>
-      </Column>
-    </SubSectionRow>
+      </SectionColumn>
+    </Row>
 
     <SectionRow>
       <Header>Additional Information</Header>
     </SectionRow>
-    <SubSectionRow>
-      <Column>
+    <Row>
+      <SectionColumn>
         <StrongText>Where Was Unit Found: </StrongText>
         <StrongText>Additional Rules and Regulation: </StrongText>
-      </Column>
-      <Column>
+      </SectionColumn>
+      <SectionColumn>
         <StrongText>Notes from Housing Locator: </StrongText>
-      </Column>
-    </SubSectionRow>
+      </SectionColumn>
+    </Row>
   </Column>
 );
 
