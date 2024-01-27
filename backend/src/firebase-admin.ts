@@ -1,8 +1,8 @@
-const firebase = require("firebase-admin/app");
-const { getAuth } = require("firebase-admin/auth");
+import firebase, { ServiceAccount } from "firebase-admin/app";
+import { getAuth } from "firebase-admin/auth";
 
 firebase.initializeApp({
-  credential: firebase.cert(JSON.parse(process.env.FIREBASE ?? "")),
+  credential: firebase.cert(JSON.parse(process.env.FIREBASE ?? "") as ServiceAccount),
 });
 
 module.exports = { firebaseAuth: getAuth() };
