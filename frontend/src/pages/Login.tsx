@@ -90,9 +90,7 @@ export function Login() {
         <Wrapper>
           <Image src="USHSLogo.png" alt="" />
           <Button
-            onClick={() => {
-              login();
-            }}
+            onClick={login}
           >
             Log in with Google
           </Button>
