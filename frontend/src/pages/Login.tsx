@@ -1,6 +1,6 @@
 import { FirebaseError, FirebaseOptions, initializeApp } from "firebase/app";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -9,6 +9,7 @@ import styled from "styled-components";
 
 import { createUser } from "@/api/users";
 import { Page } from "@/components";
+import { AuthContext } from "@/contexts/AuthContext";
 
 export function Login() {
   const [errorMessage, setError] = useState<string>();
@@ -21,7 +22,13 @@ export function Login() {
   provider.addScope("email");
   provider.addScope("profile");
 
+  const authContext = useContext(AuthContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log(authContext.currentUser);
+    console.log(authContext.signedIn);
+  });
 
   const login = () => {
     signInWithPopup(auth, provider)
