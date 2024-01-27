@@ -25,7 +25,7 @@ const Column = styled.div`
 `;
 
 const DetailsRow = styled(Row)`
-  gap: 10px;
+  gap: 20px;
 `;
 
 const SectionColumn = styled(Column)`
@@ -65,11 +65,22 @@ const Text = styled.div`
 
 `;
 
+const List = styled.ul`
+  margin-top: 0;
+  margin-bottom: 0;
+`;
+
 const StrongText = styled(Text)`
   font-weight: 600;
 `;
 
-const ListText = styled(Text)``;
+const ListText = styled.li`
+  font-family: "Montserrat"
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 150%
+  letter-spacing: 0.4px;
+`;
 
 const Address = styled(Header)``;
 
@@ -105,15 +116,23 @@ const UnitDetails = () => (
     <Row>
       <SectionColumn>
         <StrongText>Security Deposit: </StrongText>
-        <ListText> $1390</ListText>
+        <List>
+          <ListText> $1390</ListText>
+        </List>
         <StrongText>Payment/Renting Criteria: </StrongText>
-        <ListText> Credit check required</ListText>
+        <List>
+          <ListText> Credit check required</ListText>
+        </List>
       </SectionColumn>
       <SectionColumn>
         <StrongText>Applicaton Fee: </StrongText>
-        <ListText> $20</ListText>
+        <List>
+          <ListText> $20</ListText>
+        </List>
         <StrongText>Holding Fee: </StrongText>
-        <ListText> Not Applicable</ListText>
+        <List>
+          <ListText> Not Applicable</ListText>
+        </List>
       </SectionColumn>
     </Row>
 
