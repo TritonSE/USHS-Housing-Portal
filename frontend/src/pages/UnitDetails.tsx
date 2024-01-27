@@ -9,11 +9,11 @@ import { Page } from "@/components";
 import { render } from "react-dom";
 import styled from "styled-components";
 
+
 const Row = styled.div`
   display: flex;
   flex-direction: row;
   background-color: #fbf7f3;
-  padding: 0 11%;
 `;
 
 const Column = styled.div`
@@ -21,18 +21,19 @@ const Column = styled.div`
   flex-direction: column;
   background-color: #fbf7f3;
   jusify-content: evenly-spaced;
+  gap: 16px;
 `;
 
 const DetailsRow = styled(Row)`
   gap: 10px;
 `;
 
-const SectionRow = styled(Row)`
-  gap: 10px;
-`;
-
 const SectionColumn = styled(Column)`
   width: 50%;
+`;
+
+const MainColumn = styled(Column)`
+  padding: 10%;
 `;
 
 const RentPerMonth = styled.h1`
@@ -52,6 +53,7 @@ const Header = styled.div`
   font-family: "Neutra Text";
   line-height: 150%;
   line-spacing: 0.64px;
+  margin-top: 32px;
 `;
 
 const Text = styled.div`
@@ -60,6 +62,7 @@ const Text = styled.div`
   font-size: 20px;
   line-height: 150%
   letter-spacing: 0.4px;
+
 `;
 
 const StrongText = styled(Text)`
@@ -71,7 +74,7 @@ const ListText = styled(Text)``;
 const Address = styled(Header)``;
 
 const UnitDetails = () => (
-  <Column>
+  <MainColumn>
     <Row>
       <RentPerMonth>123/month</RentPerMonth>
     </Row>
@@ -96,9 +99,9 @@ const UnitDetails = () => (
       </Column>
     </DetailsRow>
 
-    <SectionRow>
+    <Row>
       <Header>Fees</Header>
-    </SectionRow>
+    </Row>
     <Row>
       <SectionColumn>
         <StrongText>Security Deposit: </StrongText>
@@ -114,9 +117,9 @@ const UnitDetails = () => (
       </SectionColumn>
     </Row>
 
-    <SectionRow>
+    <Row>
       <Header>Housing Specifications</Header>
-    </SectionRow>
+    </Row>
     <Row>
       <SectionColumn>
         <StrongText>Parking: </StrongText>
@@ -132,9 +135,9 @@ const UnitDetails = () => (
       </SectionColumn>
     </Row>
 
-    <SectionRow>
+    <Row>
       <Header>Additional Information</Header>
-    </SectionRow>
+    </Row>
     <Row>
       <SectionColumn>
         <StrongText>Where Was Unit Found: </StrongText>
@@ -144,7 +147,7 @@ const UnitDetails = () => (
         <StrongText>Notes from Housing Locator: </StrongText>
       </SectionColumn>
     </Row>
-  </Column>
+  </MainColumn>
 );
 
 render(<UnitDetails />, document.getElementById("root"));
