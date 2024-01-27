@@ -1,23 +1,55 @@
-import { FirebaseError, FirebaseOptions, initializeApp } from "firebase/app";
-import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
+import { FirebaseError } from "firebase/app";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-// import app from "../../firebase";
-
 import { createUser } from "@/api/users";
 import { Page } from "@/components";
 import { AuthContext } from "@/contexts/AuthContext";
+import { auth } from "@/firebase";
+
+const Items = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1vh;
+  height: 100vh;
+`;
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 13.67vh;
+  padding: 20vh 364.6px 0vh 365px;
+  // max-height: 70vh;
+`;
+const Button = styled.button`
+  padding: 12px 32px;
+  background-color: #b64201;
+  border-radius: 14px;
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 18px;
+  letter-spacing: 0.32px;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+`;
+const Image = styled.img`
+  width: 600px;
+  height: 250px;
+`;
+const Error = styled.div`
+  color: red;
+`;
 
 export function Login() {
   const [errorMessage, setError] = useState<string>();
 
-  const app = initializeApp(
-    JSON.parse(import.meta.env.VITE_APP_FIREBASE as string) as FirebaseOptions,
-  );
-  const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
   provider.addScope("email");
   provider.addScope("profile");
@@ -58,41 +90,6 @@ export function Login() {
       });
   };
 
-  const Items = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 1vh;
-    height: 100vh;
-  `;
-
-  const Wrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 13.67vh;
-    padding: 20vh 364.6px 0vh 365px;
-    // max-height: 70vh;
-  `;
-  const Button = styled.button`
-    padding: 12px 32px;
-    background-color: #b64201;
-    border-radius: 14px;
-    color: #ffffff;
-    font-family: Montserrat, sans-serif;
-    font-weight: 500;
-    font-size: 18px;
-    letter-spacing: 0.32px;
-    border: none;
-    cursor: pointer;
-    white-space: nowrap;
-  `;
-  const Image = styled.img`
-    width: 600px;
-    height: 250px;
-  `;
-
   return (
     <Page>
       <Helmet>
@@ -101,17 +98,9 @@ export function Login() {
       <Items>
         <Wrapper>
           <Image src="USHSLogo.png" alt="" />
-          <Button
-            onClick={() => {
-              login();
-            }}
-          >
-            Log in with Google
-          </Button>
+          <Button onClick={login}>Log in with Google</Button>
         </Wrapper>
-        {errorMessage && (
-          <div style={{ color: "red", fontFamily: "Montserrat, sans-serif" }}>{errorMessage}</div>
-        )}
+        {errorMessage && <Error>{errorMessage}</Error>}
       </Items>
     </Page>
   );

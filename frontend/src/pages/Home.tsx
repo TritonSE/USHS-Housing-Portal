@@ -1,15 +1,15 @@
-import { getAuth, signOut } from "firebase/auth";
+import { signOut } from "firebase/auth";
 import { useContext } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
 
 import { Page } from "@/components";
 import { AuthContext } from "@/contexts/AuthContext";
+import { auth } from "@/firebase";
 
 export function Home() {
   const authContext = useContext(AuthContext);
   const navigate = useNavigate();
-  const auth = getAuth();
 
   //Everything below is testing for auth context, feel free to delete
   const logOut = () => {
@@ -40,15 +40,12 @@ export function Home() {
       <button
         onClick={() => {
           navigate("/login");
-        }}>Login</button>
-      <button
-        onClick={() => {
-          logOut();
-        }}>Log Out</button>
-      <button
-        onClick={() => {
-          getInfo();
-        }}>Log user info</button>
+        }}
+      >
+        Login
+      </button>
+      <button onClick={logOut}>Log Out</button>
+      <button onClick={getInfo}>Log user info</button>
     </Page>
   );
 }

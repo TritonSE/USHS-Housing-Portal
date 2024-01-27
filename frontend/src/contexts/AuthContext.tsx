@@ -1,6 +1,7 @@
-import { FirebaseOptions, initializeApp } from "firebase/app";
-import { User, getAuth, onAuthStateChanged } from "firebase/auth";
+import { User, onAuthStateChanged } from "firebase/auth";
 import React, { ReactNode, useEffect, useMemo, useState } from "react";
+
+import { auth } from "@/firebase";
 
 type ProviderProps = {
   children: ReactNode;
@@ -15,11 +16,6 @@ export const AuthContext = React.createContext<contextType>({ currentUser: null,
 
 export function AuthProvider({ children }: ProviderProps) {
   const [currentUser, setUser] = useState<User | null>(null);
-
-  const app = initializeApp(
-    JSON.parse(import.meta.env.VITE_APP_FIREBASE as string) as FirebaseOptions,
-  );
-  const auth = getAuth(app);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
