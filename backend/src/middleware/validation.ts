@@ -1,12 +1,12 @@
 /**
  * Request validation middleware
  */
-// import * as firebaseAdmin from "@firebase-admin";
 import { RequestHandler } from "express";
 import { ValidationChain, validationResult } from "express-validator";
 import createHttpError from "http-errors";
 
-const firebaseAdmin = require("../firebase-admin");
+import * as firebaseAdmin from "@/firebase-admin";
+import { UserModel } from "@/models/user";
 
 /**
  * Rejected a request with 400 if it does not meet the validation
@@ -33,7 +33,7 @@ const validateRequest: RequestHandler = (req, res, next) => {
   throw createHttpError(400, errorString);
 };
 
-const validateUser: RequestHandler = (req, res, next) => {
+const validateUser: RequestHandler = async (req, res, next) => {
   const authHeader = req.headers.authorization;
   let token;
 
@@ -43,16 +43,16 @@ const validateUser: RequestHandler = (req, res, next) => {
     return res.status(401).send({ message: "Authorization Token Required" });
   }
 
-  firebaseAdmin.firebaseAuth
-    .verifyIdToken(token)
-    .then((decodedToken: string) => {
-      console.log("DECODED TOKEN");
-      console.log(decodedToken);
-      next();
-    })
-    .catch(() => {
-      res.status(401).send({ message: "Error while decoding token" });
-    });
+  try {
+    const decodedToken = await firebaseAdmin.firebaseAuth.verifyIdToken(token);
+    const email = decodedToken.email;
+
+    const user = await UserModel.findOne({ email });
+    console.log(user);
+    // req.currentUser = user;
+  } catch (error) {
+    return res.status(400).send({ message: "Error finding user " });
+  }
 
   res.status(200).send({ message: "Reached End of Method" });
 };

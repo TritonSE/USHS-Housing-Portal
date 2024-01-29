@@ -8,6 +8,4 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 
-const firebaseAuth = getAuth();
-
-module.exports = { firebaseAuth };
+export const firebaseAuth = getAuth();
