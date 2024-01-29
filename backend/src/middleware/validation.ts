@@ -53,7 +53,17 @@ const validateUser: RequestHandler = async (req, res, next) => {
     return res.status(400).send({ message: "Error finding user " });
   }
 
-  res.status(200).send({ message: "Reached End of Method" });
+  next();
+};
+
+const validateHousingLocator: RequestHandler = async (req, res, next) => {
+  validateUser(req, res, async () => {
+    if (req.body.currentUser.isHousingLocator) {
+      next();
+    } else {
+      res.status(401).send({ message: "Housing Locators only " });
+    }
+  });
 };
 
 /**
@@ -67,4 +77,5 @@ export const validateWith = (validators: ValidationChain[]) => [
   ...validators,
   validateRequest,
   validateUser,
+  validateHousingLocator,
 ];
