@@ -48,8 +48,7 @@ const validateUser: RequestHandler = async (req, res, next) => {
     const email = decodedToken.email;
 
     const user = await UserModel.findOne({ email });
-    console.log(user);
-    // req.currentUser = user;
+    req.body.currentUser = user;
   } catch (error) {
     return res.status(400).send({ message: "Error finding user " });
   }
