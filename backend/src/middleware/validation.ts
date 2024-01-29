@@ -33,31 +33,35 @@ const validateRequest: RequestHandler = (req, res, next) => {
   throw createHttpError(400, errorString);
 };
 
-const validateUser: RequestHandler = async (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  let token;
+const validateUser: RequestHandler = (req, res, next) => {
+  return async () => {
+    const authHeader = req.headers.authorization;
+    let token;
 
-  if (authHeader && authHeader.split(" ")[0] === "Bearer") {
-    token = authHeader.split(" ")[1];
-  } else {
-    return res.status(401).send({ message: "Authorization Token Required" });
-  }
+    if (authHeader && authHeader.split(" ")[0] === "Bearer") {
+      token = authHeader.split(" ")[1];
+    } else {
+      return res.status(401).send({ message: "Authorization Token Required" });
+    }
 
-  try {
-    const decodedToken = await firebaseAdmin.firebaseAuth.verifyIdToken(token);
-    const email = decodedToken.email;
+    try {
+      const decodedToken = await firebaseAdmin.firebaseAuth.verifyIdToken(token);
+      const email = decodedToken.email;
 
-    const user = await UserModel.findOne({ email });
-    req.body.currentUser = user;
-  } catch (error) {
-    return res.status(400).send({ message: "Error finding user " });
-  }
+      const user = await UserModel.findOne({ email });
+      /* eslint-disable-next-line @typescript-eslint/no-unsafe-member-access */
+      req.body.currentUser = user;
+    } catch (error) {
+      return res.status(400).send({ message: "Error finding user " });
+    }
 
-  next();
+    next();
+  };
 };
 
-const validateHousingLocator: RequestHandler = async (req, res, next) => {
-  validateUser(req, res, async () => {
+const validateHousingLocator: RequestHandler = (req, res, next) => {
+  validateUser(req, res, () => {
+    /* eslint-disable-next-line @typescript-eslint/no-unsafe-member-access */
     if (req.body.currentUser.isHousingLocator) {
       next();
     } else {
