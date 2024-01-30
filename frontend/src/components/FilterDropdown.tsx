@@ -6,9 +6,10 @@ const AllFiltersContainer = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  background-color: transparent;
   margin-left: 95px;
   margin-right: 95px;
+  margin-top: 95px;
+  gap: 16px;
 `;
 
 const FiltersFirstRow = styled.div`
@@ -17,16 +18,10 @@ const FiltersFirstRow = styled.div`
   justify-content: flex-start;
   align-items: center;
   gap: 28px;
-  margin-top: 95px;
-  margin-bottom: 16px;
-  background-color: transparent;
   flex-wrap: wrap;
 `;
 
 const SearchBarInput = styled.input`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
   padding: 3px;
   min-width: 16rem;
   border: 0;
@@ -36,6 +31,10 @@ const SearchBarInput = styled.input`
     font-family: Montserrat;
     font-size: 16px;
     font-weight: 600;
+  }
+
+  &:focus {
+    outline: none;
   }
 `;
 
@@ -136,6 +135,16 @@ const MinMaxDash = styled.img`
   margin-right: 5px;
 `;
 
+const DownArrowIcon = styled.img`
+  height: 12px;
+  width: 12px;
+`;
+
+const UpArrowIcon = styled.img`
+  height: 12px;
+  width: 12px;
+`;
+
 const ResetIcon = styled.img`
   height: 25px;
   width: 25px;
@@ -166,19 +175,27 @@ const ResetIcon = styled.img`
 //   }
 // `;
 
-const DownPaymentRow = styled.div`
+// const DownPaymentRow = styled.div`
+//   display: flex;
+//   flex-direction: row;
+//   justify-content: flex-start;
+//   align-items: center;
+//   padding: 10px;
+//   border-radius: 3px;
+//   border: 0.5px solid #cdcaca;
+//   background: #f5f5f5;
+//   box-shadow: 1px 1px 2px 0px rgba(228, 227, 226, 0.4);
+// `;
+
+const MinMaxBox = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  padding: 10px;
   border-radius: 3px;
   border: 0.5px solid #cdcaca;
   background: #f5f5f5;
   box-shadow: 1px 1px 2px 0px rgba(228, 227, 226, 0.4);
-`;
-
-const MinMaxBox = styled(DownPaymentRow)`
   padding: 7px;
 `;
 
@@ -188,6 +205,43 @@ const MinMaxRow = styled.div`
   justify-content: flex-start;
   align-items: center;
   gap: 4px;
+`;
+
+const MinMaxPopup = styled.div`
+  position: absolute;
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  max-height: 85px;
+  overflow: scroll;
+  background-color: #fff;
+  border: 0.5px solid #cdcaca;
+  border-radius: 5px;
+  box-shadow: 1px 1px 2px 0px rgba(228, 227, 226, 0.4);
+`;
+
+const MinMaxPopupButton = styled.button`
+  color: #000;
+  font-family: Montserrat;
+  font-size: 14px;
+  font-weight: 500;
+  border: 0;
+  background-color: transparent;
+  padding: 12px;
+  min-width: 100%;
+
+  &:hover {
+    background: rgba(236, 133, 55, 0.2);
+  }
+`;
+
+const PriceSubcontainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
 `;
 
 const ApplyButton = styled.button`
@@ -291,11 +345,6 @@ const AdjustButton = styled.button`
   padding-bottom: 2px;
   padding-left: 7px;
   padding-right: 7px;
-`;
-
-const DownArrowIcon = styled.img`
-    height = 12px;
-    width: 12px;
 `;
 
 const PopupBodyText = styled(Sort)`
@@ -423,15 +472,52 @@ export const FilterDropdown = () => {
             <DropDownPopup>
               <PopupHeaderText>Price</PopupHeaderText>
               <MinMaxRow>
-                <MinMaxBox>
-                  <PlaceholderText>No min</PlaceholderText>
-                  <DownArrowIcon src="/down_arrow.svg" />
-                </MinMaxBox>
+                <PriceSubcontainer>
+                  <MinMaxBox
+                    onClick={() => {
+                      setMinPriceOpen(!minPriceOpen);
+                    }}
+                  >
+                    <PlaceholderText>No min</PlaceholderText>
+                    {minPriceOpen ? (
+                      <UpArrowIcon src="/price_up_arrow.svg" />
+                    ) : (
+                      <DownArrowIcon src="/down_arrow.svg" />
+                    )}
+                  </MinMaxBox>
+                  {minPriceOpen ? (
+                    <MinMaxPopup>
+                      <MinMaxPopupButton>$0</MinMaxPopupButton>
+                      <MinMaxPopupButton>$50k</MinMaxPopupButton>
+                      <MinMaxPopupButton>$100k</MinMaxPopupButton>
+                      <MinMaxPopupButton>$150k</MinMaxPopupButton>
+                    </MinMaxPopup>
+                  ) : null}
+                </PriceSubcontainer>
+
                 <MinMaxDash src="/min_max_dash.svg" />
-                <MinMaxBox>
-                  <PlaceholderText>No max</PlaceholderText>
-                  <DownArrowIcon src="/down_arrow.svg" />
-                </MinMaxBox>
+                <PriceSubcontainer>
+                  <MinMaxBox
+                    onClick={() => {
+                      setMaxPriceOpen(!maxPriceOpen);
+                    }}
+                  >
+                    <PlaceholderText>No max</PlaceholderText>
+                    {maxPriceOpen ? (
+                      <UpArrowIcon src="/price_up_arrow.svg" />
+                    ) : (
+                      <DownArrowIcon src="/down_arrow.svg" />
+                    )}
+                  </MinMaxBox>
+                  {maxPriceOpen ? (
+                    <MinMaxPopup>
+                      <MinMaxPopupButton>$50k</MinMaxPopupButton>
+                      <MinMaxPopupButton>$100k</MinMaxPopupButton>
+                      <MinMaxPopupButton>$150k</MinMaxPopupButton>
+                      <MinMaxPopupButton>$200</MinMaxPopupButton>
+                    </MinMaxPopup>
+                  ) : null}
+                </PriceSubcontainer>
               </MinMaxRow>
               {/* <PopupHeaderText>Down Payment</PopupHeaderText>
               <DownPaymentRow>
