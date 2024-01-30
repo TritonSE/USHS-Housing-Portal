@@ -365,13 +365,24 @@ const PopupHeaderText = styled(Sort)`
   font-size: 14px;
 `;
 
-const PlaceholderText = styled.p`
+const PlaceholderText = styled.p<{ active: boolean }>`
   color: #cdcaca;
   font-family: Montserrat;
   font-size: 11px;
   font-style: normal;
   font-weight: 600;
   padding-right: 5px;
+
+  ${(props) =>
+    props.active
+      ? css`
+          color: #000;
+          padding-left: 11px;
+          padding-right: 11px;
+        `
+      : css`
+          color: #cdcaca;
+        `}
 `;
 
 export const FilterDropdown = () => {
@@ -383,6 +394,16 @@ export const FilterDropdown = () => {
   const [sortOpen, setSortOpen] = useState(false);
   const [available, setAvailable] = useState(false);
   const [leased, setLeased] = useState(false);
+  const [availabilityStatus, setAvailabilityStatus] = useState("Availability");
+  const [minPriceState, setMinPriceState] = useState("No Min");
+  const [maxPriceState, setMaxPriceState] = useState("No Max");
+  const [priceRangeState, setPriceRangeState] = useState("Price");
+  const [minPriceSelected, setMinPriceSelected] = useState(false);
+  const [maxPriceSelected, setMaxPriceSelected] = useState(false);
+  const [numBedrooms, setNumBedrooms] = useState(1);
+  const [numBaths, setNumBaths] = useState(0.5);
+  const [bnbState, setBnbState] = useState("Beds & Bath");
+  const [sortMethod, setSortMethod] = useState("Price (Hight to Low)");
 
   return (
     <AllFiltersContainer>
@@ -402,7 +423,7 @@ export const FilterDropdown = () => {
               active={true}
             >
               <DropdownRow>
-                <FilterText>Availability</FilterText>
+                <FilterText>{availabilityStatus}</FilterText>
                 <DropdownIcon src="/up_arrow.svg" />
               </DropdownRow>
             </Dropdown>
@@ -436,7 +457,15 @@ export const FilterDropdown = () => {
                 <PopupBodyText>Leased</PopupBodyText>
               </AvailabilityRow>
 
-              <ApplyButton>Apply</ApplyButton>
+              <ApplyButton
+                onClick={() =>
+                  available
+                    ? (setAvailabilityStatus("Available"), setAvailabilityOpen(false))
+                    : (setAvailabilityStatus("Leased"), setAvailabilityOpen(false))
+                }
+              >
+                Apply
+              </ApplyButton>
             </DropDownPopup>
           </FilterSubContainer>
         ) : (
@@ -448,7 +477,7 @@ export const FilterDropdown = () => {
               active={false}
             >
               <DropdownRow>
-                <FilterText>Availability</FilterText>
+                <FilterText>{availabilityStatus}</FilterText>
                 <DropdownIcon src="/dropdown.svg" />
               </DropdownRow>
             </Dropdown>
@@ -465,7 +494,7 @@ export const FilterDropdown = () => {
               active={true}
             >
               <DropdownRow>
-                <PriceFilterText>Price</PriceFilterText>
+                <PriceFilterText>{priceRangeState}</PriceFilterText>
                 <DropdownIcon src="/up_arrow.svg" />
               </DropdownRow>
             </Dropdown>
@@ -478,7 +507,7 @@ export const FilterDropdown = () => {
                       setMinPriceOpen(!minPriceOpen);
                     }}
                   >
-                    <PlaceholderText>No min</PlaceholderText>
+                    <PlaceholderText active={minPriceSelected}>{minPriceState}</PlaceholderText>
                     {minPriceOpen ? (
                       <UpArrowIcon src="/price_up_arrow.svg" />
                     ) : (
@@ -487,10 +516,42 @@ export const FilterDropdown = () => {
                   </MinMaxBox>
                   {minPriceOpen ? (
                     <MinMaxPopup>
-                      <MinMaxPopupButton>$0</MinMaxPopupButton>
-                      <MinMaxPopupButton>$50k</MinMaxPopupButton>
-                      <MinMaxPopupButton>$100k</MinMaxPopupButton>
-                      <MinMaxPopupButton>$150k</MinMaxPopupButton>
+                      <MinMaxPopupButton
+                        onClick={() => {
+                          setMinPriceState("$0k");
+                          setMinPriceOpen(false);
+                          setMinPriceSelected(true);
+                        }}
+                      >
+                        $0
+                      </MinMaxPopupButton>
+                      <MinMaxPopupButton
+                        onClick={() => {
+                          setMinPriceState("$50k");
+                          setMinPriceOpen(false);
+                          setMinPriceSelected(true);
+                        }}
+                      >
+                        $50k
+                      </MinMaxPopupButton>
+                      <MinMaxPopupButton
+                        onClick={() => {
+                          setMinPriceState("$100k");
+                          setMinPriceOpen(false);
+                          setMinPriceSelected(true);
+                        }}
+                      >
+                        $100k
+                      </MinMaxPopupButton>
+                      <MinMaxPopupButton
+                        onClick={() => {
+                          setMinPriceState("$150k");
+                          setMinPriceOpen(false);
+                          setMinPriceSelected(true);
+                        }}
+                      >
+                        $150k
+                      </MinMaxPopupButton>
                     </MinMaxPopup>
                   ) : null}
                 </PriceSubcontainer>
@@ -502,7 +563,7 @@ export const FilterDropdown = () => {
                       setMaxPriceOpen(!maxPriceOpen);
                     }}
                   >
-                    <PlaceholderText>No max</PlaceholderText>
+                    <PlaceholderText active={maxPriceSelected}>{maxPriceState}</PlaceholderText>
                     {maxPriceOpen ? (
                       <UpArrowIcon src="/price_up_arrow.svg" />
                     ) : (
@@ -511,10 +572,42 @@ export const FilterDropdown = () => {
                   </MinMaxBox>
                   {maxPriceOpen ? (
                     <MinMaxPopup>
-                      <MinMaxPopupButton>$50k</MinMaxPopupButton>
-                      <MinMaxPopupButton>$100k</MinMaxPopupButton>
-                      <MinMaxPopupButton>$150k</MinMaxPopupButton>
-                      <MinMaxPopupButton>$200</MinMaxPopupButton>
+                      <MinMaxPopupButton
+                        onClick={() => {
+                          setMaxPriceState("$50k");
+                          setMaxPriceOpen(false);
+                          setMaxPriceSelected(true);
+                        }}
+                      >
+                        $50k
+                      </MinMaxPopupButton>
+                      <MinMaxPopupButton
+                        onClick={() => {
+                          setMaxPriceState("$100k");
+                          setMaxPriceOpen(false);
+                          setMaxPriceSelected(true);
+                        }}
+                      >
+                        $100k
+                      </MinMaxPopupButton>
+                      <MinMaxPopupButton
+                        onClick={() => {
+                          setMaxPriceState("$150k");
+                          setMaxPriceOpen(false);
+                          setMaxPriceSelected(true);
+                        }}
+                      >
+                        $150k
+                      </MinMaxPopupButton>
+                      <MinMaxPopupButton
+                        onClick={() => {
+                          setMaxPriceState("$200k");
+                          setMaxPriceOpen(false);
+                          setMaxPriceSelected(true);
+                        }}
+                      >
+                        $200
+                      </MinMaxPopupButton>
                     </MinMaxPopup>
                   ) : null}
                 </PriceSubcontainer>
@@ -524,7 +617,14 @@ export const FilterDropdown = () => {
                 <DollarIcon src="/dollar.svg" />
                 <DownPaymentInput placeholder="0" />
               </DownPaymentRow> */}
-              <ApplyButton>Apply</ApplyButton>
+              <ApplyButton
+                onClick={() => {
+                  setPriceRangeState(minPriceState + " - " + maxPriceState);
+                  setPriceOpen(false);
+                }}
+              >
+                Apply
+              </ApplyButton>
             </DropDownPopup>
           </FilterSubContainer>
         ) : (
@@ -535,7 +635,7 @@ export const FilterDropdown = () => {
             active={false}
           >
             <DropdownRow>
-              <PriceFilterText>Price</PriceFilterText>
+              <PriceFilterText>{priceRangeState}</PriceFilterText>
               <DropdownIcon src="/dropdown.svg" />
             </DropdownRow>
           </Dropdown>
@@ -551,7 +651,7 @@ export const FilterDropdown = () => {
               active={true}
             >
               <BnbDropdownRow>
-                <FilterText>Beds & Bath</FilterText>
+                <FilterText>{bnbState}</FilterText>
                 <DropdownIcon src="/up_arrow.svg" />
               </BnbDropdownRow>
             </Dropdown>
@@ -559,20 +659,59 @@ export const FilterDropdown = () => {
               <PopupHeaderText>Bedrooms</PopupHeaderText>
               <BnbRow>
                 <BedBox>
-                  <PopupHeaderText>1+</PopupHeaderText>
+                  <PopupHeaderText>{numBedrooms}+</PopupHeaderText>
                 </BedBox>
-                <AdjustButton>-</AdjustButton>
-                <AdjustButton>+</AdjustButton>
+                <AdjustButton
+                  onClick={() => {
+                    if (numBedrooms != 1) {
+                      setNumBedrooms(numBedrooms - 1);
+                    }
+                  }}
+                >
+                  -
+                </AdjustButton>
+                <AdjustButton
+                  onClick={() => {
+                    if (numBedrooms != 4) {
+                      setNumBedrooms(numBedrooms + 1);
+                    }
+                  }}
+                >
+                  +
+                </AdjustButton>
               </BnbRow>
               <PopupHeaderText>Baths</PopupHeaderText>
               <BnbRow>
                 <BathBox>
-                  <PopupHeaderText>0.5+</PopupHeaderText>
+                  <PopupHeaderText>{numBaths}+</PopupHeaderText>
                 </BathBox>
-                <AdjustButton>-</AdjustButton>
-                <AdjustButton>+</AdjustButton>
+                <AdjustButton
+                  onClick={() => {
+                    if (numBaths != 0.5) {
+                      setNumBaths(numBaths - 0.5);
+                    }
+                  }}
+                >
+                  -
+                </AdjustButton>
+                <AdjustButton
+                  onClick={() => {
+                    if (numBaths != 2) {
+                      setNumBaths(numBaths + 0.5);
+                    }
+                  }}
+                >
+                  +
+                </AdjustButton>
               </BnbRow>
-              <ApplyButton>Apply</ApplyButton>
+              <ApplyButton
+                onClick={() => {
+                  setBnbState(numBedrooms.toString() + "+ bds, " + numBaths.toString() + "+ ba");
+                  setBnbOpen(false);
+                }}
+              >
+                Apply
+              </ApplyButton>
             </DropDownPopup>
           </FilterSubContainer>
         ) : (
@@ -583,7 +722,7 @@ export const FilterDropdown = () => {
             active={false}
           >
             <BnbDropdownRow>
-              <FilterText>Beds & Bath</FilterText>
+              <FilterText>{bnbState}</FilterText>
               <DropdownIcon src="/dropdown.svg" />
             </BnbDropdownRow>
           </Dropdown>
@@ -608,11 +747,46 @@ export const FilterDropdown = () => {
             <DropdownIcon src="/up_arrow.svg" />
           </SortRow>
           <SortDropDown>
-            <PopupSortText>Price (High to Low)</PopupSortText>
-            <PopupSortText>Price (Low to High)</PopupSortText>
-            <PopupSortText>Newest</PopupSortText>
-            <PopupSortText>Bedrooms</PopupSortText>
-            <PopupSortText>Baths</PopupSortText>
+            <PopupSortText
+              onClick={() => {
+                setSortMethod("Price (High to Low)");
+                setSortOpen(false);
+              }}
+            >
+              Price (High to Low)
+            </PopupSortText>
+            <PopupSortText
+              onClick={() => {
+                setSortMethod("Price (Low to High)");
+                setSortOpen(false);
+              }}
+            >
+              Price (Low to High)
+            </PopupSortText>
+            <PopupSortText
+              onClick={() => {
+                setSortMethod("Newest");
+                setSortOpen(false);
+              }}
+            >
+              Newest
+            </PopupSortText>
+            <PopupSortText
+              onClick={() => {
+                setSortMethod("Bedrooms");
+                setSortOpen(false);
+              }}
+            >
+              Bedrooms
+            </PopupSortText>
+            <PopupSortText
+              onClick={() => {
+                setSortMethod("Baths");
+                setSortOpen(false);
+              }}
+            >
+              Baths
+            </PopupSortText>
           </SortDropDown>
         </FilterSubContainer>
       ) : (
@@ -621,7 +795,7 @@ export const FilterDropdown = () => {
             setSortOpen(true);
           }}
         >
-          <Sort active={false}>Sort: Price (Hight to Low)</Sort>
+          <Sort active={false}>Sort: {sortMethod}</Sort>
           <DropdownIcon src="/dropdown.svg" />
         </SortRow>
       )}
