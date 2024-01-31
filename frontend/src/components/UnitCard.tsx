@@ -14,14 +14,13 @@ const UnitCardContainer = styled.div`
   background-color: white;
 
   border-radius: 6.5px;
-  border: 1.3px solid #cdcaca;
-  box-shadow: 1.181px 1.181px 2.362px 0px rgba(188, 186, 183, 0.4);
+  border: 1.3px solid #CDCACA;
+  box-shadow: 1.181px 1.181px 2.362px 0px rgba(188, 186, 183, 0.40);
 `;
 
 const UnitCardText = styled.span`
-  color: ${(props) => props.theme.colors.text};
-  // font-family: "Neutra Text";
-  font-family: "Montserrat";
+  color: ${props => props.theme.colors.text};
+  font-family: "Neutra Text";
 `;
 
 const AvailabilityRow = styled.div`
@@ -39,6 +38,13 @@ const BedBathRow = styled.div`
   justify-content: flex-start;
   align-items: center;
   gap: 10px;
+`;
+
+const AddressRow = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
 `;
 
 const AvailabilityIcon = styled.img`
@@ -102,9 +108,12 @@ const UnitCard = ({ unit }) => {
         <NumberText>1231</NumberText>
         <BedBathText>sqft</BedBathText>
       </BedBathRow>
-      <AddressText>1829 Prospect Ave Pasadena, CA 91776</AddressText>
+      <AddressRow>
+        <AddressText>1829 Prospect Ave</AddressText>
+        <AddressText>Pasadena, CA 91776</AddressText>
+      </AddressRow>
     </UnitCardContainer>
-  );
-};
+  )
+}
 
 export default UnitCard;
