@@ -1,5 +1,11 @@
 import styled, { css } from "styled-components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { FilterParams } from "@/api/units";
+import { SortDropDownComp } from "@/components/SortDropDown";
+import { DropDownPopup, DropdownIcon, FilterSubContainer,
+          Dropdown, FilterText, DropdownRow, Sort, PopupHeaderText,
+          FilterRow, ApplyButton } from "@/components/FilterCommon";
+import { BedBathDropDown } from "@/components/BedBathDropDown";
 
 const AllFiltersContainer = styled.div`
   display: flex;
@@ -55,73 +61,7 @@ const SearchBarContainer = styled.div`
   box-shadow: 1px 1px 2px 0px rgba(188, 186, 183, 0.4);
 `;
 
-const FilterSubContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-`;
-
-const Dropdown = styled.button<{ active: boolean }>`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 10px;
-  border-radius: 5px;
-  ${(props) =>
-    props.active
-      ? css`
-          border: 0.5px solid #ec8537;
-        `
-      : css`
-          border: 0.5px solid #cdcaca;
-        `}
-  background-color: #fff;
-  box-shadow: 1px 1px 2px 0px rgba(188, 186, 183, 0.4);
-`;
-
-const DropdownRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: flex-center;
-  gap: 50px;
-`;
-
-const BnbDropdownRow = styled(DropdownRow)`
-  gap: 40px;
-`;
-
-const DropDownPopup = styled.div`
-  position: absolute;
-  margin-top: 45px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  padding: 16px;
-  background-color: #fff;
-  border: 0.5px solid #ec8537;
-  border-radius: 5px;
-  box-shadow: 1px 1px 2px 0px rgba(188, 186, 183, 0.4);
-  gap: 12px;
-`;
-
-const AvailabilityRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 10px;
-`;
-
-const BnbRow = styled(AvailabilityRow)`
-  gap: 13px;
-`;
-
-const DropdownIcon = styled.img`
-  height: 20px;
-  width: 20px;
-`;
+const AvailabilityRow = styled(FilterRow)``;
 
 const FilterRadioButton = styled.img`
   height: 20px;
@@ -244,27 +184,6 @@ const PriceSubcontainer = styled.div`
   align-items: flex-start;
 `;
 
-const ApplyButton = styled.button`
-  border-radius: 5px;
-  background: #b64201;
-  border: 0;
-  padding-left: 55px;
-  padding-right: 55px;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  color: #fff;
-  font-family: Montserrat;
-  font-size: 14px;
-  font-weight: 300;
-  min-width: 100%;
-`;
-
-const FilterText = styled.p`
-  color: #000;
-  font-family: Montserrat;
-  font-size: 16px;
-  font-weight: 600;
-`;
 
 const PriceFilterText = styled(FilterText)`
   padding-right: 80px;
@@ -289,24 +208,6 @@ const ResetFilterRow = styled.div`
   gap: 8px;
 `;
 
-const Sort = styled.button<{ active: boolean }>`
-  font-family: Montserrat;
-  font-size: 15px;
-  font-style: normal;
-  font-weight: 400;
-  background-color: transparent;
-  border-color: transparent;
-
-  ${(props) =>
-    props.active
-      ? css`
-          color: #ec8537;
-        `
-      : css`
-          color: #111010;
-        `}
-`;
-
 const SortDropDown = styled(DropDownPopup)`
   margin-top: 30px;
   padding-right: 70px;
@@ -320,33 +221,6 @@ const SortRow = styled.div`
   gap: 15px;
 `;
 
-const BedBox = styled.div`
-  border-radius: 3px;
-  border: 0.5px solid #cdcaca;
-  background-color: #f5f5f5;
-  box-shadow: 1px 1px 2px 0px rgba(228, 227, 226, 0.4);
-  padding-left: 30px;
-  padding-right: 30px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-`;
-
-const BathBox = styled(BedBox)`
-  padding-left: 22px;
-  padding-right: 22px;
-`;
-
-const AdjustButton = styled.button`
-  color: #fff;
-  border: 0;
-  border-radius: 5px;
-  background: var(--Primary, #b64201);
-  padding-top: 2px;
-  padding-bottom: 2px;
-  padding-left: 7px;
-  padding-right: 7px;
-`;
-
 const PopupBodyText = styled(Sort)`
   font-weight: 300;
   font-size: 12px;
@@ -356,12 +230,6 @@ const PopupBodyText = styled(Sort)`
 const PopupSortText = styled(Sort)`
   margin: 0;
   font-weight: 300;
-  font-size: 14px;
-`;
-
-const PopupHeaderText = styled(Sort)`
-  margin: 0;
-  font-weight: 700;
   font-size: 14px;
 `;
 
@@ -385,7 +253,11 @@ const PlaceholderText = styled.p<{ active: boolean }>`
         `}
 `;
 
-export const FilterDropdown = () => {
+interface FilterDropdownProps {
+  refreshUnits(filterParams: FilterParams): void
+};
+
+export const FilterDropdown = (props: FilterDropdownProps) => {
   const [availabilityOpen, setAvailabilityOpen] = useState(false);
   const [priceOpen, setPriceOpen] = useState(false);
   const [minPriceOpen, setMinPriceOpen] = useState(false);
@@ -405,11 +277,39 @@ export const FilterDropdown = () => {
   const [bnbState, setBnbState] = useState("Beds & Bath");
   const [sortMethod, setSortMethod] = useState("Price (Hight to Low)");
 
+  const [searchText, setSearchText] = useState("");
+
+  const applyFilters = () => {
+    const filters = {
+      search: searchText ?? undefined,
+      beds: numBedrooms,
+      baths: numBaths
+    } 
+
+    props.refreshUnits(filters as FilterParams);
+  }
+
+  const resetFilters = () => {
+    setSearchText("");
+    setBnbState("Beds & Bath");
+    setPriceRangeState("Price");
+    setAvailabilityStatus("Availability");
+    setLeased(false);
+    setAvailable(false);
+  }
+
+  useEffect(() => {
+    applyFilters();
+  }, [searchText])
+
   return (
     <AllFiltersContainer>
       <FiltersFirstRow>
         <SearchBarContainer>
-          <SearchBarInput placeholder="Search Property" />
+          <SearchBarInput placeholder="Search Property" value={searchText}
+            onChange={(event) => {
+              setSearchText(event.target.value);
+          }}/>
           <SearchIcon src="/search.svg" />
         </SearchBarContainer>
 
@@ -642,93 +542,9 @@ export const FilterDropdown = () => {
         )}
 
         {/* BED AND BATH FILTER */}
-        {bnbOpen ? (
-          <FilterSubContainer>
-            <Dropdown
-              onClick={() => {
-                setBnbOpen(false);
-              }}
-              active={true}
-            >
-              <BnbDropdownRow>
-                <FilterText>{bnbState}</FilterText>
-                <DropdownIcon src="/up_arrow.svg" />
-              </BnbDropdownRow>
-            </Dropdown>
-            <DropDownPopup>
-              <PopupHeaderText>Bedrooms</PopupHeaderText>
-              <BnbRow>
-                <BedBox>
-                  <PopupHeaderText>{numBedrooms}+</PopupHeaderText>
-                </BedBox>
-                <AdjustButton
-                  onClick={() => {
-                    if (numBedrooms != 1) {
-                      setNumBedrooms(numBedrooms - 1);
-                    }
-                  }}
-                >
-                  -
-                </AdjustButton>
-                <AdjustButton
-                  onClick={() => {
-                    if (numBedrooms != 4) {
-                      setNumBedrooms(numBedrooms + 1);
-                    }
-                  }}
-                >
-                  +
-                </AdjustButton>
-              </BnbRow>
-              <PopupHeaderText>Baths</PopupHeaderText>
-              <BnbRow>
-                <BathBox>
-                  <PopupHeaderText>{numBaths}+</PopupHeaderText>
-                </BathBox>
-                <AdjustButton
-                  onClick={() => {
-                    if (numBaths != 0.5) {
-                      setNumBaths(numBaths - 0.5);
-                    }
-                  }}
-                >
-                  -
-                </AdjustButton>
-                <AdjustButton
-                  onClick={() => {
-                    if (numBaths != 2) {
-                      setNumBaths(numBaths + 0.5);
-                    }
-                  }}
-                >
-                  +
-                </AdjustButton>
-              </BnbRow>
-              <ApplyButton
-                onClick={() => {
-                  setBnbState(numBedrooms.toString() + "+ bds, " + numBaths.toString() + "+ ba");
-                  setBnbOpen(false);
-                }}
-              >
-                Apply
-              </ApplyButton>
-            </DropDownPopup>
-          </FilterSubContainer>
-        ) : (
-          <Dropdown
-            onClick={() => {
-              setBnbOpen(true);
-            }}
-            active={false}
-          >
-            <BnbDropdownRow>
-              <FilterText>{bnbState}</FilterText>
-              <DropdownIcon src="/dropdown.svg" />
-            </BnbDropdownRow>
-          </Dropdown>
-        )}
+        <BedBathDropDown />
 
-        <ResetFilterButton>
+        <ResetFilterButton onClick={resetFilters}>
           <ResetFilterRow>
             <ResetIcon src="/refresh.svg" />
             <ResetFilterText> Reset filters</ResetFilterText>
@@ -736,69 +552,7 @@ export const FilterDropdown = () => {
         </ResetFilterButton>
       </FiltersFirstRow>
 
-      {sortOpen ? (
-        <FilterSubContainer>
-          <SortRow
-            onClick={() => {
-              setSortOpen(false);
-            }}
-          >
-            <Sort active={true}>Sort: Price (Hight to Low)</Sort>
-            <DropdownIcon src="/up_arrow.svg" />
-          </SortRow>
-          <SortDropDown>
-            <PopupSortText
-              onClick={() => {
-                setSortMethod("Price (High to Low)");
-                setSortOpen(false);
-              }}
-            >
-              Price (High to Low)
-            </PopupSortText>
-            <PopupSortText
-              onClick={() => {
-                setSortMethod("Price (Low to High)");
-                setSortOpen(false);
-              }}
-            >
-              Price (Low to High)
-            </PopupSortText>
-            <PopupSortText
-              onClick={() => {
-                setSortMethod("Newest");
-                setSortOpen(false);
-              }}
-            >
-              Newest
-            </PopupSortText>
-            <PopupSortText
-              onClick={() => {
-                setSortMethod("Bedrooms");
-                setSortOpen(false);
-              }}
-            >
-              Bedrooms
-            </PopupSortText>
-            <PopupSortText
-              onClick={() => {
-                setSortMethod("Baths");
-                setSortOpen(false);
-              }}
-            >
-              Baths
-            </PopupSortText>
-          </SortDropDown>
-        </FilterSubContainer>
-      ) : (
-        <SortRow
-          onClick={() => {
-            setSortOpen(true);
-          }}
-        >
-          <Sort active={false}>Sort: {sortMethod}</Sort>
-          <DropdownIcon src="/dropdown.svg" />
-        </SortRow>
-      )}
+      <SortDropDownComp/>
     </AllFiltersContainer>
   );
 };
