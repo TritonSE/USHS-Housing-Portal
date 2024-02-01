@@ -1,38 +1,49 @@
-import React, { ReactNode, useEffect, useMemo, useState, useCallback, useContext } from "react";
+import React, { ReactNode, useCallback, useContext, useEffect, useMemo, useState } from "react";
+
 import { User } from "../../../backend/src/models/user.ts";
 import { getUsers } from "../../../backend/src/services/user.ts";
+
 import { AuthContext } from "./AuthContext.tsx";
 
 type ProviderProps = {
-    children: ReactNode;
+  children: ReactNode;
 };
 
 type contextType = {
-    allHousingLocators: [string];
-    allCaseManagers: [string];
-    currentUser: User | null;
+  allHousingLocators: User[];
+  allCaseManagers: User[];
+  currentUser: User | null;
 };
 
-export const DataContext = React.createContext<contextType>({ currentUser: null, allHousingLocators: [''], allCaseManagers: ['']});
+export const DataContext = React.createContext<contextType>({
+  currentUser: null,
+  allHousingLocators: [],
+  allCaseManagers: [],
+});
 
 export function DataProvider({ children }: ProviderProps) {
-    const [allHousingLocators, setAllHousingLocators] = useState<[string]>(['']);
-    const [allCaseManagers, setAllCaseManagers] = useState<[string]>(['']);
-    const [currentUser, setUser] = useState<User | null>(null);
-    const auth = useContext(AuthContext);
+  const [allHousingLocators, setAllHousingLocators] = useState<User[]>([]);
+  const [allCaseManagers, setAllCaseManagers] = useState<User[]>([]);
+  const [currentUser, setUser] = useState<User | null>(null);
+  const auth = useContext(AuthContext);
 
-    const fetchData = useCallback(async () => {
-        const data = await getUsers();
-        setAllHousingLocators(data.filter((user: User) => user.isHousingLocator));
-        setAllCaseManagers(data.filter((user: User) => !user.isHousingLocator));
-        setUser(data.find((user: User) => user.email === auth.currentUser.email));
-    }, [auth]);
+  const fetchData = useCallback(async () => {
+    const data: User[] = (await getUsers()) as User[];
+    setAllHousingLocators(data.filter((user: User) => user.isHousingLocator));
+    setAllCaseManagers(data.filter((user: User) => !user.isHousingLocator));
+    setUser(
+      data.find((user: User) => auth.currentUser && user.email === auth.currentUser.email) ?? null,
+    );
+  }, [auth]);
 
-    useEffect(() => {
-        fetchData();
-    }, [auth]);
+  useEffect(() => {
+    fetchData().catch(console.error);
+  }, [auth]);
 
-    const value = useMemo(() => ({ allHousingLocators, allCaseManagers, currentUser }), [allHousingLocators, allCaseManagers, currentUser]);
+  const value = useMemo(
+    () => ({ allHousingLocators, allCaseManagers, currentUser }),
+    [allHousingLocators, allCaseManagers, currentUser],
+  );
 
-    return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
+  return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 }

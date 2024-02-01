@@ -18,7 +18,7 @@ export function AuthProvider({ children }: ProviderProps) {
   const [currentUser, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, (user: User | null) => {
       if (user) {
         setUser(user);
       } else {
