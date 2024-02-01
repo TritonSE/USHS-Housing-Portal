@@ -5,6 +5,7 @@ import { RequestHandler } from "express";
 import { ValidationChain, validationResult } from "express-validator";
 import createHttpError from "http-errors";
 
+import { asyncHandler } from "@/controllers/wrappers";
 import * as firebaseAdmin from "@/firebase-admin";
 import { UserModel } from "@/models/user";
 
@@ -33,7 +34,7 @@ const validateRequest: RequestHandler = (req, res, next) => {
   throw createHttpError(400, errorString);
 };
 
-const validateUser: RequestHandler = async (req, res, next) => {
+const validateUser: RequestHandler = asyncHandler(async (req, res, next) => {
   const authHeader = req.headers.authorization;
   let token;
 
@@ -50,13 +51,13 @@ const validateUser: RequestHandler = async (req, res, next) => {
     const user = await UserModel.findOne({ email });
     /* eslint-disable-next-line @typescript-eslint/no-unsafe-member-access */
     req.body.currentUser = user;
+    console.log(user);
   } catch (error) {
     throw createHttpError(404, "Error finding user");
   }
 
   next();
-  return;
-};
+});
 
 const validateHousingLocator: RequestHandler = (req, res, next) => {
   validateUser(req, res, () => {
@@ -79,5 +80,6 @@ const validateHousingLocator: RequestHandler = (req, res, next) => {
 export const validateWith = (validators: ValidationChain[]) => [
   ...validators,
   validateRequest,
-  validateHousingLocator,
+  validateUser,
 ];
+export { validateHousingLocator };
