@@ -58,7 +58,6 @@ const validateUser: RequestHandler = asyncHandler(async (req, res, next) => {
     const user = await UserModel.findOne({ email });
     /* eslint-disable-next-line @typescript-eslint/no-unsafe-member-access */
     req.body.currentUser = user;
-    console.log(user);
   } catch (error) {
     throw createHttpError(404, "Error finding user");
   }
