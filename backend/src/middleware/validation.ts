@@ -9,6 +9,13 @@ import { asyncHandler } from "@/controllers/wrappers";
 import * as firebaseAdmin from "@/firebase-admin";
 import { UserModel } from "@/models/user";
 
+// export type UserRequest = {
+//   currentUser: User;
+//   headers: {
+//     authorization: string;
+//   };
+// } & Request;
+
 /**
  * Rejected a request with 400 if it does not meet the validation
  * criteria specified using express-validator.
