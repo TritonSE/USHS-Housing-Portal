@@ -43,7 +43,11 @@ const AdjustButton = styled.button`
   padding-right: 7px;
 `;
 
-export const BedBathDropDown = () => {
+export type BedBathDropDownProps = {
+    onApply(beds: number, baths: number): void
+}
+
+export const BedBathDropDown = (props: BedBathDropDownProps) => {
   const [isActive, setIsActive] = useState(false);
   const [numBed, setNumBed] = useState(1);
   const [numBath, setNumBath] = useState(0.5);
@@ -77,6 +81,7 @@ export const BedBathDropDown = () => {
         <ApplyButton onClick={() => {
           setDropdownText(`${numBed}+ bds, ${numBath}+ ba`);
           setIsActive(false);
+          props.onApply(numBed, numBath);
         }}>
           Apply
         </ApplyButton>

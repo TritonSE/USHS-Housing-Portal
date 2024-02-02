@@ -8,15 +8,14 @@ export type FilterParams = {
   beds?: number,
   baths?: number,
   approved?: boolean,
-  sort: string
+  sort: number
 };
 
 export async function getUnits(params: FilterParams): Promise<APIResult<Unit[]>> {
   try {
-    console.log(params);
     const query = new URLSearchParams(params);
 
-    let keysForDel = [];
+    let keysForDel : string[] = [];
     query.forEach((value, key) => {
       if (value === '' || value === null || value === undefined) {
         keysForDel.push(key);

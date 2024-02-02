@@ -92,7 +92,7 @@ const BedBathText = styled(NumberText)`
 `;
 
 // Hard coded unit data for testing
-const UnitCard = ({ unit }) => {
+export const UnitCard = ({ unit }) => {
   return (
     <UnitCardContainer>
       <AvailabilityRow>

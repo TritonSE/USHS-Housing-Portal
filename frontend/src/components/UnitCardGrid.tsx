@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import UnitCard from "@/components/UnitCard";
+import { UnitCard } from "@/components/UnitCard";
 
 const UnitCardLayout = styled.div`
   // margin: 95px;

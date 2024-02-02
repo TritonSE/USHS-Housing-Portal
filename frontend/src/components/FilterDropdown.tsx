@@ -262,8 +262,6 @@ export const FilterDropdown = (props: FilterDropdownProps) => {
   const [priceOpen, setPriceOpen] = useState(false);
   const [minPriceOpen, setMinPriceOpen] = useState(false);
   const [maxPriceOpen, setMaxPriceOpen] = useState(false);
-  const [bnbOpen, setBnbOpen] = useState(false);
-  const [sortOpen, setSortOpen] = useState(false);
   const [available, setAvailable] = useState(false);
   const [leased, setLeased] = useState(false);
   const [availabilityStatus, setAvailabilityStatus] = useState("Availability");
@@ -272,35 +270,38 @@ export const FilterDropdown = (props: FilterDropdownProps) => {
   const [priceRangeState, setPriceRangeState] = useState("Price");
   const [minPriceSelected, setMinPriceSelected] = useState(false);
   const [maxPriceSelected, setMaxPriceSelected] = useState(false);
-  const [numBedrooms, setNumBedrooms] = useState(1);
-  const [numBaths, setNumBaths] = useState(0.5);
-  const [bnbState, setBnbState] = useState("Beds & Bath");
-  const [sortMethod, setSortMethod] = useState("Price (Hight to Low)");
 
+  const [numBedBath, setNumBedBath] = useState({beds: 1, baths: 0.5});
   const [searchText, setSearchText] = useState("");
+  const [sortIndex, setSortIndex] = useState(1);
 
   const applyFilters = () => {
     const filters = {
       search: searchText ?? undefined,
-      beds: numBedrooms,
-      baths: numBaths
-    } 
+      beds: numBedBath.beds,
+      baths: numBedBath.baths,
+      sort: sortIndex
+    };
 
     props.refreshUnits(filters as FilterParams);
   }
 
   const resetFilters = () => {
     setSearchText("");
-    setBnbState("Beds & Bath");
-    setPriceRangeState("Price");
-    setAvailabilityStatus("Availability");
-    setLeased(false);
-    setAvailable(false);
+    setSortIndex(0);
   }
 
   useEffect(() => {
     applyFilters();
-  }, [searchText])
+  }, [searchText, numBedBath, sortIndex])
+
+  const BedBathChangeHandler = (beds: number, baths: number) => {
+    setNumBedBath({ beds, baths });
+  }
+
+  const SortChangeHandler = (sortType: number) => {
+    setSortIndex(sortType);  
+  }
 
   return (
     <AllFiltersContainer>
@@ -542,7 +543,7 @@ export const FilterDropdown = (props: FilterDropdownProps) => {
         )}
 
         {/* BED AND BATH FILTER */}
-        <BedBathDropDown />
+        <BedBathDropDown onApply={BedBathChangeHandler}/>
 
         <ResetFilterButton onClick={resetFilters}>
           <ResetFilterRow>
@@ -552,7 +553,7 @@ export const FilterDropdown = (props: FilterDropdownProps) => {
         </ResetFilterButton>
       </FiltersFirstRow>
 
-      <SortDropDownComp/>
+      <SortDropDownComp value={sortIndex} onApply={SortChangeHandler}/>
     </AllFiltersContainer>
   );
 };

@@ -21,9 +21,13 @@ const PopupSortText = styled(Sort)`
   font-size: 14px;
 `;
 
-export const SortDropDownComp = () => {
+export type SortDropDownCompProps = {
+  value: number,
+  onApply(selected: number): void
+}
+
+export const SortDropDownComp = (props: SortDropDownCompProps) => {
   const [isActive, setIsActive] = useState(false);
-  const [selected, setSelected] = useState("Price (High to Low)");
 
   const sortOptions = ["Price (High to Low)", "Price (Low to High)",
             "Newest", "Bedrooms", "Baths"];
@@ -31,14 +35,14 @@ export const SortDropDownComp = () => {
   return (    
     <FilterSubContainer>
       <SortRow onClick={() => {setIsActive(!isActive)}}>
-        <Sort active={isActive}>Sort: {selected}</Sort>
+        <Sort active={isActive}>Sort: {sortOptions[props.value]}</Sort>
         <DropdownIcon src={isActive ? "/up_arrow.svg" : "/dropdown.svg"} />
       </SortRow>
       {isActive && (
         <SortDropDown>
           {sortOptions.map((text, idx) => (
             <PopupSortText key={idx} onClick={() => {
-              setSelected(text);
+              props.onApply(idx);
               setIsActive(false);}}>
                {text}
               </PopupSortText>
