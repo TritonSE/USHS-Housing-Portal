@@ -1,5 +1,6 @@
-import styled, { css } from "styled-components";
 import { useState } from "react";
+import styled from "styled-components";
+
 import { DropDownPopup, DropdownIcon, FilterSubContainer, Sort } from "@/components/FilterCommon";
 
 const SortDropDown = styled(DropDownPopup)`
@@ -22,33 +23,40 @@ const PopupSortText = styled(Sort)`
 `;
 
 export type SortDropDownCompProps = {
-  value: number,
-  onApply(selected: number): void
-}
+  value: number;
+  onApply(selected: number): void;
+};
 
 export const SortDropDownComp = (props: SortDropDownCompProps) => {
   const [isActive, setIsActive] = useState(false);
 
-  const sortOptions = ["Price (High to Low)", "Price (Low to High)",
-            "Newest", "Bedrooms", "Baths"];
+  const sortOptions = ["Price (High to Low)", "Price (Low to High)", "Newest", "Bedrooms", "Baths"];
 
-  return (    
+  return (
     <FilterSubContainer>
-      <SortRow onClick={() => {setIsActive(!isActive)}}>
+      <SortRow
+        onClick={() => {
+          setIsActive(!isActive);
+        }}
+      >
         <Sort active={isActive}>Sort: {sortOptions[props.value]}</Sort>
         <DropdownIcon src={isActive ? "/up_arrow.svg" : "/dropdown.svg"} />
       </SortRow>
       {isActive && (
         <SortDropDown>
           {sortOptions.map((text, idx) => (
-            <PopupSortText key={idx} onClick={() => {
-              props.onApply(idx);
-              setIsActive(false);}}>
-               {text}
-              </PopupSortText>
+            <PopupSortText
+              key={idx}
+              onClick={() => {
+                props.onApply(idx);
+                setIsActive(false);
+              }}
+            >
+              {text}
+            </PopupSortText>
           ))}
         </SortDropDown>
       )}
     </FilterSubContainer>
   );
-}
+};

@@ -1,11 +1,12 @@
-import styled, { css } from "styled-components";
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import styled from "styled-components";
+
 import { FilterParams } from "@/api/units";
-import { SortDropDownComp } from "@/components/SortDropDown";
-import { FilterText } from "@/components/FilterCommon";
-import { BedBathDropDown } from "@/components/BedBathDropDown";
 import { AvailabilityDropDown } from "@/components/AvailabilityDropDown";
+import { BedBathDropDown } from "@/components/BedBathDropDown";
+import { FilterText } from "@/components/FilterCommon";
 import { PriceDropDown } from "@/components/PriceDropDown";
+import { SortDropDownComp } from "@/components/SortDropDown";
 
 const AllFiltersContainer = styled.div`
   display: flex;
@@ -85,16 +86,16 @@ const ResetFilterRow = styled.div`
   gap: 8px;
 `;
 
-interface FilterDropdownProps {
-  refreshUnits(filterParams: FilterParams): void
+type FilterDropdownProps = {
+  refreshUnits(filterParams: FilterParams): void;
 };
 
 export const FilterDropdown = (props: FilterDropdownProps) => {
-  const [numBedBath, setNumBedBath] = useState({beds: 1, baths: 0.5});
+  const [numBedBath, setNumBedBath] = useState({ beds: 1, baths: 0.5 });
   const [searchText, setSearchText] = useState("");
   const [sortIndex, setSortIndex] = useState(0);
   const [availabilityIndex, setAvailabilityIndex] = useState(0);
-  const [price, setPrice] = useState({minPrice: -1, maxPrice: -1});
+  const [price, setPrice] = useState({ minPrice: -1, maxPrice: -1 });
 
   const resetFunctions = useRef(Array<() => void>);
 
@@ -106,27 +107,27 @@ export const FilterDropdown = (props: FilterDropdownProps) => {
       sort: sortIndex,
       availability: availabilityIndex,
       minPrice: price.minPrice === -1 ? undefined : price.minPrice,
-      maxPrice: price.maxPrice === -1 ? undefined : price.maxPrice
+      maxPrice: price.maxPrice === -1 ? undefined : price.maxPrice,
     };
 
     props.refreshUnits(filters as FilterParams);
-  }
+  };
 
   const resetFilters = () => {
-    setNumBedBath({beds: 1, baths: 0.5});
+    setNumBedBath({ beds: 1, baths: 0.5 });
     setSearchText("");
     setSortIndex(0);
     setAvailabilityIndex(0);
     setPrice({ minPrice: -1, maxPrice: -1 });
 
-    resetFunctions.current.prototype.forEach((callback) => {
+    resetFunctions.current.prototype.forEach((callback: () => void) => {
       callback();
-    })
-  }
+    });
+  };
 
   const registerResetCallback = (callback: () => void) => {
     resetFunctions.current.prototype.push(callback);
-  }
+  };
 
   useEffect(() => {
     applyFilters();
@@ -134,39 +135,51 @@ export const FilterDropdown = (props: FilterDropdownProps) => {
 
   const BedBathChangeHandler = (beds: number, baths: number) => {
     setNumBedBath({ beds, baths });
-  }
+  };
 
   const SortChangeHandler = (sortType: number) => {
-    setSortIndex(sortType);  
-  }
+    setSortIndex(sortType);
+  };
 
   const AvailabilityChangeHandler = (availIndex: number) => {
     setAvailabilityIndex(availIndex);
-  }
+  };
 
   const MinMaxPriceChangeHandler = (minPrice: number, maxPrice: number) => {
     setPrice({ minPrice, maxPrice });
-  }
+  };
 
   return (
     <AllFiltersContainer>
       <FiltersFirstRow>
         <SearchBarContainer>
-          <SearchBarInput placeholder="Search Property" value={searchText}
+          <SearchBarInput
+            placeholder="Search Property"
+            value={searchText}
             onChange={(event) => {
               setSearchText(event.target.value);
-          }}/>
+            }}
+          />
           <SearchIcon src="/search.svg" />
         </SearchBarContainer>
 
         {/* AVAILABILITY FILTER */}
-        <AvailabilityDropDown onApply={AvailabilityChangeHandler} registerResetCallback={registerResetCallback}/>
-        
+        <AvailabilityDropDown
+          onApply={AvailabilityChangeHandler}
+          registerResetCallback={registerResetCallback}
+        />
+
         {/* PRICE FILTER */}
-        <PriceDropDown onApply={MinMaxPriceChangeHandler} registerResetCallback={registerResetCallback}/>
+        <PriceDropDown
+          onApply={MinMaxPriceChangeHandler}
+          registerResetCallback={registerResetCallback}
+        />
 
         {/* BED AND BATH FILTER */}
-        <BedBathDropDown onApply={BedBathChangeHandler} registerResetCallback={registerResetCallback}/>
+        <BedBathDropDown
+          onApply={BedBathChangeHandler}
+          registerResetCallback={registerResetCallback}
+        />
 
         <ResetFilterButton onClick={resetFilters}>
           <ResetFilterRow>
@@ -176,7 +189,7 @@ export const FilterDropdown = (props: FilterDropdownProps) => {
         </ResetFilterButton>
       </FiltersFirstRow>
 
-      <SortDropDownComp value={sortIndex} onApply={SortChangeHandler}/>
+      <SortDropDownComp value={sortIndex} onApply={SortChangeHandler} />
     </AllFiltersContainer>
   );
 };

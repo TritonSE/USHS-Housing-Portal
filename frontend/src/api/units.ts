@@ -1,28 +1,28 @@
 import { APIResult, get, handleAPIError } from "./requests";
 
 export type FilterParams = {
-  search?: string | undefined,
-  availability: number,
-  minPrice?: number | undefined,
-  maxPrice?: number | undefined,
-  beds?: number,
-  baths?: number,
-  approved?: boolean,
-  sort: number
+  search?: string | undefined;
+  availability: number;
+  minPrice?: number | undefined;
+  maxPrice?: number | undefined;
+  beds?: number;
+  baths?: number;
+  approved?: boolean;
+  sort: number;
 };
 
 export async function getUnits(params: FilterParams): Promise<APIResult<Unit[]>> {
   try {
     const query = new URLSearchParams(params);
 
-    let keysForDel : string[] = [];
+    const keysForDel: string[] = [];
     query.forEach((value, key) => {
-      if (value === '' || value === null || value === 'undefined') {
+      if (value === "" || value === null || value === "undefined") {
         keysForDel.push(key);
       }
     });
 
-    keysForDel.forEach(key => {
+    keysForDel.forEach((key) => {
       query.delete(key);
     });
 

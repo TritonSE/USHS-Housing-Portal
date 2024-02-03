@@ -1,6 +1,17 @@
-import styled from "styled-components";
 import { useEffect, useState } from "react";
-import { FilterSubContainer, Dropdown, DropdownIcon, DropDownPopup, FilterText, DropdownRow, Sort, FilterRow, ApplyButton } from "@/components/FilterCommon";
+import styled from "styled-components";
+
+import {
+  ApplyButton,
+  DropDownPopup,
+  Dropdown,
+  DropdownIcon,
+  DropdownRow,
+  FilterRow,
+  FilterSubContainer,
+  FilterText,
+  Sort,
+} from "@/components/FilterCommon";
 
 const BnbDropdownRow = styled(DropdownRow)`
   gap: 40px;
@@ -44,9 +55,9 @@ const AdjustButton = styled.button`
 `;
 
 export type BedBathDropDownProps = {
-  onApply(beds: number, baths: number): void,
-  registerResetCallback(callback: () => void): void
-}
+  onApply(beds: number, baths: number): void;
+  registerResetCallback(callback: () => void): void;
+};
 
 export const BedBathDropDown = (props: BedBathDropDownProps) => {
   const [isActive, setIsActive] = useState(false);
@@ -58,7 +69,7 @@ export const BedBathDropDown = (props: BedBathDropDownProps) => {
     setNumBath(0.5);
     setNumBed(1);
     setDropdownText("Beds & Bath");
-  }
+  };
 
   useEffect(() => {
     props.registerResetCallback(resetFitler);
@@ -66,37 +77,70 @@ export const BedBathDropDown = (props: BedBathDropDownProps) => {
 
   return (
     <FilterSubContainer>
-      <Dropdown onClick={() => { setIsActive(!isActive) }} active={isActive}>
+      <Dropdown
+        onClick={() => {
+          setIsActive(!isActive);
+        }}
+        active={isActive}
+      >
         <BnbDropdownRow>
           <FilterText>{dropdownText}</FilterText>
           <DropdownIcon src={isActive ? "/up_arrow.svg" : "/dropdown.svg"} />
         </BnbDropdownRow>
       </Dropdown>
-      {isActive && <DropDownPopup>
-        <PopupHeaderText>Bedrooms</PopupHeaderText>
-        <BnbRow>
-          <BedBox>
-            <PopupHeaderText>{numBed}+</PopupHeaderText>
-          </BedBox>
-          <AdjustButton onClick={() => {numBed > 1 && setNumBed(numBed - 1); }}>-</AdjustButton>
-          <AdjustButton onClick={() => {numBed < 4 && setNumBed(numBed + 1); }}>+</AdjustButton>
-        </BnbRow>
-        <PopupHeaderText>Bathrooms</PopupHeaderText>
-        <BnbRow>
-          <BathBox>
-            <PopupHeaderText>{numBath}+</PopupHeaderText>
-          </BathBox>
-          <AdjustButton onClick={() => {numBath > 0.5 && setNumBath(numBath - 0.5); }}>-</AdjustButton>
-          <AdjustButton onClick={() => {numBath < 2 && setNumBath(numBath + 0.5); }}>+</AdjustButton>
-        </BnbRow>
-        <ApplyButton onClick={() => {
-          setDropdownText(`${numBed}+ bds, ${numBath}+ ba`);
-          setIsActive(false);
-          props.onApply(numBed, numBath);
-        }}>
-          Apply
-        </ApplyButton>
-      </DropDownPopup>}
+      {isActive && (
+        <DropDownPopup>
+          <PopupHeaderText>Bedrooms</PopupHeaderText>
+          <BnbRow>
+            <BedBox>
+              <PopupHeaderText>{numBed}+</PopupHeaderText>
+            </BedBox>
+            <AdjustButton
+              onClick={() => {
+                if (numBed > 1) setNumBed(numBed - 1);
+              }}
+            >
+              -
+            </AdjustButton>
+            <AdjustButton
+              onClick={() => {
+                if (numBed < 4) setNumBed(numBed + 1);
+              }}
+            >
+              +
+            </AdjustButton>
+          </BnbRow>
+          <PopupHeaderText>Bathrooms</PopupHeaderText>
+          <BnbRow>
+            <BathBox>
+              <PopupHeaderText>{numBath}+</PopupHeaderText>
+            </BathBox>
+            <AdjustButton
+              onClick={() => {
+                if (numBath > 0.5) setNumBath(numBath - 0.5);
+              }}
+            >
+              -
+            </AdjustButton>
+            <AdjustButton
+              onClick={() => {
+                if (numBath < 2) setNumBath(numBath + 0.5);
+              }}
+            >
+              +
+            </AdjustButton>
+          </BnbRow>
+          <ApplyButton
+            onClick={() => {
+              setDropdownText(`${numBed}+ bds, ${numBath}+ ba`);
+              setIsActive(false);
+              props.onApply(numBed, numBath);
+            }}
+          >
+            Apply
+          </ApplyButton>
+        </DropDownPopup>
+      )}
     </FilterSubContainer>
-  )
-}
+  );
+};

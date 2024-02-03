@@ -1,11 +1,11 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
 
+import { FilterParams, getUnits } from "@/api/units";
 import { getUsers } from "@/api/users";
-import { Page } from "@/components/Page";
 import { FilterDropdown } from "@/components/FilterDropdown";
+import { Page } from "@/components/Page";
 import { UnitCardGrid } from "@/components/UnitCardGrid";
-import { getUnits, FilterParams } from "@/api/units";
 
 export function Home() {
   React.useEffect(() => {
@@ -15,7 +15,7 @@ export function Home() {
 
   const fetchUnits = (filterParams: FilterParams) => {
     getUnits(filterParams);
-  }
+  };
 
   return (
     <Page>

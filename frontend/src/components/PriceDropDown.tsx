@@ -1,6 +1,16 @@
-import styled, { css } from "styled-components";
 import { useEffect, useState } from "react";
-import { FilterSubContainer, Dropdown, DropdownRow, FitlerText, DropdownIcon, FilterText, DropDownPopup, PopupHeaderText, ApplyButton } from "@/components/FilterCommon";
+import styled, { css } from "styled-components";
+
+import {
+  ApplyButton,
+  DropDownPopup,
+  Dropdown,
+  DropdownIcon,
+  DropdownRow,
+  FilterSubContainer,
+  FilterText,
+  PopupHeaderText,
+} from "@/components/FilterCommon";
 
 const MinMaxDash = styled.img`
   width: 10px;
@@ -71,7 +81,6 @@ const PriceSubcontainer = styled.div`
   align-items: flex-start;
 `;
 
-
 const PriceFilterText = styled(FilterText)`
   padding-right: 80px;
 `;
@@ -97,97 +106,126 @@ const PlaceholderText = styled.p<{ active: boolean }>`
 `;
 
 export type PriceDropDownProps = {
-    onApply(minPrice: number, maxPrice: number): void,
-    registerResetCallback(callback: () => void): void
-}
+  onApply(minPrice: number, maxPrice: number): void;
+  registerResetCallback(callback: () => void): void;
+};
 
 export const PriceDropDown = (props: PriceDropDownProps) => {
-    const [isActive, setIsActive] = useState(false);
-    const [minPriceOpen, setMinPriceOpen] = useState(false);
-    const [maxPriceOpen, setMaxPriceOpen] = useState(false);
-    const [minPriceSelected, setMinPriceSelected] = useState(-1);
-    const [maxPriceSelected, setMaxPriceSelected] = useState(-1);
-    const [dropdownText, setDropdownText] = useState("Price");
+  const [isActive, setIsActive] = useState(false);
+  const [minPriceOpen, setMinPriceOpen] = useState(false);
+  const [maxPriceOpen, setMaxPriceOpen] = useState(false);
+  const [minPriceSelected, setMinPriceSelected] = useState(-1);
+  const [maxPriceSelected, setMaxPriceSelected] = useState(-1);
+  const [dropdownText, setDropdownText] = useState("Price");
 
-    const priceOptions: number[] = [0, 50, 100, 150, 200];
+  const priceOptions: number[] = [0, 50, 100, 150, 200];
 
-    const minPriceText = minPriceSelected === -1 ?
-        "No Min" : `$${priceOptions[minPriceSelected]}k`;
+  const minPriceText = minPriceSelected === -1 ? "No Min" : `$${priceOptions[minPriceSelected]}k`;
 
-    const maxPriceText = maxPriceSelected === -1 ?
-        "No Max" : `$${priceOptions[maxPriceSelected]}k`;
+  const maxPriceText = maxPriceSelected === -1 ? "No Max" : `$${priceOptions[maxPriceSelected]}k`;
 
-    const resetFilter = () => {
-        setMinPriceSelected(-1);
-        setMaxPriceSelected(-1);
-        setDropdownText("Price");
+  const resetFilter = () => {
+    setMinPriceSelected(-1);
+    setMaxPriceSelected(-1);
+    setDropdownText("Price");
+  };
+
+  const updateDropdownText = () => {
+    if (minPriceSelected !== -1 || maxPriceSelected !== -1) {
+      setDropdownText(`${minPriceText} - ${maxPriceText}`);
     }
+  };
 
-    const updateDropdownText = () => {
-        if (minPriceSelected !== -1 || maxPriceSelected !== -1) {
-            setDropdownText(`${minPriceText} - ${maxPriceText}`);
-        }
-    }
+  useEffect(() => {
+    props.registerResetCallback(resetFilter);
+  }, []);
 
-    useEffect(() => {
-        props.registerResetCallback(resetFilter);
-    }, []);
-    
-    return (
-        <FilterSubContainer>
-            <Dropdown active={isActive} onClick={() => { setIsActive(!isActive); }}>
-                <DropdownRow>
-                    <PriceFilterText>{dropdownText}</PriceFilterText>
-                    <DropdownIcon src={isActive ? "/up_arrow.svg" : "/dropdown.svg"} />
-                </DropdownRow>
-            </Dropdown>
-            {isActive && <DropDownPopup>
-                <PopupHeaderText>Price</PopupHeaderText>
-                <MinMaxRow onClick={() => { setMinPriceOpen(!minPriceOpen); }}>
-                    <PriceSubcontainer>
-                        <MinMaxBox onClick={() => { setMinPriceOpen(!minPriceOpen); }}>
-                            <PlaceholderText active={minPriceSelected !== -1}>{minPriceText}</PlaceholderText>
-                            <ArrowIcon src={minPriceOpen ? "/price_up_arrow.svg" : "/down_arrow.svg"} />
-                        </MinMaxBox>
-                        {minPriceOpen && <MinMaxPopup>
-                            {priceOptions.map((text, idx) => (
-                                <MinMaxPopupButton key={idx} onClick={() => {
-                                    setMinPriceSelected(idx);
-                                    setMinPriceOpen(false);
-                                }}>
-                                    {`$${text}k`}
-                                </MinMaxPopupButton>
-                            ))}
-                        </MinMaxPopup>}
-                    </PriceSubcontainer>
-                    <MinMaxDash src="/min_max_dash.svg" />
-                    <PriceSubcontainer>
-                        <MinMaxBox onClick={() => { setMaxPriceOpen(!maxPriceOpen); }}>
-                            <PlaceholderText active={maxPriceSelected !== -1}>{maxPriceText}</PlaceholderText>
-                            <ArrowIcon src={maxPriceOpen ? "/price_up_arrow.svg" : "/down_arrow.svg"} />
-                        </MinMaxBox>
-                        {maxPriceOpen && <MinMaxPopup>
-                            {priceOptions.map((text, idx) => (
-                                <MinMaxPopupButton key={idx} onClick={() => {
-                                    setMaxPriceSelected(idx);
-                                    setMaxPriceOpen(false);
-                                }}>
-                                    {`$${text}k`}
-                                </MinMaxPopupButton>
-                            ))}
-                        </MinMaxPopup>}
-                    </PriceSubcontainer>
-                </MinMaxRow>
-                <ApplyButton onClick={() => {
-                    setIsActive(false);
-                    setMinPriceOpen(false);
-                    setMaxPriceOpen(false);
-                    updateDropdownText();
-                    props.onApply(minPriceSelected, maxPriceSelected);
-                }}>
-                    Apply
-                </ApplyButton>
-            </DropDownPopup>}
-        </FilterSubContainer>
-    );
-}
+  return (
+    <FilterSubContainer>
+      <Dropdown
+        active={isActive}
+        onClick={() => {
+          setIsActive(!isActive);
+        }}
+      >
+        <DropdownRow>
+          <PriceFilterText>{dropdownText}</PriceFilterText>
+          <DropdownIcon src={isActive ? "/up_arrow.svg" : "/dropdown.svg"} />
+        </DropdownRow>
+      </Dropdown>
+      {isActive && (
+        <DropDownPopup>
+          <PopupHeaderText>Price</PopupHeaderText>
+          <MinMaxRow
+            onClick={() => {
+              setMinPriceOpen(!minPriceOpen);
+            }}
+          >
+            <PriceSubcontainer>
+              <MinMaxBox
+                onClick={() => {
+                  setMinPriceOpen(!minPriceOpen);
+                }}
+              >
+                <PlaceholderText active={minPriceSelected !== -1}>{minPriceText}</PlaceholderText>
+                <ArrowIcon src={minPriceOpen ? "/price_up_arrow.svg" : "/down_arrow.svg"} />
+              </MinMaxBox>
+              {minPriceOpen && (
+                <MinMaxPopup>
+                  {priceOptions.map((text, idx) => (
+                    <MinMaxPopupButton
+                      key={idx}
+                      onClick={() => {
+                        setMinPriceSelected(idx);
+                        setMinPriceOpen(false);
+                      }}
+                    >
+                      {`$${text}k`}
+                    </MinMaxPopupButton>
+                  ))}
+                </MinMaxPopup>
+              )}
+            </PriceSubcontainer>
+            <MinMaxDash src="/min_max_dash.svg" />
+            <PriceSubcontainer>
+              <MinMaxBox
+                onClick={() => {
+                  setMaxPriceOpen(!maxPriceOpen);
+                }}
+              >
+                <PlaceholderText active={maxPriceSelected !== -1}>{maxPriceText}</PlaceholderText>
+                <ArrowIcon src={maxPriceOpen ? "/price_up_arrow.svg" : "/down_arrow.svg"} />
+              </MinMaxBox>
+              {maxPriceOpen && (
+                <MinMaxPopup>
+                  {priceOptions.map((text, idx) => (
+                    <MinMaxPopupButton
+                      key={idx}
+                      onClick={() => {
+                        setMaxPriceSelected(idx);
+                        setMaxPriceOpen(false);
+                      }}
+                    >
+                      {`$${text}k`}
+                    </MinMaxPopupButton>
+                  ))}
+                </MinMaxPopup>
+              )}
+            </PriceSubcontainer>
+          </MinMaxRow>
+          <ApplyButton
+            onClick={() => {
+              setIsActive(false);
+              setMinPriceOpen(false);
+              setMaxPriceOpen(false);
+              updateDropdownText();
+              props.onApply(minPriceSelected, maxPriceSelected);
+            }}
+          >
+            Apply
+          </ApplyButton>
+        </DropDownPopup>
+      )}
+    </FilterSubContainer>
+  );
+};
