@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FilterSubContainer, Dropdown, DropdownIcon, DropDownPopup, FilterText, DropdownRow, Sort, FilterRow, ApplyButton } from "@/components/FilterCommon";
 
 const BnbDropdownRow = styled(DropdownRow)`
@@ -44,7 +44,8 @@ const AdjustButton = styled.button`
 `;
 
 export type BedBathDropDownProps = {
-    onApply(beds: number, baths: number): void
+  onApply(beds: number, baths: number): void,
+  registerResetCallback(callback: () => void): void
 }
 
 export const BedBathDropDown = (props: BedBathDropDownProps) => {
@@ -52,6 +53,16 @@ export const BedBathDropDown = (props: BedBathDropDownProps) => {
   const [numBed, setNumBed] = useState(1);
   const [numBath, setNumBath] = useState(0.5);
   const [dropdownText, setDropdownText] = useState("Beds & Bath");
+
+  const resetFitler = () => {
+    setNumBath(0.5);
+    setNumBed(1);
+    setDropdownText("Beds & Bath");
+  }
+
+  useEffect(() => {
+    props.registerResetCallback(resetFitler);
+  }, []);
 
   return (
     <FilterSubContainer>

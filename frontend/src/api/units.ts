@@ -2,7 +2,7 @@ import { APIResult, get, handleAPIError } from "./requests";
 
 export type FilterParams = {
   search?: string | undefined,
-  availability: string,
+  availability: number,
   minPrice?: number,
   maxPrice?: number,
   beds?: number,
