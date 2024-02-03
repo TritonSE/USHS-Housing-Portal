@@ -107,6 +107,7 @@ export const PriceDropDown = (props: PriceDropDownProps) => {
     const [maxPriceOpen, setMaxPriceOpen] = useState(false);
     const [minPriceSelected, setMinPriceSelected] = useState(-1);
     const [maxPriceSelected, setMaxPriceSelected] = useState(-1);
+    const [dropdownText, setDropdownText] = useState("Price");
 
     const priceOptions: number[] = [0, 50, 100, 150, 200];
 
@@ -119,6 +120,13 @@ export const PriceDropDown = (props: PriceDropDownProps) => {
     const resetFilter = () => {
         setMinPriceSelected(-1);
         setMaxPriceSelected(-1);
+        setDropdownText("Price");
+    }
+
+    const updateDropdownText = () => {
+        if (minPriceSelected !== -1 || maxPriceSelected !== -1) {
+            setDropdownText(`${minPriceText} - ${maxPriceText}`);
+        }
     }
 
     useEffect(() => {
@@ -129,7 +137,7 @@ export const PriceDropDown = (props: PriceDropDownProps) => {
         <FilterSubContainer>
             <Dropdown active={isActive} onClick={() => { setIsActive(!isActive); }}>
                 <DropdownRow>
-                    <PriceFilterText>Price</PriceFilterText>
+                    <PriceFilterText>{dropdownText}</PriceFilterText>
                     <DropdownIcon src={isActive ? "/up_arrow.svg" : "/dropdown.svg"} />
                 </DropdownRow>
             </Dropdown>
@@ -174,6 +182,7 @@ export const PriceDropDown = (props: PriceDropDownProps) => {
                     setIsActive(false);
                     setMinPriceOpen(false);
                     setMaxPriceOpen(false);
+                    updateDropdownText();
                     props.onApply(minPriceSelected, maxPriceSelected);
                 }}>
                     Apply

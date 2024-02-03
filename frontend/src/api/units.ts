@@ -3,8 +3,8 @@ import { APIResult, get, handleAPIError } from "./requests";
 export type FilterParams = {
   search?: string | undefined,
   availability: number,
-  minPrice?: number,
-  maxPrice?: number,
+  minPrice?: number | undefined,
+  maxPrice?: number | undefined,
   beds?: number,
   baths?: number,
   approved?: boolean,
@@ -17,7 +17,7 @@ export async function getUnits(params: FilterParams): Promise<APIResult<Unit[]>>
 
     let keysForDel : string[] = [];
     query.forEach((value, key) => {
-      if (value === '' || value === null || value === undefined) {
+      if (value === '' || value === null || value === 'undefined') {
         keysForDel.push(key);
       }
     });

@@ -105,8 +105,8 @@ export const FilterDropdown = (props: FilterDropdownProps) => {
       baths: numBedBath.baths,
       sort: sortIndex,
       availability: availabilityIndex,
-      minPrice: price.minPrice,
-      maxPrice: price.maxPrice
+      minPrice: price.minPrice === -1 ? undefined : price.minPrice,
+      maxPrice: price.maxPrice === -1 ? undefined : price.maxPrice
     };
 
     props.refreshUnits(filters as FilterParams);
