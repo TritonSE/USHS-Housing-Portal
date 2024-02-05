@@ -94,6 +94,13 @@ export function Login() {
         </Wrapper>
         {errorMessage && <Error>{errorMessage}</Error>}
       </Items>
+      <Items>
+        <Wrapper>
+          <Image src="USHSLogo.png" alt="" />
+          <Button onClick={login}>Log in with Google</Button>
+        </Wrapper>
+        {errorMessage && <Error>{errorMessage}</Error>}
+      </Items>
     </Page>
   );
 }
