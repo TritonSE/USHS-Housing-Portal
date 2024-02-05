@@ -24,7 +24,6 @@ const Wrapper = styled.div`
   align-items: center;
   gap: 13.67vh;
   padding: 20vh 364.6px 0vh 365px;
-  // max-height: 70vh;
 `;
 export const Button = styled.button`
   padding: 12px 32px;
