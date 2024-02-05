@@ -83,9 +83,5 @@ const validateHousingLocator: RequestHandler = (req, res, next) => {
  * @param validators a list of validation chains to apply to the request
  * @returns the validation chain with the validation handler appended
  */
-export const validateWith = (validators: ValidationChain[]) => [
-  ...validators,
-  validateRequest,
-  validateUser,
-];
-export { validateHousingLocator };
+export const validateWith = (validators: ValidationChain[]) => [...validators, validateRequest];
+export { validateUser, validateHousingLocator };
