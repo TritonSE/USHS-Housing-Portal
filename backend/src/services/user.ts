@@ -2,7 +2,7 @@
  * Business logic for user related operations.
  */
 
-import { UserModel } from "@/models/user";
+import { UserModel } from "../models/user";
 
 // Fetch users from the database
 export async function getUsers() {

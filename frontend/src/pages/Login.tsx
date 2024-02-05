@@ -1,13 +1,12 @@
 import { FirebaseError } from "firebase/app";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import { createUser } from "@/api/users";
 import { Page } from "@/components";
-import { AuthContext } from "@/contexts/AuthContext";
 import { auth } from "@/firebase";
 
 const Items = styled.div`
@@ -27,7 +26,7 @@ const Wrapper = styled.div`
   padding: 20vh 364.6px 0vh 365px;
   // max-height: 70vh;
 `;
-const Button = styled.button`
+export const Button = styled.button`
   padding: 12px 32px;
   background-color: #b64201;
   border-radius: 14px;
@@ -54,13 +53,7 @@ export function Login() {
   provider.addScope("email");
   provider.addScope("profile");
 
-  const authContext = useContext(AuthContext);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    console.log(authContext.currentUser);
-    console.log(authContext.signedIn);
-  });
 
   const login = () => {
     signInWithPopup(auth, provider)
@@ -76,7 +69,7 @@ export function Login() {
         createUser({ firstName, lastName, email })
           .then((res) => {
             console.log(res);
-            navigate("/"); //filler for now
+            navigate("/");
           })
           .catch((error) => {
             console.log(error);
@@ -84,7 +77,7 @@ export function Login() {
       })
       .catch((error: FirebaseError) => {
         console.log(error);
-        if (error.code !== "auth/internal-error" && error.message.includes("Cloud Function")) {
+        if (error.code === "auth/internal-error" && error.message.includes("Cloud Function")) {
           setError("You are not authorized to sign in.");
         }
       });
