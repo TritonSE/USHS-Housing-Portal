@@ -1,7 +1,7 @@
 import React, { ReactNode, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
 import { User } from "../../../backend/src/models/user.ts";
-import { getUsers } from "../../../backend/src/services/user.ts";
+import { get } from "../api/requests.ts";
 
 import { AuthContext } from "./AuthContext.tsx";
 
@@ -28,7 +28,8 @@ export function DataProvider({ children }: ProviderProps) {
   const auth = useContext(AuthContext);
 
   const fetchData = useCallback(async () => {
-    const data: User[] = (await getUsers()) as User[];
+    const jsonData = await get("/users");
+    const data = (await jsonData.json()) as User[];
     setAllHousingLocators(data.filter((user: User) => user.isHousingLocator));
     setAllCaseManagers(data.filter((user: User) => !user.isHousingLocator));
     setUser(
