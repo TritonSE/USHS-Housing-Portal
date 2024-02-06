@@ -8,6 +8,7 @@ import styled from "styled-components";
 import { createUser } from "@/api/users";
 import { Page } from "@/components";
 import { AuthContext } from "@/contexts/AuthContext";
+import { DataContext } from "@/contexts/DataContext";
 import { auth } from "@/firebase";
 
 const Items = styled.div`
@@ -55,11 +56,13 @@ export function Login() {
   provider.addScope("profile");
 
   const authContext = useContext(AuthContext);
+  const dataContext = useContext(DataContext);
   const navigate = useNavigate();
 
   useEffect(() => {
     console.log(authContext.currentUser);
     console.log(authContext.signedIn);
+    console.log(dataContext.currentUser);
   });
 
   const login = () => {
