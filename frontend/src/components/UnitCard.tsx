@@ -20,7 +20,7 @@ const UnitCardContainer = styled.div`
 
 const UnitCardText = styled.span`
   color: ${(props) => props.theme.colors.text};
-  font-family: "Neutra Text";
+  font-family: "Neutraface Text";
 `;
 
 const AvailabilityRow = styled.div`

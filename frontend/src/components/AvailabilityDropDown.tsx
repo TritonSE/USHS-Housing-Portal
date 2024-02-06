@@ -34,17 +34,17 @@ export type AvailabilityDropDownProps = {
 export const AvailabilityDropDown = (props: AvailabilityDropDownProps) => {
   const [isActive, setIsActive] = useState(false);
   const [selectedIdx, setSelectedIdx] = useState(0);
-  const [dropdownText, setDropdownText] = useState("Available");
+  const [dropdownText, setDropdownText] = useState("Availabile");
 
   const availabilityOptions: string[] = ["Available", "Leased"];
 
-  const resetFitler = () => {
+  const resetFilter = () => {
     setSelectedIdx(0);
-    setDropdownText("Available");
+    setDropdownText("Availablity");
   };
 
   useEffect(() => {
-    props.registerResetCallback(resetFitler);
+    props.registerResetCallback(resetFilter);
   }, []);
 
   return (

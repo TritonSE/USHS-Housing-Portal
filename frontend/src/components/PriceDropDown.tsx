@@ -218,8 +218,14 @@ export const PriceDropDown = (props: PriceDropDownProps) => {
               setIsActive(false);
               setMinPriceOpen(false);
               setMaxPriceOpen(false);
-              updateDropdownText();
-              props.onApply(minPriceSelected, maxPriceSelected);
+              if (minPriceSelected < maxPriceSelected) {
+                updateDropdownText();
+                props.onApply(minPriceSelected, maxPriceSelected);
+              } else {
+                setDropdownText("Price");
+                setMinPriceSelected(-1);
+                setMaxPriceSelected(-1);
+              }
             }}
           >
             Apply
