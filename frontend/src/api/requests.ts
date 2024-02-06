@@ -1,3 +1,5 @@
+import { auth } from "@/firebase";
+
 /**
  * Based on the TSE Fulcrum API client implementation by justinyaodu:
  * https://github.com/TritonSE/TSE-Fulcrum/blob/main/frontend/src/api.ts
@@ -38,6 +40,10 @@ async function fetchRequest(
   const newHeaders = { ...headers };
   if (hasBody) {
     newHeaders["Content-Type"] = "application/json";
+  }
+
+  if (auth.currentUser) {
+    newHeaders.Authorization = `Bearer ${await auth.currentUser.getIdToken()}`;
   }
 
   const response = await fetch(url, {

@@ -31,3 +31,7 @@ export async function createUser(firstName: string, lastName: string, email: str
     return null;
   }
 }
+
+export async function getUserByEmail(email: string) {
+  return await UserModel.findOne({ email });
+}

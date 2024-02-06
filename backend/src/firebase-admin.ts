@@ -1,8 +1,11 @@
-import firebase, { ServiceAccount } from "firebase-admin/app";
+import admin from "firebase-admin";
+import { ServiceAccount } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
 
-firebase.initializeApp({
-  credential: firebase.cert(JSON.parse(process.env.FIREBASE ?? "") as ServiceAccount),
+const serviceAccount = JSON.parse(process.env.FIREBASE ?? "") as ServiceAccount;
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
 });
 
-module.exports = { firebaseAuth: getAuth() };
+export const firebaseAuth = getAuth();
