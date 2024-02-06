@@ -10,6 +10,7 @@ import { auth } from "@/firebase";
 
 export function Home() {
   const authContext = useContext(AuthContext);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const dataContext = useContext(DataContext);
   const navigate = useNavigate();
 
@@ -22,12 +23,6 @@ export function Home() {
       .catch((error) => {
         console.log(error);
       });
-  };
-
-  const getInfo = () => {
-    console.log(authContext.currentUser);
-    console.log("Signed in?: " + authContext.signedIn);
-    console.log(dataContext.currentUser);
   };
 
   return (
@@ -48,7 +43,6 @@ export function Home() {
         Login
       </button>
       <button onClick={logOut}>Log Out</button>
-      <button onClick={getInfo}>Log user info</button>
     </Page>
   );
 }

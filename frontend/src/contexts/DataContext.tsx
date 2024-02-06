@@ -1,7 +1,6 @@
 import React, { ReactNode, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
-import { User } from "../../../backend/src/models/user.ts";
-import { get } from "../api/requests.ts";
+import { User, getUsers } from "../api/users.ts";
 
 import { AuthContext } from "./AuthContext.tsx";
 
@@ -28,13 +27,18 @@ export function DataProvider({ children }: ProviderProps) {
   const auth = useContext(AuthContext);
 
   const fetchData = useCallback(async () => {
-    const jsonData = await get("/users");
-    const data = (await jsonData.json()) as User[];
-    setAllHousingLocators(data.filter((user: User) => user.isHousingLocator));
-    setAllCaseManagers(data.filter((user: User) => !user.isHousingLocator));
-    setUser(
-      data.find((user: User) => auth.currentUser && user.email === auth.currentUser.email) ?? null,
-    );
+    const response = await getUsers();
+    if (response.success) {
+      const data = response.data;
+      setAllHousingLocators(data.filter((user: User) => user.isHousingLocator));
+      setAllCaseManagers(data.filter((user: User) => !user.isHousingLocator));
+      setUser(
+        data.find((user: User) => auth.currentUser && user.email === auth.currentUser.email) ??
+          null,
+      );
+    } else {
+      console.error(response.error);
+    }
   }, [auth]);
 
   useEffect(() => {
