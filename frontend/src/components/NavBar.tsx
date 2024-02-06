@@ -2,8 +2,8 @@ import { signOut } from "firebase/auth";
 import { useState } from "react";
 import styled from "styled-components";
 
+import { PrimaryButton, SecondaryButton } from "@/components/Button";
 import { auth } from "@/firebase";
-import { Button } from "@/pages/Login";
 
 const NavbarItems = styled.div`
   background-color: #ffffff;
@@ -37,7 +37,7 @@ const LeftWrapper = styled.div`
   height: 47px;
 `;
 
-const LogoutButton = styled(Button)`
+const LogoutButton = styled(PrimaryButton)`
   border-radius: 8px;
   padding: 10px 24px;
   font-size: 16px;
@@ -49,10 +49,10 @@ const ConfirmLogout = styled(LogoutButton)`
   border-radius: 12px;
 `;
 
-const CancelButton = styled(ConfirmLogout)`
-  border: 1px solid #b64201;
-  background: #fff;
-  color: #b64201;
+const CancelLogout = styled(SecondaryButton)`
+  width: 355px;
+  height: 45px;
+  border-radius: 12px;
 `;
 
 const Link = styled.a`
@@ -168,7 +168,7 @@ export function NavBar({ page }: NavBarProps) {
             <h1>Log out?</h1>
             <ButtonsWrapper>
               <ConfirmLogout onClick={logOut}>Log out</ConfirmLogout>
-              <CancelButton onClick={togglePopup}>Cancel</CancelButton>
+              <CancelLogout onClick={togglePopup}>Cancel</CancelLogout>
             </ButtonsWrapper>
           </Modal>
         </>

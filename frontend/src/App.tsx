@@ -24,8 +24,8 @@ function AppRouter() {
         {signedIn && (
           <>
             <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="*" element={<Navigate to="/" />} />
           </>
         )}
       </Routes>
