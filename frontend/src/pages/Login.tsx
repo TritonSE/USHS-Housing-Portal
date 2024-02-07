@@ -77,7 +77,7 @@ export function Login() {
       })
       .catch((error: FirebaseError) => {
         console.log(error);
-        if (error.code !== "auth/internal-error" && error.message.includes("Cloud Function")) {
+        if (error.code === "auth/internal-error" && error.message.includes("Cloud Function")) {
           setError("You are not authorized to sign in.");
         }
       });
