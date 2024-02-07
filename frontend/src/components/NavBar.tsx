@@ -2,7 +2,7 @@ import { signOut } from "firebase/auth";
 import { useState } from "react";
 import styled from "styled-components";
 
-import { PrimaryButton, SecondaryButton } from "@/components/Button";
+import { Button } from "@/components/Button";
 import { auth } from "@/firebase";
 
 const NavbarItems = styled.div`
@@ -37,7 +37,7 @@ const LeftWrapper = styled.div`
   height: 47px;
 `;
 
-const LogoutButton = styled(PrimaryButton)`
+const LogoutButton = styled(Button)`
   border-radius: 8px;
   padding: 10px 24px;
   font-size: 16px;
@@ -49,19 +49,9 @@ const ConfirmLogout = styled(LogoutButton)`
   border-radius: 12px;
 `;
 
-const CancelLogout = styled(SecondaryButton)`
-  width: 355px;
-  height: 45px;
-  border-radius: 12px;
-`;
-
-const Link = styled.a`
+const Link = styled.a<{ active: boolean }>`
   text-decoration: none;
-  color: black;
-`;
-
-const Highlighted = styled(Link)`
-  color: #b64201;
+  color: ${(props) => (props.active ? "#b64201" : "black")};
 `;
 
 const Overlay = styled.div`
@@ -143,19 +133,16 @@ export function NavBar({ page }: NavBarProps) {
       <NavbarItems>
         <LeftWrapper>
           <Icon src="USHSLogo2.png" />
-          {page === "Home" ? (
-            <>
-              <Highlighted href="/">Home</Highlighted>
-              <Link href="/profile">Profile</Link>
-            </>
-          ) : (
-            <>
-              <Link href="/">Home</Link>
-              <Highlighted href="profile">Profile</Highlighted>
-            </>
-          )}
+          <Link href="/" active={page === "Home"}>
+            Home
+          </Link>
+          <Link href="/profile" active={page === "Profile"}>
+            Profile
+          </Link>
         </LeftWrapper>
-        <LogoutButton onClick={togglePopup}>Log Out</LogoutButton>
+        <LogoutButton kind="primary" onClick={togglePopup}>
+          Log Out
+        </LogoutButton>
       </NavbarItems>
 
       {popup && (
@@ -167,8 +154,12 @@ export function NavBar({ page }: NavBarProps) {
             </XWrapper>
             <h1>Log out?</h1>
             <ButtonsWrapper>
-              <ConfirmLogout onClick={logOut}>Log out</ConfirmLogout>
-              <CancelLogout onClick={togglePopup}>Cancel</CancelLogout>
+              <ConfirmLogout kind="primary" onClick={logOut}>
+                Log out
+              </ConfirmLogout>
+              <ConfirmLogout kind="secondary" onClick={togglePopup}>
+                Cancel
+              </ConfirmLogout>
             </ButtonsWrapper>
           </Modal>
         </>

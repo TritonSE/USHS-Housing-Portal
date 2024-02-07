@@ -7,7 +7,7 @@ import styled from "styled-components";
 
 import { createUser } from "@/api/users";
 import { Page } from "@/components";
-import { PrimaryButton } from "@/components/Button";
+import { Button } from "@/components/Button";
 import { auth } from "@/firebase";
 
 const Items = styled.div`
@@ -80,7 +80,9 @@ export function Login() {
       <Items>
         <Wrapper>
           <Image src="USHSLogo.png" alt="" />
-          <PrimaryButton onClick={login}>Log in with Google</PrimaryButton>
+          <Button kind="primary" onClick={login}>
+            Log in with Google
+          </Button>
         </Wrapper>
         {errorMessage && <Error>{errorMessage}</Error>}
       </Items>
