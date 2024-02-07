@@ -5,13 +5,10 @@ import { useNavigate } from "react-router-dom";
 
 import { Page } from "@/components";
 import { AuthContext } from "@/contexts/AuthContext";
-import { DataContext } from "@/contexts/DataContext";
 import { auth } from "@/firebase";
 
 export function Home() {
   const authContext = useContext(AuthContext);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const dataContext = useContext(DataContext);
   const navigate = useNavigate();
 
   //Everything below is testing for auth context, feel free to delete

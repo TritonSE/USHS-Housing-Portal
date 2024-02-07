@@ -1,14 +1,12 @@
 import { FirebaseError } from "firebase/app";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import { createUser } from "@/api/users";
 import { Page } from "@/components";
-import { AuthContext } from "@/contexts/AuthContext";
-import { DataContext } from "@/contexts/DataContext";
 import { auth } from "@/firebase";
 
 const Items = styled.div`
@@ -55,10 +53,6 @@ export function Login() {
   provider.addScope("email");
   provider.addScope("profile");
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const authContext = useContext(AuthContext);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const dataContext = useContext(DataContext);
   const navigate = useNavigate();
 
   const login = () => {
