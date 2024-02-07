@@ -42,6 +42,7 @@ const Image = styled.img`
   width: 600px;
   height: 250px;
 `;
+
 const Error = styled.div`
   color: red;
 `;
