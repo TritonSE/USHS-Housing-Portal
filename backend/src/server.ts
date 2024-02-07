@@ -33,7 +33,7 @@ export const backend = onRequest({ region: "us-west1" }, app);
 
 export const beforecreated = beforeUserCreated((event) => {
   const user = event.data;
-  if (ENVIRONMENT === "staging" && !user.email?.includes("@ucsd.edu")) {
+  if (ENVIRONMENT === "production" && !user.email?.includes("unionstationhs.org")) {
     throw new HttpsError("invalid-argument", "Unauthorized email");
   }
 });
