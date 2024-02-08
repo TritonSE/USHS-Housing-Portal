@@ -26,7 +26,7 @@ const GridContainer = styled.div`
 `;
 
 // Hard coded units for testing
-export const UnitCardGrid = ({ units }) => {
+export const UnitCardGrid = () => {
   return (
     <GridContainer>
       <PropertiesText>Available Properties</PropertiesText>
