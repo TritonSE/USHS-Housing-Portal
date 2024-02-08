@@ -7,6 +7,7 @@ import styled from "styled-components";
 
 import { createUser } from "@/api/users";
 import { Page } from "@/components";
+import { Button } from "@/components/Button";
 import { auth } from "@/firebase";
 
 const Items = styled.div`
@@ -24,25 +25,12 @@ const Wrapper = styled.div`
   align-items: center;
   gap: 13.67vh;
   padding: 20vh 364.6px 0vh 365px;
-  // max-height: 70vh;
 `;
-const Button = styled.button`
-  padding: 12px 32px;
-  background-color: #b64201;
-  border-radius: 14px;
-  color: #ffffff;
-  font-weight: 500;
-  font-size: 18px;
-  letter-spacing: 0.32px;
-  border: none;
-  cursor: pointer;
-  white-space: nowrap;
-`;
+
 const Image = styled.img`
   width: 600px;
   height: 250px;
 `;
-
 const Error = styled.div`
   color: red;
 `;
@@ -70,7 +58,7 @@ export function Login() {
         createUser({ firstName, lastName, email })
           .then((res) => {
             console.log(res);
-            navigate("/"); //filler for now
+            navigate("/");
           })
           .catch((error) => {
             console.log(error);
@@ -92,7 +80,9 @@ export function Login() {
       <Items>
         <Wrapper>
           <Image src="USHSLogo.png" alt="" />
-          <Button onClick={login}>Log in with Google</Button>
+          <Button kind="primary" onClick={login}>
+            Log in with Google
+          </Button>
         </Wrapper>
         {errorMessage && <Error>{errorMessage}</Error>}
       </Items>
