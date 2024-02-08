@@ -187,25 +187,6 @@ export function UnitDetails() {
     }
   }, []);
 
-  //page returned if unit does not exist
-  if (unit === undefined) {
-    return (
-      <Page>
-        <Helmet>
-          <title>Unit Does Not Exist | USHS Housing Portal</title>
-        </Helmet>
-        {/* add button */}
-        <h1>This unit does not exist!</h1>
-      </Page>
-    );
-  }
-
-  //checks for avaliability
-  let availableNow = "Not Available";
-  if (unit.availableNow) {
-    availableNow = "Available Now";
-  }
-
   const Row = styled.div`
     display: flex;
     flex-direction: row;
@@ -253,13 +234,13 @@ export function UnitDetails() {
   `;
 
   const Text = styled.div`
-  font-family: "Montserrat"
-  font-weight: 400;
-  font-size: 20px;
-  line-height: 150%
-  letter-spacing: 0.4px;
+    font-family: "Montserrat"
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 150%
+    letter-spacing: 0.4px;
 
-`;
+  `;
 
   const List = styled.ul`
     margin-top: 0;
@@ -271,14 +252,60 @@ export function UnitDetails() {
   `;
 
   const ListText = styled.li`
-  font-family: "Montserrat"
-  font-weight: 400;
-  font-size: 20px;
-  line-height: 150%
-  letter-spacing: 0.4px;
-`;
+    font-family: "Montserrat"
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 150%
+    letter-spacing: 0.4px;
+  `;
 
   const Address = styled(Header)``;
+
+  const ButtonPadding = styled.div`
+    display: flex;
+    flex-direction: row;
+    padding: 20px 10% 0px 10%;
+  `;
+
+  const DoesNotExist = styled.h1`
+    font-size: 48px;
+    font-family: "Neutraface Text", sans-serif;
+    font-weight: 550;
+    line-height: 150%;
+    line-spacing: 0.96px;
+    padding: 20px 10% 20px 10%;
+  `;
+
+  //page returned if unit does not exist
+  if (unit === undefined) {
+    return (
+      <Page>
+        <Helmet>
+          <title>Unit Does Not Exist | USHS Housing Portal</title>
+        </Helmet>
+        <Column>
+          <ButtonPadding>
+            <Link to="/">
+              <Button
+                kind="primary"
+                type="button"
+                data-testid="back-to-listing-button"
+                label="Back to Listing"
+              />
+            </Link>
+          </ButtonPadding>
+          <DoesNotExist>This unit does not exist!</DoesNotExist>
+        </Column>
+      </Page>
+    );
+  }
+
+  //checks for avaliability
+  let availableNow = "Not Available";
+  if (unit.availableNow) {
+    availableNow = "Available Now";
+  }
+
   const UnitDetailsPage = () => (
     <MainColumn>
       <Row>
@@ -378,17 +405,19 @@ export function UnitDetails() {
 
   return (
     <Page>
-      <Helmet>
-        <title>{unit._id} | USHS Housing Portal</title>
-      </Helmet>
-      <Link to="/">
-        <Button
-          kind="secondary"
-          type="button"
-          data-testid="back-to-listing-button"
-          label="Back to Listing"
-        />
-      </Link>
+      <Helmet>{/* <title>{unit._id} | USHS Housing Portal</title> */}</Helmet>
+      <title>UnitDetails</title>
+      <h1>hi</h1>
+      <ButtonPadding>
+        <Link to="/">
+          <Button
+            kind="primary"
+            type="button"
+            data-testid="back-to-listing-button"
+            label="Back to Listing"
+          />
+        </Link>
+      </ButtonPadding>
 
       {/* is this correct or do we have to render  */}
       <UnitDetailsPage></UnitDetailsPage>

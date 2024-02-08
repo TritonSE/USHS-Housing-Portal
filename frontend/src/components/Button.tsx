@@ -1,5 +1,6 @@
 import React from "react";
-import styles from "src/components/Button.module.css";
+
+import styles from "./Button.module.css";
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 export interface ButtonProps extends React.ComponentProps<"button"> {

@@ -15,7 +15,7 @@ export function Home() {
       <Helmet>
         <title>Home | USHS Housing Portal</title>
       </Helmet>
-      <h1>This is the home page.</h1>
+      <h1>This is the home page. </h1>
     </Page>
   );
 }

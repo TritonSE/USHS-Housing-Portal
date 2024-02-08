@@ -2,7 +2,7 @@ import { HelmetProvider } from "react-helmet-async";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 
-import { Home, Login } from "@/pages";
+import { Home, Login, UnitDetails } from "@/pages";
 import { GlobalStyle, theme } from "@/theme";
 
 export default function App() {
@@ -14,6 +14,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/unit/{id}" element={<UnitDetails />} />
           </Routes>
         </BrowserRouter>
       </HelmetProvider>
