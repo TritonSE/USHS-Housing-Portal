@@ -118,11 +118,11 @@ export const PriceDropDown = (props: PriceDropDownProps) => {
   const [maxPriceSelected, setMaxPriceSelected] = useState(-1);
   const [dropdownText, setDropdownText] = useState("Price");
 
-  const priceOptions: number[] = [0, 50, 100, 150, 200];
+  const priceOptions: number[] = [0, 250, 500, 750, 1000, 1250, 1500, 1750, 2000];
 
-  const minPriceText = minPriceSelected === -1 ? "No Min" : `$${priceOptions[minPriceSelected]}k`;
+  const minPriceText = minPriceSelected === -1 ? "No Min" : `$${priceOptions[minPriceSelected]}`;
 
-  const maxPriceText = maxPriceSelected === -1 ? "No Max" : `$${priceOptions[maxPriceSelected]}k`;
+  const maxPriceText = maxPriceSelected === -1 ? "No Max" : `$${priceOptions[maxPriceSelected]}`;
 
   const resetFilter = () => {
     setMinPriceSelected(-1);
@@ -156,11 +156,7 @@ export const PriceDropDown = (props: PriceDropDownProps) => {
       {isActive && (
         <DropDownPopup>
           <PopupHeaderText>Price</PopupHeaderText>
-          <MinMaxRow
-            onClick={() => {
-              setMinPriceOpen(!minPriceOpen);
-            }}
-          >
+          <MinMaxRow>
             <PriceSubcontainer>
               <MinMaxBox
                 onClick={() => {
@@ -180,7 +176,7 @@ export const PriceDropDown = (props: PriceDropDownProps) => {
                         setMinPriceOpen(false);
                       }}
                     >
-                      {`$${text}k`}
+                      {`$${text}`}
                     </MinMaxPopupButton>
                   ))}
                 </MinMaxPopup>
@@ -206,7 +202,7 @@ export const PriceDropDown = (props: PriceDropDownProps) => {
                         setMaxPriceOpen(false);
                       }}
                     >
-                      {`$${text}k`}
+                      {`$${text}`}
                     </MinMaxPopupButton>
                   ))}
                 </MinMaxPopup>
