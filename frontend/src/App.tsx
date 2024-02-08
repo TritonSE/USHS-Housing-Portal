@@ -1,22 +1,49 @@
+import { useContext } from "react";
 import { HelmetProvider } from "react-helmet-async";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 
-import { Home, Login } from "@/pages";
+import { AuthContext, AuthProvider } from "./contexts/AuthContext";
+import { DataProvider } from "./contexts/DataContext";
+
+import { Home, Login, Profile } from "@/pages";
 import { GlobalStyle, theme } from "@/theme";
+
+function AppRouter() {
+  const { signedIn } = useContext(AuthContext);
+  return (
+    <BrowserRouter>
+      <Routes>
+        {!signedIn && (
+          <>
+            <Route path="*" element={<Navigate replace to="/login" />} />
+            <Route path="/login" element={<Login />} />
+          </>
+        )}
+
+        {signedIn && (
+          <>
+            <Route path="/" element={<Home />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="*" element={<Navigate to="/" />} />
+          </>
+        )}
+      </Routes>
+    </BrowserRouter>
+  );
+}
 
 export default function App() {
   return (
     <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <HelmetProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-          </Routes>
-        </BrowserRouter>
-      </HelmetProvider>
+      <AuthProvider>
+        <DataProvider>
+          <GlobalStyle />
+          <HelmetProvider>
+            <AppRouter />
+          </HelmetProvider>
+        </DataProvider>
+      </AuthProvider>
     </ThemeProvider>
   );
 }
