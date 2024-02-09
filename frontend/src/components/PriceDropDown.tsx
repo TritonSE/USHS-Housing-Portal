@@ -136,9 +136,9 @@ export const PriceDropDown = (props: PriceDropDownProps) => {
     }
   };
 
-  useEffect(() => {
-    props.registerResetCallback(resetFilter);
-  }, []);
+  // useEffect(() => {
+  //   props.registerResetCallback(resetFilter);
+  // }, []);
 
   return (
     <FilterSubContainer>

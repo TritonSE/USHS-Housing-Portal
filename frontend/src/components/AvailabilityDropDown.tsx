@@ -43,9 +43,9 @@ export const AvailabilityDropDown = (props: AvailabilityDropDownProps) => {
     setDropdownText("Availablity");
   };
 
-  useEffect(() => {
-    props.registerResetCallback(resetFilter);
-  }, []);
+  // useEffect(() => {
+  //   props.registerResetCallback(resetFilter);
+  // }, []);
 
   return (
     <FilterSubContainer>

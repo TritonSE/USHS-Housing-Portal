@@ -71,9 +71,9 @@ export const BedBathDropDown = (props: BedBathDropDownProps) => {
     setDropdownText("Beds & Bath");
   };
 
-  useEffect(() => {
-    props.registerResetCallback(resetFitler);
-  }, []);
+  // useEffect(() => {
+  //   props.registerResetCallback(resetFitler);
+  // }, []);
 
   return (
     <FilterSubContainer>
