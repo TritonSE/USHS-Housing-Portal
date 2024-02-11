@@ -23,8 +23,9 @@ const PopupSortText = styled(Sort)`
 `;
 
 export type SortDropDownCompProps = {
-  value: number;
-  onApply(selected: number): void;
+  value: number,
+  setValue(selected: number): void,
+  onApply(): void,
 };
 
 export const SortDropDownComp = (props: SortDropDownCompProps) => {
@@ -48,8 +49,9 @@ export const SortDropDownComp = (props: SortDropDownCompProps) => {
             <PopupSortText
               key={idx}
               onClick={() => {
-                props.onApply(idx);
+                props.setValue(idx);
                 setIsActive(false);
+                props.onApply();
               }}
             >
               {text}

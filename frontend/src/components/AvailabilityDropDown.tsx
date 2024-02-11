@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 
 import {
@@ -26,26 +26,21 @@ const PopupBodyText = styled(Sort)`
   margin-left: 0;
 `;
 
+export type AvailabilityState = {
+  selectedIdx: number,
+  dropdownText: string
+};
+
 export type AvailabilityDropDownProps = {
-  onApply(selected: number): void;
-  registerResetCallback(callback: () => void): void;
+  value: AvailabilityState,
+  setValue(val: AvailabilityState): void,
+  onApply(): void,
 };
 
 export const AvailabilityDropDown = (props: AvailabilityDropDownProps) => {
   const [isActive, setIsActive] = useState(false);
-  const [selectedIdx, setSelectedIdx] = useState(0);
-  const [dropdownText, setDropdownText] = useState("Availabile");
 
   const availabilityOptions: string[] = ["Available", "Leased"];
-
-  const resetFilter = () => {
-    setSelectedIdx(0);
-    setDropdownText("Availablity");
-  };
-
-  // useEffect(() => {
-  //   props.registerResetCallback(resetFilter);
-  // }, []);
 
   return (
     <FilterSubContainer>
@@ -56,7 +51,7 @@ export const AvailabilityDropDown = (props: AvailabilityDropDownProps) => {
         active={isActive}
       >
         <DropdownRow>
-          <FilterText>{dropdownText}</FilterText>
+          <FilterText>{props.value.dropdownText}</FilterText>
           <DropdownIcon src={isActive ? "/up_arrow.svg" : "/dropdown.svg"} />
         </DropdownRow>
       </Dropdown>
@@ -66,12 +61,12 @@ export const AvailabilityDropDown = (props: AvailabilityDropDownProps) => {
             <AvailabilityRow
               key={idx}
               onClick={() => {
-                setSelectedIdx(idx);
+                props.setValue({ ...props.value, selectedIdx: idx });
               }}
             >
               <FilterRadioButton
                 src={
-                  idx === selectedIdx
+                  idx === props.value.selectedIdx
                     ? "/filled_filter_radio_button.svg"
                     : "/filter_radio_button.svg"
                 }
@@ -82,8 +77,8 @@ export const AvailabilityDropDown = (props: AvailabilityDropDownProps) => {
           <ApplyButton
             onClick={() => {
               setIsActive(false);
-              setDropdownText(availabilityOptions[selectedIdx]);
-              props.onApply(selectedIdx);
+              props.setValue({...props.value, dropdownText: availabilityOptions[props.value.selectedIdx]});
+              props.onApply();
             }}
           >
             Apply
