@@ -213,6 +213,10 @@ export function UnitDetails() {
     padding: 10%;
   `;
 
+  const GapColumn = styled(Column)`
+    padding: 10%;
+  `;
+
   const RentPerMonth = styled.h1`
     font-size: 48px;
     font-family: "Neutra Text";
@@ -337,6 +341,7 @@ export function UnitDetails() {
       </Row>
       <Row>
         <SectionColumn>
+          <GapColumn></GapColumn>
           <StrongText>Security Deposit: </StrongText>
           <List>
             <ListText> ${unit.securityDeposit}</ListText>
