@@ -13,7 +13,7 @@ import { DataContext } from "@/contexts/DataContext";
 const Items = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 100px 0px 0px 0px;
+  padding: 20vh 0px 0px 0px;
   max-height: 100vh;
   gap: 100px;
   // background-color: red;
@@ -77,7 +77,7 @@ const SearchRow = styled.div`
 const AssignButton = styled(Button)`
   border-radius: 12px;
   z-index: 1;
-`
+`;
 
 const ElevatePopup = styled.div`
   display: flex;
@@ -110,14 +110,13 @@ const XButton = styled.div`
   font-size: 30px;
 `;
 
-
-
 export function Profile() {
-  const [popup, setPopup] = useState(false);
+  const [popup, setPopup] = useState<boolean>(false);
   const [allReferringStaff, setAllReferringStaff] = useState<User[]>([]);
   const [currentRS, setCurrentRS] = useState<User>();
   const [assignedRS, setAssignedRS] = useState<User>();
-  const [close, setClose] = useState(false);
+  const [currentText, setCurrentText] = useState<string>();
+  const [close, setClose] = useState<boolean>(false);
 
   const authContext = useContext(AuthContext);
   const dataContext = useContext(DataContext);
@@ -127,28 +126,34 @@ export function Profile() {
   };
 
   const handleAssign = () => {
-    if(currentRS===undefined){
+    if (
+      currentRS === undefined ||
+      currentText?.valueOf() !== (currentRS.firstName + " " + currentRS.lastName).valueOf()
+    ) {
       return;
     }
-    elevateUser(currentRS as 
-      User).then((value)=>{
-      if(value.success){
-        setClose(!close);
-        setPopup(true);
-        setAssignedRS(currentRS);
-        setCurrentRS(undefined);
-      }else{
-        console.log(value.error);
-      }
-    }).catch((error)=>{
-      console.log(error);
-    })
+    elevateUser(currentRS)
+      .then((value) => {
+        if (value.success) {
+          setClose(!close);
+          setPopup(true);
+          setAssignedRS(currentRS);
+
+          const idx = allReferringStaff.map((e) => e.email).indexOf(currentRS.email);
+          allReferringStaff.splice(idx, 1);
+          setCurrentRS(undefined);
+        } else {
+          console.log(value.error);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
-  useEffect(() => { 
-    console.log(dataContext.allReferringStaff); 
+  useEffect(() => {
     setAllReferringStaff(dataContext.allReferringStaff);
-  }, [dataContext.allReferringStaff, assignedRS]);
+  }, [dataContext.allReferringStaff]);
 
   return (
     <Page>
@@ -172,8 +177,11 @@ export function Profile() {
                 <Select
                   placeholder="Search People"
                   options={allReferringStaff}
-                  onChange={(value) => {
+                  onSelect={(value) => {
                     setCurrentRS(value);
+                  }}
+                  onType={(value) => {
+                    setCurrentText(value);
                   }}
                   close={close}
                 />
@@ -181,7 +189,7 @@ export function Profile() {
                   Assign
                 </AssignButton>
               </SearchRow>
-              {popup && assignedRS!==undefined && (
+              {popup && assignedRS !== undefined && (
                 <ElevatePopup>
                   <PopupWrapper>
                     <img src="CheckSymbol.svg" alt="Check" />

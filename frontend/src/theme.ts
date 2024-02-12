@@ -22,5 +22,6 @@ export const GlobalStyle = createGlobalStyle`
 }
 body{
   background-color: #FBF7F3;
+  overflow-y: hidden;
 }
 `;
