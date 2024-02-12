@@ -33,7 +33,7 @@ module.exports = {
     "import/no-unresolved": "off",
 
     // Custom type declarations
-    '@typescript-eslint/no-empty-interface': 'off',
+    "@typescript-eslint/no-empty-interface": "off",
 
     // Uncomment these if you really need to.
     // "@typescript-eslint/ban-ts-comment": "off",
