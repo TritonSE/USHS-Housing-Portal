@@ -1,4 +1,4 @@
-import { APIResult, get, handleAPIError } from "./requests";
+import { APIResult, handleAPIError } from "./requests";
 
 export type FilterParams = {
   search?: string | undefined;
@@ -11,7 +11,7 @@ export type FilterParams = {
   sort: number;
 };
 
-export async function getUnits(params: FilterParams): Promise<APIResult<Unit[]>> {
+export function getUnits(params: FilterParams): Promise<APIResult<Unit[]>> {
   try {
     const query = new URLSearchParams(params);
 

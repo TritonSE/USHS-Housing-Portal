@@ -55,26 +55,25 @@ const AdjustButton = styled.button`
 `;
 
 export type BedBathState = {
-  beds: number,
-  baths: number,
-  bedsDisplay: number,
-  bathsDisplay: number,
-  notApplied: boolean,
-}
+  beds: number;
+  baths: number;
+  bedsDisplay: number;
+  bathsDisplay: number;
+  notApplied: boolean;
+};
 
 export type BedBathDropDownProps = {
-  value: BedBathState,
-  setValue(val: BedBathState): void,
-  onApply(): void,
+  value: BedBathState;
+  setValue(val: BedBathState): void;
+  onApply(): void;
 };
 
 export const BedBathDropDown = (props: BedBathDropDownProps) => {
   const [isActive, setIsActive] = useState(false);
 
-  const dropdownText = props.value.notApplied ?
-    "Beds & Bath" :
-    `${props.value.beds}+ bds, ${props.value.baths}+ ba`;
-
+  const dropdownText = props.value.notApplied
+    ? "Beds & Bath"
+    : `${props.value.beds}+ bds, ${props.value.baths}+ ba`;
 
   return (
     <FilterSubContainer>
@@ -98,7 +97,7 @@ export const BedBathDropDown = (props: BedBathDropDownProps) => {
             </BedBox>
             <AdjustButton
               onClick={() => {
-                if (props.value.bedsDisplay > 1) 
+                if (props.value.bedsDisplay > 1)
                   props.setValue({ ...props.value, bedsDisplay: props.value.bedsDisplay - 1 });
               }}
             >
@@ -106,7 +105,7 @@ export const BedBathDropDown = (props: BedBathDropDownProps) => {
             </AdjustButton>
             <AdjustButton
               onClick={() => {
-                if (props.value.bedsDisplay < 4) 
+                if (props.value.bedsDisplay < 4)
                   props.setValue({ ...props.value, bedsDisplay: props.value.bedsDisplay + 1 });
               }}
             >
@@ -120,7 +119,7 @@ export const BedBathDropDown = (props: BedBathDropDownProps) => {
             </BathBox>
             <AdjustButton
               onClick={() => {
-                if (props.value.bathsDisplay > 0.5) 
+                if (props.value.bathsDisplay > 0.5)
                   props.setValue({ ...props.value, bathsDisplay: props.value.bathsDisplay - 0.5 });
               }}
             >
@@ -128,7 +127,7 @@ export const BedBathDropDown = (props: BedBathDropDownProps) => {
             </AdjustButton>
             <AdjustButton
               onClick={() => {
-                if (props.value.bathsDisplay < 2) 
+                if (props.value.bathsDisplay < 2)
                   props.setValue({ ...props.value, bathsDisplay: props.value.bathsDisplay + 0.5 });
               }}
             >
@@ -138,7 +137,12 @@ export const BedBathDropDown = (props: BedBathDropDownProps) => {
           <ApplyButton
             onClick={() => {
               setIsActive(false);
-              props.setValue({ ...props.value, beds: props.value.bedsDisplay, baths: props.value.bathsDisplay, notApplied: false });
+              props.setValue({
+                ...props.value,
+                beds: props.value.bedsDisplay,
+                baths: props.value.bathsDisplay,
+                notApplied: false,
+              });
               props.onApply();
             }}
           >

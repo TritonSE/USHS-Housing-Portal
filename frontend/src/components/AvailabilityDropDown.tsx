@@ -27,14 +27,14 @@ const PopupBodyText = styled(Sort)`
 `;
 
 export type AvailabilityState = {
-  selectedIdx: number,
-  dropdownText: string
+  selectedIdx: number;
+  dropdownText: string;
 };
 
 export type AvailabilityDropDownProps = {
-  value: AvailabilityState,
-  setValue(val: AvailabilityState): void,
-  onApply(): void,
+  value: AvailabilityState;
+  setValue(val: AvailabilityState): void;
+  onApply(): void;
 };
 
 export const AvailabilityDropDown = (props: AvailabilityDropDownProps) => {
@@ -77,7 +77,10 @@ export const AvailabilityDropDown = (props: AvailabilityDropDownProps) => {
           <ApplyButton
             onClick={() => {
               setIsActive(false);
-              props.setValue({...props.value, dropdownText: availabilityOptions[props.value.selectedIdx]});
+              props.setValue({
+                ...props.value,
+                dropdownText: availabilityOptions[props.value.selectedIdx],
+              });
               props.onApply();
             }}
           >

@@ -11,7 +11,7 @@ const UnitCardLayout = styled.div`
 `;
 
 const PropertiesText = styled.span`
-  color: ${(props) => props.theme.colors.text};
+  color: black;
   font-family: "Montserrat";
   font-size: 27px;
   font-weight: 700;

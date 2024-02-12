@@ -106,17 +106,17 @@ const PlaceholderText = styled.p<{ active: boolean }>`
 `;
 
 export type PriceState = {
-  minPrice: number,
-  maxPrice: number,
-  minPriceDisplay: number,
-  maxPriceDisplay: number,
-  notApplied: boolean
+  minPrice: number;
+  maxPrice: number;
+  minPriceDisplay: number;
+  maxPriceDisplay: number;
+  notApplied: boolean;
 };
 
 export type PriceDropDownProps = {
-  value: PriceState,
-  setValue(val: PriceState): void,
-  onApply(): void
+  value: PriceState;
+  setValue(val: PriceState): void;
+  onApply(): void;
 };
 
 export const PriceDropDown = (props: PriceDropDownProps) => {
@@ -126,9 +126,11 @@ export const PriceDropDown = (props: PriceDropDownProps) => {
 
   const priceOptions: number[] = [0, 250, 500, 750, 1000, 1250, 1500, 1750, 2000];
 
-  const minPriceText = props.value.minPriceDisplay === -1 ? "No Min" : `$${priceOptions[props.value.minPriceDisplay]}`;
+  const minPriceText =
+    props.value.minPriceDisplay === -1 ? "No Min" : `$${priceOptions[props.value.minPriceDisplay]}`;
 
-  const maxPriceText = props.value.maxPriceDisplay === -1 ? "No Max" : `$${priceOptions[props.value.maxPriceDisplay]}`;
+  const maxPriceText =
+    props.value.maxPriceDisplay === -1 ? "No Max" : `$${priceOptions[props.value.maxPriceDisplay]}`;
 
   let dropdownText = "Price";
   if (!props.value.notApplied) {
@@ -160,7 +162,9 @@ export const PriceDropDown = (props: PriceDropDownProps) => {
                   setMinPriceOpen(!minPriceOpen);
                 }}
               >
-                <PlaceholderText active={props.value.minPriceDisplay !== -1}>{minPriceText}</PlaceholderText>
+                <PlaceholderText active={props.value.minPriceDisplay !== -1}>
+                  {minPriceText}
+                </PlaceholderText>
                 <ArrowIcon src={minPriceOpen ? "/price_up_arrow.svg" : "/down_arrow.svg"} />
               </MinMaxBox>
               {minPriceOpen && (
@@ -186,7 +190,9 @@ export const PriceDropDown = (props: PriceDropDownProps) => {
                   setMaxPriceOpen(!maxPriceOpen);
                 }}
               >
-                <PlaceholderText active={props.value.maxPriceDisplay !== -1}>{maxPriceText}</PlaceholderText>
+                <PlaceholderText active={props.value.maxPriceDisplay !== -1}>
+                  {maxPriceText}
+                </PlaceholderText>
                 <ArrowIcon src={maxPriceOpen ? "/price_up_arrow.svg" : "/down_arrow.svg"} />
               </MinMaxBox>
               {maxPriceOpen && (
@@ -211,7 +217,12 @@ export const PriceDropDown = (props: PriceDropDownProps) => {
               setIsActive(false);
               setMinPriceOpen(false);
               setMaxPriceOpen(false);
-              props.setValue({ ...props.value, minPrice: props.value.minPriceDisplay, maxPrice: props.value.maxPriceDisplay, notApplied: false});
+              props.setValue({
+                ...props.value,
+                minPrice: props.value.minPriceDisplay,
+                maxPrice: props.value.maxPriceDisplay,
+                notApplied: false,
+              });
               props.onApply();
             }}
           >

@@ -19,7 +19,7 @@ const UnitCardContainer = styled.div`
 `;
 
 const UnitCardText = styled.span`
-  color: ${(props) => props.theme.colors.text};
+  color: black;
   font-family: "Neutraface Text";
 `;
 

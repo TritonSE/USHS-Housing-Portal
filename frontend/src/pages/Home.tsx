@@ -8,7 +8,13 @@ import { UnitCardGrid } from "@/components/UnitCardGrid";
 
 export function Home() {
   const fetchUnits = (filterParams: FilterParams) => {
-    // getUnits(filterParams);
+    getUnits(filterParams)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
