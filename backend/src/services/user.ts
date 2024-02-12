@@ -35,3 +35,11 @@ export async function createUser(firstName: string, lastName: string, email: str
 export async function getUserByEmail(email: string) {
   return await UserModel.findOne({ email });
 }
+
+export async function getUserByID(id: string){
+  return await UserModel.findById(id);
+}
+
+export async function elevateUser(id: string){
+  return await UserModel.findByIdAndUpdate(id, {isHousingLocator: true});
+}

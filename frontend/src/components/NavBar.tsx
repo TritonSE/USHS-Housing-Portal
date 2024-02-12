@@ -16,6 +16,7 @@ const NavbarItems = styled.div`
   height: 70px;
   width: 100vw;
   padding: 10px 96px;
+  z-index: 1;
 `;
 
 const Icon = styled.img`
@@ -63,6 +64,7 @@ const Overlay = styled.div`
   bottom: 0;
   position: fixed;
   background: rgba(0, 0, 0, 0.25);
+  z-index: 2;
 `;
 
 const Modal = styled.div`
@@ -80,6 +82,7 @@ const Modal = styled.div`
   align-items: center;
   justify-content: flex-start;
   gap: 70px;
+  z-index: 2;
 `;
 
 const XWrapper = styled.div`

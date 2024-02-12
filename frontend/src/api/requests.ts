@@ -46,6 +46,8 @@ async function fetchRequest(
     newHeaders.Authorization = `Bearer ${await auth.currentUser.getIdToken()}`;
   }
 
+  console.log(url);
+  console.log(method);
   const response = await fetch(url, {
     method,
     headers: newHeaders,
