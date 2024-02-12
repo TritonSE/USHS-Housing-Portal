@@ -15,20 +15,25 @@ const SearchBar = styled.div`
   height: 44px;
   padding: 9px 12px;
   justify-content: space-between;
+  gap: 10px;
   align-items: center;
   border-radius: 5px;
   border: 2px solid var(--Card-Outline, #cdcaca);
   box-shadow: 1px 1px 2px 0px rgba(188, 186, 183, 0.4);
-  font-size: 16px;
-  font-weight: 700;
-  font-style: normal;
-  letter-spacing: 0.32px;
   cursor: text;
   &:hover{
     border: 2px solid black;
   }
-
 `;
+
+const SearchText = styled.div`
+font-size: 16px;
+  font-weight: 700;
+  font-style: normal;
+  letter-spacing: 0.32px;
+  overflow-x: auto;
+  overflow-y: hidden;
+`
 
 const OptionsContainer = styled.div`
   position: absolute;
@@ -108,6 +113,7 @@ export function Select({ placeholder, options, onChange, close}: SelectProps) {
     setOpenMenu(false);
   };
 
+  //super messy filtering code, feedback welcome :)
   const handleValidOptions = () => {
     const matches = [];
     for(let i = 0; i<options.length; i++){
@@ -116,6 +122,12 @@ export function Select({ placeholder, options, onChange, close}: SelectProps) {
             matches.push(options[i]);
         }
     }
+    matches.sort((a, b) => {
+        const fullNameA = a.firstName + " " + a.lastName;
+        const fullNameB = b.firstName + " " + b.lastName;
+        return fullNameA.toLowerCase().indexOf(value.toLowerCase()) - 
+                fullNameB.toLowerCase().indexOf(value.toLowerCase());
+    })
     setValidOptions(matches);
 }
   
@@ -127,12 +139,14 @@ export function Select({ placeholder, options, onChange, close}: SelectProps) {
             setOpenMenu(true);
         }else if(e.key==="Escape"){
             setOpenMenu(false);
-        }else if(!e.altKey && !e.shiftKey && !e.ctrlKey && !e.metaKey && e.key!=="Tab" && e.key!=="CapsLock"){
+        }else if(!e.altKey && !e.shiftKey && !e.ctrlKey && !e.metaKey 
+                && e.key!=="Tab" && e.key!=="CapsLock" && e.key!=="Enter"
+                && e.key.indexOf("Arrow")==-1){
             setValue(value+e.key);
             setOpenMenu(true);
         }
       }}>
-        {value===""?placeholder:value}
+        <SearchText>{value===""?placeholder:value}</SearchText>
         <img src="SearchSymbol.svg" alt="Search" />
         </SearchBar>
       {openMenu &&  (
