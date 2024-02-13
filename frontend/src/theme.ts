@@ -8,6 +8,7 @@ export const theme = {
     // primary: "",
     // background: "",
     // ...etc
+    text: "black",
   },
 };
 
