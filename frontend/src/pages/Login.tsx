@@ -24,12 +24,13 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 13.67vh;
-  padding: 20vh 364.6px 0vh 365px;
+  padding: 22.5vh 364.6px 0vh 365px;
 `;
 
 const Image = styled.img`
-  width: 600px;
-  height: 250px;
+  height: auto;
+  width: auto;
+  max-width: 80%;
 `;
 const Error = styled.div`
   color: red;

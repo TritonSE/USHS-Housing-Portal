@@ -40,12 +40,12 @@ const SearchText = styled.div<{ state: boolean }>`
 const OptionsContainer = styled.div`
   position: absolute;
   top: 49px;
-  max-height: 200px;
+  max-height: 160px;
   width: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
   border-radius: 5px;
-  border: 0.5px solid var(--Card-Outline, #cdcaca);
+  border: 0.5px solid #cdcaca;
   box-shadow: 1px 1px 2px 0px rgba(188, 186, 183, 0.4);
   display: flex;
   flex-direction: column;
@@ -89,32 +89,32 @@ const Overlay = styled.div`
 type SelectProps = {
   placeholder: string;
   options: User[];
-  onSelect: (value: User) => void;
-  onType: (value: string) => void;
-  close: boolean;
+  onSelect?: (value: User | undefined) => void; //callback function for parent
+  onType?: (value: string) => void; //callback function for parent
+  reset?: boolean;
 };
 
-export function Select({ placeholder, options, onSelect, onType, close }: SelectProps) {
+export function Select({ placeholder, options, onSelect, onType, reset }: SelectProps) {
   const [openMenu, setOpenMenu] = useState(false);
-  const [value, setValue] = useState("");
-  const [validOptions, setValidOptions] = useState<User[]>(options);
-  const [solid, setSolid] = useState(false);
-  const [currentSelected, setCurrentSelected] = useState<User>();
+  const [searchValue, setSearchValue] = useState(""); //current text value in select input box
+  const [validOptions, setValidOptions] = useState<User[]>(options); //all RS filtered through search
+  const [solid, setSolid] = useState(false); //search text color
+  const [currentSelected, setCurrentSelected] = useState<User>(); //current selected RS
 
+  //handles actions after clicking on a dropdown item
   const handleSelect = (selectedValue: User) => {
-    setValue(selectedValue.firstName + " " + selectedValue.lastName);
+    const displayName = selectedValue.firstName + " " + selectedValue.lastName;
+    setSearchValue(displayName);
     setCurrentSelected(selectedValue);
-    onSelect(selectedValue);
-    onType(selectedValue.firstName + " " + selectedValue.lastName);
     setOpenMenu(false);
   };
 
-  //super messy filtering code, feedback welcome :)
+  //filters dropdown options (super messy, feedback welcome :D)
   const handleValidOptions = () => {
     const matches = [];
     for (const i of options) {
       const fullName = i.firstName + " " + i.lastName;
-      if (fullName.toLowerCase().includes(value.toLowerCase())) {
+      if (fullName.toLowerCase().includes(searchValue.toLowerCase())) {
         matches.push(i);
       }
     }
@@ -122,29 +122,33 @@ export function Select({ placeholder, options, onSelect, onType, close }: Select
       const fullNameA = a.firstName + " " + a.lastName;
       const fullNameB = b.firstName + " " + b.lastName;
       return (
-        fullNameA.toLowerCase().indexOf(value.toLowerCase()) -
-        fullNameB.toLowerCase().indexOf(value.toLowerCase())
+        fullNameA.toLowerCase().indexOf(searchValue.toLowerCase()) -
+        fullNameB.toLowerCase().indexOf(searchValue.toLowerCase())
       );
     });
     setValidOptions(matches);
   };
 
+  //Reset search bar after action from parent component
   useEffect(() => {
     setOpenMenu(false);
-    setValue("");
-  }, [close]);
+    setSearchValue("");
+    setCurrentSelected(undefined);
+  }, [reset]);
 
+  //triggers everytime text in input box changes; ensures options are filtered + callbacks + text color
   useEffect(() => {
     handleValidOptions();
-    onType(value);
-    if (
-      value.valueOf() === (currentSelected?.firstName + " " + currentSelected?.lastName).valueOf()
-    ) {
+    if (onType) onType(searchValue);
+    if (onSelect) onSelect(currentSelected);
+
+    //search text is black if it matches the selected user; indicates that it's valid for assignment
+    if (searchValue === currentSelected?.firstName + " " + currentSelected?.lastName) {
       setSolid(true);
     } else {
       setSolid(false);
     }
-  }, [value, currentSelected]);
+  }, [searchValue, currentSelected]);
 
   return (
     <SearchContainer>
@@ -156,15 +160,15 @@ export function Select({ placeholder, options, onSelect, onType, close }: Select
         tabIndex={-1}
         onKeyDown={(e) => {
           if (e.key === "Backspace") {
-            setValue(value.substring(0, value.length - 1));
+            setSearchValue(searchValue.substring(0, searchValue.length - 1));
           } else if (e.key === "Escape") {
             setOpenMenu(false);
           } else if (e.key.length === 1 && !e.ctrlKey) {
-            setValue(value + e.key);
+            setSearchValue(searchValue + e.key);
           }
         }}
       >
-        <SearchText state={solid}>{value === "" ? placeholder : value}</SearchText>
+        <SearchText state={solid}>{searchValue === "" ? placeholder : searchValue}</SearchText>
         <img src="SearchSymbol.svg" alt="Search" />
       </SearchBar>
       {openMenu && (

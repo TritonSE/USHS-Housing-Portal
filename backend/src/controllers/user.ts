@@ -32,14 +32,13 @@ export const createUserHandler: RequestHandler = asyncHandler(async (req, res, _
   }
 });
 
-export const elevateUserHandler: RequestHandler = asyncHandler(async (req, res, _)=>{
-   const id = req.params.id;  
-    const response = await elevateUser(id);
-    if(response===null){
-      res.status(404);
-    }else{
-      const newUser = await getUserByID(id);
-      res.status(200).json(newUser);
-    }
-   
-})
+export const elevateUserHandler: RequestHandler = asyncHandler(async (req, res, _) => {
+  const id = req.params.id;
+  const response = await elevateUser(id);
+  if (response === null) {
+    res.status(404);
+  } else {
+    const newUser = await getUserByID(id);
+    res.status(200).json(newUser);
+  }
+});

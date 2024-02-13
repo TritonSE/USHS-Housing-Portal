@@ -13,9 +13,9 @@ import { DataContext } from "@/contexts/DataContext";
 const Items = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 20vh 0px 0px 0px;
+  padding: 15vh 0px 0px 0px;
   max-height: 100vh;
-  gap: 100px;
+  gap: 11vh;
   // background-color: red;
 `;
 
@@ -113,42 +113,38 @@ const XButton = styled.div`
 export function Profile() {
   const [popup, setPopup] = useState<boolean>(false);
   const [allReferringStaff, setAllReferringStaff] = useState<User[]>([]);
-  const [currentRS, setCurrentRS] = useState<User>();
-  const [assignedRS, setAssignedRS] = useState<User>();
-  const [currentText, setCurrentText] = useState<string>();
-  const [close, setClose] = useState<boolean>(false);
+  const [currentRS, setCurrentRS] = useState<User>(); //tracks current RS selected (for assignment)
+  const [assignedRS, setAssignedRS] = useState<User>(); //tracks last RS elevated (for popup)
+  const [currentText, setCurrentText] = useState<string>(); //tracks current text in search box
+  const [resetSelect, setResetSelect] = useState<boolean>(false); //resets select component when state changes
 
   const authContext = useContext(AuthContext);
   const dataContext = useContext(DataContext);
 
-  const togglePopup = () => {
-    setPopup(!popup);
-  };
-
   const handleAssign = () => {
-    if (
-      currentRS === undefined ||
-      currentText?.valueOf() !== (currentRS.firstName + " " + currentRS.lastName).valueOf()
-    ) {
-      return;
-    }
-    elevateUser(currentRS)
-      .then((value) => {
-        if (value.success) {
-          setClose(!close);
-          setPopup(true);
-          setAssignedRS(currentRS);
+    //only lets assignment happen if current text in search box matches the currently selected RS
+    if (currentRS !== undefined && currentText === currentRS.firstName + " " + currentRS.lastName) {
+      elevateUser(currentRS)
+        .then((value) => {
+          if (value.success) {
+            //reset select component
+            setResetSelect(!resetSelect);
 
-          const idx = allReferringStaff.map((e) => e.email).indexOf(currentRS.email);
-          allReferringStaff.splice(idx, 1);
-          setCurrentRS(undefined);
-        } else {
-          console.log(value.error);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+            setPopup(true);
+            setAssignedRS(currentRS);
+
+            //change list of all RS locally because datacontext doesn't update without page reload
+            const idx = allReferringStaff.map((e) => e.email).indexOf(currentRS.email);
+            allReferringStaff.splice(idx, 1);
+            setCurrentRS(undefined);
+          } else {
+            console.log(value.error);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   useEffect(() => {
@@ -169,6 +165,7 @@ export function Profile() {
             <div>{authContext.currentUser?.email}</div>
           </InfoWrapper>
         </ProfileWrapper>
+
         {dataContext.currentUser?.isHousingLocator && (
           <CenterDiv>
             <AssignWrapper>
@@ -183,7 +180,7 @@ export function Profile() {
                   onType={(value) => {
                     setCurrentText(value);
                   }}
-                  close={close}
+                  reset={resetSelect}
                 />
                 <AssignButton kind="primary" onClick={handleAssign}>
                   Assign
@@ -197,7 +194,13 @@ export function Profile() {
                       {`${assignedRS?.firstName} ${assignedRS?.lastName} succesfully assigned as a Housing Locator`}
                     </div>
                   </PopupWrapper>
-                  <XButton onClick={togglePopup}>&times;</XButton>
+                  <XButton
+                    onClick={() => {
+                      setPopup(false);
+                    }}
+                  >
+                    &times;
+                  </XButton>
                 </ElevatePopup>
               )}
             </AssignWrapper>
