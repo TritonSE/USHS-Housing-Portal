@@ -1,8 +1,37 @@
 import { RequestHandler } from "express";
-import { validationResult } from "express-validator";
-import UnitModel from "@/models/units";
 
-export const createUnit: RequestHandler = async (req, res, next) => {
+// import { asyncHandler } from "./wrappers";
+
+// import { createUnit } from "@/services/units";
+
+type CreateUnitRequestBody = {
+  approved: boolean;
+  landlordFirstName: string;
+  landlordLastName: string;
+  landlordEmail: string;
+  landlordPhone: string;
+  monthlyRent: number;
+  securityDeposit: number;
+  paymentRentingCriteria: [string];
+  applicationFeeCost: number;
+  housingAuthority: string;
+  holdingFeeAmount: number;
+  listingAddress: string;
+  sqft: number;
+  dateAvailable: Date;
+  availableNow: boolean;
+  numBeds: number;
+  numBaths: number;
+  appliances: [string];
+  communityFeatures: [string];
+  parking: [string];
+  accessibility: [string];
+  pets: [string];
+  sharingAcceptable: string;
+  landlordComments: string;
+};
+
+export const createUnitsHandler: RequestHandler = (req, res, _) => {
   const {
     approved,
     landlordFirstName,
@@ -28,39 +57,36 @@ export const createUnit: RequestHandler = async (req, res, next) => {
     pets,
     sharingAcceptable,
     landlordComments,
-  } = req.body;
+  } = req.body as CreateUnitRequestBody;
 
-  res.status(201).json(unit);
+  // createUnit();
 
-  try {
-    const unit = await UnitModel.create({
-      approved: approved,
-      landlordFirstName: landlordFirstName,
-      landlordLastName: landlordLastName,
-      landlordEmail: landlordEmail,
-      landlordPhone: landlordPhone,
-      monthlyRent: monthlyRent,
-      securityDeposit: securityDeposit,
-      paymentRentingCriteria: paymentRentingCriteria,
-      applicationFeeCost: applicationFeeCost,
-      housingAuthority: housingAuthority,
-      holdingFeeAmount: holdingFeeAmount,
-      listingAddress: listingAddress,
-      sqft: sqft,
-      dateAvailable: dateAvailable,
-      availableNow: availableNow,
-      numBeds: numBeds,
-      numBaths: numBaths,
-      appliances: appliances,
-      communityFeatures: communityFeatures,
-      parking: parking,
-      accessibility: accessibility,
-      pets: pets,
-      sharingAcceptable: sharingAcceptable,
-      landlordComments: landlordComments,
-    });
-    res.status(201).json(unit);
-  } catch (error) {
-    next(error);
-  }
+  res.status(201).json({
+    unit: {
+      approved,
+      landlordFirstName,
+      landlordLastName,
+      landlordEmail,
+      landlordPhone,
+      monthlyRent,
+      securityDeposit,
+      paymentRentingCriteria,
+      applicationFeeCost,
+      housingAuthority,
+      holdingFeeAmount,
+      listingAddress,
+      sqft,
+      dateAvailable,
+      availableNow,
+      numBeds,
+      numBaths,
+      appliances,
+      communityFeatures,
+      parking,
+      accessibility,
+      pets,
+      sharingAcceptable,
+      landlordComments,
+    },
+  });
 };

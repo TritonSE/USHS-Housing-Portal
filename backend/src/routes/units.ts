@@ -8,6 +8,6 @@ import * as UnitController from "@/controllers/units";
 
 const router = express.Router();
 
-router.post("/units", UnitController.createUnit);
+router.post("/units", UnitController.createUnitsHandler);
 
 export default router;
