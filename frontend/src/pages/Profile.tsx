@@ -15,8 +15,7 @@ const Items = styled.div`
   flex-direction: column;
   padding: 15vh 0px 0px 0px;
   max-height: 100vh;
-  gap: 11vh;
-  // background-color: red;
+  gap: 10vh;
 `;
 
 const ProfileWrapper = styled.div`
@@ -26,7 +25,6 @@ const ProfileWrapper = styled.div`
   justify-content: center;
   gap: 100px;
   width: 100%;
-  // background-color: red;
 `;
 
 const InfoWrapper = styled.div`
@@ -43,7 +41,6 @@ const InfoWrapper = styled.div`
 const ProfilePicture = styled.img`
   width: 182px;
   height: 182px;
-  flex-shrink: 0;
   border-radius: 100px;
 `;
 
@@ -76,6 +73,7 @@ const SearchRow = styled.div`
 
 const AssignButton = styled(Button)`
   border-radius: 12px;
+  padding: 12px 24px;
   z-index: 1;
 `;
 
@@ -115,7 +113,6 @@ export function Profile() {
   const [allReferringStaff, setAllReferringStaff] = useState<User[]>([]);
   const [currentRS, setCurrentRS] = useState<User>(); //tracks current RS selected (for assignment)
   const [assignedRS, setAssignedRS] = useState<User>(); //tracks last RS elevated (for popup)
-  const [currentText, setCurrentText] = useState<string>(); //tracks current text in search box
   const [resetSelect, setResetSelect] = useState<boolean>(false); //resets select component when state changes
 
   const authContext = useContext(AuthContext);
@@ -123,13 +120,12 @@ export function Profile() {
 
   const handleAssign = () => {
     //only lets assignment happen if current text in search box matches the currently selected RS
-    if (currentRS !== undefined && currentText === currentRS.firstName + " " + currentRS.lastName) {
+    if (currentRS !== undefined) {
       elevateUser(currentRS)
         .then((value) => {
           if (value.success) {
             //reset select component
             setResetSelect(!resetSelect);
-
             setPopup(true);
             setAssignedRS(currentRS);
 
@@ -176,9 +172,6 @@ export function Profile() {
                   options={allReferringStaff}
                   onSelect={(value) => {
                     setCurrentRS(value);
-                  }}
-                  onType={(value) => {
-                    setCurrentText(value);
                   }}
                   reset={resetSelect}
                 />

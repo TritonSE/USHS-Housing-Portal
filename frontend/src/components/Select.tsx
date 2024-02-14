@@ -9,32 +9,24 @@ const SearchContainer = styled.div`
   z-index: 1;
 `;
 
-const SearchBar = styled.div<{ open: boolean }>`
-  display: flex;
-  width: 367px;
+const SearchBar = styled.input<{ open: boolean; state: boolean }>`
+  width: 100%;
   height: 44px;
-  padding: 9px 12px;
-  justify-content: space-between;
-  gap: 10px;
+  padding: 9px 20px 9px 12px;
   align-items: center;
   border-radius: 5px;
   border: ${(props) => (props.open ? "1.5px solid black;" : "1.5px solid #cdcaca")};
   box-shadow: 1px 1px 2px 0px rgba(188, 186, 183, 0.4);
   outline: none;
-  cursor: text;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.32px;
+  color: ${(props) => (props.state ? "black" : "gray")};
+  background-color: #fbf7f3;
+  background: url("SearchSymbol.svg") no-repeat 330px 9px;
   &:hover {
     border: 1.5px solid black;
   }
-`;
-
-const SearchText = styled.div<{ state: boolean }>`
-  font-size: 16px;
-  font-weight: 700;
-  font-style: normal;
-  letter-spacing: 0.32px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  color: ${(props) => (props.state ? "black" : "gray")};
 `;
 
 const OptionsContainer = styled.div`
@@ -42,8 +34,8 @@ const OptionsContainer = styled.div`
   top: 49px;
   max-height: 160px;
   width: 100%;
-  overflow-y: scroll;
-  overflow-x: hidden;
+  overflow-y: auto;
+  overflow-x: auto;
   border-radius: 5px;
   border: 0.5px solid #cdcaca;
   box-shadow: 1px 1px 2px 0px rgba(188, 186, 183, 0.4);
@@ -52,13 +44,13 @@ const OptionsContainer = styled.div`
   background-color: #fbf7f3;
 `;
 const Option = styled.div`
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
   font-style: normal;
   letter-spacing: 0.32px;
   cursor: pointer;
   height: 100%;
-  padding: 10px;
+  padding: 7px;
   &:hover {
     color: #debb01;
   }
@@ -89,12 +81,11 @@ const Overlay = styled.div`
 type SelectProps = {
   placeholder: string;
   options: User[];
-  onSelect?: (value: User | undefined) => void; //callback function for parent
-  onType?: (value: string) => void; //callback function for parent
+  onSelect?: (value: User | undefined) => void; //callback function for parent, sends current selected user
   reset?: boolean;
 };
 
-export function Select({ placeholder, options, onSelect, onType, reset }: SelectProps) {
+export function Select({ placeholder, options, onSelect, reset }: SelectProps) {
   const [openMenu, setOpenMenu] = useState(false);
   const [searchValue, setSearchValue] = useState(""); //current text value in select input box
   const [validOptions, setValidOptions] = useState<User[]>(options); //all RS filtered through search
@@ -103,8 +94,7 @@ export function Select({ placeholder, options, onSelect, onType, reset }: Select
 
   //handles actions after clicking on a dropdown item
   const handleSelect = (selectedValue: User) => {
-    const displayName = selectedValue.firstName + " " + selectedValue.lastName;
-    setSearchValue(displayName);
+    setSearchValue(selectedValue.firstName + " " + selectedValue.lastName);
     setCurrentSelected(selectedValue);
     setOpenMenu(false);
   };
@@ -118,14 +108,24 @@ export function Select({ placeholder, options, onSelect, onType, reset }: Select
         matches.push(i);
       }
     }
-    matches.sort((a, b) => {
-      const fullNameA = a.firstName + " " + a.lastName;
-      const fullNameB = b.firstName + " " + b.lastName;
-      return (
-        fullNameA.toLowerCase().indexOf(searchValue.toLowerCase()) -
-        fullNameB.toLowerCase().indexOf(searchValue.toLowerCase())
-      );
-    });
+    //sort alphabetically if no search value
+    if (searchValue === "") {
+      matches.sort((a, b) => {
+        const fullNameA = a.firstName + " " + a.lastName;
+        const fullNameB = b.firstName + " " + b.lastName;
+        return fullNameA < fullNameB ? -1 : 1;
+      });
+      //sort by 'best' match
+    } else {
+      matches.sort((a, b) => {
+        const fullNameA = a.firstName + " " + a.lastName;
+        const fullNameB = b.firstName + " " + b.lastName;
+        return (
+          fullNameA.toLowerCase().indexOf(searchValue.toLowerCase()) -
+          fullNameB.toLowerCase().indexOf(searchValue.toLowerCase())
+        );
+      });
+    }
     setValidOptions(matches);
   };
 
@@ -136,18 +136,25 @@ export function Select({ placeholder, options, onSelect, onType, reset }: Select
     setCurrentSelected(undefined);
   }, [reset]);
 
-  //triggers everytime text in input box changes; ensures options are filtered + callbacks + text color
+  //triggers everytime text in input box changes; ensures options are filtered + callbacks + correct user is selected
   useEffect(() => {
     handleValidOptions();
-    if (onType) onType(searchValue);
-    if (onSelect) onSelect(currentSelected);
-
-    //search text is black if it matches the selected user; indicates that it's valid for assignment
-    if (searchValue === currentSelected?.firstName + " " + currentSelected?.lastName) {
-      setSolid(true);
+    //selects user if current text exactly matches a valid user
+    const idx = validOptions.map((e) => e.firstName + " " + e.lastName).indexOf(searchValue);
+    if (idx !== -1) {
+      if (validOptions.length === 1) {
+        setCurrentSelected(validOptions[idx]);
+        setSolid(true);
+      }
+      //case for if there's more than one possible match and a certain match is selected from the dropdown
+      if (currentSelected?.firstName + " " + currentSelected?.lastName === searchValue) {
+        setSolid(true);
+      }
     } else {
       setSolid(false);
     }
+
+    if (onSelect) onSelect(currentSelected);
   }, [searchValue, currentSelected]);
 
   return (
@@ -156,21 +163,16 @@ export function Select({ placeholder, options, onSelect, onType, reset }: Select
         onClick={() => {
           setOpenMenu(true);
         }}
+        placeholder={placeholder}
         open={openMenu}
+        state={solid}
         tabIndex={-1}
-        onKeyDown={(e) => {
-          if (e.key === "Backspace") {
-            setSearchValue(searchValue.substring(0, searchValue.length - 1));
-          } else if (e.key === "Escape") {
-            setOpenMenu(false);
-          } else if (e.key.length === 1 && !e.ctrlKey) {
-            setSearchValue(searchValue + e.key);
-          }
+        value={searchValue}
+        onInput={(e) => {
+          setSearchValue((e.target as HTMLTextAreaElement).value);
+          setCurrentSelected(undefined);
         }}
-      >
-        <SearchText state={solid}>{searchValue === "" ? placeholder : searchValue}</SearchText>
-        <img src="SearchSymbol.svg" alt="Search" />
-      </SearchBar>
+      />
       {openMenu && (
         <OptionsContainer>
           <Overlay
@@ -186,7 +188,8 @@ export function Select({ placeholder, options, onSelect, onType, reset }: Select
                   handleSelect(option);
                 }}
               >
-                {option.firstName + " " + option.lastName}
+                <div>{`${option.firstName} ${option.lastName}`}</div>
+                <div>{`(${option.email})`}</div>
               </Option>
             ))
           ) : (
