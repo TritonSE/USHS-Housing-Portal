@@ -84,6 +84,8 @@ export function UnitDetails() {
   const List = styled.ul`
     margin-top: 0;
     margin-bottom: 0;
+
+    padding: 0, 0, 0, 10%;
   `;
 
   const StrongText = styled(Text)`
@@ -91,11 +93,12 @@ export function UnitDetails() {
   `;
 
   const ListText = styled.li`
-    font-family: "Montserrat"
+    font-family: "Montserrat";
     font-weight: 400;
     font-size: 20px;
     line-height: 150%
     letter-spacing: 0.4px;
+    margin-left: 6%;
   `;
 
   const Address = styled(Header)``;
@@ -129,7 +132,7 @@ export function UnitDetails() {
                 kind="primary"
                 type="button"
                 data-testid="back-to-listing-button"
-                label="Back to Listing"
+                label="<Back to Listing"
               />
             </Link>
           </ButtonPadding>
@@ -254,7 +257,7 @@ export function UnitDetails() {
             kind="primary"
             type="button"
             data-testid="back-to-listing-button"
-            label="Back to Listing"
+            label="< Back to Listing"
           />
         </Link>
       </ButtonPadding>
