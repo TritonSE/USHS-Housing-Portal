@@ -8,6 +8,102 @@ import { Unit, getUnit } from "@/api/units";
 import { Page } from "@/components";
 import { Button } from "@/components/Button";
 
+const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  background-color: #fbf7f3;
+`;
+
+const Column = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: #fbf7f3;
+  jusify-content: evenly-spaced;
+  gap: 16px;
+`;
+
+const DetailsRow = styled(Row)`
+  gap: 20px;
+`;
+
+const SectionColumn = styled(Column)`
+  width: 50%;
+`;
+
+const MainColumn = styled(Column)`
+  padding: 10%;
+`;
+
+const GapColumn = styled(Column)`
+  padding: 10%;
+`;
+
+const RentPerMonth = styled.h1`
+  font-size: 48px;
+  font-family: "Neutra Text";
+  font-weight: 700;
+  line-height: 150%;
+  line-spacing: 0.96px;
+
+  margin: 0;
+`;
+
+const Header = styled.div`
+  font-size: 32px;
+  margin: 0;
+  font-weight: 700;
+  font-family: "Neutra Text";
+  line-height: 150%;
+  line-spacing: 0.64px;
+  margin-top: 32px;
+`;
+
+const Text = styled.div`
+    font-family: "Montserrat"
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 150%
+    letter-spacing: 0.4px;
+
+  `;
+
+const List = styled.ul`
+  margin-top: 0;
+  margin-bottom: 0;
+
+  padding: 0, 0, 0, 10%;
+`;
+
+const StrongText = styled(Text)`
+  font-weight: 600;
+`;
+
+const ListText = styled.li`
+    font-family: "Montserrat";
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 150%
+    letter-spacing: 0.4px;
+    margin-left: 6%;
+  `;
+
+const Address = styled(Header)``;
+
+const ButtonPadding = styled.div`
+  display: flex;
+  flex-direction: row;
+  padding: 20px 10% 0px 10%;
+`;
+
+const DoesNotExist = styled.h1`
+  font-size: 48px;
+  font-family: "Neutraface Text", sans-serif;
+  font-weight: 550;
+  line-height: 150%;
+  line-spacing: 0.96px;
+  padding: 20px 10% 20px 10%;
+`;
+
 export function UnitDetails() {
   const [unit, setUnit] = useState<Unit>();
   const { id } = useParams();
@@ -19,104 +115,29 @@ export function UnitDetails() {
           setUnit(result.data);
         }
       });
+    } else {
+      return (
+        <Page>
+          <Helmet>
+            <title>Unit Does Not Exist | USHS Housing Portal</title>
+          </Helmet>
+          <Column>
+            <ButtonPadding>
+              <Link to="/">
+                <Button
+                  kind="primary"
+                  type="button"
+                  data-testid="back-to-listing-button"
+                  label="<Back to Listing"
+                />
+              </Link>
+            </ButtonPadding>
+            <DoesNotExist>This unit does not exist!</DoesNotExist>
+          </Column>
+        </Page>
+      );
     }
   }, []);
-
-  const Row = styled.div`
-    display: flex;
-    flex-direction: row;
-    background-color: #fbf7f3;
-  `;
-
-  const Column = styled.div`
-    display: flex;
-    flex-direction: column;
-    background-color: #fbf7f3;
-    jusify-content: evenly-spaced;
-    gap: 16px;
-  `;
-
-  const DetailsRow = styled(Row)`
-    gap: 20px;
-  `;
-
-  const SectionColumn = styled(Column)`
-    width: 50%;
-  `;
-
-  const MainColumn = styled(Column)`
-    padding: 10%;
-  `;
-
-  const GapColumn = styled(Column)`
-    padding: 10%;
-  `;
-
-  const RentPerMonth = styled.h1`
-    font-size: 48px;
-    font-family: "Neutra Text";
-    font-weight: 700;
-    line-height: 150%;
-    line-spacing: 0.96px;
-
-    margin: 0;
-  `;
-
-  const Header = styled.div`
-    font-size: 32px;
-    margin: 0;
-    font-weight: 700;
-    font-family: "Neutra Text";
-    line-height: 150%;
-    line-spacing: 0.64px;
-    margin-top: 32px;
-  `;
-
-  const Text = styled.div`
-    font-family: "Montserrat"
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 150%
-    letter-spacing: 0.4px;
-
-  `;
-
-  const List = styled.ul`
-    margin-top: 0;
-    margin-bottom: 0;
-
-    padding: 0, 0, 0, 10%;
-  `;
-
-  const StrongText = styled(Text)`
-    font-weight: 600;
-  `;
-
-  const ListText = styled.li`
-    font-family: "Montserrat";
-    font-weight: 400;
-    font-size: 20px;
-    line-height: 150%
-    letter-spacing: 0.4px;
-    margin-left: 6%;
-  `;
-
-  const Address = styled(Header)``;
-
-  const ButtonPadding = styled.div`
-    display: flex;
-    flex-direction: row;
-    padding: 20px 10% 0px 10%;
-  `;
-
-  const DoesNotExist = styled.h1`
-    font-size: 48px;
-    font-family: "Neutraface Text", sans-serif;
-    font-weight: 550;
-    line-height: 150%;
-    line-spacing: 0.96px;
-    padding: 20px 10% 20px 10%;
-  `;
 
   //page returned if unit does not exist
   if (unit === undefined) {
@@ -248,9 +269,10 @@ export function UnitDetails() {
 
   return (
     <Page>
-      <Helmet>{/* <title>{unit._id} | USHS Housing Portal</title> */}</Helmet>
-      <title>UnitDetails</title>
-      <h1>hi</h1>
+      <Helmet>
+        <title>{unit._id} | USHS Housing Portal</title>
+      </Helmet>
+
       <ButtonPadding>
         <Link to="/">
           <Button
@@ -261,8 +283,6 @@ export function UnitDetails() {
           />
         </Link>
       </ButtonPadding>
-
-      {/* is this correct or do we have to render  */}
       <UnitDetailsPage></UnitDetailsPage>
     </Page>
   );
