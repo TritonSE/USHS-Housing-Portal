@@ -59,6 +59,7 @@ export const createUnitsHandler: RequestHandler = (req, res, _) => {
     landlordComments,
   } = req.body as CreateUnitRequestBody;
 
+  console.log("At createUnitsHandler");
   // createUnit();
 
   res.status(201).json({

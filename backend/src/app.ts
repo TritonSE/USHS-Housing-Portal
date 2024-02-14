@@ -9,7 +9,6 @@ import { isHttpError } from "http-errors";
 
 import env from "@/config/env";
 import apiRouter from "@/routes/api";
-import unitRouter from "@/routes/units";
 
 const app = express();
 
@@ -29,7 +28,7 @@ app.use(
 
 // Register API router
 app.use("/api", apiRouter);
-app.use("/units", unitRouter);
+app.use("/units", apiRouter);
 
 /**
  * Error handler; all errors thrown by server are handled here.
