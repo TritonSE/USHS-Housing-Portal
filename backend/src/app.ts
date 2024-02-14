@@ -7,7 +7,6 @@ import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
 import { isHttpError } from "http-errors";
 
-import env from "@/config/env";
 import apiRouter from "@/routes/api";
 
 const app = express();
