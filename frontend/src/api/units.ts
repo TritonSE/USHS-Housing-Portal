@@ -1,4 +1,4 @@
-import { APIResult, handleAPIError, post } from "src/api/requests";
+import { APIResult, get, handleAPIError, post } from "./requests";
 
 // Represents a Unit object as it will be received from the backend.
 export type Unit = {
@@ -39,7 +39,7 @@ export type Unit = {
 
 export type FilterParams = {
   search?: string | undefined;
-  availability: number;
+  availability: string;
   minPrice?: number | undefined;
   maxPrice?: number | undefined;
   beds?: number;
@@ -48,26 +48,30 @@ export type FilterParams = {
   sort: number;
 };
 
-// export function getUnits(params: FilterParams): Promise<APIResult<Unit[]>> {
-//   try {
-//     const query = new URLSearchParams(params);
+export async function getUnits(_params: FilterParams): Promise<APIResult<Unit[]>> {
+  try {
+    // const query = new URLSearchParams(params);
 
-//     const keysForDel: string[] = [];
-//     query.forEach((value, key) => {
-//       if (value === "" || value === null || value === "undefined") {
-//         keysForDel.push(key);
-//       }
-//     });
+    // const keysForDel: string[] = [];
+    // query.forEach((value, key) => {
+    //   if (value === "" || value === null || value === "undefined") {
+    //     keysForDel.push(key);
+    //   }
+    // });
 
-//     keysForDel.forEach((key) => {
-//       query.delete(key);
-//     });
+    // keysForDel.forEach((key) => {
+    //   query.delete(key);
+    // });
 
-//     console.log(query.toString());
-//   } catch (error) {
-//     return handleAPIError(error);
-//   }
-// }
+    // console.log(query.toString());
+
+    const response = await get("/units");
+    const json = (await response.json()) as Unit[];
+    return { success: true, data: json };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+}
 
 type HousingLocatorFields =
   | "whereFound"
