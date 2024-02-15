@@ -149,12 +149,7 @@ export function UnitDetails() {
         <Column>
           <ButtonPadding>
             <Link to="/">
-              <Button
-                kind="primary"
-                type="button"
-                data-testid="back-to-listing-button"
-                label="<Back to Listing"
-              />
+              <Button kind="secondary">Back to Listing</Button>
             </Link>
           </ButtonPadding>
           <DoesNotExist>This unit does not exist!</DoesNotExist>
@@ -275,12 +270,7 @@ export function UnitDetails() {
 
       <ButtonPadding>
         <Link to="/">
-          <Button
-            kind="primary"
-            type="button"
-            data-testid="back-to-listing-button"
-            label="< Back to Listing"
-          />
+          <Button kind="secondary">Back to Listing</Button>
         </Link>
       </ButtonPadding>
       <UnitDetailsPage></UnitDetailsPage>
