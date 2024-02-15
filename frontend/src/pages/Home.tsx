@@ -1,21 +1,30 @@
-import React from "react";
 import { Helmet } from "react-helmet-async";
 
-import { getUsers } from "@/api/users";
-import { Page } from "@/components";
+import { FilterParams, getUnits } from "@/api/units";
+import { FilterDropdown } from "@/components/FilterDropdown";
+import { NavBar } from "@/components/NavBar";
+import { Page } from "@/components/Page";
+import { UnitCardGrid } from "@/components/UnitCardGrid";
 
 export function Home() {
-  React.useEffect(() => {
-    // Example API call
-    void getUsers().then(console.log);
-  }, []);
+  const fetchUnits = (filterParams: FilterParams) => {
+    getUnits(filterParams)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   return (
     <Page>
       <Helmet>
         <title>Home | USHS Housing Portal</title>
       </Helmet>
-      <h1>This is the home page.</h1>
+      <NavBar page="Home" />
+      <FilterDropdown refreshUnits={fetchUnits}></FilterDropdown>
+      <UnitCardGrid />
     </Page>
   );
 }

@@ -15,14 +15,19 @@ export const getUsersHandler: RequestHandler = asyncHandler(async (_req, res, _n
 });
 
 type CreateUserRequestBody = {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
 };
 
-export const createUserHandler: RequestHandler = (req, res, _) => {
-  const { name, email } = req.body as CreateUserRequestBody;
+export const createUserHandler: RequestHandler = asyncHandler(async (req, res, _) => {
+  const { firstName, lastName, email } = req.body as CreateUserRequestBody;
 
-  createUser();
+  const response = await createUser(firstName, lastName, email);
 
-  res.status(200).json({ user: { name, email } });
-};
+  if (response !== null) {
+    res.status(200).json({ user: { firstName, lastName, email } });
+  } else {
+    res.status(400).send("User Already Exists");
+  }
+});
