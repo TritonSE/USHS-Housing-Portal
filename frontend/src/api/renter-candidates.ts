@@ -11,7 +11,7 @@ export type RenterCandidate = {
 export type createRenterCandidateRequest = {
   firstName: string;
   lastName: string;
-  email: string;
+  contactInfo: string;
   program?: string;
 };
 
