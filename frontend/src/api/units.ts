@@ -71,8 +71,7 @@ export async function getUnit(id: string): Promise<APIResult<Unit>> {
     const response = await get(`/units/${id}`);
     const json = (await response.json()) as Unit;
     return { success: true, data: json };
-  }catch (error) {
+  } catch (error) {
     return handleAPIError(error);
   }
-
 }
