@@ -12,14 +12,14 @@ const SearchContainer = styled.div`
 const SearchBar = styled.input<{ open: boolean; state: boolean }>`
   width: 100%;
   height: 44px;
-  padding: 9px 20px 9px 12px;
+  padding: 9px 40px 9px 12px;
   align-items: center;
   border-radius: 5px;
   border: ${(props) => (props.open ? "1.5px solid black;" : "1.5px solid #cdcaca")};
   box-shadow: 1px 1px 2px 0px rgba(188, 186, 183, 0.4);
   outline: none;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: ${(props) => (props.state ? "475" : "400")};
   letter-spacing: 0.32px;
   color: ${(props) => (props.state ? "black" : "gray")};
   background-color: #fbf7f3;
@@ -31,28 +31,28 @@ const SearchBar = styled.input<{ open: boolean; state: boolean }>`
 
 const OptionsContainer = styled.div`
   position: absolute;
-  top: 49px;
+  top: 47px;
   max-height: 160px;
   width: 100%;
   overflow-y: auto;
   overflow-x: auto;
   border-radius: 5px;
   border: 0.5px solid #cdcaca;
-  box-shadow: 1px 1px 2px 0px rgba(188, 186, 183, 0.4);
+  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   background-color: #fbf7f3;
 `;
 const Option = styled.div`
   font-size: 15px;
-  font-weight: 700;
+  font-weight: 400;
   font-style: normal;
   letter-spacing: 0.32px;
   cursor: pointer;
   height: 100%;
-  padding: 7px;
+  padding: 8px;
   &:hover {
-    color: #debb01;
+    color: #b64201;
   }
 `;
 
@@ -85,7 +85,7 @@ type SelectProps = {
   reset?: boolean;
 };
 
-export function Select({ placeholder, options, onSelect, reset }: SelectProps) {
+export function UserDropdown({ placeholder, options, onSelect, reset }: SelectProps) {
   const [openMenu, setOpenMenu] = useState(false);
   const [searchValue, setSearchValue] = useState(""); //current text value in select input box
   const [validOptions, setValidOptions] = useState<User[]>(options); //all RS filtered through search
@@ -136,9 +136,15 @@ export function Select({ placeholder, options, onSelect, reset }: SelectProps) {
     setCurrentSelected(undefined);
   }, [reset]);
 
-  //triggers everytime text in input box changes; ensures options are filtered + callbacks + correct user is selected
+  //triggers everytime text in input box changes; ensures options are filtered
   useEffect(() => {
     handleValidOptions();
+  }, [searchValue, currentSelected]);
+
+  //triggers everytime valid options changes
+  //separated from the above useeffect so that validOptions are updated in time for these functions
+  //please lmk if there's a better way to do this
+  useEffect(() => {
     //selects user if current text exactly matches a valid user
     const idx = validOptions.map((e) => e.firstName + " " + e.lastName).indexOf(searchValue);
     if (idx !== -1) {
@@ -155,7 +161,7 @@ export function Select({ placeholder, options, onSelect, reset }: SelectProps) {
     }
 
     if (onSelect) onSelect(currentSelected);
-  }, [searchValue, currentSelected]);
+  }, [validOptions]);
 
   return (
     <SearchContainer>

@@ -6,16 +6,16 @@ import { User, elevateUser } from "@/api/users";
 import { Page } from "@/components";
 import { Button } from "@/components/Button";
 import { NavBar } from "@/components/NavBar";
-import { Select } from "@/components/Select";
+import { UserDropdown } from "@/components/UserDropdown";
 import { AuthContext } from "@/contexts/AuthContext";
 import { DataContext } from "@/contexts/DataContext";
 
-const Items = styled.div`
+const Items = styled.div<{ IsHL: boolean }>`
   display: flex;
   flex-direction: column;
-  padding: 15vh 0px 0px 0px;
+  padding: ${(props) => (props.IsHL ? "8vh" : "30vh")} 0px 0px 0px;
   max-height: 100vh;
-  gap: 10vh;
+  gap: 7vh;
 `;
 
 const ProfileWrapper = styled.div`
@@ -30,30 +30,35 @@ const ProfileWrapper = styled.div`
 const InfoWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-content: center;
-  gap: 25px;
-  font-size: 23px;
+  align-items: center;
+  gap: 15px;
+`;
+
+const Name = styled.div`
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 150%;
+  letter-spacing: 0.64px;
+`;
+
+const Email = styled.div`
+  font-size: 20px;
   font-weight: 400;
   line-height: 150%;
   letter-spacing: 0.4px;
 `;
 
 const ProfilePicture = styled.img`
-  width: 182px;
-  height: 182px;
+  width: 160px;
+  height: 160px;
   border-radius: 100px;
 `;
 
 const CenterDiv = styled.div`
   display: flex;
-  justify-content: center;
-`;
-
-const AssignWrapper = styled.div`
-  display: flex;
   flex-direction: column;
-  gap: 28px;
-  max-width: 100%;
+  gap: 40px;
+  padding-left: 20vw;
 `;
 
 const AssignHeader = styled.div`
@@ -62,6 +67,25 @@ const AssignHeader = styled.div`
   font-weight: 600;
   line-height: 150%;
   letter-spacing: 0.4px;
+`;
+
+const AssignWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 100%;
+`;
+
+const HLWrapper = styled.div`
+  width: 100vw;
+  display: flex;
+  flex-flow: wrap;
+  row-gap: 12px;
+`;
+
+const HLDiv = styled.div`
+  width: 27vw;
+  font-size: 16px;
 `;
 
 const SearchRow = styled.div`
@@ -80,7 +104,7 @@ const AssignButton = styled(Button)`
 const ElevatePopup = styled.div`
   display: flex;
   flex-direction: row;
-  max-width:;
+  max-width: 600px;
   height: 40px;
   gap: 10px;
   padding: 8px 12px 8px 20px;
@@ -111,6 +135,7 @@ const XButton = styled.div`
 export function Profile() {
   const [popup, setPopup] = useState<boolean>(false);
   const [allReferringStaff, setAllReferringStaff] = useState<User[]>([]);
+  const [allHousingLocators, setAllHousingLocators] = useState<User[]>([]);
   const [currentRS, setCurrentRS] = useState<User>(); //tracks current RS selected (for assignment)
   const [assignedRS, setAssignedRS] = useState<User>(); //tracks last RS elevated (for popup)
   const [resetSelect, setResetSelect] = useState<boolean>(false); //resets select component when state changes
@@ -129,9 +154,10 @@ export function Profile() {
             setPopup(true);
             setAssignedRS(currentRS);
 
-            //change list of all RS locally because datacontext doesn't update without page reload
-            const idx = allReferringStaff.map((e) => e.email).indexOf(currentRS.email);
-            allReferringStaff.splice(idx, 1);
+            //change lists of all RS & HL locally because datacontext doesn't update without page reload
+            setAllReferringStaff(allReferringStaff.filter((rs) => rs !== currentRS));
+            setAllHousingLocators([...allHousingLocators, currentRS]);
+
             setCurrentRS(undefined);
           } else {
             console.log(value.error);
@@ -145,7 +171,8 @@ export function Profile() {
 
   useEffect(() => {
     setAllReferringStaff(dataContext.allReferringStaff);
-  }, [dataContext.allReferringStaff]);
+    setAllHousingLocators(dataContext.allHousingLocators);
+  }, [dataContext.allReferringStaff, dataContext.allHousingLocators]);
 
   return (
     <Page>
@@ -153,21 +180,29 @@ export function Profile() {
         <title>Profile | USHS Housing Portal</title>
       </Helmet>
       <NavBar page="Profile" />
-      <Items>
+      <Items IsHL={dataContext.currentUser?.isHousingLocator ?? false}>
         <ProfileWrapper>
           <ProfilePicture src={authContext.currentUser?.photoURL ?? ""} alt="Profile Img" />
           <InfoWrapper>
-            <div>{authContext.currentUser?.displayName}</div>
-            <div>{authContext.currentUser?.email}</div>
+            <Name>{authContext.currentUser?.displayName}</Name>
+            <Email>{authContext.currentUser?.email}</Email>
           </InfoWrapper>
         </ProfileWrapper>
 
         {dataContext.currentUser?.isHousingLocator && (
           <CenterDiv>
             <AssignWrapper>
+              <AssignHeader>Current Housing Locators:</AssignHeader>
+              <HLWrapper>
+                {allHousingLocators.map((HS, index) => (
+                  <HLDiv key={index}>{HS.firstName + " " + HS.lastName}</HLDiv>
+                ))}
+              </HLWrapper>
+            </AssignWrapper>
+            <AssignWrapper>
               <AssignHeader>Assign Housing Locators:</AssignHeader>
               <SearchRow>
-                <Select
+                <UserDropdown
                   placeholder="Search People"
                   options={allReferringStaff}
                   onSelect={(value) => {
