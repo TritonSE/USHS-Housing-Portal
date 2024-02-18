@@ -60,7 +60,7 @@ export const DropdownRow = styled.div`
   gap: 50px;
 `;
 
-export const Sort = styled.button<{ active: boolean }>`
+export const Sort = styled.button<{ active?: boolean }>`
   font-family: Montserrat;
   font-size: 15px;
   font-style: normal;
