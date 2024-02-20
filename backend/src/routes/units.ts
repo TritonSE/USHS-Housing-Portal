@@ -3,6 +3,6 @@ import express from "express";
 
 const router = express.Router();
 
-router.get("/units/:id"); //, UnitController.getUnit);
+router.get("/units/:id", UnitController.getUnit);
 
 export default router;
