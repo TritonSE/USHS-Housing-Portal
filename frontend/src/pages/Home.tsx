@@ -1,21 +1,28 @@
+import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 
-import { FilterParams, getUnits } from "@/api/units";
+import { FilterParams, Unit, getUnits } from "@/api/units";
 import { FilterDropdown } from "@/components/FilterDropdown";
 import { NavBar } from "@/components/NavBar";
 import { Page } from "@/components/Page";
 import { UnitCardGrid } from "@/components/UnitCardGrid";
 
 export function Home() {
+  const [units, setUnits] = useState<Unit[]>([]);
+
   const fetchUnits = (filterParams: FilterParams) => {
     getUnits(filterParams)
       .then((response) => {
-        console.log(response);
+        setUnits(response.data as Unit[]);
       })
       .catch((error) => {
         console.error(error);
       });
   };
+
+  useEffect(() => {
+    fetchUnits();
+  }, []);
 
   return (
     <Page>
@@ -24,7 +31,7 @@ export function Home() {
       </Helmet>
       <NavBar page="Home" />
       <FilterDropdown refreshUnits={fetchUnits}></FilterDropdown>
-      <UnitCardGrid />
+      <UnitCardGrid units={units} />
     </Page>
   );
 }

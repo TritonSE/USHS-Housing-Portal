@@ -24,3 +24,9 @@ export const createUnit = async (newUnit: NewUnit) => {
   const unit = await UnitModel.create(newUnit);
   return unit;
 };
+
+export const getUnits = async () => {
+  const units = await UnitModel.find();
+
+  return units;
+};

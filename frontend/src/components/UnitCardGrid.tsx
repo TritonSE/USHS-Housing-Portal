@@ -1,5 +1,6 @@
 import styled from "styled-components";
 
+import { Unit } from "@/api/units";
 import { UnitCard } from "@/components/UnitCard";
 
 const UnitCardLayout = styled.div`
@@ -25,18 +26,20 @@ const GridContainer = styled.div`
   gap: 30px;
 `;
 
-// Hard coded units for testing
-export const UnitCardGrid = () => {
+export type UnitCardGridProps = {
+  units: Unit[];
+};
+
+export const UnitCardGrid = (props: UnitCardGridProps) => {
+  console.log(props.units);
+
   return (
     <GridContainer>
       <PropertiesText>Available Properties</PropertiesText>
       <UnitCardLayout>
-        <UnitCard />
-        <UnitCard />
-        <UnitCard />
-        <UnitCard />
-        <UnitCard />
-        <UnitCard />
+        {props.units.map((unit, idx) => (
+          <UnitCard key={idx} unit={unit} />
+        ))}
       </UnitCardLayout>
     </GridContainer>
   );

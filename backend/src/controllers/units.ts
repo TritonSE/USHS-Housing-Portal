@@ -2,7 +2,7 @@ import { RequestHandler } from "express";
 
 import { asyncHandler } from "./wrappers";
 
-import { NewUnit, createUnit } from "@/services/units";
+import { NewUnit, createUnit, getUnits } from "@/services/units";
 
 /**
  * Handle a request to create a new unit.
@@ -13,4 +13,10 @@ export const createUnitsHandler: RequestHandler = asyncHandler(async (req, res, 
   const newUnit = await createUnit(newUnitBody);
 
   res.status(201).json(newUnit);
+});
+
+export const getUnitsHandler: RequestHandler = asyncHandler(async (req, res, _) => {
+  const units = await getUnits();
+
+  res.status(200).json(units);
 });

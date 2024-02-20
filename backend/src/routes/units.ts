@@ -11,5 +11,6 @@ import { createUnitValidators } from "@/validators/units";
 const router = express.Router();
 
 router.post("/", validateWith(createUnitValidators), UnitController.createUnitsHandler);
+router.get("/", UnitController.getUnitsHandler);
 
 export default router;
