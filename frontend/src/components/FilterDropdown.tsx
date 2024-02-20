@@ -123,7 +123,7 @@ export const FilterDropdown = (props: FilterDropdownProps) => {
       maxPrice: priceState.maxPrice === -1 ? undefined : priceState.maxPrice,
     };
 
-    props.refreshUnits(filters as FilterParams);
+    props.refreshUnits(filters);
     console.log(filters);
   };
 

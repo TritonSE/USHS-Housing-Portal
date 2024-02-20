@@ -1,8 +1,10 @@
-import { APIResult, handleAPIError } from "./requests";
+import { APIResult, get, handleAPIError, post } from "./requests";
+
+// Represents a Unit object as it will be received from the backend.
 
 export type FilterParams = {
   search?: string | undefined;
-  availability: number;
+  availability: string;
   minPrice?: number | undefined;
   maxPrice?: number | undefined;
   beds?: number;
@@ -11,38 +13,26 @@ export type FilterParams = {
   sort: number;
 };
 
-export function getUnits(params: FilterParams): Promise<APIResult<Unit[]>> {
+type HousingLocatorFields =
+  | "whereFound"
+  | "paymentRentingCriteria"
+  | "additionalRules"
+  | "internalComments"
+  | "approved"
+  | "createdAt"
+  | "updatedAt";
+
+export type CreateUnitRequest = Omit<Unit, HousingLocatorFields>;
+
+export async function createUnit(unit: CreateUnitRequest): Promise<APIResult<Unit>> {
   try {
-    const query = new URLSearchParams(params);
-
-    const keysForDel: string[] = [];
-    query.forEach((value, key) => {
-      if (value === "" || value === null || value === "undefined") {
-        keysForDel.push(key);
-      }
-    });
-
-    keysForDel.forEach((key) => {
-      query.delete(key);
-    });
-
-    console.log(query.toString());
+    const response = await post("/units", unit);
+    const json = (await response.json()) as Unit;
+    return { success: true, data: json };
   } catch (error) {
     return handleAPIError(error);
   }
 }
-import { APIResult, get, handleAPIError } from "./requests";
-
-export type FilterParams = {
-  search?: string | undefined;
-  availability: number;
-  minPrice?: number | undefined;
-  maxPrice?: number | undefined;
-  beds?: number;
-  baths?: number;
-  approved?: boolean;
-  sort: number;
-};
 
 export function getUnits(params: FilterParams): Promise<APIResult<Unit[]>> {
   try {

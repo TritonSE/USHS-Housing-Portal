@@ -2,7 +2,8 @@
  * Request validation middleware
  */
 import { RequestHandler } from "express";
-import { ValidationChain, validationResult } from "express-validator";
+import { ContextRunner, ValidationChain, validationResult } from "express-validator";
+import { Middleware } from "express-validator/src/base";
 import createHttpError from "http-errors";
 
 /**
@@ -21,9 +22,13 @@ const validateRequest: RequestHandler = (req, res, next) => {
   const allErrors = result.mapped();
 
   // Collect all validation errors
-  const errorMessages = Object.entries(allErrors).map(
-    ([fieldName, error]) => `${fieldName} ${error.msg}`,
-  );
+  const errorMessages = Object.entries(allErrors).map(([fieldName, error]) => {
+    if (error.type === "unknown_fields") {
+      // Catch unknown fields error and return a more user-friendly message
+      return `${error.msg}: ${error.fields.map(({ path }) => path).join(", ")}`;
+    }
+    return `${fieldName} ${error.msg}`;
+  });
 
   const errorString = `Invalid fields: ${[...errorMessages].join(", ")}`;
 
@@ -37,4 +42,7 @@ const validateRequest: RequestHandler = (req, res, next) => {
  * @param validators a list of validation chains to apply to the request
  * @returns the validation chain with the validation handler appended
  */
-export const validateWith = (validators: ValidationChain[]) => [...validators, validateRequest];
+export const validateWith = (validators: (ValidationChain | (Middleware & ContextRunner))[]) => [
+  ...validators,
+  validateRequest,
+];
