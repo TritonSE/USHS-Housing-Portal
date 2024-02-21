@@ -4,6 +4,7 @@ const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  background-color: #fbf7f3;
 `;
 
 const ContentWrapper = styled.div`
