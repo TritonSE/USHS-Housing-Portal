@@ -92,7 +92,6 @@ export function UserDropdown({ placeholder, options, onSelect, reset }: SelectPr
   const [solid, setSolid] = useState(false); //search text color
   const [currentSelected, setCurrentSelected] = useState<User>(); //current selected RS
 
-  //handles actions after clicking on a dropdown item
   const handleSelect = (selectedValue: User) => {
     setSearchValue(selectedValue.firstName + " " + selectedValue.lastName);
     setCurrentSelected(selectedValue);
