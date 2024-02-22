@@ -52,7 +52,8 @@ const Option = styled.div`
   height: 100%;
   padding: 8px;
   &:hover {
-    color: #b64201;
+    background-color: #f3f3f3;
+    // color: #b64201;
   }
 `;
 

@@ -53,6 +53,12 @@ const ConfirmLogout = styled(LogoutButton)`
 const Link = styled.a<{ active: boolean }>`
   text-decoration: none;
   color: ${(props) => (props.active ? "#b64201" : "black")};
+  background-color: ${(props) => (props.active ? "rgba(236, 133, 55, 0.10)" : "none")};
+  padding: 8px 16px;
+  border-radius: 16px;
+  &:hover {
+    color: #b64201;
+  }
 `;
 
 const Overlay = styled.div`

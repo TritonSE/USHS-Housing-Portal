@@ -11,4 +11,10 @@ export const Button = styled.button<{ kind: "primary" | "secondary" }>`
   letter-spacing: 0.32px;
   cursor: pointer;
   white-space: nowrap;
+  transition-duration: 300ms;
+  &:hover {
+    background-color: ${(props) =>
+      props.kind === "primary" ? "#EC8537" : "rgba(236, 133, 55, 0.20)"};
+    border-color: ${(props) => (props.kind === "primary" ? "#EC8537" : "#b64201")};
+  }
 `;
