@@ -9,13 +9,14 @@ export async function getRenterCandidates() {
 export async function createRenterCandidate(
   firstName: string,
   lastName: string,
-  contactInfo: string,
-  program?: string,
+  uid: string,
+  program: string,
+  adults: number,
+  children: number,
+  phone?: string,
+  email?: string,
 ) {
-  const query =
-    typeof program !== "undefined"
-      ? { firstName, lastName, contactInfo, program }
-      : { firstName, lastName, contactInfo };
+  const query = { firstName, lastName, phone, email, uid, program, adults, children };
   const renter = await RenterModel.findOne(query);
   if (renter === null) {
     const newRenter = await RenterModel.create(query);

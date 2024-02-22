@@ -4,11 +4,13 @@ const renterSchema = new Schema(
   {
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
-    contactInfo: { type: String, required: true },
-    program: { type: String, required: false },
+    phone: { type: String, required: false },
+    email: { type: String, required: false },
+    uid: { type: String, required: true },
+    program: { type: String, required: true },
+    adults: { type: Number, required: true },
+    children: { type: Number, required: true },
   },
-  // Mongoose will automatically create "createdAt" and "updatedAt" properties
-  // and update them accordingly when the document is saved/updated.
   { timestamps: true },
 );
 

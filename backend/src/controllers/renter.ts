@@ -13,27 +13,31 @@ export const getRenterCandidatesHandler: RequestHandler = asyncHandler(async (_r
 type CreateRenterCandidateRequestBody = {
   firstName: string;
   lastName: string;
-  contactInfo: string;
-  program?: string;
+  uid: string;
+  program: string;
+  adults: number;
+  children: number;
+  phone?: string;
+  email?: string;
 };
 
 export const createRenterCandidateHandler: RequestHandler = asyncHandler(async (req, res, _) => {
-  const { firstName, lastName, contactInfo, program } =
+  const { firstName, lastName, uid, program, adults, children, phone, email } =
     req.body as CreateRenterCandidateRequestBody;
 
-  let response;
-  if (typeof program !== "undefined") {
-    response = await createRenterCandidate(firstName, lastName, contactInfo, program);
-  } else {
-    response = await createRenterCandidate(firstName, lastName, contactInfo);
-  }
+  const response = await createRenterCandidate(
+    firstName,
+    lastName,
+    uid,
+    program,
+    adults,
+    children,
+    phone,
+    email,
+  );
 
   if (response !== null) {
-    if (typeof program !== "undefined") {
-      res.status(200).json({ renter: { firstName, lastName, contactInfo, program } });
-    } else {
-      res.status(200).json({ renter: { firstName, lastName, contactInfo } });
-    }
+    res.status(200).json(response);
   } else {
     res.status(400).send("Renter Already Exists");
   }
