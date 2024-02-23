@@ -4,15 +4,23 @@ export type RenterCandidate = {
   _id: string;
   firstName: string;
   lastName: string;
-  email: string;
-  program?: string;
+  phone?: string;
+  email?: string;
+  uid: string;
+  program: string;
+  adults: number;
+  children: number;
 };
 
 export type createRenterCandidateRequest = {
   firstName: string;
   lastName: string;
-  contactInfo: string;
-  program?: string;
+  phone?: string;
+  email?: string;
+  uid: string;
+  program: string;
+  adults: number;
+  children: number;
 };
 
 export async function getRenterCandidates(): Promise<APIResult<RenterCandidate[]>> {

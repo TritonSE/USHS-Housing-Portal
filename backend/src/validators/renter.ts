@@ -20,7 +20,11 @@ const lastNameValidator = body("lastName")
   .notEmpty()
   .withMessage("cannot be empty");
 
-const contactInfoValidator = body("contactInfo")
+const phoneValidator = body("phone").optional().isString().withMessage("must be a string");
+
+const emailValidator = body("email").optional().isEmail().withMessage("is an invalid format");
+
+const uidValidator = body("uid")
   .exists()
   .withMessage("is required")
   .bail()
@@ -30,11 +34,37 @@ const contactInfoValidator = body("contactInfo")
   .notEmpty()
   .withMessage("cannot be empty");
 
-const programValidator = body("program").optional().isString().withMessage("must be a string");
+const programValidator = body("program")
+  .exists()
+  .withMessage("is required")
+  .bail()
+  .isString()
+  .withMessage("must be a string")
+  .bail()
+  .notEmpty()
+  .withMessage("cannot be empty");
+
+const adultsValidator = body("adults")
+  .exists()
+  .withMessage("is required")
+  .bail()
+  .isNumeric()
+  .withMessage("must be a number");
+
+const childrenValidator = body("children")
+  .exists()
+  .withMessage("is required")
+  .bail()
+  .isNumeric()
+  .withMessage("must be a number");
 
 export const createRenterCandidate = [
   firstNameValidator,
   lastNameValidator,
-  contactInfoValidator,
+  phoneValidator,
+  emailValidator,
+  uidValidator,
   programValidator,
+  adultsValidator,
+  childrenValidator,
 ];
