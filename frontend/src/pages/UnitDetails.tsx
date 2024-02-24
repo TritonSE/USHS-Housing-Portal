@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { JSX } from "react/jsx-runtime";
 import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
@@ -158,6 +159,32 @@ export function UnitDetails() {
     availableNow = "Available Now";
   }
 
+  //move data into an array
+  const rentingCriteria = unit.paymentRentingCriteria.map((criteria) => (
+    <li key={criteria}>{criteria}</li>
+  ));
+  const appliances = unit.appliances.map((appliance) => <li key={appliance}>{appliance}</li>);
+  const parkingRequirements = unit.parking.map((parking) => <li key={parking}>{parking}</li>);
+  const communityFeatures = unit.communityFeatures.map((feature) => (
+    <li key={feature}>{feature}</li>
+  ));
+  const accessibility = unit.accessibility.map((access) => <li key={access}>{access}</li>);
+  const pets = unit.pets.map((pet) => <li key={pet}>{pet}</li>);
+
+  let additionalRules:
+    | string
+    | number
+    | boolean
+    | JSX.Element[]
+    | React.ReactElement
+    | Iterable<React.ReactNode>
+    | null
+    | undefined;
+  if (unit.additionalRules !== undefined) {
+    additionalRules = unit.additionalRules.map((rule) => <li key={rule}>{rule}</li>);
+  } else {
+    additionalRules = "None";
+  }
   const UnitDetailsPage = () => (
     <MainColumn>
       <Row>
@@ -194,10 +221,7 @@ export function UnitDetails() {
             <ListText> ${unit.securityDeposit}</ListText>
           </List>
           <StrongText>Payment/Renting Criteria: </StrongText>
-          <ListText>{unit.paymentRentingCriteria}</ListText>
-          <List>
-            <ListText>{unit.paymentRentingCriteria}</ListText>
-          </List>
+          <ListText>{rentingCriteria}</ListText>
         </SectionColumn>
         <SectionColumn>
           <StrongText>Applicaton Fee: </StrongText>
@@ -217,11 +241,11 @@ export function UnitDetails() {
       <Row>
         <SectionColumn>
           <StrongText>Parking: </StrongText>
-          <ListText>{unit.parking}</ListText>
+          <ListText>{parkingRequirements}</ListText>
           <StrongText>Pets/Animals: </StrongText>
-          <ListText>{unit.pets}</ListText>
+          <ListText>{pets}</ListText>
           <StrongText>Appliances: </StrongText>
-          <ListText>{unit.appliances}</ListText>
+          <ListText>{appliances}</ListText>
           <StrongText>Housing Authority: </StrongText>
           <ListText>{unit.housingAuthority}</ListText>
           <StrongText>Additional Comments from Landlord: </StrongText>
@@ -229,11 +253,11 @@ export function UnitDetails() {
         </SectionColumn>
         <SectionColumn>
           <StrongText>Accessibility Access: </StrongText>
-          <ListText>{unit.accessibility}</ListText>
+          <ListText>{accessibility}</ListText>
           <StrongText>Sharing House Acceptable: </StrongText>
           <ListText>{unit.sharingAcceptable}</ListText>
           <StrongText>Community/Neighborhood Information: </StrongText>
-          <ListText>{unit.communityFeatures}</ListText>
+          <ListText>{communityFeatures}</ListText>
         </SectionColumn>
       </Row>
 
@@ -245,7 +269,7 @@ export function UnitDetails() {
           <StrongText>Where Was Unit Found: </StrongText>
           <ListText>{unit.whereFound}</ListText>
           <StrongText>Additional Rules and Regulation: </StrongText>
-          <ListText>{unit.additionalRules}</ListText>
+          <ListText>{additionalRules}</ListText>
         </SectionColumn>
         <SectionColumn>
           <StrongText>Notes from Housing Locator: </StrongText>
