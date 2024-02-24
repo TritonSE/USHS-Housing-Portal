@@ -101,13 +101,10 @@ export function UserDropdown({ placeholder, options, onSelect, reset }: SelectPr
 
   //filters dropdown options (super messy, feedback welcome :D)
   const handleValidOptions = () => {
-    const matches = [];
-    for (const i of options) {
-      const fullName = i.firstName + " " + i.lastName;
-      if (fullName.toLowerCase().includes(searchValue.toLowerCase())) {
-        matches.push(i);
-      }
-    }
+    const matches = options.filter((user: User) =>
+      (user.firstName + " " + user.lastName).toLowerCase().includes(searchValue.toLowerCase()),
+    );
+
     //sort alphabetically if no search value
     if (searchValue === "") {
       matches.sort((a, b) => {
@@ -139,11 +136,9 @@ export function UserDropdown({ placeholder, options, onSelect, reset }: SelectPr
   //triggers everytime text in input box changes; ensures options are filtered
   useEffect(() => {
     handleValidOptions();
-  }, [searchValue, currentSelected]);
+  }, [searchValue, currentSelected, options]);
 
-  //triggers everytime valid options changes
   //separated from the above useeffect so that validOptions are updated in time for these functions
-  //please lmk if there's a better way to do this
   useEffect(() => {
     //selects user if current text exactly matches a valid user
     const idx = validOptions.map((e) => e.firstName + " " + e.lastName).indexOf(searchValue);

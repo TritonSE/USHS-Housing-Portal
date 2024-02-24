@@ -12,17 +12,19 @@ type contextType = {
   allHousingLocators: User[];
   allReferringStaff: User[];
   currentUser: User | null;
+  refetchData: () => void;
 };
 
 export const DataContext = React.createContext<contextType>({
   currentUser: null,
   allHousingLocators: [],
   allReferringStaff: [],
+  refetchData: () => null,
 });
 
 export function DataProvider({ children }: ProviderProps) {
   const [allHousingLocators, setAllHousingLocators] = useState<User[]>([]);
-  const [allReferringStaff, setALlReferringStaff] = useState<User[]>([]);
+  const [allReferringStaff, setAllReferringStaff] = useState<User[]>([]);
   const [currentUser, setUser] = useState<User | null>(null);
   const auth = useContext(AuthContext);
 
@@ -31,7 +33,7 @@ export function DataProvider({ children }: ProviderProps) {
     if (response.success) {
       const data = response.data;
       setAllHousingLocators(data.filter((user: User) => user.isHousingLocator));
-      setALlReferringStaff(data.filter((user: User) => !user.isHousingLocator));
+      setAllReferringStaff(data.filter((user: User) => !user.isHousingLocator));
       setUser(
         data.find((user: User) => auth.currentUser && user.email === auth.currentUser.email) ??
           null,
@@ -46,7 +48,7 @@ export function DataProvider({ children }: ProviderProps) {
   }, [auth]);
 
   const value = useMemo(
-    () => ({ allHousingLocators, allReferringStaff, currentUser }),
+    () => ({ allHousingLocators, allReferringStaff, currentUser, refetchData: fetchData }),
     [allHousingLocators, allReferringStaff, currentUser],
   );
 

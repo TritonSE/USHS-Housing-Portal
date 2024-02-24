@@ -154,10 +154,7 @@ export function Profile() {
             setPopup(true);
             setAssignedRS(currentRS);
 
-            //change lists of all RS & HL locally because datacontext doesn't update without page reload
-            setAllReferringStaff(allReferringStaff.filter((rs) => rs !== currentRS));
-            setAllHousingLocators([...allHousingLocators, currentRS]);
-
+            dataContext.refetchData();
             setCurrentRS(undefined);
           } else {
             console.log(value.error);

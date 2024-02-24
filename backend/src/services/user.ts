@@ -7,6 +7,11 @@ import { UserModel } from "../models/user";
 // Fetch users from the database
 export async function getUsers() {
   const users = await UserModel.find({});
+  users.sort((a, b) => {
+    const fullNameA = a.firstName + " " + a.lastName;
+    const fullNameB = b.firstName + " " + b.lastName;
+    return fullNameA < fullNameB ? -1 : 1;
+  });
   return users;
 }
 
