@@ -12,6 +12,8 @@ const Row = styled.div`
   display: flex;
   flex-direction: row;
   background-color: #fbf7f3;
+  jusify-content: evenly-spaced;
+  column-gap: 10%;
 `;
 
 const Column = styled.div`
@@ -34,14 +36,10 @@ const MainColumn = styled(Column)`
   padding: 10%;
 `;
 
-const GapColumn = styled(Column)`
-  padding: 10%;
-`;
-
 const RentPerMonth = styled.h1`
   font-size: 48px;
-  font-family: "Neutra Text";
-  font-weight: 700;
+  font-family: "Montserrat";
+  font-weight: 600;
   line-height: 150%;
   line-spacing: 0.96px;
 
@@ -52,7 +50,7 @@ const Header = styled.div`
   font-size: 32px;
   margin: 0;
   font-weight: 700;
-  font-family: "Neutra Text";
+  font-family: "Montserrat";
   line-height: 150%;
   line-spacing: 0.64px;
   margin-top: 32px;
@@ -64,7 +62,6 @@ const Text = styled.div`
     font-size: 20px;
     line-height: 150%
     letter-spacing: 0.4px;
-
   `;
 
 const List = styled.ul`
@@ -85,6 +82,8 @@ const ListText = styled.li`
     line-height: 150%
     letter-spacing: 0.4px;
     margin-left: 6%;
+    flex-wrap: wrap;
+    margin-right: 10px;
   `;
 
 const Address = styled(Header)``;
@@ -124,12 +123,7 @@ export function UnitDetails() {
           <Column>
             <ButtonPadding>
               <Link to="/">
-                <Button
-                  kind="primary"
-                  type="button"
-                  data-testid="back-to-listing-button"
-                  label="<Back to Listing"
-                />
+                <Button kind="secondary">Back to Listing</Button>
               </Link>
             </ButtonPadding>
             <DoesNotExist>This unit does not exist!</DoesNotExist>
@@ -195,7 +189,6 @@ export function UnitDetails() {
       </Row>
       <Row>
         <SectionColumn>
-          <GapColumn></GapColumn>
           <StrongText>Security Deposit: </StrongText>
           <List>
             <ListText> ${unit.securityDeposit}</ListText>
