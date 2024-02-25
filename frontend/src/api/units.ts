@@ -11,6 +11,7 @@ export type Unit = {
   suiteNumber: string;
   city: string;
   state: string;
+  listingAddress: string;
   areaCode: string;
   sqft: number;
   monthlyRent: number;
@@ -20,6 +21,7 @@ export type Unit = {
   applicationFeeCost: number;
   dateAvailable: string;
   leasedStatus?: "ushs" | "removed";
+  availableNow: boolean;
   numBeds: number;
   numBaths: number;
   appliances: string[];

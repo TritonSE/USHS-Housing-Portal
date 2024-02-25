@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { JSX } from "react/jsx-runtime";
 import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
@@ -26,7 +25,7 @@ const Column = styled.div`
 `;
 
 const DetailsRow = styled(Row)`
-  gap: 20px;
+  gap: 120px;
 `;
 
 const SectionColumn = styled(Column)`
@@ -68,7 +67,6 @@ const Text = styled.div`
 const List = styled.ul`
   margin-top: 0;
   margin-bottom: 0;
-
   padding: 0, 0, 0, 10%;
 `;
 
@@ -115,27 +113,10 @@ export function UnitDetails() {
           setUnit(result.data);
         }
       });
-    } else {
-      return (
-        <Page>
-          <Helmet>
-            <title>Unit Does Not Exist | USHS Housing Portal</title>
-          </Helmet>
-          <Column>
-            <ButtonPadding>
-              <Link to="/">
-                <Button kind="secondary">Back to Listing</Button>
-              </Link>
-            </ButtonPadding>
-            <DoesNotExist>This unit does not exist!</DoesNotExist>
-          </Column>
-        </Page>
-      );
     }
   }, []);
 
-  //page returned if unit does not exist
-  if (unit === undefined) {
+  if (!unit) {
     return (
       <Page>
         <Helmet>
@@ -153,38 +134,30 @@ export function UnitDetails() {
     );
   }
 
-  //checks for avaliability
-  let availableNow = "Not Available";
-  if (unit.availableNow) {
-    availableNow = "Available Now";
-  }
+  //checks for availability
+  const availableNow = unit.availableNow ? "Available Now" : "Not Available";
 
   //move data into an array
   const rentingCriteria = unit.paymentRentingCriteria.map((criteria) => (
-    <li key={criteria}>{criteria}</li>
+    <ListText key={criteria}>{criteria}</ListText>
   ));
-  const appliances = unit.appliances.map((appliance) => <li key={appliance}>{appliance}</li>);
-  const parkingRequirements = unit.parking.map((parking) => <li key={parking}>{parking}</li>);
+  const appliances = unit.appliances.map((appliance) => (
+    <ListText key={appliance}>{appliance}</ListText>
+  ));
+  const parkingRequirements = unit.parking.map((parking) => (
+    <ListText key={parking}>{parking}</ListText>
+  ));
   const communityFeatures = unit.communityFeatures.map((feature) => (
-    <li key={feature}>{feature}</li>
+    <ListText key={feature}>{feature}</ListText>
   ));
-  const accessibility = unit.accessibility.map((access) => <li key={access}>{access}</li>);
-  const pets = unit.pets.map((pet) => <li key={pet}>{pet}</li>);
+  const accessibility = unit.accessibility.map((access) => (
+    <ListText key={access}>{access}</ListText>
+  ));
+  const pets = unit.pets.map((pet) => <ListText key={pet}>{pet}</ListText>);
+  const additionalRules = unit.additionalRules.map((rule) => (
+    <ListText key={rule}>{rule}</ListText>
+  ));
 
-  let additionalRules:
-    | string
-    | number
-    | boolean
-    | JSX.Element[]
-    | React.ReactElement
-    | Iterable<React.ReactNode>
-    | null
-    | undefined;
-  if (unit.additionalRules !== undefined) {
-    additionalRules = unit.additionalRules.map((rule) => <li key={rule}>{rule}</li>);
-  } else {
-    additionalRules = "None";
-  }
   const UnitDetailsPage = () => (
     <MainColumn>
       <Row>
@@ -194,18 +167,20 @@ export function UnitDetails() {
         <Address>{unit.listingAddress}</Address>
       </Row>
       <DetailsRow>
-        <Column>
-          <StrongText>{unit.numBeds}</StrongText>
-          <Text>beds</Text>
-        </Column>
-        <Column>
-          <StrongText>{unit.numBaths}</StrongText>
-          <Text>baths</Text>
-        </Column>
-        <Column>
-          <StrongText>{unit.sqft}</StrongText>
-          <Text>sqft</Text>
-        </Column>
+        <Row>
+          <Column>
+            <StrongText>{unit.numBeds}</StrongText>
+            <Text>beds</Text>
+          </Column>
+          <Column>
+            <StrongText>{unit.numBaths}</StrongText>
+            <Text>baths</Text>
+          </Column>
+          <Column>
+            <StrongText>{unit.sqft}</StrongText>
+            <Text>sqft</Text>
+          </Column>
+        </Row>
         <Column>
           <StrongText>{availableNow}</StrongText>
         </Column>
@@ -221,17 +196,18 @@ export function UnitDetails() {
             <ListText> ${unit.securityDeposit}</ListText>
           </List>
           <StrongText>Payment/Renting Criteria: </StrongText>
-          <ListText>{rentingCriteria}</ListText>
+          {rentingCriteria}
         </SectionColumn>
         <SectionColumn>
-          <StrongText>Applicaton Fee: </StrongText>
+          <StrongText>Application Fee: </StrongText>
           <List>
             <ListText>${unit.applicationFeeCost}</ListText>
           </List>
-          <StrongText>Holding Fee: </StrongText>
+          {/* I don't think we have this anymore? */}
+          {/* <StrongText>Holding Fee: </StrongText>
           <List>
             <ListText>${unit.holdingFeeAmount}</ListText>
-          </List>
+          </List> */}
         </SectionColumn>
       </Row>
 
@@ -241,23 +217,23 @@ export function UnitDetails() {
       <Row>
         <SectionColumn>
           <StrongText>Parking: </StrongText>
-          <ListText>{parkingRequirements}</ListText>
+          {parkingRequirements}
           <StrongText>Pets/Animals: </StrongText>
-          <ListText>{pets}</ListText>
+          {pets}
           <StrongText>Appliances: </StrongText>
-          <ListText>{appliances}</ListText>
+          {appliances}
           <StrongText>Housing Authority: </StrongText>
-          <ListText>{unit.housingAuthority}</ListText>
+          <ListText> {unit.housingAuthority}</ListText>
           <StrongText>Additional Comments from Landlord: </StrongText>
-          <ListText>{unit.landlordComments}</ListText>
+          <ListText> {unit.landlordComments}</ListText>
         </SectionColumn>
         <SectionColumn>
           <StrongText>Accessibility Access: </StrongText>
-          <ListText>{accessibility}</ListText>
+          {accessibility}
           <StrongText>Sharing House Acceptable: </StrongText>
           <ListText>{unit.sharingAcceptable}</ListText>
           <StrongText>Community/Neighborhood Information: </StrongText>
-          <ListText>{communityFeatures}</ListText>
+          {communityFeatures}
         </SectionColumn>
       </Row>
 
@@ -273,7 +249,7 @@ export function UnitDetails() {
         </SectionColumn>
         <SectionColumn>
           <StrongText>Notes from Housing Locator: </StrongText>
-          <ListText>{unit.internalNotes}</ListText>
+          {unit.internalComments}
         </SectionColumn>
       </Row>
     </MainColumn>
@@ -282,7 +258,7 @@ export function UnitDetails() {
   return (
     <Page>
       <Helmet>
-        <title>{unit._id} | USHS Housing Portal</title>
+        <title>{unit.listingAddress} | USHS Housing Portal</title>
       </Helmet>
 
       <ButtonPadding>

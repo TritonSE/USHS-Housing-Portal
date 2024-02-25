@@ -1,6 +1,6 @@
 /**
  * User router
- * 
+ *
  * Path: /api/users/*
  */
 
