@@ -158,103 +158,6 @@ export function UnitDetails() {
     <ListText key={rule}>{rule}</ListText>
   ));
 
-  const UnitDetailsPage = () => (
-    <MainColumn>
-      <Row>
-        <RentPerMonth>${unit.monthlyRent}/month</RentPerMonth>
-      </Row>
-      <Row>
-        <Address>{unit.listingAddress}</Address>
-      </Row>
-      <DetailsRow>
-        <Row>
-          <Column>
-            <StrongText>{unit.numBeds}</StrongText>
-            <Text>beds</Text>
-          </Column>
-          <Column>
-            <StrongText>{unit.numBaths}</StrongText>
-            <Text>baths</Text>
-          </Column>
-          <Column>
-            <StrongText>{unit.sqft}</StrongText>
-            <Text>sqft</Text>
-          </Column>
-        </Row>
-        <Column>
-          <StrongText>{availableNow}</StrongText>
-        </Column>
-      </DetailsRow>
-
-      <Row>
-        <Header>Fees</Header>
-      </Row>
-      <Row>
-        <SectionColumn>
-          <StrongText>Security Deposit: </StrongText>
-          <List>
-            <ListText> ${unit.securityDeposit}</ListText>
-          </List>
-          <StrongText>Payment/Renting Criteria: </StrongText>
-          {rentingCriteria}
-        </SectionColumn>
-        <SectionColumn>
-          <StrongText>Application Fee: </StrongText>
-          <List>
-            <ListText>${unit.applicationFeeCost}</ListText>
-          </List>
-          {/* I don't think we have this anymore? */}
-          {/* <StrongText>Holding Fee: </StrongText>
-          <List>
-            <ListText>${unit.holdingFeeAmount}</ListText>
-          </List> */}
-        </SectionColumn>
-      </Row>
-
-      <Row>
-        <Header>Housing Specifications</Header>
-      </Row>
-      <Row>
-        <SectionColumn>
-          <StrongText>Parking: </StrongText>
-          {parkingRequirements}
-          <StrongText>Pets/Animals: </StrongText>
-          {pets}
-          <StrongText>Appliances: </StrongText>
-          {appliances}
-          <StrongText>Housing Authority: </StrongText>
-          <ListText> {unit.housingAuthority}</ListText>
-          <StrongText>Additional Comments from Landlord: </StrongText>
-          <ListText> {unit.landlordComments}</ListText>
-        </SectionColumn>
-        <SectionColumn>
-          <StrongText>Accessibility Access: </StrongText>
-          {accessibility}
-          <StrongText>Sharing House Acceptable: </StrongText>
-          <ListText>{unit.sharingAcceptable}</ListText>
-          <StrongText>Community/Neighborhood Information: </StrongText>
-          {communityFeatures}
-        </SectionColumn>
-      </Row>
-
-      <Row>
-        <Header>Additional Information</Header>
-      </Row>
-      <Row>
-        <SectionColumn>
-          <StrongText>Where Was Unit Found: </StrongText>
-          <ListText>{unit.whereFound}</ListText>
-          <StrongText>Additional Rules and Regulation: </StrongText>
-          <ListText>{additionalRules}</ListText>
-        </SectionColumn>
-        <SectionColumn>
-          <StrongText>Notes from Housing Locator: </StrongText>
-          {unit.internalComments}
-        </SectionColumn>
-      </Row>
-    </MainColumn>
-  );
-
   return (
     <Page>
       <Helmet>
@@ -266,7 +169,100 @@ export function UnitDetails() {
           <Button kind="secondary">Back to Listing</Button>
         </Link>
       </ButtonPadding>
-      <UnitDetailsPage></UnitDetailsPage>
+      <MainColumn>
+        <Row>
+          <RentPerMonth>${unit.monthlyRent}/month</RentPerMonth>
+        </Row>
+        <Row>
+          <Address>{unit.listingAddress}</Address>
+        </Row>
+        <DetailsRow>
+          <Row>
+            <Column>
+              <StrongText>{unit.numBeds}</StrongText>
+              <Text>beds</Text>
+            </Column>
+            <Column>
+              <StrongText>{unit.numBaths}</StrongText>
+              <Text>baths</Text>
+            </Column>
+            <Column>
+              <StrongText>{unit.sqft}</StrongText>
+              <Text>sqft</Text>
+            </Column>
+          </Row>
+          <Column>
+            <StrongText>{availableNow}</StrongText>
+          </Column>
+        </DetailsRow>
+
+        <Row>
+          <Header>Fees</Header>
+        </Row>
+        <Row>
+          <SectionColumn>
+            <StrongText>Security Deposit: </StrongText>
+            <List>
+              <ListText> ${unit.securityDeposit}</ListText>
+            </List>
+            <StrongText>Payment/Renting Criteria: </StrongText>
+            {rentingCriteria}
+          </SectionColumn>
+          <SectionColumn>
+            <StrongText>Application Fee: </StrongText>
+            <List>
+              <ListText>${unit.applicationFeeCost}</ListText>
+            </List>
+            {/* I don't think we have this anymore? */}
+            {/* <StrongText>Holding Fee: </StrongText>
+          <List>
+            <ListText>${unit.holdingFeeAmount}</ListText>
+          </List> */}
+          </SectionColumn>
+        </Row>
+
+        <Row>
+          <Header>Housing Specifications</Header>
+        </Row>
+        <Row>
+          <SectionColumn>
+            <StrongText>Parking: </StrongText>
+            {parkingRequirements}
+            <StrongText>Pets/Animals: </StrongText>
+            {pets}
+            <StrongText>Appliances: </StrongText>
+            {appliances}
+            <StrongText>Housing Authority: </StrongText>
+            <ListText> {unit.housingAuthority}</ListText>
+            <StrongText>Additional Comments from Landlord: </StrongText>
+            <ListText> {unit.landlordComments}</ListText>
+          </SectionColumn>
+          <SectionColumn>
+            <StrongText>Accessibility Access: </StrongText>
+            {accessibility}
+            <StrongText>Sharing House Acceptable: </StrongText>
+            <ListText>{unit.sharingAcceptable}</ListText>
+            <StrongText>Community/Neighborhood Information: </StrongText>
+            {communityFeatures}
+          </SectionColumn>
+        </Row>
+
+        <Row>
+          <Header>Additional Information</Header>
+        </Row>
+        <Row>
+          <SectionColumn>
+            <StrongText>Where Was Unit Found: </StrongText>
+            <ListText>{unit.whereFound}</ListText>
+            <StrongText>Additional Rules and Regulation: </StrongText>
+            <ListText>{additionalRules}</ListText>
+          </SectionColumn>
+          <SectionColumn>
+            <StrongText>Notes from Housing Locator: </StrongText>
+            {unit.internalComments}
+          </SectionColumn>
+        </Row>
+      </MainColumn>
     </Page>
   );
 }
