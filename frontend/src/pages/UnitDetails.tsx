@@ -13,7 +13,7 @@ const Row = styled.div`
   display: flex;
   flex-direction: row;
   background-color: #fbf7f3;
-  jusify-content: evenly-spaced;
+  justify-content: evenly-spaced;
   column-gap: 10%;
 `;
 
@@ -21,7 +21,7 @@ const Column = styled.div`
   display: flex;
   flex-direction: column;
   background-color: #fbf7f3;
-  jusify-content: evenly-spaced;
+  justify-content: evenly-spaced;
   gap: 16px;
 `;
 
