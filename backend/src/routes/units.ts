@@ -12,4 +12,6 @@ const router = express.Router();
 
 router.post("/", validateWith(createUnitValidators), UnitController.createUnitsHandler);
 
+router.put("/:id/approve", UnitController.approveUnitHandler);
+
 export default router;
