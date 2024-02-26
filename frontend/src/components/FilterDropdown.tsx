@@ -155,7 +155,7 @@ export const FilterDropdown = (props: FilterDropdownProps) => {
               applyFilters();
             }}
           />
-          <SearchIcon src="/search.svg" />
+          <SearchIcon src="/search.svg" onClick={applyFilters} />
         </SearchBarContainer>
 
         {/* AVAILABILITY FILTER */}

@@ -219,8 +219,8 @@ export const PriceDropDown = (props: PriceDropDownProps) => {
               setMaxPriceOpen(false);
               props.setValue({
                 ...props.value,
-                minPrice: props.value.minPriceDisplay,
-                maxPrice: props.value.maxPriceDisplay,
+                minPrice: priceOptions[props.value.minPriceDisplay],
+                maxPrice: priceOptions[props.value.maxPriceDisplay],
                 notApplied: false,
               });
               props.onApply();

@@ -50,22 +50,11 @@ export type FilterParams = {
 
 export async function getUnits(_params: FilterParams): Promise<APIResult<Unit[]>> {
   try {
-    // const query = new URLSearchParams(params);
+    const queryParams = new URLSearchParams(_params as any);
+    const url = `/units?${queryParams.toString()}`;
+    console.log(url);
+    const response = await get(url);
 
-    // const keysForDel: string[] = [];
-    // query.forEach((value, key) => {
-    //   if (value === "" || value === null || value === "undefined") {
-    //     keysForDel.push(key);
-    //   }
-    // });
-
-    // keysForDel.forEach((key) => {
-    //   query.delete(key);
-    // });
-
-    // console.log(query.toString());
-
-    const response = await get("/units");
     const json = (await response.json()) as Unit[];
     return { success: true, data: json };
   } catch (error) {
