@@ -16,4 +16,6 @@ router.get("/:id", UnitController.getUnitHandler);
 
 router.post("/", validateWith(createUnitValidators), UnitController.createUnitsHandler);
 
+router.put("/:id/approve", UnitController.approveUnitHandler);
+
 export default router;

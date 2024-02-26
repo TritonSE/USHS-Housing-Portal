@@ -24,3 +24,13 @@ export const createUnit = async (newUnit: NewUnit) => {
   const unit = await UnitModel.create(newUnit);
   return unit;
 };
+
+export async function approveUnit(unitId: string) {
+  const unit = await UnitModel.findById(unitId);
+  if (unit === null) {
+    return null;
+  }
+  unit.approved = true;
+  await unit.save();
+  return unit;
+}

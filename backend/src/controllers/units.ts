@@ -4,7 +4,7 @@ import createHttpError from "http-errors";
 import { asyncHandler } from "./wrappers";
 
 import { UnitModel } from "@/models/units";
-import { NewUnit, createUnit } from "@/services/units";
+import { NewUnit, approveUnit, createUnit } from "@/services/units";
 
 /**
  * Handle a request to create a new unit.
@@ -31,4 +31,20 @@ export const getUnitHandler: RequestHandler = asyncHandler(async (req, res, _) =
   }
 
   res.status(200).json(unit);
+});
+
+/**
+ * Handle a request to get all units.
+ */
+export const approveUnitHandler: RequestHandler = asyncHandler(async (req, res, _) => {
+  const unitId = req.params.id;
+  console.log(unitId);
+
+  const unit = await approveUnit(unitId);
+
+  if (unit !== null) {
+    res.status(200).json(unit);
+  } else {
+    res.status(404).send("Unit not found");
+  }
 });
