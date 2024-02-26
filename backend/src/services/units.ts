@@ -26,6 +26,7 @@ export const createUnit = async (newUnit: NewUnit) => {
 };
 
 export const getUnits = async () => {
+  // need to pass filterparams here as a parameter to find
   const units = await UnitModel.find();
 
   return units;
