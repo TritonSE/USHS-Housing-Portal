@@ -16,6 +16,8 @@ const UnitCardContainer = styled.div`
   border-radius: 6.5px;
   border: 1.3px solid #cdcaca;
   box-shadow: 1.181px 1.181px 2.362px 0px rgba(188, 186, 183, 0.4);
+
+  // position: absolute;
 `;
 
 const UnitCardText = styled.span`
@@ -91,14 +93,37 @@ const BedBathText = styled(NumberText)`
   padding-right: 10px;
 `;
 
+const DeleteIcon = styled.img`
+  width: 35.432px;
+  height: 35.432px;
+  border-radius: 118.107px;
+  background: #ec8537;
+  position: relative;
+  top: -27px;
+  left: 310px;
+  cursor: pointer;
+`;
+
+// Hard coded prop; replace with backend data for availibity
+type CardProps = {
+  pending: boolean;
+};
+
 // Hard coded unit data for testing
-export const UnitCard = () => {
+export const UnitCard = ({ pending }: CardProps) => {
   return (
     <UnitCardContainer>
-      <AvailabilityRow>
-        <AvailabilityIcon src="/green_ellipse.svg" />
-        <AvailabilityText>Available</AvailabilityText>
-      </AvailabilityRow>
+      {pending ? (
+        <AvailabilityRow>
+          <AvailabilityIcon src="/red_ellipse.svg" />
+          <AvailabilityText>Pending Approval</AvailabilityText>
+        </AvailabilityRow>
+      ) : (
+        <AvailabilityRow>
+          <AvailabilityIcon src="/green_ellipse.svg" />
+          <AvailabilityText>Available</AvailabilityText>
+        </AvailabilityRow>
+      )}
       <RentText>$1390/month</RentText>
       <BedBathRow>
         <NumberText>2</NumberText>
@@ -112,6 +137,7 @@ export const UnitCard = () => {
         <AddressText>1829 Prospect Ave</AddressText>
         <AddressText>Pasadena, CA 91776</AddressText>
       </AddressRow>
+      {!pending && <DeleteIcon src="delete.png" />}
     </UnitCardContainer>
   );
 };
