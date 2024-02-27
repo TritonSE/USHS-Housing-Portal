@@ -18,7 +18,7 @@ const unitSchema = new Schema(
     housingAuthority: { type: String, required: true },
     applicationFeeCost: { type: Number, required: true },
     dateAvailable: { type: Date, required: true },
-    availableNow: { type: Boolean, required: true },
+    leasedStatus: { type: String, required: false, enum: ["ushs", "removed"] },
     numBeds: { type: Number, required: true },
     numBaths: { type: Number, required: true },
     appliances: { type: [String], required: true },
@@ -34,9 +34,32 @@ const unitSchema = new Schema(
     internalComments: { type: String, required: false, default: "" },
     approved: { type: Boolean, required: false, default: false },
   },
-  // Mongoose will automatically create "createdAt" and "updatedAt" properties
-  // and update them accordingly when the document is saved/updated.
-  { timestamps: true },
+  {
+    // Mongoose will automatically create "createdAt" and "updatedAt" properties
+    // and update them accordingly when the document is saved/updated.
+    timestamps: true,
+    virtuals: {
+      // Determine if a unit is available for rent.
+      availableNow: {
+        get: function () {
+          return this.dateAvailable <= new Date() && this.leasedStatus === undefined;
+        },
+      },
+      // Full address of the unit.
+      listingAddress: {
+        get: function () {
+          return `${this.streetAddress}, ${this.suiteNumber}, ${this.city}, ${this.state} ${this.areaCode}`;
+        },
+      },
+    },
+    // Include virtual properties when converting to JSON or object.
+    toJSON: {
+      virtuals: true,
+    },
+    toObject: {
+      virtuals: true,
+    },
+  },
 );
 
 export type Unit = InferSchemaType<typeof unitSchema>;
