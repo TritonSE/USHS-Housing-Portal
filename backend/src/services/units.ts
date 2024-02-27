@@ -24,3 +24,8 @@ export const createUnit = async (newUnit: NewUnit) => {
   const unit = await UnitModel.create(newUnit);
   return unit;
 };
+
+export const deleteUnit = async (id: string) => {
+  const unit = await UnitModel.deleteOne({ _id: id });
+  return unit;
+};

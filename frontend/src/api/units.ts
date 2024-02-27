@@ -1,4 +1,4 @@
-import { APIResult, get, handleAPIError, post } from "./requests";
+import { APIResult, get, handleAPIError, post, remove } from "./requests";
 
 // Represents a Unit object as it will be received from the backend.
 export type Unit = {
@@ -87,6 +87,16 @@ export type CreateUnitRequest = Omit<Unit, HousingLocatorFields>;
 export async function createUnit(unit: CreateUnitRequest): Promise<APIResult<Unit>> {
   try {
     const response = await post("/units", unit);
+    const json = (await response.json()) as Unit;
+    return { success: true, data: json };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+}
+
+export async function deleteUnit(id: string): Promise<APIResult<Unit>> {
+  try {
+    const response = await remove(`/units/${id}`);
     const json = (await response.json()) as Unit;
     return { success: true, data: json };
   } catch (error) {
