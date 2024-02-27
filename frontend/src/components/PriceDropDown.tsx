@@ -108,6 +108,9 @@ const PlaceholderText = styled.p<{ active: boolean }>`
 export type PriceState = {
   minPrice: number;
   maxPrice: number;
+};
+
+export type PriceDisplayState = {
   minPriceDisplay: number;
   maxPriceDisplay: number;
   notApplied: boolean;
@@ -116,7 +119,8 @@ export type PriceState = {
 export type PriceDropDownProps = {
   value: PriceState;
   setValue(val: PriceState): void;
-  onApply(): void;
+  displayValue: PriceDisplayState;
+  setDisplayValue(val: PriceDisplayState): void;
 };
 
 export const PriceDropDown = (props: PriceDropDownProps) => {
@@ -127,14 +131,18 @@ export const PriceDropDown = (props: PriceDropDownProps) => {
   const priceOptions: number[] = [0, 250, 500, 750, 1000, 1250, 1500, 1750, 2000];
 
   const minPriceText =
-    props.value.minPriceDisplay === -1 ? "No Min" : `$${priceOptions[props.value.minPriceDisplay]}`;
+    props.displayValue.minPriceDisplay === -1
+      ? "No Min"
+      : `$${priceOptions[props.displayValue.minPriceDisplay]}`;
 
   const maxPriceText =
-    props.value.maxPriceDisplay === -1 ? "No Max" : `$${priceOptions[props.value.maxPriceDisplay]}`;
+    props.displayValue.maxPriceDisplay === -1
+      ? "No Max"
+      : `$${priceOptions[props.displayValue.maxPriceDisplay]}`;
 
   let dropdownText = "Price";
-  if (!props.value.notApplied) {
-    if (props.value.minPriceDisplay !== -1 || props.value.maxPriceDisplay !== -1) {
+  if (!props.displayValue.notApplied) {
+    if (props.displayValue.minPriceDisplay !== -1 || props.displayValue.maxPriceDisplay !== -1) {
       dropdownText = `${minPriceText} - ${maxPriceText}`;
     }
   }
@@ -162,7 +170,7 @@ export const PriceDropDown = (props: PriceDropDownProps) => {
                   setMinPriceOpen(!minPriceOpen);
                 }}
               >
-                <PlaceholderText active={props.value.minPriceDisplay !== -1}>
+                <PlaceholderText active={props.displayValue.minPriceDisplay !== -1}>
                   {minPriceText}
                 </PlaceholderText>
                 <ArrowIcon src={minPriceOpen ? "/price_up_arrow.svg" : "/down_arrow.svg"} />
@@ -173,7 +181,7 @@ export const PriceDropDown = (props: PriceDropDownProps) => {
                     <MinMaxPopupButton
                       key={idx}
                       onClick={() => {
-                        props.setValue({ ...props.value, minPriceDisplay: idx });
+                        props.setDisplayValue({ ...props.displayValue, minPriceDisplay: idx });
                         setMinPriceOpen(false);
                       }}
                     >
@@ -190,7 +198,7 @@ export const PriceDropDown = (props: PriceDropDownProps) => {
                   setMaxPriceOpen(!maxPriceOpen);
                 }}
               >
-                <PlaceholderText active={props.value.maxPriceDisplay !== -1}>
+                <PlaceholderText active={props.displayValue.maxPriceDisplay !== -1}>
                   {maxPriceText}
                 </PlaceholderText>
                 <ArrowIcon src={maxPriceOpen ? "/price_up_arrow.svg" : "/down_arrow.svg"} />
@@ -201,7 +209,7 @@ export const PriceDropDown = (props: PriceDropDownProps) => {
                     <MinMaxPopupButton
                       key={idx}
                       onClick={() => {
-                        props.setValue({ ...props.value, maxPriceDisplay: idx });
+                        props.setDisplayValue({ ...props.displayValue, maxPriceDisplay: idx });
                         setMaxPriceOpen(false);
                       }}
                     >
@@ -219,11 +227,13 @@ export const PriceDropDown = (props: PriceDropDownProps) => {
               setMaxPriceOpen(false);
               props.setValue({
                 ...props.value,
-                minPrice: priceOptions[props.value.minPriceDisplay],
-                maxPrice: priceOptions[props.value.maxPriceDisplay],
+                minPrice: priceOptions[props.displayValue.minPriceDisplay],
+                maxPrice: priceOptions[props.displayValue.maxPriceDisplay],
+              });
+              props.setDisplayValue({
+                ...props.displayValue,
                 notApplied: false,
               });
-              props.onApply();
             }}
           >
             Apply

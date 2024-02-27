@@ -31,8 +31,6 @@ export type UnitCardGridProps = {
 };
 
 export const UnitCardGrid = (props: UnitCardGridProps) => {
-  console.log(props.units);
-
   return (
     <GridContainer>
       <PropertiesText>Available Properties</PropertiesText>

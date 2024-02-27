@@ -50,9 +50,8 @@ export type FilterParams = {
 
 export async function getUnits(_params: FilterParams): Promise<APIResult<Unit[]>> {
   try {
-    const queryParams = new URLSearchParams(_params as any);
+    const queryParams = new URLSearchParams(_params);
     const url = `/units?${queryParams.toString()}`;
-    console.log(url);
     const response = await get(url);
 
     const json = (await response.json()) as Unit[];
