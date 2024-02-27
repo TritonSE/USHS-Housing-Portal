@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import styled from "styled-components";
 
 import { Button } from "./Button";
 
 import { deleteUnit } from "@/api/units";
+import { DataContext } from "@/contexts/DataContext";
 
-const UnitCardContainer = styled.div`
+const UnitCardContainer = styled.div<{ pending: boolean }>`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -19,7 +20,7 @@ const UnitCardContainer = styled.div`
   background-color: white;
 
   border-radius: 6.5px;
-  border: 1.3px solid #cdcaca;
+  border: 1.3px solid ${(props) => (props.pending ? "rgba(230, 159, 28, 0.50)" : "#cdcaca")};
   box-shadow: 1.181px 1.181px 2.362px 0px rgba(188, 186, 183, 0.4);
 
   // position: absolute;
@@ -189,7 +190,10 @@ type CardProps = {
 // Hard coded unit data for testing
 export const UnitCard = ({ pending, refreshUnits }: CardProps) => {
   const [popup, setPopup] = useState<boolean>(false);
+  const dataContext = useContext(DataContext);
+
   const handleDelete = () => {
+    //random testing ID
     deleteUnit("65dd346ad8ea7151e4ca662b")
       .then((value) => {
         if (value.success) console.log(value.data);
@@ -203,7 +207,7 @@ export const UnitCard = ({ pending, refreshUnits }: CardProps) => {
 
   return (
     <>
-      <UnitCardContainer>
+      <UnitCardContainer pending={pending}>
         {pending ? (
           <AvailabilityRow>
             <AvailabilityIcon src="/red_ellipse.svg" />
@@ -228,7 +232,7 @@ export const UnitCard = ({ pending, refreshUnits }: CardProps) => {
           <AddressText>1829 Prospect Ave</AddressText>
           <AddressText>Pasadena, CA 91776</AddressText>
         </AddressRow>
-        {!pending && (
+        {!pending && dataContext.currentUser?.isHousingLocator && (
           <DeleteIcon
             src="delete.png"
             onClick={() => {

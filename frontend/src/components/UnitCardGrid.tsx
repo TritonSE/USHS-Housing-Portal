@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 
 import { UnitCard } from "@/components/UnitCard";
+import { DataContext } from "@/contexts/DataContext";
 
 const UnitCardLayout = styled.div`
   // margin: 95px;
@@ -34,7 +35,7 @@ const GridContainer = styled.div`
 const ButtonsWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  left: 75vw;
+  left: 74vw;
   position: absolute;
 `;
 
@@ -58,6 +59,7 @@ const PendingButton = styled.div<{ selected: boolean }>`
 `;
 
 const ListingsButton = styled(PendingButton)`
+  border-radius: ${(props) => (props.selected ? "12px" : "0px 12px 12px 0px")};
   position: relative;
   left: -10px;
 `;
@@ -73,8 +75,8 @@ const AddListings = styled.div`
   background: rgba(182, 66, 1, 0.8);
   box-shadow: 0px 4px 4px 0px rgba(190, 180, 180, 0.25);
   position: fixed;
-  left: 87.5vw;
-  bottom: 5vh;
+  left: 85vw;
+  bottom: 7.5vh;
   color: #fff;
   font-size: 16px;
   font-style: normal;
@@ -88,6 +90,8 @@ const AddListings = styled.div`
 export const UnitCardGrid = () => {
   const [pendingSelected, setPendingSelected] = useState<boolean>(false);
   const [refreshUnits, setRefreshUnits] = useState<boolean>(false);
+
+  const dataContext = useContext(DataContext);
 
   const getAllUnits = () => {
     console.log("refreshing units");
@@ -133,24 +137,26 @@ export const UnitCardGrid = () => {
           <>
             <PropertiesRow>
               <div>Available Properties</div>
-              <ButtonsWrapper>
-                <PendingButton
-                  onClick={() => {
-                    setPendingSelected(true);
-                  }}
-                  selected={pendingSelected}
-                >
-                  Pending Listings
-                </PendingButton>
-                <ListingsButton
-                  onClick={() => {
-                    setPendingSelected(false);
-                  }}
-                  selected={!pendingSelected}
-                >
-                  All Listings
-                </ListingsButton>
-              </ButtonsWrapper>
+              {dataContext.currentUser?.isHousingLocator && (
+                <ButtonsWrapper>
+                  <PendingButton
+                    onClick={() => {
+                      setPendingSelected(true);
+                    }}
+                    selected={pendingSelected}
+                  >
+                    Pending Listings
+                  </PendingButton>
+                  <ListingsButton
+                    onClick={() => {
+                      setPendingSelected(false);
+                    }}
+                    selected={!pendingSelected}
+                  >
+                    All Listings
+                  </ListingsButton>
+                </ButtonsWrapper>
+              )}
             </PropertiesRow>
             <UnitCardLayout>
               <UnitCard
@@ -193,10 +199,12 @@ export const UnitCardGrid = () => {
           </>
         )}
       </GridContainer>
-      <AddListings>
-        <img src="add_symbol.svg" alt="add" />
-        <div>Listings</div>
-      </AddListings>
+      {dataContext.currentUser?.isHousingLocator && (
+        <AddListings>
+          <img src="add_symbol.svg" alt="add" />
+          <div>Listings</div>
+        </AddListings>
+      )}
     </>
   );
 };
