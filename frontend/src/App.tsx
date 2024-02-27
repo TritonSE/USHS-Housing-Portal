@@ -6,7 +6,7 @@ import { ThemeProvider } from "styled-components";
 import { AuthContext, AuthProvider } from "./contexts/AuthContext";
 import { DataProvider } from "./contexts/DataContext";
 
-import { Home, Login, Profile } from "@/pages";
+import { Home, Login, Profile, UnitDetails } from "@/pages";
 import { GlobalStyle, theme } from "@/theme";
 
 function AppRouter() {
@@ -25,6 +25,7 @@ function AppRouter() {
           <>
             <Route path="/" element={<Home />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/unit/:id" element={<UnitDetails />} />
             <Route path="*" element={<Navigate to="/" />} />
           </>
         )}

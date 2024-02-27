@@ -1,5 +1,7 @@
 /**
  * User router
+ *
+ * Path: /api/users/*
  */
 
 import express from "express";

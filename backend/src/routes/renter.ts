@@ -1,3 +1,9 @@
+/**
+ * Renter Candidates Router
+ *
+ * Path: /api/renter-candidates/*
+ */
+
 import express from "express";
 
 import * as RenterController from "@/controllers/renter";
