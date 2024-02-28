@@ -106,3 +106,22 @@ export async function createUnit(unit: CreateUnitRequest): Promise<APIResult<Uni
     return handleAPIError(error);
   }
 }
+
+export type Referral = {
+  _id: string;
+  status: string;
+  renterCandidateId: string;
+  unitId: string;
+  assignedHousingLocatorId: string;
+  assignedReferringStaffId: string;
+};
+
+export async function getUnitReferrals(id: string): Promise<APIResult<Referral[]>> {
+  try {
+    const response = await get(`/units/${id}/referrals`);
+    const json = (await response.json()) as Referral[];
+    return { success: true, data: json };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+}

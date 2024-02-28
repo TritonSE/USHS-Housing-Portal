@@ -4,7 +4,7 @@ import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-import { Unit, getUnit } from "@/api/units";
+import { Unit, getUnit, getUnitReferrals } from "@/api/units";
 import { Page } from "@/components";
 import { Button } from "@/components/Button";
 
@@ -112,6 +112,9 @@ export function UnitDetails() {
         if (result.success) {
           setUnit(result.data);
         }
+      });
+      void getUnitReferrals(id).then((res) => {
+        console.log(res);
       });
     }
   }, []);
