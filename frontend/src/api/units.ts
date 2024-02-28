@@ -2,6 +2,7 @@ import { APIResult, get, handleAPIError, post } from "./requests";
 
 // Represents a Unit object as it will be received from the backend.
 export type Unit = {
+  _id: string;
   landlordFirstName: string;
   landlordLastName: string;
   landlordEmail: string;
@@ -10,6 +11,7 @@ export type Unit = {
   suiteNumber: string;
   city: string;
   state: string;
+  listingAddress: string;
   areaCode: string;
   sqft: number;
   monthlyRent: number;
@@ -18,6 +20,7 @@ export type Unit = {
   housingAuthority: string;
   applicationFeeCost: number;
   dateAvailable: string;
+  leasedStatus?: "ushs" | "removed";
   availableNow: boolean;
   numBeds: number;
   numBaths: number;
@@ -47,6 +50,16 @@ export type FilterParams = {
   approved?: boolean;
   sort: number;
 };
+
+export async function getUnit(id: string): Promise<APIResult<Unit>> {
+  try {
+    const response = await get(`/units/${id}`);
+    const json = (await response.json()) as Unit;
+    return { success: true, data: json };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+}
 
 export async function getUnits(_params: FilterParams): Promise<APIResult<Unit[]>> {
   try {

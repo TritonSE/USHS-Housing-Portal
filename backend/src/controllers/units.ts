@@ -1,7 +1,9 @@
 import { RequestHandler } from "express";
+import createHttpError from "http-errors";
 
 import { asyncHandler } from "./wrappers";
 
+import { UnitModel } from "@/models/units";
 import { NewUnit, createUnit, getUnits, FilterParams } from "@/services/units";
 
 /**
@@ -16,10 +18,22 @@ export const createUnitsHandler: RequestHandler = asyncHandler(async (req, res, 
 });
 
 export const getUnitsHandler: RequestHandler = asyncHandler(async (req, res, _) => {
-  console.log("requests");
-  console.log(req.query);
-
   const units = await getUnits(req.query as FilterParams);
 
   res.status(200).json(units);
+});
+/**
+ * Handle a request to get a unit.
+ */
+export const getUnitHandler: RequestHandler = asyncHandler(async (req, res, _) => {
+  const { id } = req.params;
+
+  // Fetch the unit data based on the unitId
+  const unit = await UnitModel.findById(id);
+
+  if (unit === null) {
+    throw createHttpError(404, "Unit not found.");
+  }
+
+  res.status(200).json(unit);
 });
