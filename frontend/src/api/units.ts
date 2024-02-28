@@ -41,14 +41,13 @@ export type Unit = {
 };
 
 export type FilterParams = {
-  search?: string | undefined;
-  availability: string;
-  minPrice?: number | undefined;
-  maxPrice?: number | undefined;
-  beds?: number;
-  baths?: number;
-  approved?: boolean;
-  sort: number;
+  search?: string;
+  availability?: string;
+  minPrice?: string;
+  maxPrice?: string;
+  beds?: string;
+  baths?: string;
+  sort?: string;
 };
 
 export async function getUnit(id: string): Promise<APIResult<Unit>> {

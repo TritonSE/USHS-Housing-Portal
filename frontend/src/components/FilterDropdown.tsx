@@ -121,13 +121,13 @@ export const FilterDropdown = (props: FilterDropdownProps) => {
 
   const applyFilters = () => {
     const filters = {
-      search: searchText ?? undefined,
-      beds: bedBathState.beds,
-      baths: bedBathState.baths,
-      sort: sortIndex,
+      search: searchText ?? "undefined",
+      beds: String(bedBathState.beds),
+      baths: String(bedBathState.baths),
+      sort: String(sortIndex),
       availability: availabilityState.dropdownText,
-      minPrice: priceState.minPrice === -1 ? undefined : priceState.minPrice,
-      maxPrice: priceState.maxPrice === -1 ? undefined : priceState.maxPrice,
+      minPrice: priceState.minPrice === -1 ? "undefined" : String(priceState.minPrice),
+      maxPrice: priceState.maxPrice === -1 ? "undefined" : String(priceState.maxPrice),
     };
 
     props.refreshUnits(filters);

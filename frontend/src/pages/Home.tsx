@@ -13,7 +13,7 @@ export function Home() {
   const fetchUnits = (filterParams: FilterParams) => {
     getUnits(filterParams)
       .then((response) => {
-        setUnits(response.data as Unit[]);
+        if (response.success) setUnits(response.data);
       })
       .catch((error) => {
         console.error(error);
@@ -21,7 +21,7 @@ export function Home() {
   };
 
   useEffect(() => {
-    fetchUnits();
+    fetchUnits({});
   }, []);
 
   return (
