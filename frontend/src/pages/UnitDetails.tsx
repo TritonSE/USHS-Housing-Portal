@@ -33,18 +33,23 @@ const SectionColumn = styled(Column)`
   width: 50%;
 `;
 
+const GapColumn = styled(Column)`
+  padding: 40px;
+`;
+
 const MainColumn = styled(Column)`
-  padding: 10%;
+  padding: 20px 10% 10% 10%;
 `;
 
 const RentPerMonth = styled.h1`
   font-size: 48px;
-  font-family: "Montserrat";
+  font-family: "Neutra Text";
   font-weight: 600;
-  line-height: 150%;
+  line-height: 72px;
   line-spacing: 0.96px;
 
   margin: 0;
+  padding: 0;
 `;
 
 const Header = styled.div`
@@ -101,7 +106,7 @@ const DoesNotExist = styled.h1`
   font-weight: 550;
   line-height: 150%;
   line-spacing: 0.96px;
-  padding: 20px 10% 20px 10%;
+  padding: 30px 10% 20px 10%;
 `;
 
 export function UnitDetails() {
@@ -206,6 +211,7 @@ export function UnitDetails() {
           <StrongText>{unit.sqft}</StrongText>
           <Text>sqft</Text>
         </Column>
+        <GapColumn></GapColumn>
         <Column>
           <StrongText>{availableNow}</StrongText>
         </Column>
@@ -284,7 +290,6 @@ export function UnitDetails() {
       <Helmet>
         <title>{unit._id} | USHS Housing Portal</title>
       </Helmet>
-
       <ButtonPadding>
         <Link to="/">
           <Button kind="secondary">Back to Listing</Button>
