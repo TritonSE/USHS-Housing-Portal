@@ -20,7 +20,7 @@ export const AuthContext = React.createContext<contextType>({
 });
 
 export function AuthProvider({ children }: ProviderProps) {
-  const [currentUser, setUser] = useState<User | null | undefined>(null);
+  const [currentUser, setUser] = useState<User | null | undefined>(undefined);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -36,7 +36,7 @@ export function AuthProvider({ children }: ProviderProps) {
   }, []);
 
   const value = useMemo(
-    () => ({ currentUser, signedIn: currentUser !== undefined, loading }),
+    () => ({ currentUser, signedIn: !currentUser, loading }),
     [currentUser],
   );
 

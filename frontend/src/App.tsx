@@ -6,18 +6,21 @@ import { ThemeProvider } from "styled-components";
 import { AuthContext, AuthProvider } from "./contexts/AuthContext";
 import { DataProvider } from "./contexts/DataContext";
 
-import { Home, Login, Profile, UnitDetails } from "@/pages";
+
+import { Home, ListingForm, Login, Profile, UnitDetails } from "@/pages";
 import { GlobalStyle, theme } from "@/theme";
 
 function AppRouter() {
   const { signedIn } = useContext(AuthContext);
+  console.log(signedIn);
   return (
     <BrowserRouter>
       <Routes>
         {!signedIn && (
           <>
-            <Route path="*" element={<Navigate replace to="/login" />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/form" element={<ListingForm />} />
+            <Route path="*" element={<Navigate replace to="/login" />} />
           </>
         )}
 
@@ -29,6 +32,8 @@ function AppRouter() {
             <Route path="*" element={<Navigate to="/" />} />
           </>
         )}
+
+
       </Routes>
     </BrowserRouter>
   );
