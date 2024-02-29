@@ -16,6 +16,7 @@ const NavbarItems = styled.div`
   height: 70px;
   width: 100vw;
   padding: 10px 96px;
+  z-index: 1;
 `;
 
 const Icon = styled.img`
@@ -52,6 +53,12 @@ const ConfirmLogout = styled(LogoutButton)`
 const Link = styled.a<{ active: boolean }>`
   text-decoration: none;
   color: ${(props) => (props.active ? "#b64201" : "black")};
+  background-color: ${(props) => (props.active ? "rgba(236, 133, 55, 0.10)" : "none")};
+  padding: 8px 16px;
+  border-radius: 16px;
+  &:hover {
+    color: #b64201;
+  }
 `;
 
 const Overlay = styled.div`
@@ -63,6 +70,7 @@ const Overlay = styled.div`
   bottom: 0;
   position: fixed;
   background: rgba(0, 0, 0, 0.25);
+  z-index: 2;
 `;
 
 const Modal = styled.div`
@@ -80,6 +88,7 @@ const Modal = styled.div`
   align-items: center;
   justify-content: flex-start;
   gap: 70px;
+  z-index: 2;
 `;
 
 const XWrapper = styled.div`
