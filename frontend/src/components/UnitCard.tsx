@@ -97,7 +97,6 @@ export type UnitCardProps = {
   unit: Unit;
 };
 
-// Hard coded unit data for testing
 export const UnitCard = (props: UnitCardProps) => {
   const unit = props.unit;
 
