@@ -29,6 +29,7 @@ const RTR_Wrapper = styled.div`
   flex-direction: row;
   justify-content: space-between;
   margin: 0vh 5vw 0vh 5vw;
+  padding: 2vh 2vw 2vh 2vw;
 `;
 
 const RTR_Text = styled.p`

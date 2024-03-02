@@ -11,10 +11,82 @@ type ReferralTableProps = {
   id: string;
 };
 
+const TableColumnNames = [
+  "Name",
+  "Contact Info",
+  "Referring Staff",
+  "Housing Locator",
+  "Status",
+  "Last Update",
+];
+
 const ReferralTableContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+`;
+
+const ReferralTableTitleSection = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin: 0vh 7vw 0vh 7vw;
+`;
+
+const ReferralTableTitle = styled.h2`
+  color: #000;
+
+  font-family: "Neutra Text";
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 125%;
+  letter-spacing: 0.64px;
+`;
+
+const ReferralTableButton = styled.button`
+  display: inline-flex;
+  padding: 8px 20px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+
+  border-radius: 12px;
+  border: none;
+  background: var(--Primary, #b64201);
+  color: #ffffff;
+
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const ReferralTableButtonIcon = styled.img`
+  width: 19px;
+  height: 19px;
+`;
+
+const ReferralTableColumnHeaders = styled.div`
+  display: flex;
+  margin: 0px 3vw 0px 2vw;
+  justify-content: space-around;
+  background: #ffffff;
+`;
+
+const ReferralTableColumnHeader = styled.div`
+  display: flex
+  justify-content: flex-start;
+  color: var(--Neutral-Black, #000);
+
+  min-width: 200px;
+  max-width: 201px;
+
+  font-family: Montserrat;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%; /* 24px */
+  letter-spacing: 0.32px;
+  padding: 10px 0px 10px 50px;
 `;
 
 export const ReferralTable = (props: ReferralTableProps) => {
@@ -73,6 +145,20 @@ export const ReferralTable = (props: ReferralTableProps) => {
 
   return (
     <ReferralTableContainer>
+      <ReferralTableTitleSection>
+        <ReferralTableTitle>Referrals:</ReferralTableTitle>
+        <ReferralTableButton>
+          <ReferralTableButtonIcon src={"/plus_sign.svg"} />
+          Add Referral
+        </ReferralTableButton>
+      </ReferralTableTitleSection>
+
+      <ReferralTableColumnHeaders>
+        {TableColumnNames.map((name, idx) => (
+          <ReferralTableColumnHeader key={idx}>{name}</ReferralTableColumnHeader>
+        ))}
+      </ReferralTableColumnHeaders>
+
       {referrals.map((referral, idx) => (
         <ReferralTableRow
           key={idx}
