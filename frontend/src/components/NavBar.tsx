@@ -61,6 +61,14 @@ const Link = styled.a<{ active: boolean }>`
   }
 `;
 
+const StagingIndicator = styled.p`
+  text-decoration: none;
+  color: red;
+  padding: 8px 16px;
+  font-size: 24px;
+  font-weight: bold;
+`;
+
 const Overlay = styled.div`
   width: 100vw;
   height: 100vh;
@@ -137,6 +145,9 @@ export function NavBar({ page }: NavBarProps) {
       });
   };
 
+  const currUrl = window.location.href;
+  const isStaging = /ushs-housing-portal-staging.web.app/i.test(currUrl);
+
   return (
     <div>
       <NavbarItems>
@@ -148,6 +159,7 @@ export function NavBar({ page }: NavBarProps) {
           <Link href="/profile" active={page === "Profile"}>
             Profile
           </Link>
+          {isStaging && <StagingIndicator>Staging Environment</StagingIndicator>}
         </LeftWrapper>
         <LogoutButton kind="primary" onClick={togglePopup}>
           Log Out
