@@ -1,4 +1,3 @@
-import { ObjectId } from "mongodb";
 import { InferSchemaType, Schema, model } from "mongoose";
 
 const referralSchema = new Schema(
@@ -9,22 +8,19 @@ const referralSchema = new Schema(
       enum: ["Referred", "Viewing", "Pending", "Approved", "Denied", "Leased", "Canceled"],
       default: "Referred",
     },
-    renterCandidateId: {
-      type: ObjectId,
-      required: true,
-    },
+    renterCandidate: [{ type: Schema.Types.ObjectId, ref: "Renter" }],
     unitId: {
-      type: ObjectId,
+      type: Schema.Types.ObjectId,
       required: true,
     },
     // Will be set later on in the flow
     assignedHousingLocatorId: {
-      type: ObjectId,
+      type: Schema.Types.ObjectId,
       required: false,
     },
     // Should be set to the user that created the referral (RS or HL)
     assignedReferringStaffId: {
-      type: ObjectId,
+      type: Schema.Types.ObjectId,
       required: true,
     },
   },

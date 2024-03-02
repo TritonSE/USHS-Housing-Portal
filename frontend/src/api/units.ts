@@ -110,7 +110,7 @@ export async function createUnit(unit: CreateUnitRequest): Promise<APIResult<Uni
 export type Referral = {
   _id: string;
   status: string;
-  renterCandidateId: string;
+  renterCandidate: [];
   unitId: string;
   assignedHousingLocatorId: string;
   assignedReferringStaffId: string;
