@@ -8,25 +8,42 @@ import {
   DropdownRow,
   FilterRow,
   FilterSubContainer,
-  FilterText,
   Sort,
 } from "./FilterCommon";
 
-const ReferralTableRow = styled(FilterRow)`
-  min-width: 10vw;
-  max-width: 11vw;
+// ABBREVIATIONS
+// RT: Referral Table
+// DD: Dropdown
+
+const RT_Row_DD_Container = styled(FilterSubContainer)``;
+
+const RT_Row_DD_Row = styled(FilterRow)`
+  min-width: 8vw;
+  max-width: 9.25vw;
+  max-height: 2vh;
+  overflow: hidden;
   &:hover {
     cursor: pointer;
     background-color: #f5f5f5;
   }
 `;
 
-const ReferralTableRowDropdownRow = styled(DropdownRow)`
+const RT_Row_DD_Display = styled(DropdownRow)`
   min-width: 10vw;
   max-width: 11vw;
   max-height: 2vh;
   overflow: hidden;
   justify-content: space-between;
+`;
+
+const RT_Row_DD_Display_Text = styled.p`
+  color: var(--Neutral-Black, #000);
+
+  font-family: Montserrat;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: 0.32px;
 `;
 
 const PopupBodyText = styled(Sort)`
@@ -45,32 +62,32 @@ export const ReferralTableDropDown = (props: ReferralTableDropDownProps) => {
   const [displayedValue, setDisplayedValue] = useState(props.defaultValue);
 
   return (
-    <FilterSubContainer>
+    <RT_Row_DD_Container>
       <Dropdown
         onClick={() => {
           setIsActive(!isActive);
         }}
         active={isActive}
       >
-        <ReferralTableRowDropdownRow>
-          <FilterText>{displayedValue}</FilterText>
+        <RT_Row_DD_Display>
+          <RT_Row_DD_Display_Text>{displayedValue}</RT_Row_DD_Display_Text>
           <DropdownIcon src={isActive ? "/up_arrow.svg" : "/dropdown.svg"} />
-        </ReferralTableRowDropdownRow>
+        </RT_Row_DD_Display>
       </Dropdown>
       {isActive && (
         <DropDownPopup>
           {props.values.map((value, idx) => (
-            <ReferralTableRow
+            <RT_Row_DD_Row
               key={idx}
               onClick={() => {
                 setDisplayedValue(value);
               }}
             >
               <PopupBodyText>{value}</PopupBodyText>
-            </ReferralTableRow>
+            </RT_Row_DD_Row>
           ))}
         </DropDownPopup>
       )}
-    </FilterSubContainer>
+    </RT_Row_DD_Container>
   );
 };
