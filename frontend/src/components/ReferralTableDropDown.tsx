@@ -18,7 +18,7 @@ import {
 const RT_Row_DD_Container = styled(FilterSubContainer)``;
 
 const RT_Row_DD_Row = styled(FilterRow)`
-  min-width: 8vw;
+  min-width: 9.24vw;
   max-width: 9.25vw;
   max-height: 2vh;
   overflow: hidden;
@@ -29,7 +29,7 @@ const RT_Row_DD_Row = styled(FilterRow)`
 `;
 
 const RT_Row_DD_Display = styled(DropdownRow)`
-  min-width: 10vw;
+  min-width: 10.95vw;
   max-width: 11vw;
   max-height: 2vh;
   overflow: hidden;
