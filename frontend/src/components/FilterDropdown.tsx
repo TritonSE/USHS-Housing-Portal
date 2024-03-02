@@ -15,7 +15,7 @@ const AllFiltersContainer = styled.div`
   align-items: flex-start;
   margin-left: 95px;
   margin-right: 95px;
-  margin-top: 95px;
+  margin-top: 55px;
   gap: 16px;
 `;
 

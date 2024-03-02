@@ -23,6 +23,7 @@ const GridContainer = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   margin: 95px;
+  margin-top: 50px;
   gap: 30px;
 `;
 

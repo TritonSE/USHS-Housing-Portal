@@ -7,6 +7,11 @@ import { UserModel } from "../models/user";
 // Fetch users from the database
 export async function getUsers() {
   const users = await UserModel.find({});
+  users.sort((a, b) => {
+    const fullNameA = a.firstName + " " + a.lastName;
+    const fullNameB = b.firstName + " " + b.lastName;
+    return fullNameA < fullNameB ? -1 : 1;
+  });
   return users;
 }
 
@@ -34,4 +39,12 @@ export async function createUser(firstName: string, lastName: string, email: str
 
 export async function getUserByEmail(email: string) {
   return await UserModel.findOne({ email });
+}
+
+export async function getUserByID(id: string) {
+  return await UserModel.findById(id);
+}
+
+export async function elevateUser(id: string) {
+  return await UserModel.findByIdAndUpdate(id, { isHousingLocator: true });
 }
