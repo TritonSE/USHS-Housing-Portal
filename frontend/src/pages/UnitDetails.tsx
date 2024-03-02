@@ -1,13 +1,13 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-import { Unit, getUnit, getUnitReferrals } from "@/api/units";
+import { Unit, getUnit } from "@/api/units";
 import { Page } from "@/components";
 import { Button } from "@/components/Button";
-import { AuthContext } from "@/contexts/AuthContext";
+import { ReferralTable } from "@/components/ReferralTable";
 
 const Row = styled.div`
   display: flex;
@@ -106,7 +106,6 @@ const DoesNotExist = styled.h1`
 export function UnitDetails() {
   const [unit, setUnit] = useState<Unit>();
   const { id } = useParams();
-  const authContext = useContext(AuthContext);
 
   React.useEffect(() => {
     if (id !== undefined) {
@@ -115,14 +114,8 @@ export function UnitDetails() {
           setUnit(result.data);
         }
       });
-
-      if (authContext.currentUser) {
-        void getUnitReferrals(id).then((res) => {
-          console.log(res);
-        });
-      }
     }
-  }, [authContext.currentUser]);
+  }, []);
 
   if (!unit) {
     return (
@@ -271,6 +264,7 @@ export function UnitDetails() {
           </SectionColumn>
         </Row>
       </MainColumn>
+      <ReferralTable id={id ?? ""} />
     </Page>
   );
 }
