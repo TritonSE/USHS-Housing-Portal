@@ -1,12 +1,12 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
 
+import { ReferralTablePagination } from "./ReferralTablePagination";
 import { ReferralTableRow } from "./ReferralTableRow";
 
 import { Referral, getUnitReferrals } from "@/api/units";
 import { AuthContext } from "@/contexts/AuthContext";
 import { DataContext } from "@/contexts/DataContext";
-import { ReferralTablePagination } from "./ReferralTablePagination";
 
 type ReferralTableProps = {
   id: string;
