@@ -6,10 +6,13 @@ import { ReferralTableRow } from "./ReferralTableRow";
 import { Referral, getUnitReferrals } from "@/api/units";
 import { AuthContext } from "@/contexts/AuthContext";
 import { DataContext } from "@/contexts/DataContext";
+import { ReferralTablePagination } from "./ReferralTablePagination";
 
 type ReferralTableProps = {
   id: string;
 };
+
+const ENTRIES_PER_PAGE = 5;
 
 const TableColumnNames = [
   "Name",
@@ -90,12 +93,18 @@ const ReferralTableColumnHeader = styled.div`
   padding: 1vh 0px 1vh 1vw;
 `;
 
+const ReferralTableFooter = styled.div`
+  padding-left: 85%;
+  margin: 1vh 0vw 3vh 0vw;
+`;
+
 export const ReferralTable = (props: ReferralTableProps) => {
   const authContext = useContext(AuthContext);
   const dataContext = useContext(DataContext);
   const [referrals, setReferrals] = useState<Referral[]>([]);
   const [referringStaff, setReferringStaff] = useState<string[]>([]);
   const [housingLocators, setHousingLocators] = useState<string[]>([]);
+  const [pageNumber, setPageNumber] = useState<number>(1);
 
   const getAllReferringStaff = (): string[] => {
     return dataContext.allCaseManagers.map((manager) => manager.firstName + " " + manager.lastName);
@@ -160,21 +169,35 @@ export const ReferralTable = (props: ReferralTableProps) => {
         ))}
       </ReferralTableColumnHeaders>
 
-      {referrals.map((referral, idx) => (
-        <ReferralTableRow
-          key={idx}
-          index={idx}
-          name={referral.renterCandidate.firstName}
-          email={referral.renterCandidate.email}
-          phone={referral.renterCandidate.phone}
-          referringStaff={getReferringStaff(referral.assignedReferringStaffId)}
-          allReferringStaff={referringStaff}
-          housingLocator={getHousingLocator(referral.assignedHousingLocatorId)}
-          allHousingLocators={housingLocators}
-          status={referral.status}
-          lastUpdate={referral.updatedAt.toString()}
+      {referrals
+        .slice(
+          (pageNumber - 1) * ENTRIES_PER_PAGE,
+          (pageNumber - 1) * ENTRIES_PER_PAGE + ENTRIES_PER_PAGE,
+        )
+        .map((referral, idx) => (
+          <ReferralTableRow
+            key={idx}
+            index={idx}
+            name={referral.renterCandidate.firstName}
+            email={referral.renterCandidate.email}
+            phone={referral.renterCandidate.phone}
+            referringStaff={getReferringStaff(referral.assignedReferringStaffId)}
+            allReferringStaff={referringStaff}
+            housingLocator={getHousingLocator(referral.assignedHousingLocatorId)}
+            allHousingLocators={housingLocators}
+            status={referral.status}
+            lastUpdate={referral.updatedAt.toString()}
+          />
+        ))}
+      <ReferralTableFooter>
+        <ReferralTablePagination
+          totalPages={Math.ceil(referrals.length / ENTRIES_PER_PAGE)}
+          currPage={pageNumber}
+          setPageNumber={(newPageNumber: number) => {
+            setPageNumber(newPageNumber);
+          }}
         />
-      ))}
+      </ReferralTableFooter>
     </ReferralTableContainer>
   );
 };

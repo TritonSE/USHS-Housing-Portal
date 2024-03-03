@@ -61,6 +61,21 @@ export const ReferralTableDropDown = (props: ReferralTableDropDownProps) => {
   const [isActive, setIsActive] = useState(false);
   const [displayedValue, setDisplayedValue] = useState(props.defaultValue);
 
+  // const onClickOutside = (element: HTMLElement | string, callback: () => void) => {
+  //   const targetElement = typeof element === "string" ? document.getElementById(element) : element;
+  //   if (!targetElement) return;
+
+  //   document.addEventListener("click", (e: MouseEvent) => {
+  //     if (!targetElement.contains(e.target as Node)) callback();
+  //   });
+  // };
+
+  // // Usage
+  // onClickOutside("RTR_Row_DD_Container", () => {
+  //   setIsActive(false);
+  //   console.log("IN THE CALLBACK!!");
+  // });
+
   return (
     <RT_Row_DD_Container>
       <Dropdown
