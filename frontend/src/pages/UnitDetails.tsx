@@ -7,13 +7,18 @@ import styled from "styled-components";
 import { Unit, getUnit } from "@/api/units";
 import { Page } from "@/components";
 import { Button } from "@/components/Button";
+import { NavBar } from "@/components/NavBar";
 
 const Row = styled.div`
   display: flex;
   flex-direction: row;
   background-color: #fbf7f3;
   justify-content: evenly-spaced;
-  column-gap: 10%;
+  max-width: 100%;
+`;
+
+const TopRow = styled(Row)`
+  justify-content: space-between;
 `;
 
 const Column = styled.div`
@@ -32,8 +37,14 @@ const SectionColumn = styled(Column)`
   width: 50%;
 `;
 
-const MainColumn = styled(Column)`
-  padding: 10%;
+const MainColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: #fbf7f3;
+`;
+
+const DetailsColumn = styled(MainColumn)`
+  margin: 90px;
 `;
 
 const RentPerMonth = styled.h1`
@@ -42,8 +53,7 @@ const RentPerMonth = styled.h1`
   font-weight: 600;
   line-height: 150%;
   line-spacing: 0.96px;
-
-  margin: 0;
+  margin-top: 20px;
 `;
 
 const Header = styled.div`
@@ -87,10 +97,14 @@ const ListText = styled.li`
 
 const Address = styled(Header)``;
 
+const Availability = styled(Header)`
+  font-size: 30px;
+`;
+
 const ButtonPadding = styled.div`
   display: flex;
   flex-direction: row;
-  padding: 20px 10% 0px 10%;
+  padding: 20px 0px 0px 10%;
 `;
 
 const DoesNotExist = styled.h1`
@@ -102,9 +116,74 @@ const DoesNotExist = styled.h1`
   padding: 20px 10% 20px 10%;
 `;
 
+const Overlay = styled.div`
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: fixed;
+  background: rgba(0, 0, 0, 0.25);
+  z-index: 2;
+`;
+
+const Modal = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 736px;
+  height: 447px;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 70px;
+  z-index: 2;
+`;
+
+const XWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding: 10px 27px;
+  font-size: 30px;
+`;
+
+const XButton = styled.div`
+  &:hover {
+    cursor: pointer;
+  }
+  height: 10px;
+  width: 10px;
+`;
+
+const ButtonsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 15px;
+`;
+
+const PopupButtonRow = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
 export function UnitDetails() {
   const [unit, setUnit] = useState<Unit>();
   const { id } = useParams();
+  const [popup, setPopup] = useState(false);
+
+  const togglePopup = () => {
+    setPopup(!popup);
+  };
 
   React.useEffect(() => {
     if (id !== undefined) {
@@ -122,10 +201,11 @@ export function UnitDetails() {
         <Helmet>
           <title>Unit Does Not Exist | USHS Housing Portal</title>
         </Helmet>
+        <NavBar page="" />
         <Column>
           <ButtonPadding>
             <Link to="/">
-              <Button kind="secondary">Back to Listing</Button>
+              <Button kind="secondary"> Back to Listing</Button>
             </Link>
           </ButtonPadding>
           <DoesNotExist>This unit does not exist!</DoesNotExist>
@@ -163,105 +243,134 @@ export function UnitDetails() {
       <Helmet>
         <title>{unit.listingAddress} | USHS Housing Portal</title>
       </Helmet>
-
-      <ButtonPadding>
+      <NavBar page="" />
+      {/* <ButtonPadding>
         <Link to="/">
           <Button kind="secondary">Back to Listing</Button>
         </Link>
-      </ButtonPadding>
+      </ButtonPadding> */}
       <MainColumn>
-        <Row>
-          <RentPerMonth>${unit.monthlyRent}/month</RentPerMonth>
-        </Row>
-        <Row>
-          <Address>{unit.listingAddress}</Address>
-        </Row>
-        <DetailsRow>
+        <DetailsColumn>
           <Row>
-            <Column>
-              <StrongText>{unit.numBeds}</StrongText>
-              <Text>beds</Text>
-            </Column>
-            <Column>
-              <StrongText>{unit.numBaths}</StrongText>
-              <Text>baths</Text>
-            </Column>
-            <Column>
-              <StrongText>{unit.sqft}</StrongText>
-              <Text>sqft</Text>
-            </Column>
+            <Link to="/">
+              <Button kind="secondary">Back to Listing</Button>
+            </Link>
           </Row>
-          <Column>
-            <StrongText>{availableNow}</StrongText>
-          </Column>
-        </DetailsRow>
+          <TopRow>
+            <RentPerMonth>${unit.monthlyRent}/month</RentPerMonth>
+            <Availability>{unit.availableNow ? "Available Now" : null}</Availability>
+          </TopRow>
+          <TopRow>
+            <Address>{unit.listingAddress}</Address>
+            <ButtonPadding>
+              <Button kind="primary" onClick={togglePopup}>
+                Change Availability
+              </Button>
+            </ButtonPadding>
+          </TopRow>
+          <DetailsRow>
+            <Row>
+              <Column>
+                <StrongText>{unit.numBeds}</StrongText>
+                <Text>beds</Text>
+              </Column>
+              <Column>
+                <StrongText>{unit.numBaths}</StrongText>
+                <Text>baths</Text>
+              </Column>
+              <Column>
+                <StrongText>{unit.sqft}</StrongText>
+                <Text>sqft</Text>
+              </Column>
+            </Row>
+            <Column>
+              <StrongText>{availableNow}</StrongText>
+            </Column>
+          </DetailsRow>
 
-        <Row>
-          <Header>Fees</Header>
-        </Row>
-        <Row>
-          <SectionColumn>
-            <StrongText>Security Deposit: </StrongText>
-            <List>
-              <ListText> ${unit.securityDeposit}</ListText>
-            </List>
-            <StrongText>Payment/Renting Criteria: </StrongText>
-            {rentingCriteria}
-          </SectionColumn>
-          <SectionColumn>
-            <StrongText>Application Fee: </StrongText>
-            <List>
-              <ListText>${unit.applicationFeeCost}</ListText>
-            </List>
-            {/* I don't think we have this anymore? */}
-            {/* <StrongText>Holding Fee: </StrongText>
+          <Row>
+            <Header>Fees</Header>
+          </Row>
+          <Row>
+            <SectionColumn>
+              <StrongText>Security Deposit: </StrongText>
+              <List>
+                <ListText> ${unit.securityDeposit}</ListText>
+              </List>
+              <StrongText>Payment/Renting Criteria: </StrongText>
+              {rentingCriteria}
+            </SectionColumn>
+            <SectionColumn>
+              <StrongText>Application Fee: </StrongText>
+              <List>
+                <ListText>${unit.applicationFeeCost}</ListText>
+              </List>
+              {/* I don't think we have this anymore? */}
+              {/* <StrongText>Holding Fee: </StrongText>
           <List>
             <ListText>${unit.holdingFeeAmount}</ListText>
           </List> */}
-          </SectionColumn>
-        </Row>
+            </SectionColumn>
+          </Row>
 
-        <Row>
-          <Header>Housing Specifications</Header>
-        </Row>
-        <Row>
-          <SectionColumn>
-            <StrongText>Parking: </StrongText>
-            {parkingRequirements}
-            <StrongText>Pets/Animals: </StrongText>
-            {pets}
-            <StrongText>Appliances: </StrongText>
-            {appliances}
-            <StrongText>Housing Authority: </StrongText>
-            <ListText> {unit.housingAuthority}</ListText>
-            <StrongText>Additional Comments from Landlord: </StrongText>
-            <ListText> {unit.landlordComments}</ListText>
-          </SectionColumn>
-          <SectionColumn>
-            <StrongText>Accessibility Access: </StrongText>
-            {accessibility}
-            <StrongText>Sharing House Acceptable: </StrongText>
-            <ListText>{unit.sharingAcceptable}</ListText>
-            <StrongText>Community/Neighborhood Information: </StrongText>
-            {communityFeatures}
-          </SectionColumn>
-        </Row>
+          <Row>
+            <Header>Housing Specifications</Header>
+          </Row>
+          <Row>
+            <SectionColumn>
+              <StrongText>Parking: </StrongText>
+              {parkingRequirements}
+              <StrongText>Pets/Animals: </StrongText>
+              {pets}
+              <StrongText>Appliances: </StrongText>
+              {appliances}
+              <StrongText>Housing Authority: </StrongText>
+              <ListText> {unit.housingAuthority}</ListText>
+              <StrongText>Additional Comments from Landlord: </StrongText>
+              <ListText> {unit.landlordComments}</ListText>
+            </SectionColumn>
+            <SectionColumn>
+              <StrongText>Accessibility Access: </StrongText>
+              {accessibility}
+              <StrongText>Sharing House Acceptable: </StrongText>
+              <ListText>{unit.sharingAcceptable}</ListText>
+              <StrongText>Community/Neighborhood Information: </StrongText>
+              {communityFeatures}
+            </SectionColumn>
+          </Row>
 
-        <Row>
-          <Header>Additional Information</Header>
-        </Row>
-        <Row>
-          <SectionColumn>
-            <StrongText>Where Was Unit Found: </StrongText>
-            <ListText>{unit.whereFound}</ListText>
-            <StrongText>Additional Rules and Regulation: </StrongText>
-            <ListText>{additionalRules}</ListText>
-          </SectionColumn>
-          <SectionColumn>
-            <StrongText>Notes from Housing Locator: </StrongText>
-            {unit.internalComments}
-          </SectionColumn>
-        </Row>
+          <Row>
+            <Header>Additional Information</Header>
+          </Row>
+          <Row>
+            <SectionColumn>
+              <StrongText>Where Was Unit Found: </StrongText>
+              <ListText>{unit.whereFound}</ListText>
+              <StrongText>Additional Rules and Regulation: </StrongText>
+              <ListText>{additionalRules}</ListText>
+            </SectionColumn>
+            <SectionColumn>
+              <StrongText>Notes from Housing Locator: </StrongText>
+              {unit.internalComments}
+            </SectionColumn>
+          </Row>
+        </DetailsColumn>
+        {popup && (
+          <>
+            <Overlay />
+            <Modal>
+              <XWrapper>
+                <XButton onClick={togglePopup}> &times; </XButton>
+              </XWrapper>
+              <h1>Change Availability</h1>
+              <ButtonsWrapper>
+                <PopupButtonRow>
+                  <Button kind="primary">Save Availability</Button>
+                </PopupButtonRow>
+              </ButtonsWrapper>
+            </Modal>
+          </>
+        )}
       </MainColumn>
     </Page>
   );
