@@ -121,7 +121,6 @@ export const ReferralTable = (props: ReferralTableProps) => {
       void getUnitReferrals(props.id).then((res) => {
         if (res.success) {
           setReferrals(res.data);
-          console.log(referrals);
         }
       });
     }
@@ -129,7 +128,6 @@ export const ReferralTable = (props: ReferralTableProps) => {
     if (dataContext) {
       setReferringStaff(getAllReferringStaff());
       setHousingLocators(getAllHousingLocators());
-      console.log(dataContext);
     }
   }, [authContext, dataContext]);
 
