@@ -32,7 +32,7 @@ const RT_Row_DD_Display = styled(DropdownRow)`
   min-width: 10.95vw;
   max-width: 11vw;
   max-height: 2vh;
-  overflow: hidden;
+
   justify-content: space-between;
 `;
 
@@ -44,6 +44,8 @@ const RT_Row_DD_Display_Text = styled.p`
   font-style: normal;
   font-weight: 400;
   letter-spacing: 0.32px;
+  white-space: nowrap;
+  overflow: hidden;
 `;
 
 const PopupBodyText = styled(Sort)`
@@ -70,7 +72,7 @@ export const ReferralTableDropDown = (props: ReferralTableDropDownProps) => {
         active={isActive}
       >
         <RT_Row_DD_Display>
-          <RT_Row_DD_Display_Text>{displayedValue}</RT_Row_DD_Display_Text>
+          <RT_Row_DD_Display_Text title={displayedValue}>{displayedValue}</RT_Row_DD_Display_Text>
           <DropdownIcon src={isActive ? "/up_arrow.svg" : "/dropdown.svg"} />
         </RT_Row_DD_Display>
       </Dropdown>

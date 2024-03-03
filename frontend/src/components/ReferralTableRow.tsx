@@ -37,6 +37,8 @@ const RTR_Wrapper = styled.div<{ index: number }>`
 `;
 
 const RTR_Text = styled.p`
+  display: flex;
+  align-items: center;
   overflow: hidden;
   color: var(--Primary, #0c2b35);
   text-overflow: ellipsis;
@@ -68,8 +70,8 @@ const formatDate = (date: string): string => {
 export const ReferralTableRow = (props: ReferralTableRowProps) => {
   return (
     <RTR_Wrapper index={props.index}>
-      <RTR_Text>{props.name}</RTR_Text>
-      <RTR_Text>
+      <RTR_Text title={props.name}>{props.name}</RTR_Text>
+      <RTR_Text title={props.email + " " + props.phone}>
         {props.email} <br /> {props.phone}
       </RTR_Text>
       {/* Referring Staff (Case Manager) */}
@@ -82,7 +84,9 @@ export const ReferralTableRow = (props: ReferralTableRowProps) => {
       {/* Status */}
       <ReferralTableDropDown values={referralStatuses} defaultValue={props.status} />
 
-      <RTR_Text_End>{formatDate(props.lastUpdate)}</RTR_Text_End>
+      <RTR_Text_End title={formatDate(props.lastUpdate)}>
+        {formatDate(props.lastUpdate)}
+      </RTR_Text_End>
     </RTR_Wrapper>
   );
 };

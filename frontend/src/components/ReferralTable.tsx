@@ -32,7 +32,7 @@ const ReferralTableContainer = styled.div`
 const ReferralTableTitleSection = styled.div`
   display: flex;
   justify-content: space-between;
-  margin: 0vh 7vw 0vh 7vw;
+  margin: 0vh 5vw 0vh 5vw;
 `;
 
 const ReferralTableTitle = styled.h2`
@@ -70,7 +70,7 @@ const ReferralTableButtonIcon = styled.img`
 
 const ReferralTableColumnHeaders = styled.div`
   display: flex;
-  margin: 3vh 6vw 1vh 6vw;
+  margin: 3vh 5vw 1vh 5vw;
   justify-content: space-between;
   flex-grow: 1;
   background: #ffffff;
