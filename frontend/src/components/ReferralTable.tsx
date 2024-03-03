@@ -163,6 +163,7 @@ export const ReferralTable = (props: ReferralTableProps) => {
       {referrals.map((referral, idx) => (
         <ReferralTableRow
           key={idx}
+          index={idx}
           name={referral.renterCandidate.firstName}
           email={referral.renterCandidate.email}
           phone={referral.renterCandidate.phone}

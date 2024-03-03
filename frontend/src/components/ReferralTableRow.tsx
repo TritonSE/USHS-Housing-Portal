@@ -12,6 +12,7 @@ const referralStatuses = [
   "Canceled",
 ];
 type ReferralTableRowProps = {
+  index: number;
   name: string;
   email: string;
   phone: string;
@@ -25,12 +26,14 @@ type ReferralTableRowProps = {
 
 // Abbreviation
 // RTR: Referral Table Row
-const RTR_Wrapper = styled.div`
+const RTR_Wrapper = styled.div<{ index: number }>`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   margin: 0vh 5vw 0vh 5vw;
   padding: 2vh 2vw 2vh 2vw;
+  background: ${(div) =>
+    div.index % 2 ? "var(--Neutral-Gray0, #F3F3F3);" : "background: var(--Background, #FBF7F3);"};
 `;
 
 const RTR_Text = styled.p`
@@ -64,7 +67,7 @@ const formatDate = (date: string): string => {
 
 export const ReferralTableRow = (props: ReferralTableRowProps) => {
   return (
-    <RTR_Wrapper>
+    <RTR_Wrapper index={props.index}>
       <RTR_Text>{props.name}</RTR_Text>
       <RTR_Text>
         {props.email} <br /> {props.phone}
