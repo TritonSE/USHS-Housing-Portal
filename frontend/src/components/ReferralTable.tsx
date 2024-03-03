@@ -98,6 +98,10 @@ const ReferralTableFooter = styled.div`
   margin: 1vh 0vw 3vh 0vw;
 `;
 
+const ReferralTablePlaceholder = styled.div`
+  padding: 0vh 0vw 6vh 6vw;
+`;
+
 export const ReferralTable = (props: ReferralTableProps) => {
   const authContext = useContext(AuthContext);
   const dataContext = useContext(DataContext);
@@ -143,12 +147,8 @@ export const ReferralTable = (props: ReferralTableProps) => {
     return locator === undefined ? "N/A" : locator.firstName + " " + locator.lastName;
   };
 
-  if (!referrals) {
-    return <div>No Referrals</div>;
-  }
-
   if (!authContext || !dataContext) {
-    return <div>Loading Referral Table...</div>;
+    return <ReferralTablePlaceholder>Loading Referrals Table...</ReferralTablePlaceholder>;
   }
 
   return (
@@ -167,35 +167,36 @@ export const ReferralTable = (props: ReferralTableProps) => {
         ))}
       </ReferralTableColumnHeaders>
 
-      {referrals
-        .slice(
-          (pageNumber - 1) * ENTRIES_PER_PAGE,
-          (pageNumber - 1) * ENTRIES_PER_PAGE + ENTRIES_PER_PAGE,
-        )
-        .map((referral, idx) => (
-          <ReferralTableRow
-            key={idx}
-            index={idx}
-            name={referral.renterCandidate.firstName}
-            email={referral.renterCandidate.email}
-            phone={referral.renterCandidate.phone}
-            referringStaff={getReferringStaff(referral.assignedReferringStaffId)}
-            allReferringStaff={referringStaff}
-            housingLocator={getHousingLocator(referral.assignedHousingLocatorId)}
-            allHousingLocators={housingLocators}
-            status={referral.status}
-            lastUpdate={referral.updatedAt.toString()}
-          />
-        ))}
-      <ReferralTableFooter>
-        <ReferralTablePagination
-          totalPages={Math.ceil(referrals.length / ENTRIES_PER_PAGE)}
-          currPage={pageNumber}
-          setPageNumber={(newPageNumber: number) => {
-            setPageNumber(newPageNumber);
-          }}
-        />
-      </ReferralTableFooter>
+      {referrals && referrals.length > 0 ? (
+        <>
+          {referrals
+            .slice((pageNumber - 1) * ENTRIES_PER_PAGE, pageNumber * ENTRIES_PER_PAGE)
+            .map((referral, idx) => (
+              <ReferralTableRow
+                key={idx}
+                index={idx}
+                name={referral.renterCandidate.firstName}
+                email={referral.renterCandidate.email}
+                phone={referral.renterCandidate.phone}
+                referringStaff={getReferringStaff(referral.assignedReferringStaffId)}
+                allReferringStaff={referringStaff}
+                housingLocator={getHousingLocator(referral.assignedHousingLocatorId)}
+                allHousingLocators={housingLocators}
+                status={referral.status}
+                lastUpdate={referral.updatedAt.toString()}
+              />
+            ))}
+          <ReferralTableFooter>
+            <ReferralTablePagination
+              totalPages={Math.ceil(referrals.length / ENTRIES_PER_PAGE)}
+              currPage={pageNumber}
+              setPageNumber={setPageNumber}
+            />
+          </ReferralTableFooter>
+        </>
+      ) : (
+        <ReferralTablePlaceholder>None</ReferralTablePlaceholder>
+      )}
     </ReferralTableContainer>
   );
 };
