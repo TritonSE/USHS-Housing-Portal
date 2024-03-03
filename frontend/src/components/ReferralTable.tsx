@@ -67,8 +67,9 @@ const ReferralTableButtonIcon = styled.img`
 
 const ReferralTableColumnHeaders = styled.div`
   display: flex;
-  margin: 0px 3vw 0px 2vw;
-  justify-content: space-around;
+  margin: 3vh 6vw 1vh 6vw;
+  justify-content: space-between;
+  flex-grow: 1;
   background: #ffffff;
 `;
 
@@ -86,7 +87,7 @@ const ReferralTableColumnHeader = styled.div`
   font-weight: 700;
   line-height: 150%; /* 24px */
   letter-spacing: 0.32px;
-  padding: 10px 0px 10px 50px;
+  padding: 1vh 0px 1vh 1vw;
 `;
 
 export const ReferralTable = (props: ReferralTableProps) => {
@@ -163,7 +164,8 @@ export const ReferralTable = (props: ReferralTableProps) => {
         <ReferralTableRow
           key={idx}
           name={referral.renterCandidate.firstName}
-          contactInfo={referral.renterCandidate.email + "\n" + referral.renterCandidate.phone}
+          email={referral.renterCandidate.email}
+          phone={referral.renterCandidate.phone}
           referringStaff={getReferringStaff(referral.assignedReferringStaffId)}
           allReferringStaff={referringStaff}
           housingLocator={getHousingLocator(referral.assignedHousingLocatorId)}

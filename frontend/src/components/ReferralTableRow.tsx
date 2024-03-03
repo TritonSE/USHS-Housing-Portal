@@ -13,7 +13,8 @@ const referralStatuses = [
 ];
 type ReferralTableRowProps = {
   name: string;
-  contactInfo: string; // email;phone-number
+  email: string;
+  phone: string;
   referringStaff: string;
   allReferringStaff: string[];
   housingLocator: string;
@@ -38,6 +39,9 @@ const RTR_Text = styled.p`
   text-overflow: ellipsis;
   white-space: nowrap;
 
+  min-width: 200px;
+  max-width: 201px;
+
   /* Body 2 */
   font-family: Montserrat;
   font-size: 16px;
@@ -45,6 +49,12 @@ const RTR_Text = styled.p`
   font-weight: 400;
   line-height: 150%; /* 24px */
   letter-spacing: 0.32px;
+`;
+
+const RTR_Text_End = styled(RTR_Text)`
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 4vw;
 `;
 
 const formatDate = (date: string): string => {
@@ -56,7 +66,9 @@ export const ReferralTableRow = (props: ReferralTableRowProps) => {
   return (
     <RTR_Wrapper>
       <RTR_Text>{props.name}</RTR_Text>
-      <RTR_Text>{props.contactInfo}</RTR_Text>
+      <RTR_Text>
+        {props.email} <br /> {props.phone}
+      </RTR_Text>
       {/* Referring Staff (Case Manager) */}
       <ReferralTableDropDown values={props.allReferringStaff} defaultValue={props.referringStaff} />
       {/* Housing Locator */}
@@ -67,7 +79,7 @@ export const ReferralTableRow = (props: ReferralTableRowProps) => {
       {/* Status */}
       <ReferralTableDropDown values={referralStatuses} defaultValue={props.status} />
 
-      <RTR_Text>{formatDate(props.lastUpdate)}</RTR_Text>
+      <RTR_Text_End>{formatDate(props.lastUpdate)}</RTR_Text_End>
     </RTR_Wrapper>
   );
 };
