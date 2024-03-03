@@ -83,6 +83,7 @@ export const ReferralTableDropDown = (props: ReferralTableDropDownProps) => {
               key={idx}
               onClick={() => {
                 setDisplayedValue(value);
+                setIsActive(false);
               }}
             >
               <PopupBodyText>{value}</PopupBodyText>
