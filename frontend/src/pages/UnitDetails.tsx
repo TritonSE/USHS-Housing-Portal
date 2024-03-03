@@ -7,6 +7,7 @@ import styled from "styled-components";
 import { Unit, getUnit } from "@/api/units";
 import { Page } from "@/components";
 import { Button } from "@/components/Button";
+import { ReferralTable } from "@/components/ReferralTable";
 
 const Row = styled.div`
   display: flex;
@@ -263,6 +264,7 @@ export function UnitDetails() {
           </SectionColumn>
         </Row>
       </MainColumn>
+      <ReferralTable id={id ?? ""} />
     </Page>
   );
 }
