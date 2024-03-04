@@ -1,5 +1,7 @@
 import styled from "styled-components";
 
+import { Unit } from "@/api/units";
+
 const UnitCardContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -91,26 +93,31 @@ const BedBathText = styled(NumberText)`
   padding-right: 10px;
 `;
 
-// Hard coded unit data for testing
-export const UnitCard = () => {
+export type UnitCardProps = {
+  unit: Unit;
+};
+
+export const UnitCard = (props: UnitCardProps) => {
+  const unit = props.unit;
+
   return (
     <UnitCardContainer>
       <AvailabilityRow>
         <AvailabilityIcon src="/green_ellipse.svg" />
-        <AvailabilityText>Available</AvailabilityText>
+        <AvailabilityText>{unit.availableNow ? "Available" : "Pending Approval"}</AvailabilityText>
       </AvailabilityRow>
-      <RentText>$1390/month</RentText>
+      <RentText>{`$${unit.monthlyRent}/month`}</RentText>
       <BedBathRow>
-        <NumberText>2</NumberText>
+        <NumberText>{unit.numBeds}</NumberText>
         <BedBathText>beds</BedBathText>
-        <NumberText>2</NumberText>
+        <NumberText>{unit.numBaths}</NumberText>
         <BedBathText>baths</BedBathText>
-        <NumberText>1231</NumberText>
+        <NumberText>{unit.sqft}</NumberText>
         <BedBathText>sqft</BedBathText>
       </BedBathRow>
       <AddressRow>
-        <AddressText>1829 Prospect Ave</AddressText>
-        <AddressText>Pasadena, CA 91776</AddressText>
+        <AddressText>{unit.streetAddress}</AddressText>
+        <AddressText>{`${unit.city}, ${unit.state} ${unit.areaCode}`}</AddressText>
       </AddressRow>
     </UnitCardContainer>
   );

@@ -15,5 +15,6 @@ const router = express.Router();
 router.get("/:id", UnitController.getUnitHandler);
 
 router.post("/", validateWith(createUnitValidators), UnitController.createUnitsHandler);
+router.get("/", UnitController.getUnitsHandler);
 
 export default router;
