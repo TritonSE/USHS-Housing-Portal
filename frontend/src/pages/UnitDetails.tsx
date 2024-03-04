@@ -7,6 +7,7 @@ import styled from "styled-components";
 import { Unit, getUnit } from "@/api/units";
 import { Page } from "@/components";
 import { Button } from "@/components/Button";
+import { ReferralPopup } from "@/components/ReferralPopup";
 
 const Row = styled.div`
   display: flex;
@@ -105,6 +106,7 @@ const DoesNotExist = styled.h1`
 export function UnitDetails() {
   const [unit, setUnit] = useState<Unit>();
   const { id } = useParams();
+  const [popup, setPopup] = useState<boolean>(false);
 
   React.useEffect(() => {
     if (id !== undefined) {
@@ -262,6 +264,20 @@ export function UnitDetails() {
             {unit.internalComments}
           </SectionColumn>
         </Row>
+        <Button
+          kind={"primary"}
+          onClick={() => {
+            setPopup(true);
+          }}
+        >
+          Add Referral
+        </Button>
+        <ReferralPopup
+          active={popup}
+          onClose={() => {
+            setPopup(false);
+          }}
+        />
       </MainColumn>
     </Page>
   );

@@ -203,7 +203,7 @@ export function Profile() {
                   placeholder="Search People"
                   options={allReferringStaff}
                   onSelect={(value) => {
-                    setCurrentRS(value);
+                    setCurrentRS(value as User);
                   }}
                   reset={resetSelect}
                 />
