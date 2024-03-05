@@ -145,7 +145,7 @@ const InputBox = styled.input`
 `;
 
 const ButtonsWrapper = styled.div`
-  padding-top: 50px;
+  padding-top: 30px;
   display: flex;
   flex-direction: row;
   gap: 400px;
