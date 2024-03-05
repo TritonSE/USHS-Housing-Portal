@@ -132,8 +132,10 @@ export async function put(
   return response;
 }
 
-//delete is a reserved word apparently
-export async function remove(url: string, headers: Record<string, string> = {}): Promise<Response> {
+export async function deleteRequest(
+  url: string,
+  headers: Record<string, string> = {},
+): Promise<Response> {
   const response = await fetchRequest("DELETE", API_BASE_URL + url, undefined, headers);
   await assertOk(response);
   return response;
