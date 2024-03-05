@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { Button } from "./Button";
 
-import { deleteUnit } from "@/api/units";
+import { Unit, deleteUnit } from "@/api/units";
 import { DataContext } from "@/contexts/DataContext";
 
 const UnitCardContainer = styled.div<{ pending: boolean }>`
@@ -181,20 +181,17 @@ const ButtonsWrapper = styled.div`
   gap: 15px;
 `;
 
-// Hard coded prop; replace with backend data for availibity
 type CardProps = {
-  pending: boolean;
+  unit: Unit;
   refreshUnits?: () => void;
 };
 
-// Hard coded unit data for testing
-export const UnitCard = ({ pending, refreshUnits }: CardProps) => {
+export const UnitCard = ({ unit, refreshUnits }: CardProps) => {
   const [popup, setPopup] = useState<boolean>(false);
   const dataContext = useContext(DataContext);
 
   const handleDelete = () => {
-    //random testing ID
-    deleteUnit("65dd346ad8ea7151e4ca662b")
+    deleteUnit(unit._id)
       .then((value) => {
         if (value.success) console.log(value.data);
         setPopup(false);
@@ -207,8 +204,8 @@ export const UnitCard = ({ pending, refreshUnits }: CardProps) => {
 
   return (
     <>
-      <UnitCardContainer pending={pending}>
-        {pending ? (
+      <UnitCardContainer pending={!unit.approved}>
+        {!unit.approved ? (
           <AvailabilityRow>
             <AvailabilityIcon src="/red_ellipse.svg" />
             <AvailabilityText>Pending Approval</AvailabilityText>
@@ -219,20 +216,20 @@ export const UnitCard = ({ pending, refreshUnits }: CardProps) => {
             <AvailabilityText>Available</AvailabilityText>
           </AvailabilityRow>
         )}
-        <RentText>$1390/month</RentText>
+        <RentText>{`$${unit.monthlyRent}/month`}</RentText>
         <BedBathRow>
-          <NumberText>2</NumberText>
+          <NumberText>{unit.numBeds}</NumberText>
           <BedBathText>beds</BedBathText>
-          <NumberText>2</NumberText>
+          <NumberText>{unit.numBaths}</NumberText>
           <BedBathText>baths</BedBathText>
-          <NumberText>1231</NumberText>
+          <NumberText>{unit.sqft}</NumberText>
           <BedBathText>sqft</BedBathText>
         </BedBathRow>
         <AddressRow>
-          <AddressText>1829 Prospect Ave</AddressText>
-          <AddressText>Pasadena, CA 91776</AddressText>
+          <AddressText>{unit.streetAddress}</AddressText>
+          <AddressText>{`${unit.city}, ${unit.state} ${unit.areaCode}`}</AddressText>
         </AddressRow>
-        {!pending && dataContext.currentUser?.isHousingLocator && (
+        {unit.approved && dataContext.currentUser?.isHousingLocator && (
           <DeleteIcon
             src="delete.png"
             onClick={() => {
@@ -252,8 +249,7 @@ export const UnitCard = ({ pending, refreshUnits }: CardProps) => {
                   setPopup(false);
                 }}
               >
-                {" "}
-                &times;{" "}
+                &times;
               </XButton>
             </XWrapper>
             <HeadingWrapper>

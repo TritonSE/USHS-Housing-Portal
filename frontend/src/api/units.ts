@@ -41,14 +41,13 @@ export type Unit = {
 };
 
 export type FilterParams = {
-  search?: string | undefined;
-  availability: string;
-  minPrice?: number | undefined;
-  maxPrice?: number | undefined;
-  beds?: number;
-  baths?: number;
-  approved?: boolean;
-  sort: number;
+  search?: string;
+  availability?: string;
+  minPrice?: string;
+  maxPrice?: string;
+  beds?: string;
+  baths?: string;
+  sort?: string;
 };
 
 export async function getUnit(id: string): Promise<APIResult<Unit>> {
@@ -63,22 +62,10 @@ export async function getUnit(id: string): Promise<APIResult<Unit>> {
 
 export async function getUnits(_params: FilterParams): Promise<APIResult<Unit[]>> {
   try {
-    // const query = new URLSearchParams(params);
+    const queryParams = new URLSearchParams(_params);
+    const url = `/units?${queryParams.toString()}`;
+    const response = await get(url);
 
-    // const keysForDel: string[] = [];
-    // query.forEach((value, key) => {
-    //   if (value === "" || value === null || value === "undefined") {
-    //     keysForDel.push(key);
-    //   }
-    // });
-
-    // keysForDel.forEach((key) => {
-    //   query.delete(key);
-    // });
-
-    // console.log(query.toString());
-
-    const response = await get("/units");
     const json = (await response.json()) as Unit[];
     return { success: true, data: json };
   } catch (error) {

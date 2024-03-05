@@ -3,8 +3,8 @@ import createHttpError from "http-errors";
 
 import { asyncHandler } from "./wrappers";
 
-import { NewUnit, createUnit, deleteUnit } from "@/services/units";
 import { UnitModel } from "@/models/units";
+import { FilterParams, NewUnit, createUnit, deleteUnit, getUnits } from "@/services/units";
 
 /**
  * Handle a request to create a new unit.
@@ -25,6 +25,12 @@ export const deleteUnitsHandler: RequestHandler = asyncHandler(async (req, res, 
   } else {
     res.status(200).json(response);
   }
+});
+
+export const getUnitsHandler: RequestHandler = asyncHandler(async (req, res, _) => {
+  const units = await getUnits(req.query as FilterParams);
+
+  res.status(200).json(units);
 });
 /**
  * Handle a request to get a unit.

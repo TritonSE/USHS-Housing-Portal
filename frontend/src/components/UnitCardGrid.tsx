@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 
+import { Unit } from "@/api/units";
 import { UnitCard } from "@/components/UnitCard";
 import { DataContext } from "@/contexts/DataContext";
 
@@ -85,21 +86,24 @@ const AddListings = styled.div`
   cursor: pointer;
 `;
 
-// Hard coded units for testing
-// Props and units hard coded; replace with backend query
-export const UnitCardGrid = () => {
+export type UnitCardGridProps = {
+  units: Unit[];
+  refreshUnits: () => void;
+};
+
+export const UnitCardGrid = ({ units, refreshUnits }: UnitCardGridProps) => {
   const [pendingSelected, setPendingSelected] = useState<boolean>(false);
-  const [refreshUnits, setRefreshUnits] = useState<boolean>(false);
-
-  const dataContext = useContext(DataContext);
-
-  const getAllUnits = () => {
-    console.log("refreshing units");
-  };
+  const [pendingUnits, setPendingUnits] = useState<Unit[]>([]);
+  const [approvedUnits, setApprovedUnits] = useState<Unit[]>([]);
 
   useEffect(() => {
-    getAllUnits();
-  }, [refreshUnits]);
+    const pending = units.filter((unit: Unit) => !unit.approved);
+    const approved = units.filter((unit: Unit) => unit.approved);
+    setPendingUnits(pending);
+    setApprovedUnits(approved);
+  }, [units]);
+
+  const dataContext = useContext(DataContext);
 
   return (
     <>
@@ -128,9 +132,10 @@ export const UnitCardGrid = () => {
               </ButtonsWrapper>
             </PropertiesRow>
             <UnitCardLayout>
-              <UnitCard pending={true} />
-              <UnitCard pending={true} />
-              <UnitCard pending={true} />
+              {pendingUnits.length > 0 &&
+                pendingUnits.map((option, index) => (
+                  <UnitCard unit={option} refreshUnits={refreshUnits} key={index} />
+                ))}
             </UnitCardLayout>
           </>
         ) : (
@@ -159,42 +164,10 @@ export const UnitCardGrid = () => {
               )}
             </PropertiesRow>
             <UnitCardLayout>
-              <UnitCard
-                refreshUnits={() => {
-                  setRefreshUnits(!refreshUnits);
-                }}
-                pending={false}
-              />
-              <UnitCard
-                refreshUnits={() => {
-                  setRefreshUnits(!refreshUnits);
-                }}
-                pending={false}
-              />
-              <UnitCard
-                refreshUnits={() => {
-                  setRefreshUnits(!refreshUnits);
-                }}
-                pending={false}
-              />
-              <UnitCard
-                refreshUnits={() => {
-                  setRefreshUnits(!refreshUnits);
-                }}
-                pending={false}
-              />
-              <UnitCard
-                refreshUnits={() => {
-                  setRefreshUnits(!refreshUnits);
-                }}
-                pending={false}
-              />
-              <UnitCard
-                refreshUnits={() => {
-                  setRefreshUnits(!refreshUnits);
-                }}
-                pending={false}
-              />
+              {approvedUnits.length > 0 &&
+                approvedUnits.map((option, index) => (
+                  <UnitCard unit={option} refreshUnits={refreshUnits} key={index} />
+                ))}
             </UnitCardLayout>
           </>
         )}
