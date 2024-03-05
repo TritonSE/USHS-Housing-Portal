@@ -6,7 +6,6 @@ import { ThemeProvider } from "styled-components";
 import { AuthContext, AuthProvider } from "./contexts/AuthContext";
 import { DataProvider } from "./contexts/DataContext";
 
-
 import { Home, ListingForm, Login, Profile, UnitDetails } from "@/pages";
 import { GlobalStyle, theme } from "@/theme";
 
@@ -27,13 +26,12 @@ function AppRouter() {
         {signedIn && (
           <>
             <Route path="/" element={<Home />} />
+            <Route path="/form" element={<ListingForm />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/unit/:id" element={<UnitDetails />} />
             <Route path="*" element={<Navigate to="/" />} />
           </>
         )}
-
-
       </Routes>
     </BrowserRouter>
   );
