@@ -351,75 +351,78 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
           handleApplicationFeeCost={handleApplicationFeeCost}
         />
         <MidSectionHeader>House Specifics</MidSectionHeader>
+        <DateAvailable dateAvailable={dateAvailable} handleDateAvailable={handleDateAvailable} />
+
+        <RadioCheckBoxContainer>
+          <NumberBedrooms
+            numberOfBedrooms={numberOfBedrooms}
+            handleNumberOfBedrooms={handleNumberOfBedrooms}
+            numberOfBedroomsOther={numberOfBedroomsOther}
+            handleNumberOfBedroomsOther={handleNumberOfBedroomsOther}
+          />
+          <NumberBaths
+            numberOfBaths={numberOfBaths}
+            handleNumberOfBaths={handleNumberOfBaths}
+            numberOfBathsOther={numberOfBathsOther}
+            handleNumberOfBathsOther={handleNumberOfBathsOther}
+          />
+        </RadioCheckBoxContainer>
+        <Appliances
+          appliances={appliances}
+          setAppliances={setAppliances}
+          handleCheckBoxNA={handleCheckBoxNA}
+        />
+        <CommunityInfo
+          communityAndNeighborInfo={communityAndNeighborInfo}
+          handleCommunityAndNeighborInfo={handleCommunityAndNeighborInfo}
+          communityAndNeighborInfoOther={communityAndNeighborInfoOther}
+          handleCommunityAndNeighborInfoOther={handleCommunityAndNeighborInfoOther}
+        />
+
+        <Parking parking={parking} setParking={setParking} handleCheckBoxNA={handleCheckBoxNA} />
+        <AccessibilityAccess
+          accessibility={accessibility}
+          setAccessibility={setAccessibility}
+          handleCheckBoxNA={handleCheckBoxNA}
+        />
+        <Pets pets={pets} setPets={setPets} handleCheckBoxNA={handleCheckBoxNA} />
+        <SharingHousing
+          sharingHousing={sharingHousing}
+          handleSharingHousing={handleSharingHousing}
+        />
+
+        {props.formType === 2 && (
+          <div>
+            <MidSectionHeader>Additional fields to be entered by housing locator</MidSectionHeader>
+            <Textbox
+              elementName="Where did you find the unit?"
+              requiredField={true}
+              name="whereFindUnit"
+              value={whereFindUnit}
+              handler={handleWhereFindUnit}
+            />
+            <PaymentRentingCriteria
+              paymentRentingCriteria={paymentRantingCriteria}
+              setPaymentRentingCriteria={setPaymentRentingCriteria}
+              handleCheckBoxNA={handleCheckBoxNA}
+              notRequired={true}
+            />
+            <AdditionalRulesRegulations
+              additionalRulesRegulations={additionalRulesRegulations}
+              setAdditionalRulesRegulations={setAdditionalRulesRegulations}
+              handleCheckBoxNA={handleCheckBoxNA}
+            />
+          </div>
+        )}
+
+        <Textbox
+          elementName="Additional Comments"
+          requiredField={true}
+          name="additionalComments"
+          value={additionalComments}
+          handler={handleAdditionalComments}
+        />
       </ContentContainer>
-      <DateAvailable dateAvailable={dateAvailable} handleDateAvailable={handleDateAvailable} />
-
-      <RadioCheckBoxContainer>
-        <NumberBedrooms
-          numberOfBedrooms={numberOfBedrooms}
-          handleNumberOfBedrooms={handleNumberOfBedrooms}
-          numberOfBedroomsOther={numberOfBedroomsOther}
-          handleNumberOfBedroomsOther={handleNumberOfBedroomsOther}
-        />
-        <NumberBaths
-          numberOfBaths={numberOfBaths}
-          handleNumberOfBaths={handleNumberOfBaths}
-          numberOfBathsOther={numberOfBathsOther}
-          handleNumberOfBathsOther={handleNumberOfBathsOther}
-        />
-      </RadioCheckBoxContainer>
-      <Appliances
-        appliances={appliances}
-        setAppliances={setAppliances}
-        handleCheckBoxNA={handleCheckBoxNA}
-      />
-      <CommunityInfo
-        communityAndNeighborInfo={communityAndNeighborInfo}
-        handleCommunityAndNeighborInfo={handleCommunityAndNeighborInfo}
-        communityAndNeighborInfoOther={communityAndNeighborInfoOther}
-        handleCommunityAndNeighborInfoOther={handleCommunityAndNeighborInfoOther}
-      />
-
-      <Parking parking={parking} setParking={setParking} handleCheckBoxNA={handleCheckBoxNA} />
-      <AccessibilityAccess
-        accessibility={accessibility}
-        setAccessibility={setAccessibility}
-        handleCheckBoxNA={handleCheckBoxNA}
-      />
-      <Pets pets={pets} setPets={setPets} handleCheckBoxNA={handleCheckBoxNA} />
-      <SharingHousing sharingHousing={sharingHousing} handleSharingHousing={handleSharingHousing} />
-
-      {props.formType === 2 && (
-        <div>
-          <MidSectionHeader>Additional fields to be entered by housing locator</MidSectionHeader>
-          <Textbox
-            elementName="Where did you find the unit?"
-            requiredField={true}
-            name="whereFindUnit"
-            value={whereFindUnit}
-            handler={handleWhereFindUnit}
-          />
-          <PaymentRentingCriteria
-            paymentRentingCriteria={paymentRantingCriteria}
-            setPaymentRentingCriteria={setPaymentRentingCriteria}
-            handleCheckBoxNA={handleCheckBoxNA}
-            notRequired={true}
-          />
-          <AdditionalRulesRegulations
-            additionalRulesRegulations={additionalRulesRegulations}
-            setAdditionalRulesRegulations={setAdditionalRulesRegulations}
-            handleCheckBoxNA={handleCheckBoxNA}
-          />
-        </div>
-      )}
-
-      <Textbox
-        elementName="Additional Comments"
-        requiredField={true}
-        name="additionalComments"
-        value={additionalComments}
-        handler={handleAdditionalComments}
-      />
     </MainContainer>
   );
 }

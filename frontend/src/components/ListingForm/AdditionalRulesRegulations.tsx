@@ -1,4 +1,6 @@
 import {
+    // Checkbox,
+  CustomCheckboxRadio,
   Margin32,
   //   RadioCheckBoxContainer,
   //   RadioCheckboxCol,
@@ -23,7 +25,7 @@ export const AdditionalRulesRegulations = (props: AdditionalRulesRegulationsProp
       {/* <RadioCheckBoxContainer>
         <RadioCheckboxCol> */}
       <label>
-        <input
+        <CustomCheckboxRadio
           type="checkbox"
           name="additionalRulesRegulations allowed"
           value="additionalRulesRegulations allowed"
@@ -40,7 +42,7 @@ export const AdditionalRulesRegulations = (props: AdditionalRulesRegulationsProp
       </label>
       <br />
       <label>
-        <input
+        <CustomCheckboxRadio
           type="checkbox"
           name="Manager on site"
           value="Manager on site"
@@ -57,7 +59,7 @@ export const AdditionalRulesRegulations = (props: AdditionalRulesRegulationsProp
       </label>
       <br />
       <label>
-        <input
+        <CustomCheckboxRadio
           type="checkbox"
           name="Quiet Building"
           value="Quiet Building"
@@ -74,7 +76,7 @@ export const AdditionalRulesRegulations = (props: AdditionalRulesRegulationsProp
       </label>
       <br />
       <label>
-        <input
+        <CustomCheckboxRadio
           type="checkbox"
           name="Visitor Policies"
           value="Visitor Policies"
@@ -93,7 +95,7 @@ export const AdditionalRulesRegulations = (props: AdditionalRulesRegulationsProp
       <div>
         {" "}
         <label>
-          <input
+          <CustomCheckboxRadio
             type="checkbox"
             name="Kid friendly"
             value="Kid friendly"
@@ -110,7 +112,7 @@ export const AdditionalRulesRegulations = (props: AdditionalRulesRegulationsProp
         </label>
         <br />
         <label>
-          <input
+          <CustomCheckboxRadio
             type="checkbox"
             name="Minimal-management interactions"
             value="Minimal-management interactions"
@@ -127,7 +129,7 @@ export const AdditionalRulesRegulations = (props: AdditionalRulesRegulationsProp
         </label>
         <br />
         <label>
-          <input
+          <CustomCheckboxRadio
             type="checkbox"
             name="High-management interactions"
             value="High-management interactions"
@@ -143,8 +145,7 @@ export const AdditionalRulesRegulations = (props: AdditionalRulesRegulationsProp
           High-management interactions
         </label>
         <br />
-        <label>
-          <input
+          <CustomCheckboxRadio
             type="radio"
             name="N/A"
             value="N/A"
@@ -158,7 +159,6 @@ export const AdditionalRulesRegulations = (props: AdditionalRulesRegulationsProp
             }}
           />
           N/A
-        </label>
       </div>
       {/* //   </RadioCheckBoxContainer> */}
     </Margin32>

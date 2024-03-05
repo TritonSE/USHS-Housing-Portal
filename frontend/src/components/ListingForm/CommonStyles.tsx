@@ -67,3 +67,9 @@ export const Header = styled.h1`
   text-align: center;
   margin-bottom: 22px;
 `;
+
+export const CustomCheckboxRadio = styled.input`
+  accent-color: #b64201;
+  margin-bottom: 8px;
+  margin-right: 16px;
+`;

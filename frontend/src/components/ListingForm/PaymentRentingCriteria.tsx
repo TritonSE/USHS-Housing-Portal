@@ -1,4 +1,5 @@
 import {
+    CustomCheckboxRadio,
   Margin32,
   // RadioCheckBoxContainer,
   // RadioCheckboxCol,
@@ -25,7 +26,7 @@ export const PaymentRentingCriteria = (props: PaymentRentingCriteriaProps) => {
       {/* <RadioCheckBoxContainer>
           <RadioCheckboxCol> */}
       <label>
-        <input
+        <CustomCheckboxRadio
           type="checkbox"
           name="3rd party payment accepting"
           value="3rd party payment accepting"
@@ -42,7 +43,7 @@ export const PaymentRentingCriteria = (props: PaymentRentingCriteriaProps) => {
       </label>
       <br />
       <label>
-        <input
+        <CustomCheckboxRadio
           type="checkbox"
           name="Credit check required"
           value="Credit check required"
@@ -59,7 +60,7 @@ export const PaymentRentingCriteria = (props: PaymentRentingCriteriaProps) => {
       </label>
       <br />
       <label>
-        <input
+        <CustomCheckboxRadio
           type="checkbox"
           name="Background check required"
           value="Background check required"
@@ -76,7 +77,7 @@ export const PaymentRentingCriteria = (props: PaymentRentingCriteriaProps) => {
       </label>
       <br />
       <label>
-        <input
+        <CustomCheckboxRadio
           type="checkbox"
           name="Program letter required"
           value="Program letter required"

@@ -1,4 +1,9 @@
 import { Required } from "@/components/ListingForm/CommonStyles";
+import styled from "styled-components";
+
+export const WidthOffset = styled.label`
+  width: 433px;
+`;
 
 type NumberBedroomsProps = {
   numberOfBedrooms: number | undefined;
@@ -9,7 +14,7 @@ type NumberBedroomsProps = {
 
 function NumberBedrooms(props: NumberBedroomsProps) {
   return (
-    <label id="num-beds">
+    <WidthOffset>
       <h3>
         Number of Bedrooms <Required>*</Required>
       </h3>
@@ -75,7 +80,7 @@ function NumberBedrooms(props: NumberBedroomsProps) {
           />
         </label>
       </div>
-    </label>
+    </WidthOffset>
   );
 }
 export default NumberBedrooms;

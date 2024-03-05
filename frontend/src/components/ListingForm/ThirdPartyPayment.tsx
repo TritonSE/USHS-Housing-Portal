@@ -1,6 +1,6 @@
 // import styled from "styled-components";
 
-import { Margin32, Required } from "@/components/ListingForm/CommonStyles";
+import { CustomCheckboxRadio, Margin32, Required } from "@/components/ListingForm/CommonStyles";
 
 type ThirdPartyPaymentProps = {
   thirdPartyPayment: boolean | undefined;
@@ -14,8 +14,7 @@ export const ThirdPartyPayment = (props: ThirdPartyPaymentProps) => {
         3rd party payment accepting <Required>*</Required>
       </h3>
       <div>
-        <label>
-          <input
+          <CustomCheckboxRadio
             type="radio"
             name="Yes"
             value="Yes"
@@ -23,10 +22,8 @@ export const ThirdPartyPayment = (props: ThirdPartyPaymentProps) => {
             onChange={props.handleThirdPartyPayment}
           />
           Yes
-        </label>
         <br />
-        <label>
-          <input
+          <CustomCheckboxRadio
             type="radio"
             name="No"
             value="No"
@@ -34,7 +31,6 @@ export const ThirdPartyPayment = (props: ThirdPartyPaymentProps) => {
             onChange={props.handleThirdPartyPayment}
           />
           No
-        </label>
       </div>
     </Margin32>
   );
