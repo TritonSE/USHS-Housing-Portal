@@ -2,6 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 
 import { Button } from "./Button";
+import { Logo } from "./ListingForm/Logo";
 
 import { AccessibilityAccess } from "@/components/ListingForm/AccessibilityAccess";
 import { AdditionalRulesRegulations } from "@/components/ListingForm/AdditionalRulesRegulations";
@@ -248,6 +249,7 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
 
   return (
     <MainContainer>
+      <Logo />
       {props.formType === 1 && <LandlordListingFormHeader />}
       {props.formType === 2 && <HousingLocatorHeader />}
       <ContentContainer>

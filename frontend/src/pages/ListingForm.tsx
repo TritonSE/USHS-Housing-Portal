@@ -5,7 +5,7 @@ export function ListingForm() {
   return (
     <div>
       <Page>
-        <ListingFormComponents formType={1} />
+        <ListingFormComponents formType={2} />
       </Page>
     </div>
   );
