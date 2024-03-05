@@ -30,5 +30,3 @@ export const DateAvailable = (props: DateAvailableProps) => {
     </LabelTextCol>
   );
 };
-
-export default DateAvailable;

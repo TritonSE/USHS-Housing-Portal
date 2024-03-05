@@ -16,7 +16,7 @@ type CommunityInfoProps = {
   handleCommunityAndNeighborInfoOther: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-function CommunityInfo(props: CommunityInfoProps) {
+export const CommunityInfo = (props: CommunityInfoProps) => {
   return (
     <Margin32>
       <FieldHeader>
@@ -116,6 +116,4 @@ function CommunityInfo(props: CommunityInfoProps) {
       </RadioCheckBoxContainer>
     </Margin32>
   );
-}
-
-export default CommunityInfo;
+};

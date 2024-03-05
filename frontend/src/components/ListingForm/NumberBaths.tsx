@@ -13,7 +13,7 @@ type NumberBathsProps = {
   handleNumberOfBathsOther: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-function NumberBaths(props: NumberBathsProps) {
+export const NumberBaths = (props: NumberBathsProps) => {
   return (
     <div>
       <FieldHeader>
@@ -94,6 +94,4 @@ function NumberBaths(props: NumberBathsProps) {
       </div>
     </div>
   );
-}
-
-export default NumberBaths;
+};

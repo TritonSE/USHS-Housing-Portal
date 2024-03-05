@@ -11,7 +11,7 @@ type SharingHousingProps = {
   handleSharingHousing: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-function SharingHousing(props: SharingHousingProps) {
+export const SharingHousing = (props: SharingHousingProps) => {
   return (
     <Margin32>
       <FieldHeader>
@@ -54,6 +54,4 @@ function SharingHousing(props: SharingHousingProps) {
       </div>
     </Margin32>
   );
-}
-
-export default SharingHousing;
+};

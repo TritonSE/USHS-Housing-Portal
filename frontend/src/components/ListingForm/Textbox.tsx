@@ -14,7 +14,7 @@ type TextboxProps = {
   handler: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-function Textbox(props: TextboxProps) {
+export const Textbox = (props: TextboxProps) => {
   return (
     <TextCol>
       {props.elementName && props.requiredField ? (
@@ -22,7 +22,7 @@ function Textbox(props: TextboxProps) {
           {props.elementName} <Required>*</Required>
         </FieldHeader>
       ) : (
-        <h3>{props.elementName}</h3>
+        <FieldHeader>{props.elementName}</FieldHeader>
       )}
 
       {!props.elementName && <FieldHeader>&nbsp;</FieldHeader>}
@@ -52,5 +52,4 @@ function Textbox(props: TextboxProps) {
       </div>
     </TextCol>
   );
-}
-export default Textbox;
+};

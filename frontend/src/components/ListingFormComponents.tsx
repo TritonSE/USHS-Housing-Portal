@@ -1,46 +1,42 @@
-// import { DateAvailable } from "@/components/LandlordSubmissionForm/DateAvailable"
 import { useState } from "react";
 import styled from "styled-components";
 
-import { AccessibilityAccess } from "./ListingForm/AccessibilityAccess";
-import { Appliances } from "./ListingForm/Appliances";
-import { ApplicationFeeCost } from "./ListingForm/ApplicationFeeCost";
+import { Button } from "./Button";
+
+import { AccessibilityAccess } from "@/components/ListingForm/AccessibilityAccess";
+import { AdditionalRulesRegulations } from "@/components/ListingForm/AdditionalRulesRegulations";
+import { Appliances } from "@/components/ListingForm/Appliances";
+import { ApplicationFeeCost } from "@/components/ListingForm/ApplicationFeeCost";
 import {
   ContentContainer,
   MainContainer,
   RadioCheckBoxContainer,
   TextContainer,
-} from "./ListingForm/CommonStyles";
-import CommunityInfo from "./ListingForm/CommunityInfo";
-import DateAvailable from "./ListingForm/DateAvailable";
-import NumberBaths from "./ListingForm/NumberBaths";
-import NumberBedrooms from "./ListingForm/NumberBedrooms";
-import { Parking } from "./ListingForm/Parking";
-import { Pets } from "./ListingForm/Pets";
-import { LandlordListingFormHeader } from "./ListingForm/Headers/LandlordListingFormHeader";
-import { HousingLocatorHeader } from "./ListingForm/Headers/HousingLocatorHeader";
-import SharingHousing from "./ListingForm/SharingHousing";
-
+} from "@/components/ListingForm/CommonStyles";
+import { CommunityInfo } from "@/components/ListingForm/CommunityInfo";
+import { DateAvailable } from "@/components/ListingForm/DateAvailable";
+import { HousingLocatorHeader } from "@/components/ListingForm/Headers/HousingLocatorHeader";
+import { LandlordListingFormHeader } from "@/components/ListingForm/Headers/LandlordListingFormHeader";
 import { HousingAuthority } from "@/components/ListingForm/HousingAuthority";
-import Textbox from "@/components/ListingForm/Textbox";
+import { NumberBaths } from "@/components/ListingForm/NumberBaths";
+import { NumberBedrooms } from "@/components/ListingForm/NumberBedrooms";
+import { Parking } from "@/components/ListingForm/Parking";
+import { PaymentRentingCriteria } from "@/components/ListingForm/PaymentRentingCriteria";
+import { Pets } from "@/components/ListingForm/Pets";
+import { SharingHousing } from "@/components/ListingForm/SharingHousing";
+import { Textbox } from "@/components/ListingForm/Textbox";
 import { ThirdPartyPayment } from "@/components/ListingForm/ThirdPartyPayment";
-import { PaymentRentingCriteria } from "./ListingForm/PaymentRentingCriteria";
-import { AdditionalRulesRegulations } from "./ListingForm/AdditionalRulesRegulations";
-import { Button } from "./Button";
 
 const MidSectionHeader = styled.h2`
   margin-bottom: 32px;
   font-size: 32px;
   line-height: 150%;
-
   color: #000;
-
-  /* Heading 2 */
   font-family: "Neutraface Text", sans-serif;
   font-size: 32px;
   font-style: normal;
   font-weight: 700;
-  line-height: 150%; /* 48px */
+  line-height: 150%;
   letter-spacing: 0.64px;
 `;
 
@@ -56,6 +52,11 @@ type ListingFormComponentsProps = {
   email?: string;
 };
 
+const SubmitButtonMarginOffset = styled.div`
+  margin-top: 54px;
+  margin-bottom: 54px;
+`;
+
 export function ListingFormComponents(props: ListingFormComponentsProps) {
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
@@ -69,9 +70,7 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
   const [sqFootage, setSqFootage] = useState<number>();
   const [rentPerMonth, setRentPerMonth] = useState<number | undefined>(undefined);
   const [securityDeposit, setSecurityDeposit] = useState<number | undefined>(undefined);
-
   const [thirdPartyPayment, setThirdPartyPayment] = useState<boolean | undefined>(undefined);
-
   const [housingAuthority, setHousingAuthority] = useState<string>("");
   const [applicationFeeCost, setApplicationFeeCost] = useState(undefined);
   const [dateAvailable, setDateAvailable] = useState<Date | undefined>();
@@ -88,7 +87,6 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
   const [pets, setPets] = useState<string[]>([]);
   const [sharingHousing, setSharingHousing] = useState<string>("");
   const [additionalComments, setAdditionalComments] = useState<string>("");
-
   const [whereFindUnit, setWhereFindUnit] = useState<string>("");
   const [paymentRantingCriteria, setPaymentRentingCriteria] = useState<string[]>([]);
   const [additionalRulesRegulations, setAdditionalRulesRegulations] = useState<string[]>([]);
@@ -432,8 +430,10 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
           value={additionalComments}
           handler={handleAdditionalComments}
         />
-        <Button kind="primary">Submit</Button>
       </ContentContainer>
+      <SubmitButtonMarginOffset>
+        <Button kind="primary">Submit</Button>
+      </SubmitButtonMarginOffset>
     </MainContainer>
   );
 }

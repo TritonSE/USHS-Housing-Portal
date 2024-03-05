@@ -1,11 +1,12 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
+import styled from "styled-components";
+
 import {
   CustomCheckboxRadio,
   FieldHeader,
   OtherText,
   Required,
 } from "@/components/ListingForm/CommonStyles";
-import styled from "styled-components";
 
 export const WidthOffset = styled.label`
   width: 433px;
@@ -18,7 +19,7 @@ type NumberBedroomsProps = {
   handleNumberOfBedroomsOther: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-function NumberBedrooms(props: NumberBedroomsProps) {
+export const NumberBedrooms = (props: NumberBedroomsProps) => {
   return (
     <WidthOffset>
       <FieldHeader>
@@ -88,5 +89,4 @@ function NumberBedrooms(props: NumberBedroomsProps) {
       </div>
     </WidthOffset>
   );
-}
-export default NumberBedrooms;
+};

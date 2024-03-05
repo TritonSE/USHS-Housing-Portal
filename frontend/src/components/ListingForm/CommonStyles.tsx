@@ -22,7 +22,7 @@ export const FieldHeader = styled.h3`
 `;
 
 export const ContentContainer = styled.div`
-  width: 100%; /* Adjust as needed */
+  //   width: 80%; /* Adjust as needed */
   margin: 20px auto;
 `;
 
@@ -31,36 +31,36 @@ export const TextContainer = styled.div`
 `;
 
 export const CustomInputText = styled.input`
-  background-color: #fbf7f3; /* Change this to your desired background color */
-  color: black; /* Set text color */
-  padding: 5px; /* Add some padding for better appearance */
-  border-radius: 5px; /* Add rounded corners */
-  border: 1px solid #ccc; /* Add a border */
+  background-color: #fbf7f3;
+  color: black;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
   width: 300px;
 `;
 
 export const CustomInputDate = styled.input`
-  background-color: #fbf7f3; /* Change this to your desired background color */
-  color: black; /* Set text color */
-  padding: 5px; /* Add some padding for better appearance */
-  border-radius: 5px; /* Add rounded corners */
-  border: 1px solid #ccc; /* Add a border */
+  background-color: #fbf7f3;
+  color: black;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
   width: 300px;
 `;
 
 export const OtherText = styled.input`
-  background-color: #fbf7f3; /* Change this to your desired background color */
-  color: black; /* Set text color */
-  padding: 5px; /* Add some padding for better appearance */
-  border-radius: 5px; /* Add rounded corners */
-  border: 1px solid #ccc; /* Add a border */
+  background-color: #fbf7f3;
+  color: black;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
 `;
 
 export const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: left; /* Ensures text in the content stays left-aligned */
+  text-align: left;
 `;
 
 export const TextCol = styled.div`

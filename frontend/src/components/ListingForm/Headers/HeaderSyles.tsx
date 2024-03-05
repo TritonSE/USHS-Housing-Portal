@@ -10,6 +10,7 @@ export const HeaderMain = styled.h1`
   font-weight: 700;
   line-height: 150%; /* 72px */
   letter-spacing: 0.96px;
+  margin-top: 54px;
 `;
 
 export const HeaderRequired = styled.em`

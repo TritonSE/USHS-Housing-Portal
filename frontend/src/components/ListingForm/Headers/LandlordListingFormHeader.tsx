@@ -1,6 +1,8 @@
-import { Header, Required } from "@/components/ListingForm/CommonStyles";
-import { HeaderMain, HeaderRequired } from "./HeaderSyles";
 import styled from "styled-components";
+
+import { HeaderMain, HeaderRequired } from "./HeaderSyles";
+
+import { Header, Required } from "@/components/ListingForm/CommonStyles";
 
 export const HeaderSubtext = styled.p`
   color: #000;
