@@ -173,7 +173,7 @@ export const ReferralTable = (props: ReferralTableProps) => {
             .slice((pageNumber - 1) * ENTRIES_PER_PAGE, pageNumber * ENTRIES_PER_PAGE)
             .map((referral, idx) => (
               <ReferralTableRow
-                key={idx}
+                key={Math.random()}
                 index={idx}
                 name={referral.renterCandidate.firstName}
                 email={referral.renterCandidate.email}
