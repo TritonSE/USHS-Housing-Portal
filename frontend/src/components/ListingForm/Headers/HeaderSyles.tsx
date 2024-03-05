@@ -4,7 +4,7 @@ export const HeaderMain = styled.h1`
   color: #b64201;
   text-align: center;
   /* Heading 1 */
-  font-family: "Neutra Text";
+  font-family: "Neutraface Text", sans-serif;
   font-size: 48px;
   font-style: normal;
   font-weight: 700;

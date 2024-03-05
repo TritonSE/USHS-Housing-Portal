@@ -1,4 +1,10 @@
-import { Required } from "@/components/ListingForm/CommonStyles";
+/* eslint-disable jsx-a11y/label-has-associated-control */
+import {
+  CustomCheckboxRadio,
+  FieldHeader,
+  OtherText,
+  Required,
+} from "@/components/ListingForm/CommonStyles";
 
 type NumberBathsProps = {
   numberOfBaths: number | undefined;
@@ -10,12 +16,12 @@ type NumberBathsProps = {
 function NumberBaths(props: NumberBathsProps) {
   return (
     <div>
-      <h3>
+      <FieldHeader>
         Number of Baths <Required>*</Required>
-      </h3>
+      </FieldHeader>
       <div>
         <label>
-          <input
+          <CustomCheckboxRadio
             type="radio"
             name="Baths_1"
             value="1"
@@ -26,7 +32,7 @@ function NumberBaths(props: NumberBathsProps) {
         </label>
         <br />
         <label>
-          <input
+          <CustomCheckboxRadio
             type="radio"
             name="Baths_1.5"
             value="1.5"
@@ -37,7 +43,7 @@ function NumberBaths(props: NumberBathsProps) {
         </label>
         <br />
         <label>
-          <input
+          <CustomCheckboxRadio
             type="radio"
             name="Baths_2"
             value="2"
@@ -48,7 +54,7 @@ function NumberBaths(props: NumberBathsProps) {
         </label>
         <br />
         <label>
-          <input
+          <CustomCheckboxRadio
             type="radio"
             name="Baths_2.5"
             value="2.5"
@@ -59,7 +65,7 @@ function NumberBaths(props: NumberBathsProps) {
         </label>
         <br />
         <label>
-          <input
+          <CustomCheckboxRadio
             type="radio"
             name="Baths_3"
             value="3"
@@ -70,7 +76,7 @@ function NumberBaths(props: NumberBathsProps) {
         </label>
         <br />
         <label>
-          <input
+          <CustomCheckboxRadio
             type="radio"
             name="Baths_Other"
             // value="-2"
@@ -78,7 +84,7 @@ function NumberBaths(props: NumberBathsProps) {
             onChange={props.handleNumberOfBathsOther}
           />
           Other:{" "}
-          <input
+          <OtherText
             type="text"
             name="Bath_other_text"
             value={props.numberOfBathsOther ?? ""}

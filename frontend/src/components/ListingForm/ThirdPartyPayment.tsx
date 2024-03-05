@@ -1,6 +1,11 @@
-// import styled from "styled-components";
+/* eslint-disable jsx-a11y/label-has-associated-control */
 
-import { CustomCheckboxRadio, Margin32, Required } from "@/components/ListingForm/CommonStyles";
+import {
+  CustomCheckboxRadio,
+  FieldHeader,
+  Margin32,
+  Required,
+} from "@/components/ListingForm/CommonStyles";
 
 type ThirdPartyPaymentProps = {
   thirdPartyPayment: boolean | undefined;
@@ -10,10 +15,11 @@ type ThirdPartyPaymentProps = {
 export const ThirdPartyPayment = (props: ThirdPartyPaymentProps) => {
   return (
     <Margin32>
-      <h3>
+      <FieldHeader>
         3rd party payment accepting <Required>*</Required>
-      </h3>
+      </FieldHeader>
       <div>
+        <label>
           <CustomCheckboxRadio
             type="radio"
             name="Yes"
@@ -22,7 +28,9 @@ export const ThirdPartyPayment = (props: ThirdPartyPaymentProps) => {
             onChange={props.handleThirdPartyPayment}
           />
           Yes
-        <br />
+        </label>
+        <label>
+          <br />
           <CustomCheckboxRadio
             type="radio"
             name="No"
@@ -31,6 +39,7 @@ export const ThirdPartyPayment = (props: ThirdPartyPaymentProps) => {
             onChange={props.handleThirdPartyPayment}
           />
           No
+        </label>
       </div>
     </Margin32>
   );

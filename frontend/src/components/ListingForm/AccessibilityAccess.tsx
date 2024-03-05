@@ -1,4 +1,7 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import {
+  CustomCheckboxRadio,
+  FieldHeader,
   Margin32,
   RadioCheckBoxContainer,
   RadioCheckboxCol,
@@ -14,16 +17,16 @@ type AccessibilityAccessProps = {
     setter: React.Dispatch<React.SetStateAction<string[]>>,
   ) => void;
 };
-function AccessibilityAccess(props: AccessibilityAccessProps) {
+export const AccessibilityAccess = (props: AccessibilityAccessProps) => {
   return (
     <Margin32>
-      <h3>
+      <FieldHeader>
         Accessibility Access <Required>*</Required>
-      </h3>
+      </FieldHeader>
       <RadioCheckBoxContainer>
         <RadioCheckboxCol>
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="1st floor"
               value="1st floor"
@@ -36,7 +39,7 @@ function AccessibilityAccess(props: AccessibilityAccessProps) {
           </label>
           <br />
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="2nd floor and above"
               value="2nd floor and above"
@@ -53,7 +56,7 @@ function AccessibilityAccess(props: AccessibilityAccessProps) {
           </label>
           <br />
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="Ramps up to unit"
               value="Ramps up to unit"
@@ -71,7 +74,7 @@ function AccessibilityAccess(props: AccessibilityAccessProps) {
         </RadioCheckboxCol>
         <div>
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="Stairs only"
               value="Stairs only"
@@ -84,7 +87,7 @@ function AccessibilityAccess(props: AccessibilityAccessProps) {
           </label>
           <br />
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="Elevators to unit"
               value="Elevators to unit"
@@ -101,7 +104,7 @@ function AccessibilityAccess(props: AccessibilityAccessProps) {
           </label>
           <br />
           <label>
-            <input
+            <CustomCheckboxRadio
               type="radio"
               name="accessibilityN/A"
               value="N/A"
@@ -116,6 +119,4 @@ function AccessibilityAccess(props: AccessibilityAccessProps) {
       </RadioCheckBoxContainer>
     </Margin32>
   );
-}
-
-export default AccessibilityAccess;
+};

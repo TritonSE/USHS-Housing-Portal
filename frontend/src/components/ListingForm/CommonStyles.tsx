@@ -15,8 +15,6 @@ export const Margin32 = styled.div`
 
 export const FieldHeader = styled.h3`
   font-size: 20px;
-  margin-bottom: 0px;
-  font-size: 20px;
   font-style: normal;
   font-weight: 600;
   line-height: 150%; /* 30px */
@@ -39,6 +37,23 @@ export const CustomInputText = styled.input`
   border-radius: 5px; /* Add rounded corners */
   border: 1px solid #ccc; /* Add a border */
   width: 300px;
+`;
+
+export const CustomInputDate = styled.input`
+  background-color: #fbf7f3; /* Change this to your desired background color */
+  color: black; /* Set text color */
+  padding: 5px; /* Add some padding for better appearance */
+  border-radius: 5px; /* Add rounded corners */
+  border: 1px solid #ccc; /* Add a border */
+  width: 300px;
+`;
+
+export const OtherText = styled.input`
+  background-color: #fbf7f3; /* Change this to your desired background color */
+  color: black; /* Set text color */
+  padding: 5px; /* Add some padding for better appearance */
+  border-radius: 5px; /* Add rounded corners */
+  border: 1px solid #ccc; /* Add a border */
 `;
 
 export const MainContainer = styled.div`

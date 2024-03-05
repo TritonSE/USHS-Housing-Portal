@@ -1,4 +1,10 @@
-import { Margin32, Required } from "@/components/ListingForm/CommonStyles";
+/* eslint-disable jsx-a11y/label-has-associated-control */
+import {
+  CustomCheckboxRadio,
+  FieldHeader,
+  Margin32,
+  Required,
+} from "@/components/ListingForm/CommonStyles";
 
 type SharingHousingProps = {
   sharingHousing: string;
@@ -8,12 +14,12 @@ type SharingHousingProps = {
 function SharingHousing(props: SharingHousingProps) {
   return (
     <Margin32>
-      <h3>
+      <FieldHeader>
         Sharing house acceptable? <Required>*</Required>
-      </h3>
+      </FieldHeader>
       <div>
         <label>
-          <input
+          <CustomCheckboxRadio
             type="radio"
             name="sharingHousingYes"
             value="Yes"
@@ -24,7 +30,7 @@ function SharingHousing(props: SharingHousingProps) {
         </label>
         <br />
         <label>
-          <input
+          <CustomCheckboxRadio
             type="radio"
             name="sharingHousingNo"
             value="No"
@@ -35,7 +41,7 @@ function SharingHousing(props: SharingHousingProps) {
         </label>
         <br />
         <label>
-          <input
+          <CustomCheckboxRadio
             type="radio"
             name="sharingHousingUncertain"
             value="Uncertain"

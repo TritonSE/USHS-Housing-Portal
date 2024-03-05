@@ -1,5 +1,9 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import {
+  CustomCheckboxRadio,
+  FieldHeader,
   Margin32,
+  OtherText,
   RadioCheckBoxContainer,
   RadioCheckboxCol,
   Required,
@@ -15,13 +19,13 @@ type CommunityInfoProps = {
 function CommunityInfo(props: CommunityInfoProps) {
   return (
     <Margin32>
-      <h3>
+      <FieldHeader>
         Community and Neighborhood Information <Required>*</Required>
-      </h3>
+      </FieldHeader>
       <RadioCheckBoxContainer>
         <RadioCheckboxCol>
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="Automatic gate"
               value="Automatic gate"
@@ -32,7 +36,7 @@ function CommunityInfo(props: CommunityInfoProps) {
           </label>
           <br />
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="Gated community"
               value="Gated community"
@@ -43,7 +47,7 @@ function CommunityInfo(props: CommunityInfoProps) {
           </label>
           <br />
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="Pool"
               value="Pool"
@@ -54,7 +58,7 @@ function CommunityInfo(props: CommunityInfoProps) {
           </label>
           <br />
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="Club house"
               value="Clubhouse"
@@ -66,7 +70,7 @@ function CommunityInfo(props: CommunityInfoProps) {
         </RadioCheckboxCol>
         <div>
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="BBQ"
               value="BBQ"
@@ -77,7 +81,7 @@ function CommunityInfo(props: CommunityInfoProps) {
           </label>
           <br />
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="Smoke area"
               value="Smoke area"
@@ -89,7 +93,7 @@ function CommunityInfo(props: CommunityInfoProps) {
           <br />
 
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="Other"
               value="Other"
@@ -97,7 +101,7 @@ function CommunityInfo(props: CommunityInfoProps) {
               onChange={props.handleCommunityAndNeighborInfo}
             />
             Other:{" "}
-            <input
+            <OtherText
               type="text"
               name="communityOtherText"
               value={

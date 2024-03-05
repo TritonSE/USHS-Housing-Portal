@@ -1,4 +1,10 @@
-import { Margin32, Required } from "@/components/ListingForm/CommonStyles";
+/* eslint-disable jsx-a11y/label-has-associated-control */
+import {
+  CustomCheckboxRadio,
+  FieldHeader,
+  Margin32,
+  Required,
+} from "@/components/ListingForm/CommonStyles";
 
 type HousingAuthorityProps = {
   housingAuthority: string;
@@ -8,12 +14,12 @@ type HousingAuthorityProps = {
 export const HousingAuthority = (props: HousingAuthorityProps) => {
   return (
     <Margin32>
-      <h3>
+      <FieldHeader>
         Select housing authority <Required>*</Required>
-      </h3>
+      </FieldHeader>
       <div>
         <label>
-          <input
+          <CustomCheckboxRadio
             type="radio"
             name="LACDA"
             value="LACDA"
@@ -24,7 +30,7 @@ export const HousingAuthority = (props: HousingAuthorityProps) => {
         </label>
         <br />
         <label>
-          <input
+          <CustomCheckboxRadio
             type="radio"
             name="HACLA"
             value="HACLA"
@@ -35,7 +41,7 @@ export const HousingAuthority = (props: HousingAuthorityProps) => {
         </label>
         <br />
         <label>
-          <input
+          <CustomCheckboxRadio
             type="radio"
             name="Other"
             value="Other"

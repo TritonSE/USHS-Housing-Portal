@@ -1,8 +1,8 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import {
-    CustomCheckboxRadio,
+  CustomCheckboxRadio,
+  FieldHeader,
   Margin32,
-  // RadioCheckBoxContainer,
-  // RadioCheckboxCol,
   Required,
 } from "@/components/ListingForm/CommonStyles";
 
@@ -19,12 +19,10 @@ type PaymentRentingCriteriaProps = {
 export const PaymentRentingCriteria = (props: PaymentRentingCriteriaProps) => {
   return (
     <Margin32>
-      <h3>
+      <FieldHeader>
         Payment/Renting Criteria (select ALL that apply){" "}
         {!props.notRequired && <Required>*</Required>}
-      </h3>
-      {/* <RadioCheckBoxContainer>
-          <RadioCheckboxCol> */}
+      </FieldHeader>
       <label>
         <CustomCheckboxRadio
           type="checkbox"
@@ -92,9 +90,6 @@ export const PaymentRentingCriteria = (props: PaymentRentingCriteriaProps) => {
         />
         Program letter required
       </label>
-      {/* </RadioCheckboxCol> */}
-
-      {/* // </RadioCheckBoxContainer> */}
     </Margin32>
   );
 };

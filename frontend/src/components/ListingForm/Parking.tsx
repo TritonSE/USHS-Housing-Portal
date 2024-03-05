@@ -1,4 +1,7 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import {
+  CustomCheckboxRadio,
+  FieldHeader,
   Margin32,
   RadioCheckBoxContainer,
   RadioCheckboxCol,
@@ -18,13 +21,13 @@ type ParkingProps = {
 export const Parking = (props: ParkingProps) => {
   return (
     <Margin32>
-      <h3>
+      <FieldHeader>
         Parking <Required>*</Required>
-      </h3>
+      </FieldHeader>
       <RadioCheckBoxContainer>
         <RadioCheckboxCol>
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="Garage with assigned spots"
               value="Garage with assigned spots"
@@ -41,7 +44,7 @@ export const Parking = (props: ParkingProps) => {
           </label>
           <br />
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="Attached to house"
               value="Attached to house"
@@ -50,11 +53,11 @@ export const Parking = (props: ParkingProps) => {
                 props.handleCheckBoxNA("Attached to house", props.parking, props.setParking);
               }}
             />
-            Attached to house{" "}
+            Attached to house
           </label>
           <br />
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="Gated"
               value="Gated"
@@ -63,11 +66,11 @@ export const Parking = (props: ParkingProps) => {
                 props.handleCheckBoxNA("Gated", props.parking, props.setParking);
               }}
             />
-            Gated{" "}
+            Gated
           </label>
           <br />
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="Covered"
               value="Covered"
@@ -81,7 +84,7 @@ export const Parking = (props: ParkingProps) => {
         </RadioCheckboxCol>
         <div>
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="Underground"
               value="Underground"
@@ -90,11 +93,11 @@ export const Parking = (props: ParkingProps) => {
                 props.handleCheckBoxNA("Underground", props.parking, props.setParking);
               }}
             />
-            Underground{" "}
+            Underground
           </label>
           <br />
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="No parking on site"
               value="No parking on site"
@@ -107,7 +110,7 @@ export const Parking = (props: ParkingProps) => {
           </label>
           <br />
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="Street parking"
               value="Street parking"
@@ -120,7 +123,7 @@ export const Parking = (props: ParkingProps) => {
           </label>
           <br />
           <label>
-            <input
+            <CustomCheckboxRadio
               type="radio"
               name="parkingN/A"
               value="N/A"

@@ -1,9 +1,8 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import {
-    // Checkbox,
   CustomCheckboxRadio,
+  FieldHeader,
   Margin32,
-  //   RadioCheckBoxContainer,
-  //   RadioCheckboxCol,
   Required,
 } from "@/components/ListingForm/CommonStyles";
 
@@ -19,11 +18,9 @@ type AdditionalRulesRegulationsProps = {
 export const AdditionalRulesRegulations = (props: AdditionalRulesRegulationsProps) => {
   return (
     <Margin32>
-      <h3>
+      <FieldHeader>
         Additional Rules/Regulations <Required>*</Required>
-      </h3>
-      {/* <RadioCheckBoxContainer>
-        <RadioCheckboxCol> */}
+      </FieldHeader>
       <label>
         <CustomCheckboxRadio
           type="checkbox"
@@ -91,9 +88,7 @@ export const AdditionalRulesRegulations = (props: AdditionalRulesRegulationsProp
         />
         Visitor Policies
       </label>
-      {/* </RadioCheckboxCol> */}
       <div>
-        {" "}
         <label>
           <CustomCheckboxRadio
             type="checkbox"
@@ -145,6 +140,7 @@ export const AdditionalRulesRegulations = (props: AdditionalRulesRegulationsProp
           High-management interactions
         </label>
         <br />
+        <label>
           <CustomCheckboxRadio
             type="radio"
             name="N/A"
@@ -159,8 +155,8 @@ export const AdditionalRulesRegulations = (props: AdditionalRulesRegulationsProp
             }}
           />
           N/A
+        </label>
       </div>
-      {/* //   </RadioCheckBoxContainer> */}
     </Margin32>
   );
 };

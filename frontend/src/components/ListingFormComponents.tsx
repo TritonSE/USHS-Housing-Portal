@@ -2,9 +2,8 @@
 import { useState } from "react";
 import styled from "styled-components";
 
-import AccessibilityAccess from "./ListingForm/AccessibilityAccess";
-import Applicances from "./ListingForm/Appliances";
-import Appliances from "./ListingForm/Appliances";
+import { AccessibilityAccess } from "./ListingForm/AccessibilityAccess";
+import { Appliances } from "./ListingForm/Appliances";
 import { ApplicationFeeCost } from "./ListingForm/ApplicationFeeCost";
 import {
   ContentContainer,
@@ -27,11 +26,22 @@ import Textbox from "@/components/ListingForm/Textbox";
 import { ThirdPartyPayment } from "@/components/ListingForm/ThirdPartyPayment";
 import { PaymentRentingCriteria } from "./ListingForm/PaymentRentingCriteria";
 import { AdditionalRulesRegulations } from "./ListingForm/AdditionalRulesRegulations";
+import { Button } from "./Button";
 
-export const MidSectionHeader = styled.h2`
+const MidSectionHeader = styled.h2`
   margin-bottom: 32px;
   font-size: 32px;
   line-height: 150%;
+
+  color: #000;
+
+  /* Heading 2 */
+  font-family: "Neutraface Text", sans-serif;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%; /* 48px */
+  letter-spacing: 0.64px;
 `;
 
 /*
@@ -422,6 +432,7 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
           value={additionalComments}
           handler={handleAdditionalComments}
         />
+        <Button kind="primary">Submit</Button>
       </ContentContainer>
     </MainContainer>
   );

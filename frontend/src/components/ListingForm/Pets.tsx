@@ -1,4 +1,7 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import {
+  CustomCheckboxRadio,
+  FieldHeader,
   Margin32,
   RadioCheckBoxContainer,
   RadioCheckboxCol,
@@ -17,13 +20,13 @@ type PetsProps = {
 export const Pets = (props: PetsProps) => {
   return (
     <Margin32>
-      <h3>
+      <FieldHeader>
         Pets/animals <Required>*</Required>
-      </h3>
+      </FieldHeader>
       <RadioCheckBoxContainer>
         <RadioCheckboxCol>
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="Pets allowed"
               value="Pets allowed"
@@ -36,7 +39,7 @@ export const Pets = (props: PetsProps) => {
           </label>
           <br />
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="Pets not allowed"
               value="Pets not allowed"
@@ -49,7 +52,7 @@ export const Pets = (props: PetsProps) => {
           </label>
           <br />
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="ESA letter requirequiredFieldColor"
               value="ESA letter requirequiredFieldColor"
@@ -66,7 +69,7 @@ export const Pets = (props: PetsProps) => {
           </label>
           <br />
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="Small dogs/cats allowed only"
               value="Small dogs/cats allowed only"
@@ -81,7 +84,7 @@ export const Pets = (props: PetsProps) => {
         <div>
           {" "}
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="Big dogs allowed"
               value="Big dogs allowed"
@@ -94,7 +97,7 @@ export const Pets = (props: PetsProps) => {
           </label>
           <br />
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="Pet deposit fee (included in security deposit)"
               value="Pet deposit fee (included in security deposit)"
@@ -111,7 +114,7 @@ export const Pets = (props: PetsProps) => {
           </label>
           <br />
           <label>
-            <input
+            <CustomCheckboxRadio
               type="radio"
               name="N/A"
               value="N/A"

@@ -1,6 +1,11 @@
 // import styled from "styled-components";
 
-import { LabelTextCol, Required } from "@/components/ListingForm/CommonStyles";
+import {
+  CustomInputDate,
+  FieldHeader,
+  LabelTextCol,
+  Required,
+} from "@/components/ListingForm/CommonStyles";
 
 export type DateAvailableProps = {
   dateAvailable: string | undefined;
@@ -10,12 +15,12 @@ export type DateAvailableProps = {
 export const DateAvailable = (props: DateAvailableProps) => {
   return (
     <LabelTextCol>
-      <h3>
+      <FieldHeader>
         Date Available
         <Required>*</Required>
-      </h3>
+      </FieldHeader>
       <div>
-        <input
+        <CustomInputDate
           type="date"
           name="No"
           value={props.dateAvailable}

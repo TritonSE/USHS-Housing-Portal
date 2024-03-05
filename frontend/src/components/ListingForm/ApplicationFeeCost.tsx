@@ -1,6 +1,12 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import Textbox from "./Textbox";
 
-import { Margin32, Required } from "@/components/ListingForm/CommonStyles";
+import {
+  CustomCheckboxRadio,
+  FieldHeader,
+  Margin32,
+  Required,
+} from "@/components/ListingForm/CommonStyles";
 
 type ApplicationFeeCostProps = {
   applicationFeeCost: number | undefined;
@@ -10,10 +16,10 @@ type ApplicationFeeCostProps = {
 export const ApplicationFeeCost = (props: ApplicationFeeCostProps) => {
   return (
     <Margin32>
-      <h3>
+      <FieldHeader>
         Application Fee Cost
         <Required>*</Required>
-      </h3>
+      </FieldHeader>
       <div>
         <div id="app-fee-cost-box">
           <Textbox
@@ -30,7 +36,7 @@ export const ApplicationFeeCost = (props: ApplicationFeeCostProps) => {
         <br />
 
         <label>
-          <input
+          <CustomCheckboxRadio
             type="radio"
             name="appFeeCostN/A"
             value="0"

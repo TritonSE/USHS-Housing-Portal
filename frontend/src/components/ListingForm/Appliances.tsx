@@ -1,4 +1,7 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import {
+  CustomCheckboxRadio,
+  FieldHeader,
   Margin32,
   RadioCheckBoxContainer,
   RadioCheckboxCol,
@@ -15,16 +18,16 @@ type ApplicancesProps = {
   ) => void;
 };
 
-function Appliances(props: ApplicancesProps) {
+export const Appliances = (props: ApplicancesProps) => {
   return (
     <Margin32>
-      <h3>
+      <FieldHeader>
         Select All Appliances that Apply or N/A <Required>*</Required>
-      </h3>
+      </FieldHeader>
       <RadioCheckBoxContainer>
         <RadioCheckboxCol>
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="Refrigerator"
               value="Refrigerator"
@@ -37,7 +40,7 @@ function Appliances(props: ApplicancesProps) {
           </label>
           <br />
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="Dishwasher"
               value="Dishwasher"
@@ -50,7 +53,7 @@ function Appliances(props: ApplicancesProps) {
           </label>
           <br />
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="Disposal"
               value="Disposal"
@@ -63,7 +66,7 @@ function Appliances(props: ApplicancesProps) {
           </label>
           <br />
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="Microwave"
               value="Microwave"
@@ -76,7 +79,7 @@ function Appliances(props: ApplicancesProps) {
           </label>
           <br />
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="Central AC/Heat"
               value="Central AC/Heat"
@@ -89,7 +92,7 @@ function Appliances(props: ApplicancesProps) {
           </label>
           <br />
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="Window unit AC"
               value="Window unit AC"
@@ -102,7 +105,7 @@ function Appliances(props: ApplicancesProps) {
           </label>
           <br />
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="Wall unit header - gas"
               value="Wall unit header - gas"
@@ -119,7 +122,7 @@ function Appliances(props: ApplicancesProps) {
           </label>
           <br />
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="Wall unit heater - electric"
               value="Wall unit heater - electric"
@@ -137,7 +140,7 @@ function Appliances(props: ApplicancesProps) {
         </RadioCheckboxCol>
         <div>
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="Landry hookups in unit"
               value="Landry hookups in unit"
@@ -154,7 +157,7 @@ function Appliances(props: ApplicancesProps) {
           </label>
           <br />
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="Water header - gas"
               value="Water header - gas"
@@ -167,7 +170,7 @@ function Appliances(props: ApplicancesProps) {
           </label>
           <br />
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="Water heater - electric"
               value="Water heater - electric"
@@ -184,7 +187,7 @@ function Appliances(props: ApplicancesProps) {
           </label>
           <br />
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="Laundry facilities on site"
               value="Laundry facilities on site"
@@ -201,7 +204,7 @@ function Appliances(props: ApplicancesProps) {
           </label>
           <br />
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="Laundry appliances in unit"
               value="Laundry appliances in unit"
@@ -218,7 +221,7 @@ function Appliances(props: ApplicancesProps) {
           </label>
           <br />
           <label>
-            <input
+            <CustomCheckboxRadio
               type="checkbox"
               name="Stove/oven"
               value="Stove/oven"
@@ -231,7 +234,7 @@ function Appliances(props: ApplicancesProps) {
           </label>
           <br />
           <label>
-            <input
+            <CustomCheckboxRadio
               type="radio"
               name="applianceN/A"
               value="N/A"
@@ -247,6 +250,4 @@ function Appliances(props: ApplicancesProps) {
       </RadioCheckBoxContainer>
     </Margin32>
   );
-}
-
-export default Appliances;
+};

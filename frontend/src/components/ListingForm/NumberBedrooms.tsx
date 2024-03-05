@@ -1,4 +1,10 @@
-import { Required } from "@/components/ListingForm/CommonStyles";
+/* eslint-disable jsx-a11y/label-has-associated-control */
+import {
+  CustomCheckboxRadio,
+  FieldHeader,
+  OtherText,
+  Required,
+} from "@/components/ListingForm/CommonStyles";
 import styled from "styled-components";
 
 export const WidthOffset = styled.label`
@@ -15,12 +21,12 @@ type NumberBedroomsProps = {
 function NumberBedrooms(props: NumberBedroomsProps) {
   return (
     <WidthOffset>
-      <h3>
+      <FieldHeader>
         Number of Bedrooms <Required>*</Required>
-      </h3>
+      </FieldHeader>
       <div>
         <label>
-          <input
+          <CustomCheckboxRadio
             type="radio"
             name="Bedroom_1"
             value="1"
@@ -31,7 +37,7 @@ function NumberBedrooms(props: NumberBedroomsProps) {
         </label>
         <br />
         <label>
-          <input
+          <CustomCheckboxRadio
             type="radio"
             name="Bedroom_2"
             value="2"
@@ -42,7 +48,7 @@ function NumberBedrooms(props: NumberBedroomsProps) {
         </label>{" "}
         <br />
         <label>
-          <input
+          <CustomCheckboxRadio
             type="radio"
             name="Bedroom_3"
             value="3"
@@ -53,7 +59,7 @@ function NumberBedrooms(props: NumberBedroomsProps) {
         </label>
         <br />
         <label>
-          <input
+          <CustomCheckboxRadio
             type="radio"
             name="Bedroom_4"
             value="4"
@@ -64,7 +70,7 @@ function NumberBedrooms(props: NumberBedroomsProps) {
         </label>
         <br />
         <label>
-          <input
+          <CustomCheckboxRadio
             type="radio"
             name="Bedroom_Other"
             // value="-2"
@@ -72,7 +78,7 @@ function NumberBedrooms(props: NumberBedroomsProps) {
             onChange={props.handleNumberOfBedroomsOther}
           />
           Other:{" "}
-          <input
+          <OtherText
             type="text"
             name="Bedroom_other_text"
             value={props.numberOfBedroomsOther ?? ""}
