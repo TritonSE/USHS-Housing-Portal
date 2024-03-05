@@ -101,6 +101,13 @@ const Availability = styled(Header)`
   font-size: 30px;
 `;
 
+const SaveButton = styled(Button)`
+  font-size: 15px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+`;
 const ButtonPadding = styled.div`
   display: flex;
   flex-direction: row;
@@ -142,8 +149,25 @@ const Modal = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  gap: 70px;
+  gap: 25px;
   z-index: 2;
+  padding: 30px;
+`;
+
+const FormWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 85%;
+  height: 70%;
+`;
+const RadioColumn = styled.div`
+  margin-top: 1.5rem;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 25px;
 `;
 
 const XWrapper = styled.div`
@@ -165,15 +189,42 @@ const XButton = styled.div`
 
 const ButtonsWrapper = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 15px;
+  flex-direction: row;
+  justify-content: flex-end;
 `;
 
-const PopupButtonRow = styled.div`
+const RadioRow = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direciton: row;
+  align-items: flex-start;
+  gap: 13px;
+`;
+
+const AvailabilityDateColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+const RadioButtonLabel = styled.label`
+  font-family: Montserrat;
+  font-size: 14px;
+  font-weight: 400;
+`;
+const RadioButton = styled.input`
+  width: 16px;
+  height: 16px;
+  accent-color: black;
+`;
+
+const AvailabilityDate = styled.input`
+  padding: 6px 15px 6px 15px;
+  border: 1px solid #d8d8d8;
+  border-radius: 4px;
+  margin-left: 27px;
+`;
+
+const Heading = styled.h1`
+  font-family: "Neutraface Text";
 `;
 
 export function UnitDetails() {
@@ -362,12 +413,48 @@ export function UnitDetails() {
               <XWrapper>
                 <XButton onClick={togglePopup}> &times; </XButton>
               </XWrapper>
-              <h1>Change Availability</h1>
-              <ButtonsWrapper>
-                <PopupButtonRow>
-                  <Button kind="primary">Save Availability</Button>
-                </PopupButtonRow>
-              </ButtonsWrapper>
+              {/* <h1>Change Availability</h1> */}
+              <Heading>Change Availability</Heading>
+              <FormWrapper>
+                <RadioColumn>
+                  <AvailabilityDateColumn>
+                    <RadioRow>
+                      <RadioButton
+                        type="radio"
+                        name="radio"
+                        value="optionA"
+                        // checked={select === "optionA"}
+                        // onChange={(event) => handleSelectChange(event)}
+                      />
+                      <RadioButtonLabel>Enter new availability date:</RadioButtonLabel>
+                    </RadioRow>
+                    <AvailabilityDate placeholder="01/01/2024" />
+                  </AvailabilityDateColumn>
+                  <RadioRow>
+                    <RadioButton
+                      type="radio"
+                      name="radio"
+                      value="optionA"
+                      // checked={select === "optionA"}
+                      // onChange={(event) => handleSelectChange(event)}
+                    />
+                    <RadioButtonLabel>Leased by USHS</RadioButtonLabel>
+                  </RadioRow>
+                  <RadioRow>
+                    <RadioButton
+                      type="radio"
+                      name="radio"
+                      value="optionA"
+                      // checked={select === "optionA"}
+                      // onChange={(event) => handleSelectChange(event)}
+                    />
+                    <RadioButtonLabel>Removed from market</RadioButtonLabel>
+                  </RadioRow>
+                </RadioColumn>
+                <ButtonsWrapper>
+                  <SaveButton kind="primary">Save Availability</SaveButton>
+                </ButtonsWrapper>
+              </FormWrapper>
             </Modal>
           </>
         )}
