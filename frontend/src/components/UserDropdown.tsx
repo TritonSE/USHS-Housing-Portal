@@ -36,7 +36,7 @@ const SearchBar = styled.input<{ open: boolean; state: boolean; isRCDropdown: bo
 const OptionsContainer = styled.div<{ isRCDropdown: boolean }>`
   position: absolute;
   top: 47px;
-  max-height: 160px;
+  max-height: ${(props) => (props.isRCDropdown ? "250px" : "160px")};
   width: 100%;
   overflow-y: auto;
   overflow-x: auto;
@@ -45,7 +45,7 @@ const OptionsContainer = styled.div<{ isRCDropdown: boolean }>`
   box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  background-color: ${(props) => (props.isRCDropdown ? "#FFF" : "#fbf7f3")};
+  background-color: #fff;
 `;
 const Option = styled.div`
   font-size: 15px;
@@ -117,7 +117,7 @@ export function UserDropdown({ placeholder, options, onSelect, reset, isRCDropdo
       matches.sort((a, b) => {
         const fullNameA = a.firstName + " " + a.lastName;
         const fullNameB = b.firstName + " " + b.lastName;
-        return fullNameA < fullNameB ? -1 : 1;
+        return fullNameA.toLowerCase() < fullNameB.toLowerCase() ? -1 : 1;
       });
       //sort by 'best' match
     } else {
@@ -210,7 +210,7 @@ export function UserDropdown({ placeholder, options, onSelect, reset, isRCDropdo
           )}
         </OptionsContainer>
       )}
-      <Icon src={"SearchSymbol.svg"} alt="search" />
+      <Icon src={"/SearchSymbol.svg"} alt="search" />
     </SearchContainer>
   );
 }

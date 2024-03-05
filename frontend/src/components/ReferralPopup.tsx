@@ -1,10 +1,16 @@
 import { useEffect, useState } from "react";
+import { FieldValues, useForm } from "react-hook-form";
 import styled from "styled-components";
 
 import { Button } from "./Button";
 import { UserDropdown } from "./UserDropdown";
 
-import { RenterCandidate, getRenterCandidates } from "@/api/renter-candidates";
+import {
+  RenterCandidate,
+  createRenterCandidate,
+  createRenterCandidateRequest,
+  getRenterCandidates,
+} from "@/api/renter-candidates";
 
 const Overlay = styled.div`
   width: 100vw;
@@ -23,8 +29,8 @@ const Modal = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 800px;
-  height: 550px;
+  width: 900px;
+  height: 600px;
   border-radius: 20px;
   background: #fff;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
@@ -56,20 +62,20 @@ const XButton = styled.div`
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 80px;
   align-items: center;
 `;
 
 const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 25px;
   align-items: center;
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
   line-height: 150%; /* 24px */
   letter-spacing: 0.32px;
+  padding-top: 100px;
 `;
 
 const DropdownWrapper = styled.div`
@@ -94,7 +100,73 @@ const Header = styled.div`
   line-height: 150%; /* 24px */
   letter-spacing: 0.32px;
   position: relative;
-  right: 175px;
+  right: 195px;
+  padding-top: 60px;
+  padding-bottom: 15px;
+`;
+
+const FormWrapper = styled.form`
+  width: 700px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-flow: wrap;
+  column-gap: 100px;
+  row-gap: 10px;
+`;
+
+const InputSection = styled.div`
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-family: Montserrat;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%; /* 24px */
+  letter-spacing: 0.32px;
+`;
+
+const InputBox = styled.input`
+  display: flex;
+  padding: 6px 12px;
+  align-items: flex-start;
+  gap: 10px;
+  align-self: stretch;
+  border-radius: 4px;
+  border: 1px solid var(--Neutral-Gray2, #d8d8d8);
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%; /* 24px */
+  letter-spacing: 0.32px;
+  color: var(--Neutral-Gray6, #484848);
+`;
+
+const ButtonsWrapper = styled.div`
+  padding-top: 50px;
+  display: flex;
+  flex-direction: row;
+  gap: 400px;
+`;
+
+export const SubmitButton = styled.input`
+  padding: 12px 28px;
+  background-color: #b64201;
+  color: #ffffff;
+  border: 1px solid #b64201;
+  border-radius: 14px;
+  font-weight: 500;
+  font-size: 18px;
+  letter-spacing: 0.32px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition-duration: 300ms;
+  &:hover {
+    background-color: #ec8537;
+    border-color: #ec8537;
+  }
 `;
 
 type PopupProps = {
@@ -106,6 +178,7 @@ export const ReferralPopup = ({ active, onClose }: PopupProps) => {
   const [popup, setPopup] = useState<boolean>(false);
   const [addRC, setAddRC] = useState<boolean>(false);
   const [allRCs, setAllRCs] = useState<RenterCandidate[]>([]);
+  const { register, handleSubmit, reset } = useForm();
 
   useEffect(() => {
     setPopup(active);
@@ -121,7 +194,25 @@ export const ReferralPopup = ({ active, onClose }: PopupProps) => {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [popup]);
+
+  const handleCreateRC = (data: FieldValues) => {
+    if (data.email === "") delete data.email;
+    if (data.phone === "") delete data.phone;
+    createRenterCandidate(data as createRenterCandidateRequest)
+      .then((value) => {
+        if (value.success) {
+          const id = value.data._id;
+          console.log(id);
+          reset();
+          onClose();
+          setAddRC(false);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <>
@@ -141,11 +232,7 @@ export const ReferralPopup = ({ active, onClose }: PopupProps) => {
             </XWrapper>
             <Wrapper>
               <h1>Add Referral</h1>
-              {addRC ? (
-                <>
-                  <Header>Add new renter Candidate:</Header>
-                </>
-              ) : (
+              {!addRC ? (
                 <ContentWrapper>
                   <div>Choose existing renter candidate:</div>
                   <DropdownWrapper>
@@ -167,6 +254,58 @@ export const ReferralPopup = ({ active, onClose }: PopupProps) => {
                     Add new candidate
                   </Button>
                 </ContentWrapper>
+              ) : (
+                <>
+                  <Header>Add new renter candidate:</Header>
+                  <FormWrapper onSubmit={(event) => void handleSubmit(handleCreateRC)(event)}>
+                    <InputSection>
+                      <div>First Name *</div>
+                      <InputBox {...register("firstName", { required: true })} />
+                    </InputSection>
+                    <InputSection>
+                      <div>Last Name *</div>
+                      <InputBox {...register("lastName", { required: true })} />
+                    </InputSection>
+                    <InputSection>
+                      <div>Phone number</div>
+                      <InputBox
+                        placeholder="(xxx) xxx-xxxx"
+                        {...register("phone", { required: false })}
+                      />
+                    </InputSection>
+                    <InputSection>
+                      <div>Email</div>
+                      <InputBox {...register("email", { required: false })} />
+                    </InputSection>
+                    <InputSection>
+                      <div>Unique Identifier *</div>
+                      <InputBox {...register("uid", { required: true })} />
+                    </InputSection>
+                    <InputSection>
+                      <div>Housing Program *</div>
+                      <InputBox {...register("program", { required: true })} />
+                    </InputSection>
+                    <InputSection>
+                      <div>Number of adults (include self) *</div>
+                      <InputBox placeholder="Ex: 3" {...register("adults", { required: true })} />
+                    </InputSection>
+                    <InputSection>
+                      <div>Number of children *</div>
+                      <InputBox placeholder="Ex: 3" {...register("children", { required: true })} />
+                    </InputSection>
+                    <ButtonsWrapper>
+                      <Button
+                        onClick={() => {
+                          setAddRC(false);
+                        }}
+                        kind="secondary"
+                      >
+                        Back
+                      </Button>
+                      <SubmitButton type="submit" value="Add Referral"></SubmitButton>
+                    </ButtonsWrapper>
+                  </FormWrapper>
+                </>
               )}
             </Wrapper>
           </Modal>
