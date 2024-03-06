@@ -25,7 +25,7 @@ function AppRouter() {
           <>
             <Route path="/" element={<Home />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/unit/:id" element={<UnitDetails />} />
+            <Route path="/units/:id" element={<UnitDetails />} />
             <Route path="*" element={<Navigate to="/" />} />
           </>
         )}
