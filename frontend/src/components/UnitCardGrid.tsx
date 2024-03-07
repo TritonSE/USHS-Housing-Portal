@@ -141,9 +141,7 @@ export const UnitCardGrid = ({ units, refreshUnits }: UnitCardGridProps) => {
                 pendingUnits.map((option, index) => (
                   <UnitCard unit={option} refreshUnits={refreshUnits} key={index} />
                 ))}
-              {pendingUnits.length == 0 &&
-                <HeaderText>No matching units found</HeaderText>
-              }
+              {pendingUnits.length === 0 && <HeaderText>No matching units found</HeaderText>}
             </UnitCardLayout>
           </>
         ) : (
@@ -176,9 +174,7 @@ export const UnitCardGrid = ({ units, refreshUnits }: UnitCardGridProps) => {
                 approvedUnits.map((option, index) => (
                   <UnitCard unit={option} refreshUnits={refreshUnits} key={index} />
                 ))}
-              {approvedUnits.length == 0 &&
-                <HeaderText>No matching units found</HeaderText>
-              }
+              {approvedUnits.length === 0 && <HeaderText>No matching units found</HeaderText>}
             </UnitCardLayout>
           </>
         )}
