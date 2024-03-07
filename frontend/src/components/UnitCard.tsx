@@ -234,7 +234,10 @@ export const UnitCard = ({ unit, refreshUnits }: CardProps) => {
           {unit.approved && dataContext.currentUser?.isHousingLocator && (
             <DeleteIcon
               src="delete.png"
-              onClick={() => {
+              onClick={(e) => {
+                // Stop click from propagating to parent (opening the unit page)
+                e.preventDefault();
+                e.stopPropagation();
                 setPopup(true);
               }}
             />
