@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-import { Unit, getUnit } from "@/api/units";
+import { Unit, approveUnit, getUnit } from "@/api/units";
 import { Page } from "@/components";
+import { Banner } from "@/components/Banner";
 import { Button } from "@/components/Button";
+import { DataContext } from "@/contexts/DataContext";
 
 const Row = styled.div`
   display: flex;
@@ -28,12 +30,17 @@ const DetailsRow = styled(Row)`
   gap: 120px;
 `;
 
+const HorizontalDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
 const SectionColumn = styled(Column)`
   width: 50%;
 `;
 
 const MainColumn = styled(Column)`
-  padding: 10%;
+  padding: 5% 10% 10% 10%;
 `;
 
 const RentPerMonth = styled.h1`
@@ -93,6 +100,12 @@ const ButtonPadding = styled.div`
   padding: 20px 10% 0px 10%;
 `;
 
+const EditButton = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
 const DoesNotExist = styled.h1`
   font-size: 48px;
   font-family: "Neutraface Text", sans-serif;
@@ -104,7 +117,30 @@ const DoesNotExist = styled.h1`
 
 export function UnitDetails() {
   const [unit, setUnit] = useState<Unit>();
+  const approvedBannerValues = {
+    image: "/check_mark.svg",
+    withTitle: true,
+    title: "Approval Confirmed",
+    message: "The listing is now visible to case manager and ready for referrals.",
+    withX: true,
+    color: "#C4F4DF",
+    width: "1120px",
+    height: "80px",
+  };
+  const unapprovedBannerValues = {
+    image: "/Caution.svg",
+    withTitle: true,
+    title: "Pending Approval",
+    message:
+      "The following information is submitted by the landlord. Fill in additional information and approve at the bottom of the page to make the listing visible to case managers.",
+    withX: false,
+    color: "#FCE9C9",
+    width: "1120px",
+    height: "80px",
+  };
   const { id } = useParams();
+  //using Data Context to get currentUser info
+  const { currentUser } = useContext(DataContext);
 
   React.useEffect(() => {
     if (id !== undefined) {
@@ -115,6 +151,23 @@ export function UnitDetails() {
       });
     }
   }, []);
+
+  const approveListing = () => {
+    try {
+      if (unit && id && !unit.approved) {
+        approveUnit(id)
+          .then((result) => {
+            console.log(result);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   if (!unit) {
     return (
@@ -163,13 +216,25 @@ export function UnitDetails() {
       <Helmet>
         <title>{unit.listingAddress} | USHS Housing Portal</title>
       </Helmet>
-
       <ButtonPadding>
-        <Link to="/">
-          <Button kind="secondary">Back to Listing</Button>
-        </Link>
+        <HorizontalDiv>
+          <Link to="/">
+            <Button kind="secondary">Back to Listing</Button>
+          </Link>
+          {currentUser?.isHousingLocator && (
+            <Button kind="secondary" style={{ margin: "0px 800px" }}>
+              <EditButton>
+                <img src={"/pencil.svg"} alt="" style={{ marginRight: "12px" }} />
+                Edit
+              </EditButton>
+            </Button>
+          )}
+        </HorizontalDiv>
       </ButtonPadding>
       <MainColumn>
+        <Row>
+          <Banner value={unit.approved ? approvedBannerValues : unapprovedBannerValues}></Banner>
+        </Row>
         <Row>
           <RentPerMonth>${unit.monthlyRent}/month</RentPerMonth>
         </Row>
@@ -195,7 +260,6 @@ export function UnitDetails() {
             <StrongText>{availableNow}</StrongText>
           </Column>
         </DetailsRow>
-
         <Row>
           <Header>Fees</Header>
         </Row>
@@ -262,6 +326,15 @@ export function UnitDetails() {
             {unit.internalComments}
           </SectionColumn>
         </Row>
+        {!unit.approved && (
+          <Button
+            kind="primary"
+            style={{ margin: "99px 941px", width: 210, height: 50 }}
+            onClick={approveListing}
+          >
+            Approve Listing
+          </Button>
+        )}
       </MainColumn>
     </Page>
   );
