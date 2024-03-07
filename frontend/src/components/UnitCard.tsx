@@ -1,4 +1,5 @@
 import { useContext, useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 import { Button } from "./Button";
@@ -204,40 +205,42 @@ export const UnitCard = ({ unit, refreshUnits }: CardProps) => {
 
   return (
     <>
-      <UnitCardContainer pending={!unit.approved}>
-        {!unit.approved ? (
-          <AvailabilityRow>
-            <AvailabilityIcon src="/red_ellipse.svg" />
-            <AvailabilityText>Pending Approval</AvailabilityText>
-          </AvailabilityRow>
-        ) : (
-          <AvailabilityRow>
-            <AvailabilityIcon src="/green_ellipse.svg" />
-            <AvailabilityText>Available</AvailabilityText>
-          </AvailabilityRow>
-        )}
-        <RentText>{`$${unit.monthlyRent}/month`}</RentText>
-        <BedBathRow>
-          <NumberText>{unit.numBeds}</NumberText>
-          <BedBathText>beds</BedBathText>
-          <NumberText>{unit.numBaths}</NumberText>
-          <BedBathText>baths</BedBathText>
-          <NumberText>{unit.sqft}</NumberText>
-          <BedBathText>sqft</BedBathText>
-        </BedBathRow>
-        <AddressRow>
-          <AddressText>{unit.streetAddress}</AddressText>
-          <AddressText>{`${unit.city}, ${unit.state} ${unit.areaCode}`}</AddressText>
-        </AddressRow>
-        {unit.approved && dataContext.currentUser?.isHousingLocator && (
-          <DeleteIcon
-            src="delete.png"
-            onClick={() => {
-              setPopup(true);
-            }}
-          />
-        )}
-      </UnitCardContainer>
+      <Link to={`/unit/${unit._id}`} style={{ textDecoration: "none" }}>
+        <UnitCardContainer pending={!unit.approved}>
+          {!unit.approved ? (
+            <AvailabilityRow>
+              <AvailabilityIcon src="/red_ellipse.svg" />
+              <AvailabilityText>Pending Approval</AvailabilityText>
+            </AvailabilityRow>
+          ) : (
+            <AvailabilityRow>
+              <AvailabilityIcon src="/green_ellipse.svg" />
+              <AvailabilityText>Available</AvailabilityText>
+            </AvailabilityRow>
+          )}
+          <RentText>{`$${unit.monthlyRent}/month`}</RentText>
+          <BedBathRow>
+            <NumberText>{unit.numBeds}</NumberText>
+            <BedBathText>beds</BedBathText>
+            <NumberText>{unit.numBaths}</NumberText>
+            <BedBathText>baths</BedBathText>
+            <NumberText>{unit.sqft}</NumberText>
+            <BedBathText>sqft</BedBathText>
+          </BedBathRow>
+          <AddressRow>
+            <AddressText>{unit.streetAddress}</AddressText>
+            <AddressText>{`${unit.city}, ${unit.state} ${unit.areaCode}`}</AddressText>
+          </AddressRow>
+          {unit.approved && dataContext.currentUser?.isHousingLocator && (
+            <DeleteIcon
+              src="delete.png"
+              onClick={() => {
+                setPopup(true);
+              }}
+            />
+          )}
+        </UnitCardContainer>
+      </Link>
 
       {popup && (
         <>
