@@ -1,4 +1,4 @@
-import { APIResult, get, handleAPIError, post } from "./requests";
+import { APIResult, deleteRequest, get, handleAPIError, post } from "./requests";
 
 // Represents a Unit object as it will be received from the backend.
 export type Unit = {
@@ -41,14 +41,13 @@ export type Unit = {
 };
 
 export type FilterParams = {
-  search?: string | undefined;
-  availability: string;
-  minPrice?: number | undefined;
-  maxPrice?: number | undefined;
-  beds?: number;
-  baths?: number;
-  approved?: boolean;
-  sort: number;
+  search?: string;
+  availability?: string;
+  minPrice?: string;
+  maxPrice?: string;
+  beds?: string;
+  baths?: string;
+  sort?: string;
 };
 
 export async function getUnit(id: string): Promise<APIResult<Unit>> {
@@ -88,6 +87,16 @@ export type CreateUnitRequest = Omit<Unit, HousingLocatorFields>;
 export async function createUnit(unit: CreateUnitRequest): Promise<APIResult<Unit>> {
   try {
     const response = await post("/units", unit);
+    const json = (await response.json()) as Unit;
+    return { success: true, data: json };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+}
+
+export async function deleteUnit(id: string): Promise<APIResult<Unit>> {
+  try {
+    const response = await deleteRequest(`/units/${id}`);
     const json = (await response.json()) as Unit;
     return { success: true, data: json };
   } catch (error) {

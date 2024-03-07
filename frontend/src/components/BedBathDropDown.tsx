@@ -57,6 +57,9 @@ const AdjustButton = styled.button`
 export type BedBathState = {
   beds: number;
   baths: number;
+};
+
+export type BedBathDisplayState = {
   bedsDisplay: number;
   bathsDisplay: number;
   notApplied: boolean;
@@ -65,13 +68,14 @@ export type BedBathState = {
 export type BedBathDropDownProps = {
   value: BedBathState;
   setValue(val: BedBathState): void;
-  onApply(): void;
+  displayValue: BedBathDisplayState;
+  setDisplayValue(val: BedBathDisplayState): void;
 };
 
 export const BedBathDropDown = (props: BedBathDropDownProps) => {
   const [isActive, setIsActive] = useState(false);
 
-  const dropdownText = props.value.notApplied
+  const dropdownText = props.displayValue.notApplied
     ? "Beds & Bath"
     : `${props.value.beds}+ bds, ${props.value.baths}+ ba`;
 
@@ -93,20 +97,26 @@ export const BedBathDropDown = (props: BedBathDropDownProps) => {
           <PopupHeaderText>Bedrooms</PopupHeaderText>
           <BnbRow>
             <BedBox>
-              <PopupHeaderText>{props.value.bedsDisplay}+</PopupHeaderText>
+              <PopupHeaderText>{props.displayValue.bedsDisplay}+</PopupHeaderText>
             </BedBox>
             <AdjustButton
               onClick={() => {
-                if (props.value.bedsDisplay > 1)
-                  props.setValue({ ...props.value, bedsDisplay: props.value.bedsDisplay - 1 });
+                if (props.displayValue.bedsDisplay > 1)
+                  props.setDisplayValue({
+                    ...props.displayValue,
+                    bedsDisplay: props.displayValue.bedsDisplay - 1,
+                  });
               }}
             >
               -
             </AdjustButton>
             <AdjustButton
               onClick={() => {
-                if (props.value.bedsDisplay < 4)
-                  props.setValue({ ...props.value, bedsDisplay: props.value.bedsDisplay + 1 });
+                if (props.displayValue.bedsDisplay < 4)
+                  props.setDisplayValue({
+                    ...props.displayValue,
+                    bedsDisplay: props.displayValue.bedsDisplay + 1,
+                  });
               }}
             >
               +
@@ -115,20 +125,26 @@ export const BedBathDropDown = (props: BedBathDropDownProps) => {
           <PopupHeaderText>Bathrooms</PopupHeaderText>
           <BnbRow>
             <BathBox>
-              <PopupHeaderText>{props.value.bathsDisplay}+</PopupHeaderText>
+              <PopupHeaderText>{props.displayValue.bathsDisplay}+</PopupHeaderText>
             </BathBox>
             <AdjustButton
               onClick={() => {
-                if (props.value.bathsDisplay > 0.5)
-                  props.setValue({ ...props.value, bathsDisplay: props.value.bathsDisplay - 0.5 });
+                if (props.displayValue.bathsDisplay > 0.5)
+                  props.setDisplayValue({
+                    ...props.displayValue,
+                    bathsDisplay: props.displayValue.bathsDisplay - 0.5,
+                  });
               }}
             >
               -
             </AdjustButton>
             <AdjustButton
               onClick={() => {
-                if (props.value.bathsDisplay < 2)
-                  props.setValue({ ...props.value, bathsDisplay: props.value.bathsDisplay + 0.5 });
+                if (props.displayValue.bathsDisplay < 2)
+                  props.setDisplayValue({
+                    ...props.displayValue,
+                    bathsDisplay: props.displayValue.bathsDisplay + 0.5,
+                  });
               }}
             >
               +
@@ -139,11 +155,13 @@ export const BedBathDropDown = (props: BedBathDropDownProps) => {
               setIsActive(false);
               props.setValue({
                 ...props.value,
-                beds: props.value.bedsDisplay,
-                baths: props.value.bathsDisplay,
+                beds: props.displayValue.bedsDisplay,
+                baths: props.displayValue.bathsDisplay,
+              });
+              props.setDisplayValue({
+                ...props.displayValue,
                 notApplied: false,
               });
-              props.onApply();
             }}
           >
             Apply

@@ -25,7 +25,6 @@ const PopupSortText = styled(Sort)`
 export type SortDropDownCompProps = {
   value: number;
   setValue(selected: number): void;
-  onApply(): void;
 };
 
 export const SortDropDownComp = (props: SortDropDownCompProps) => {
@@ -51,7 +50,6 @@ export const SortDropDownComp = (props: SortDropDownCompProps) => {
               onClick={() => {
                 props.setValue(idx);
                 setIsActive(false);
-                props.onApply();
               }}
             >
               {text}
