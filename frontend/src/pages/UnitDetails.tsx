@@ -150,7 +150,12 @@ export function UnitDetails() {
         <NavBar page="Home" />
         <ButtonPadding>
           <Link to="/">
-            <Button kind="secondary">Back to Listing</Button>
+            <Button kind="secondary">
+              <PaddingInButton>
+                <img className="back-arrow" src="/back_arrow.svg" alt={"Back arrow"} />
+                Back to Listing
+              </PaddingInButton>
+            </Button>
           </Link>
         </ButtonPadding>
         <DoesNotExist>This unit does not exist!</DoesNotExist>
@@ -192,7 +197,12 @@ export function UnitDetails() {
 
         <ButtonPadding>
           <Link to="/">
-            <Button kind="secondary">Back to Listing</Button>
+            <Button kind="secondary">
+              <PaddingInButton>
+                <img className="back-arrow" src="/back_arrow.svg" alt={"Back arrow"} />
+                Back to Listing
+              </PaddingInButton>
+            </Button>
           </Link>
           <Button kind="secondary" onClick={toggleEditing}>
             <PaddingInButton>
@@ -224,7 +234,9 @@ export function UnitDetails() {
               </Column>
             </Row>
             <Column>
-              <StrongText>Landlord: {unit.landlordFirstName + unit.landlordLastName}</StrongText>
+              <StrongText>
+                Landlord: {unit.landlordFirstName + " " + unit.landlordLastName}
+              </StrongText>
               <ListText>{unit.landlordPhone}</ListText>
               <ListText>{unit.landlordEmail}</ListText>
             </Column>
@@ -304,7 +316,12 @@ export function UnitDetails() {
 
         <ButtonPadding>
           <Link to="/">
-            <Button kind="secondary">Back to Listing</Button>
+            <Button kind="secondary">
+              <PaddingInButton>
+                <img className="back-arrow" src="/back_arrow.svg" alt={"Back arrow"} />
+                Back to Listing
+              </PaddingInButton>
+            </Button>
           </Link>
         </ButtonPadding>
         <MainColumn>
