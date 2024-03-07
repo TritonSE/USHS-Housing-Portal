@@ -9,6 +9,7 @@ import { UnitCardGrid } from "@/components/UnitCardGrid";
 
 export function Home() {
   const [units, setUnits] = useState<Unit[]>([]);
+  const [filters, setFilters] = useState<FilterParams>({});
 
   const fetchUnits = (filterParams: FilterParams) => {
     getUnits(filterParams)
@@ -21,8 +22,8 @@ export function Home() {
   };
 
   useEffect(() => {
-    fetchUnits({});
-  }, []);
+    fetchUnits(filters);
+  }, [filters]);
 
   return (
     <Page>
@@ -30,8 +31,13 @@ export function Home() {
         <title>Home | USHS Housing Portal</title>
       </Helmet>
       <NavBar page="Home" />
-      <FilterDropdown refreshUnits={fetchUnits}></FilterDropdown>
-      <UnitCardGrid units={units} />
+      <FilterDropdown refreshUnits={setFilters}></FilterDropdown>
+      <UnitCardGrid
+        units={units}
+        refreshUnits={() => {
+          fetchUnits(filters);
+        }}
+      />
     </Page>
   );
 }

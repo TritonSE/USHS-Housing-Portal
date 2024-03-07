@@ -70,6 +70,7 @@ const ResetIcon = styled.img`
 const ResetFilterButton = styled.button`
   background-color: transparent;
   border-color: transparent;
+  cursor: pointer;
 `;
 
 const ResetFilterText = styled(FilterText)`
