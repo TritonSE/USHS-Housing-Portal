@@ -35,10 +35,15 @@ export const createUnit = async (newUnit: NewUnit) => {
   return unit;
 };
 
+export const deleteUnit = async (id: string) => {
+  const unit = await UnitModel.deleteOne({ _id: id });
+  return unit;
+};
+
 export const getUnits = async (filters: FilterParams) => {
-  // If FilterParams is empty return all the units
+  // If FilterParams is empty return all available units
   if (Object.keys(filters).length === 0 && filters.constructor === Object) {
-    const units = await UnitModel.find();
+    const units = await UnitModel.find({ dateAvailable: { $lte: new Date() } });
     return units;
   }
 

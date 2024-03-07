@@ -4,7 +4,7 @@ import createHttpError from "http-errors";
 import { asyncHandler } from "./wrappers";
 
 import { UnitModel } from "@/models/units";
-import { NewUnit, createUnit, getUnits, FilterParams } from "@/services/units";
+import { FilterParams, NewUnit, createUnit, deleteUnit, getUnits } from "@/services/units";
 
 /**
  * Handle a request to create a new unit.
@@ -15,6 +15,16 @@ export const createUnitsHandler: RequestHandler = asyncHandler(async (req, res, 
   const newUnit = await createUnit(newUnitBody);
 
   res.status(201).json(newUnit);
+});
+
+export const deleteUnitsHandler: RequestHandler = asyncHandler(async (req, res, _) => {
+  const id = req.params.id;
+  const response = await deleteUnit(id);
+  if (response === null) {
+    res.status(400);
+  } else {
+    res.status(200).json(response);
+  }
 });
 
 export const getUnitsHandler: RequestHandler = asyncHandler(async (req, res, _) => {
