@@ -24,6 +24,11 @@ const PropertiesRow = styled.span`
   margin-bottom: 15px;
 `;
 
+const HeaderText = styled.span`
+  font-family: "Neutraface Text";
+  font-size: 32px;
+`;
+
 const GridContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -111,7 +116,7 @@ export const UnitCardGrid = ({ units, refreshUnits }: UnitCardGridProps) => {
         {pendingSelected ? (
           <>
             <PropertiesRow>
-              <div>Pending Approval</div>
+              <HeaderText>Pending Approval</HeaderText>
               <ButtonsWrapper>
                 <PendingButton
                   onClick={() => {
@@ -136,12 +141,15 @@ export const UnitCardGrid = ({ units, refreshUnits }: UnitCardGridProps) => {
                 pendingUnits.map((option, index) => (
                   <UnitCard unit={option} refreshUnits={refreshUnits} key={index} />
                 ))}
+              {pendingUnits.length == 0 &&
+                <HeaderText>No matching units found</HeaderText>
+              }
             </UnitCardLayout>
           </>
         ) : (
           <>
             <PropertiesRow>
-              <div>Available Properties</div>
+              <HeaderText>Available Properties</HeaderText>
               {dataContext.currentUser?.isHousingLocator && (
                 <ButtonsWrapper>
                   <PendingButton
@@ -168,6 +176,9 @@ export const UnitCardGrid = ({ units, refreshUnits }: UnitCardGridProps) => {
                 approvedUnits.map((option, index) => (
                   <UnitCard unit={option} refreshUnits={refreshUnits} key={index} />
                 ))}
+              {approvedUnits.length == 0 &&
+                <HeaderText>No matching units found</HeaderText>
+              }
             </UnitCardLayout>
           </>
         )}
