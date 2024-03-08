@@ -43,6 +43,10 @@ const SearchBarInput = styled.input`
   &:focus {
     outline: none;
   }
+
+  &:focus::placeholder {
+    color: transparent;
+  }
 `;
 
 const SearchIcon = styled.img`
