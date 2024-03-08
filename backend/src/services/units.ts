@@ -1,4 +1,4 @@
-import { Unit, UnitModel } from "@/models/units";
+import { Unit, UnitModel, VUnit } from "@/models/units";
 
 type HousingLocatorFields =
   | "whereFound"
@@ -54,13 +54,6 @@ export const getUnits = async (filters: FilterParams) => {
 
   const avail = filters.availability ? (filters.availability === "Available" ? true : false) : true;
 
-  let dateAvail;
-  if (avail) {
-    dateAvail = { $lte: new Date() };
-  } else {
-    dateAvail = { $gt: new Date() };
-  }
-
   let sortingCriteria;
   switch (filters.sort) {
     case "0": // Price (High to Low)
@@ -84,12 +77,14 @@ export const getUnits = async (filters: FilterParams) => {
   }
 
   const units = await UnitModel.find({
-    streetAddress: addressRegex,
     numBeds: { $gte: filters.beds ?? 1 },
     numBaths: { $gte: filters.baths ?? 0.5 },
     monthlyRent: { $gte: minPrice, $lte: maxPrice },
-    dateAvailable: dateAvail,
   }).sort(sortingCriteria);
 
-  return units;
+  const filteredUnits = units.filter((unit: VUnit) => {
+    return addressRegex.test(unit.listingAddress ?? "") && (unit.availableNow ?? false) === avail;
+  });
+
+  return filteredUnits;
 };

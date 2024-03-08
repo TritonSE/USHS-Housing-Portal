@@ -64,4 +64,6 @@ const unitSchema = new Schema(
 
 export type Unit = InferSchemaType<typeof unitSchema>;
 
+export type VUnit = Unit & { listingAddress?: string; availableNow?: boolean };
+
 export const UnitModel = model<Unit>("Unit", unitSchema);
