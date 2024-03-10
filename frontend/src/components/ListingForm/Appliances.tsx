@@ -22,7 +22,7 @@ export const Appliances = (props: ApplicancesProps) => {
   return (
     <Margin32>
       <FieldHeader>
-        Select All Appliances that Apply or N/A <Required>*</Required>
+        Select All Appliances that Apply <Required>*</Required>
       </FieldHeader>
       <RadioCheckBoxContainer>
         <RadioCheckboxCol>

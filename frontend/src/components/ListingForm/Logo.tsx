@@ -15,8 +15,8 @@ export const Logo = () => {
         src="/LogoTransparent.png"
         alt="Logo"
         style={{
-          width: "100%",
-          height: "100%",
+          width: "80%",
+          height: "80%",
         }}
       />
     </LogoPosition>

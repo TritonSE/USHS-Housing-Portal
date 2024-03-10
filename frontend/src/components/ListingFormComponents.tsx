@@ -87,7 +87,8 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
   const [accessibility, setAccessibility] = useState<string[]>([]);
   const [pets, setPets] = useState<string[]>([]);
   const [sharingHousing, setSharingHousing] = useState<string>("");
-  const [additionalComments, setAdditionalComments] = useState<string>("");
+  const [additionalCommentsLL, setadditionalCommentsLL] = useState<string>("");
+  const [additionalCommentsHL, setadditionalCommentsHL] = useState<string>("");
   const [whereFindUnit, setWhereFindUnit] = useState<string>("");
   const [paymentRantingCriteria, setPaymentRentingCriteria] = useState<string[]>([]);
   const [additionalRulesRegulations, setAdditionalRulesRegulations] = useState<string[]>([]);
@@ -239,8 +240,12 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
     setSharingHousing(event.target.value);
   };
 
-  const handleAdditionalComments = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAdditionalComments(event.target.value);
+  const handleadditionalCommentsLL = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setadditionalCommentsLL(event.target.value);
+  };
+
+  const handleadditionalCommentsHL = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setadditionalCommentsHL(event.target.value);
   };
 
   const handleWhereFindUnit = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -308,7 +313,7 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
           />
           <Textbox
             elementName="Apartment/Suite etc"
-            requiredField={true}
+            requiredField={false}
             name="aptNum"
             value={aptNum}
             handler={handleApartmentNumber}
@@ -400,6 +405,13 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
           sharingHousing={sharingHousing}
           handleSharingHousing={handleSharingHousing}
         />
+        <Textbox
+          elementName="Additional Comments"
+          requiredField={true}
+          name="additionalCommentsLL"
+          value={additionalCommentsLL}
+          handler={handleadditionalCommentsLL}
+        />
 
         {props.formType === 2 && (
           <div>
@@ -422,16 +434,18 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
               setAdditionalRulesRegulations={setAdditionalRulesRegulations}
               handleCheckBoxNA={handleCheckBoxNA}
             />
+            <Textbox
+          elementName="Additional Comments"
+          requiredField={true}
+          kind="textarea"
+          name="additionalCommentsHL"
+          value={additionalCommentsHL}
+          handler={handleadditionalCommentsHL}
+        />
           </div>
         )}
 
-        <Textbox
-          elementName="Additional Comments"
-          requiredField={true}
-          name="additionalComments"
-          value={additionalComments}
-          handler={handleAdditionalComments}
-        />
+        
       </ContentContainer>
       <SubmitButtonMarginOffset>
         <Button kind="primary">Submit</Button>

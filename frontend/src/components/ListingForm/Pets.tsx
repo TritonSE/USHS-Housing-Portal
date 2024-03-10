@@ -54,9 +54,9 @@ export const Pets = (props: PetsProps) => {
           <label>
             <CustomCheckboxRadio
               type="checkbox"
-              name="ESA letter requirequiredFieldColor"
-              value="ESA letter requirequiredFieldColor"
-              checked={props.pets.includes("ESA letter requirequiredFieldColor")}
+              name="ESA letter required"
+              value="ESA letter required"
+              checked={props.pets.includes("ESA letter requirequired")}
               onChange={() => {
                 props.handleCheckBoxNA(
                   "ESA letter requirequiredFieldColor",
@@ -125,6 +125,9 @@ export const Pets = (props: PetsProps) => {
             />
             N/A
           </label>
+          {console.log(props.pets)}
+          {console.log("props.pets.includes(\"N/A\"): " + props.pets.includes("N/A"))}
+
         </div>
       </RadioCheckBoxContainer>
     </Margin32>
