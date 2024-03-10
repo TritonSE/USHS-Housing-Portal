@@ -32,6 +32,7 @@ const DetailsRow = styled(Row)`
 
 const SectionColumn = styled(Column)`
   width: 50%;
+  gap: 25px;
 `;
 
 const MainColumn = styled(Column)`
@@ -124,7 +125,6 @@ const InfoBlock = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin: 0 0px 15px 0;
 `;
 
 export function UnitDetails() {
@@ -195,291 +195,169 @@ export function UnitDetails() {
     <ListText key={rule}>{rule}</ListText>
   ));
 
-  if (!dataContext.currentUser?.isHousingLocator) {
+  const HousingLocatorComponent = () => {
     return (
-      <Page>
-        <Helmet>
-          <title>{unit.listingAddress} | USHS Housing Portal</title>
-        </Helmet>
-        <NavBar page="Home" />
+      <Column>
+        <StrongText>Landlord: {unit.landlordFirstName + " " + unit.landlordLastName}</StrongText>
+        <Text>{unit.landlordPhone}</Text>
+        <Text>{unit.landlordEmail}</Text>
+      </Column>
+    );
+  };
 
-        <ButtonPadding>
-          <Link to="/">
-            <Button kind="secondary">
-              <PaddingInButton>
-                <img className="back-arrow" src="/back_arrow.svg" alt={"Back arrow"} />
-                Back to Listing
-              </PaddingInButton>
-            </Button>
-          </Link>
+  const NotHousingLocatorComponent = () => {
+    return (
+      <Column>
+        <StrongText>{availableNow}</StrongText>
+      </Column>
+    );
+  };
+
+  return (
+    <Page>
+      <Helmet>
+        <title>{unit.listingAddress} | USHS Housing Portal</title>
+      </Helmet>
+      <NavBar page="Home" />
+
+      <ButtonPadding>
+        <Link to="/">
+          <Button kind="secondary">
+            <PaddingInButton>
+              <img className="back-arrow" src="/back_arrow.svg" alt={"Back arrow"} />
+              Back to Listing
+            </PaddingInButton>
+          </Button>
+        </Link>
+        {dataContext.currentUser?.isHousingLocator && (
           <Button kind="secondary" onClick={toggleEditing}>
             <PaddingInButton>
               <img className="edit-button-pen" src="/edit_button_pen.svg" alt={"Edit Button Pen"} />
               Edit
             </PaddingInButton>
           </Button>
-        </ButtonPadding>
-        <MainColumn>
+        )}
+      </ButtonPadding>
+      <MainColumn>
+        <Row>
+          <RentPerMonth>${unit.monthlyRent}/month</RentPerMonth>
+        </Row>
+        <Row>
+          <Address>{unit.listingAddress}</Address>
+        </Row>
+        <DetailsRow>
           <Row>
-            <RentPerMonth>${unit.monthlyRent}/month</RentPerMonth>
-          </Row>
-          <Row>
-            <Address>{unit.listingAddress}</Address>
-          </Row>
-          <DetailsRow>
-            <Row>
-              <Column>
-                <StrongText>{unit.numBeds}</StrongText>
-                <Text>beds</Text>
-              </Column>
-              <Column>
-                <StrongText>{unit.numBaths}</StrongText>
-                <Text>baths</Text>
-              </Column>
-              <Column>
-                <StrongText>{unit.sqft}</StrongText>
-                <Text>sqft</Text>
-              </Column>
-            </Row>
             <Column>
-              <StrongText>
-                Landlord: {unit.landlordFirstName + " " + unit.landlordLastName}
-              </StrongText>
-              <Text>{unit.landlordPhone}</Text>
-              <Text>{unit.landlordEmail}</Text>
+              <StrongText>{unit.numBeds}</StrongText>
+              <Text>beds</Text>
             </Column>
-          </DetailsRow>
-
-          <Row>
-            <Header>Fees</Header>
-          </Row>
-          <Row>
-            <SectionColumn>
-              <InfoBlock>
-                <StrongText>Security Deposit: </StrongText>
-                <List>
-                  <ListText> ${unit.securityDeposit}</ListText>
-                </List>
-              </InfoBlock>
-              <InfoBlock>
-                <StrongText>Payment/Renting Criteria: </StrongText>
-                {rentingCriteria}
-              </InfoBlock>
-            </SectionColumn>
-
-            <SectionColumn>
-              <InfoBlock>
-                <StrongText>Application Fee: </StrongText>
-                <List>
-                  <ListText>${unit.applicationFeeCost}</ListText>
-                </List>
-              </InfoBlock>
-            </SectionColumn>
-          </Row>
-
-          <Row>
-            <Header>Housing Specifications</Header>
-          </Row>
-          <Row>
-            <SectionColumn>
-              <InfoBlock>
-                <StrongText>Parking: </StrongText>
-                {parkingRequirements}
-              </InfoBlock>
-              <InfoBlock>
-                <StrongText>Pets/Animals: </StrongText>
-                {pets}
-              </InfoBlock>
-              <InfoBlock>
-                <StrongText>Appliances: </StrongText>
-                {appliances}
-              </InfoBlock>
-              <InfoBlock>
-                <StrongText>Housing Authority: </StrongText>
-                <ListText> {unit.housingAuthority}</ListText>
-              </InfoBlock>
-              <InfoBlock>
-                <StrongText>Additional Comments from Landlord: </StrongText>
-                <ListText> {unit.landlordComments}</ListText>
-              </InfoBlock>
-            </SectionColumn>
-            <SectionColumn>
-              <InfoBlock>
-                <StrongText>Accessibility Access: </StrongText>
-                {accessibility}
-              </InfoBlock>
-              <InfoBlock>
-                <StrongText>Sharing House Acceptable: </StrongText>
-                <ListText>{unit.sharingAcceptable}</ListText>
-              </InfoBlock>
-              <InfoBlock>
-                <StrongText>Community/Neighborhood Information: </StrongText>
-                {communityFeatures}
-              </InfoBlock>
-            </SectionColumn>
-          </Row>
-
-          <Row>
-            <Header>Additional Information</Header>
-          </Row>
-          <Row>
-            <SectionColumn>
-              <InfoBlock>
-                <StrongText>Where Was Unit Found: </StrongText>
-                <ListText>{unit.whereFound}</ListText>
-              </InfoBlock>
-              <InfoBlock>
-                <StrongText>Additional Rules and Regulation: </StrongText>
-                <ListText>{additionalRules}</ListText>
-              </InfoBlock>
-            </SectionColumn>
-            <SectionColumn>
-              <InfoBlock>
-                <StrongText>Notes from Housing Locator: </StrongText>
-                {unit.internalComments}
-              </InfoBlock>
-            </SectionColumn>
-          </Row>
-        </MainColumn>
-      </Page>
-    );
-  } else {
-    return (
-      <Page>
-        <Helmet>
-          <title>{unit.listingAddress} | USHS Housing Portal</title>
-        </Helmet>
-        <NavBar page="Home" />
-
-        <ButtonPadding>
-          <Link to="/">
-            <Button kind="secondary">
-              <PaddingInButton>
-                <img className="back-arrow" src="/back_arrow.svg" alt={"Back arrow"} />
-                Back to Listing
-              </PaddingInButton>
-            </Button>
-          </Link>
-        </ButtonPadding>
-        <MainColumn>
-          <Row>
-            <RentPerMonth>${unit.monthlyRent}/month</RentPerMonth>
-          </Row>
-          <Row>
-            <Address>{unit.listingAddress}</Address>
-          </Row>
-          <DetailsRow>
-            <Row>
-              <Column>
-                <StrongText>{unit.numBeds}</StrongText>
-                <Text>beds</Text>
-              </Column>
-              <Column>
-                <StrongText>{unit.numBaths}</StrongText>
-                <Text>baths</Text>
-              </Column>
-              <Column>
-                <StrongText>{unit.sqft}</StrongText>
-                <Text>sqft</Text>
-              </Column>
-            </Row>
             <Column>
-              <StrongText>{availableNow}</StrongText>
+              <StrongText>{unit.numBaths}</StrongText>
+              <Text>baths</Text>
             </Column>
-          </DetailsRow>
+            <Column>
+              <StrongText>{unit.sqft}</StrongText>
+              <Text>sqft</Text>
+            </Column>
+          </Row>
+          {dataContext.currentUser?.isHousingLocator ? (
+            <HousingLocatorComponent />
+          ) : (
+            <NotHousingLocatorComponent />
+          )}
+        </DetailsRow>
 
-          <Row>
-            <Header>Fees</Header>
-          </Row>
-          <Row>
-            <SectionColumn>
-              <InfoBlock>
-                <StrongText>Security Deposit: </StrongText>
-                <List>
-                  <ListText> ${unit.securityDeposit}</ListText>
-                </List>
-              </InfoBlock>
-              <InfoBlock>
-                <StrongText>Payment/Renting Criteria: </StrongText>
-                {rentingCriteria}
-              </InfoBlock>
-            </SectionColumn>
+        <Row>
+          <Header>Fees</Header>
+        </Row>
+        <Row>
+          <SectionColumn>
+            <InfoBlock>
+              <StrongText>Security Deposit: </StrongText>
+              <List>
+                <ListText> ${unit.securityDeposit}</ListText>
+              </List>
+            </InfoBlock>
+            <InfoBlock>
+              <StrongText>Payment/Renting Criteria: </StrongText>
+              {rentingCriteria}
+            </InfoBlock>
+          </SectionColumn>
 
-            <SectionColumn>
-              <InfoBlock>
-                <StrongText>Application Fee: </StrongText>
-                <List>
-                  <ListText>${unit.applicationFeeCost}</ListText>
-                </List>
-              </InfoBlock>
-            </SectionColumn>
-          </Row>
+          <SectionColumn>
+            <InfoBlock>
+              <StrongText>Application Fee: </StrongText>
+              <List>
+                <ListText>${unit.applicationFeeCost}</ListText>
+              </List>
+            </InfoBlock>
+          </SectionColumn>
+        </Row>
 
-          <Row>
-            <Header>Housing Specifications</Header>
-          </Row>
-          <Row>
-            <SectionColumn>
-              <InfoBlock>
-                <StrongText>Parking: </StrongText>
-                {parkingRequirements}
-              </InfoBlock>
-              <InfoBlock>
-                <StrongText>Pets/Animals: </StrongText>
-                {pets}
-              </InfoBlock>
-              <InfoBlock>
-                <StrongText>Appliances: </StrongText>
-                {appliances}
-              </InfoBlock>
-              <InfoBlock>
-                <StrongText>Housing Authority: </StrongText>
-                <ListText> {unit.housingAuthority}</ListText>
-              </InfoBlock>
-              <InfoBlock>
-                <StrongText>Additional Comments from Landlord: </StrongText>
-                <ListText> {unit.landlordComments}</ListText>
-              </InfoBlock>
-            </SectionColumn>
-            <SectionColumn>
-              <InfoBlock>
-                <StrongText>Accessibility Access: </StrongText>
-                {accessibility}
-              </InfoBlock>
-              <InfoBlock>
-                <StrongText>Sharing House Acceptable: </StrongText>
-                <ListText>{unit.sharingAcceptable}</ListText>
-              </InfoBlock>
-              <InfoBlock>
-                <StrongText>Community/Neighborhood Information: </StrongText>
-                {communityFeatures}
-              </InfoBlock>
-            </SectionColumn>
-          </Row>
+        <Row>
+          <Header>Housing Specifications</Header>
+        </Row>
+        <Row>
+          <SectionColumn>
+            <InfoBlock>
+              <StrongText>Parking: </StrongText>
+              {parkingRequirements}
+            </InfoBlock>
+            <InfoBlock>
+              <StrongText>Pets/Animals: </StrongText>
+              {pets}
+            </InfoBlock>
+            <InfoBlock>
+              <StrongText>Appliances: </StrongText>
+              {appliances}
+            </InfoBlock>
+            <InfoBlock>
+              <StrongText>Housing Authority: </StrongText>
+              <ListText> {unit.housingAuthority}</ListText>
+            </InfoBlock>
+            <InfoBlock>
+              <StrongText>Additional Comments from Landlord: </StrongText>
+              <ListText> {unit.landlordComments}</ListText>
+            </InfoBlock>
+          </SectionColumn>
+          <SectionColumn>
+            <InfoBlock>
+              <StrongText>Accessibility Access: </StrongText>
+              {accessibility}
+            </InfoBlock>
+            <InfoBlock>
+              <StrongText>Sharing House Acceptable: </StrongText>
+              <ListText>{unit.sharingAcceptable}</ListText>
+            </InfoBlock>
+            <InfoBlock>
+              <StrongText>Community/Neighborhood Information: </StrongText>
+              {communityFeatures}
+            </InfoBlock>
+          </SectionColumn>
+        </Row>
 
-          <Row>
-            <Header>Additional Information</Header>
-          </Row>
-          <Row>
-            <SectionColumn>
-              <InfoBlock>
-                <StrongText>Where Was Unit Found: </StrongText>
-                <ListText>{unit.whereFound}</ListText>
-              </InfoBlock>
-              <InfoBlock>
-                <StrongText>Additional Rules and Regulation: </StrongText>
-                <ListText>{additionalRules}</ListText>
-              </InfoBlock>
-            </SectionColumn>
-            <SectionColumn>
-              <InfoBlock>
-                <StrongText>Notes from Housing Locator: </StrongText>
-                {unit.internalComments}
-              </InfoBlock>
-            </SectionColumn>
-          </Row>
-        </MainColumn>
-      </Page>
-    );
-  }
+        <Row>
+          <Header>Additional Information</Header>
+        </Row>
+        <Row>
+          <SectionColumn>
+            <InfoBlock>
+              <StrongText>Where Was Unit Found: </StrongText>
+              <ListText>{unit.whereFound}</ListText>
+            </InfoBlock>
+            <InfoBlock>
+              <StrongText>Additional Rules and Regulation: </StrongText>
+              <ListText>{additionalRules}</ListText>
+            </InfoBlock>
+          </SectionColumn>
+          <SectionColumn>
+            <InfoBlock>
+              <StrongText>Notes from Housing Locator: </StrongText>
+              {unit.internalComments}
+            </InfoBlock>
+          </SectionColumn>
+        </Row>
+      </MainColumn>
+    </Page>
+  );
 }
