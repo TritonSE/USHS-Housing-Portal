@@ -101,7 +101,7 @@ const Header = styled.div`
   letter-spacing: 0.32px;
   position: relative;
   right: 195px;
-  padding-top: 60px;
+  padding-top: 50px;
   padding-bottom: 15px;
 `;
 
@@ -145,13 +145,13 @@ const InputBox = styled.input`
 `;
 
 const ButtonsWrapper = styled.div`
-  padding-top: 30px;
+  padding-top: 25px;
   display: flex;
   flex-direction: row;
   gap: 400px;
 `;
 
-export const SubmitButton = styled.input`
+const SubmitButton = styled.input`
   padding: 12px 28px;
   background-color: #b64201;
   color: #ffffff;
@@ -169,6 +169,11 @@ export const SubmitButton = styled.input`
   }
 `;
 
+const Error = styled.div`
+  color: red;
+  padding-top: 10px;
+`;
+
 type PopupProps = {
   active: boolean;
   onClose: () => void;
@@ -177,8 +182,10 @@ type PopupProps = {
 export const ReferralPopup = ({ active, onClose }: PopupProps) => {
   const [popup, setPopup] = useState<boolean>(false);
   const [addRC, setAddRC] = useState<boolean>(false);
+  const [errorMsg, setErrorMsg] = useState<string>("");
   const [allRCs, setAllRCs] = useState<RenterCandidate[]>([]);
   const { register, handleSubmit, reset } = useForm();
+  const errorMapping = { email: "Email", adults: "Adults field", children: "Children field" };
 
   useEffect(() => {
     setPopup(active);
@@ -207,6 +214,16 @@ export const ReferralPopup = ({ active, onClose }: PopupProps) => {
           reset();
           onClose();
           setAddRC(false);
+          setErrorMsg("");
+        } else {
+          //scuffed string parsing
+          const errorMessage = value.error.substring(value.error.indexOf("Invalid fields") + 16);
+          const firstWord = errorMessage.substring(
+            0,
+            errorMessage.indexOf(" "),
+          ) as keyof typeof errorMapping;
+          const secondHalf = errorMessage.substring(firstWord.length, errorMessage.length - 2);
+          setErrorMsg(errorMapping[firstWord] + secondHalf);
         }
       })
       .catch((error) => {
@@ -225,6 +242,7 @@ export const ReferralPopup = ({ active, onClose }: PopupProps) => {
                 onClick={() => {
                   onClose();
                   setAddRC(false);
+                  setErrorMsg("");
                 }}
               >
                 &times;
@@ -297,6 +315,7 @@ export const ReferralPopup = ({ active, onClose }: PopupProps) => {
                       <Button
                         onClick={() => {
                           setAddRC(false);
+                          setErrorMsg("");
                         }}
                         kind="secondary"
                       >
@@ -305,6 +324,7 @@ export const ReferralPopup = ({ active, onClose }: PopupProps) => {
                       <SubmitButton type="submit" value="Add Referral"></SubmitButton>
                     </ButtonsWrapper>
                   </FormWrapper>
+                  <Error>{errorMsg}</Error>
                 </>
               )}
             </Wrapper>
