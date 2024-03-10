@@ -75,6 +75,8 @@ const List = styled.ul`
 
 const StrongText = styled(Text)`
   font-weight: 600;
+  line-height: 30px;
+  letter-spacing: 0.4px;
 `;
 
 const ListText = styled.li`
@@ -118,6 +120,13 @@ const PaddingInButton = styled.div`
   gap: 10px;
 `;
 
+const InfoBlock = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0 0px 15px 0;
+`;
+
 export function UnitDetails() {
   const [unit, setUnit] = useState<Unit>();
   const { id } = useParams();
@@ -128,7 +137,6 @@ export function UnitDetails() {
 
   const toggleEditing = () => {
     setIsEditing((prevState) => !prevState);
-    console.log(isEditing);
   };
 
   React.useEffect(() => {
@@ -187,7 +195,7 @@ export function UnitDetails() {
     <ListText key={rule}>{rule}</ListText>
   ));
 
-  if (dataContext.currentUser?.isHousingLocator) {
+  if (!dataContext.currentUser?.isHousingLocator) {
     return (
       <Page>
         <Helmet>
@@ -237,8 +245,8 @@ export function UnitDetails() {
               <StrongText>
                 Landlord: {unit.landlordFirstName + " " + unit.landlordLastName}
               </StrongText>
-              <ListText>{unit.landlordPhone}</ListText>
-              <ListText>{unit.landlordEmail}</ListText>
+              <Text>{unit.landlordPhone}</Text>
+              <Text>{unit.landlordEmail}</Text>
             </Column>
           </DetailsRow>
 
@@ -247,18 +255,25 @@ export function UnitDetails() {
           </Row>
           <Row>
             <SectionColumn>
-              <StrongText>Security Deposit: </StrongText>
-              <List>
-                <ListText> ${unit.securityDeposit}</ListText>
-              </List>
-              <StrongText>Payment/Renting Criteria: </StrongText>
-              {rentingCriteria}
+              <InfoBlock>
+                <StrongText>Security Deposit: </StrongText>
+                <List>
+                  <ListText> ${unit.securityDeposit}</ListText>
+                </List>
+              </InfoBlock>
+              <InfoBlock>
+                <StrongText>Payment/Renting Criteria: </StrongText>
+                {rentingCriteria}
+              </InfoBlock>
             </SectionColumn>
+
             <SectionColumn>
-              <StrongText>Application Fee: </StrongText>
-              <List>
-                <ListText>${unit.applicationFeeCost}</ListText>
-              </List>
+              <InfoBlock>
+                <StrongText>Application Fee: </StrongText>
+                <List>
+                  <ListText>${unit.applicationFeeCost}</ListText>
+                </List>
+              </InfoBlock>
             </SectionColumn>
           </Row>
 
@@ -267,24 +282,40 @@ export function UnitDetails() {
           </Row>
           <Row>
             <SectionColumn>
-              <StrongText>Parking: </StrongText>
-              {parkingRequirements}
-              <StrongText>Pets/Animals: </StrongText>
-              {pets}
-              <StrongText>Appliances: </StrongText>
-              {appliances}
-              <StrongText>Housing Authority: </StrongText>
-              <ListText> {unit.housingAuthority}</ListText>
-              <StrongText>Additional Comments from Landlord: </StrongText>
-              <ListText> {unit.landlordComments}</ListText>
+              <InfoBlock>
+                <StrongText>Parking: </StrongText>
+                {parkingRequirements}
+              </InfoBlock>
+              <InfoBlock>
+                <StrongText>Pets/Animals: </StrongText>
+                {pets}
+              </InfoBlock>
+              <InfoBlock>
+                <StrongText>Appliances: </StrongText>
+                {appliances}
+              </InfoBlock>
+              <InfoBlock>
+                <StrongText>Housing Authority: </StrongText>
+                <ListText> {unit.housingAuthority}</ListText>
+              </InfoBlock>
+              <InfoBlock>
+                <StrongText>Additional Comments from Landlord: </StrongText>
+                <ListText> {unit.landlordComments}</ListText>
+              </InfoBlock>
             </SectionColumn>
             <SectionColumn>
-              <StrongText>Accessibility Access: </StrongText>
-              {accessibility}
-              <StrongText>Sharing House Acceptable: </StrongText>
-              <ListText>{unit.sharingAcceptable}</ListText>
-              <StrongText>Community/Neighborhood Information: </StrongText>
-              {communityFeatures}
+              <InfoBlock>
+                <StrongText>Accessibility Access: </StrongText>
+                {accessibility}
+              </InfoBlock>
+              <InfoBlock>
+                <StrongText>Sharing House Acceptable: </StrongText>
+                <ListText>{unit.sharingAcceptable}</ListText>
+              </InfoBlock>
+              <InfoBlock>
+                <StrongText>Community/Neighborhood Information: </StrongText>
+                {communityFeatures}
+              </InfoBlock>
             </SectionColumn>
           </Row>
 
@@ -293,14 +324,20 @@ export function UnitDetails() {
           </Row>
           <Row>
             <SectionColumn>
-              <StrongText>Where Was Unit Found: </StrongText>
-              <ListText>{unit.whereFound}</ListText>
-              <StrongText>Additional Rules and Regulation: </StrongText>
-              <ListText>{additionalRules}</ListText>
+              <InfoBlock>
+                <StrongText>Where Was Unit Found: </StrongText>
+                <ListText>{unit.whereFound}</ListText>
+              </InfoBlock>
+              <InfoBlock>
+                <StrongText>Additional Rules and Regulation: </StrongText>
+                <ListText>{additionalRules}</ListText>
+              </InfoBlock>
             </SectionColumn>
             <SectionColumn>
-              <StrongText>Notes from Housing Locator: </StrongText>
-              {unit.internalComments}
+              <InfoBlock>
+                <StrongText>Notes from Housing Locator: </StrongText>
+                {unit.internalComments}
+              </InfoBlock>
             </SectionColumn>
           </Row>
         </MainColumn>
@@ -356,18 +393,25 @@ export function UnitDetails() {
           </Row>
           <Row>
             <SectionColumn>
-              <StrongText>Security Deposit: </StrongText>
-              <List>
-                <ListText> ${unit.securityDeposit}</ListText>
-              </List>
-              <StrongText>Payment/Renting Criteria: </StrongText>
-              {rentingCriteria}
+              <InfoBlock>
+                <StrongText>Security Deposit: </StrongText>
+                <List>
+                  <ListText> ${unit.securityDeposit}</ListText>
+                </List>
+              </InfoBlock>
+              <InfoBlock>
+                <StrongText>Payment/Renting Criteria: </StrongText>
+                {rentingCriteria}
+              </InfoBlock>
             </SectionColumn>
+
             <SectionColumn>
-              <StrongText>Application Fee: </StrongText>
-              <List>
-                <ListText>${unit.applicationFeeCost}</ListText>
-              </List>
+              <InfoBlock>
+                <StrongText>Application Fee: </StrongText>
+                <List>
+                  <ListText>${unit.applicationFeeCost}</ListText>
+                </List>
+              </InfoBlock>
             </SectionColumn>
           </Row>
 
@@ -376,24 +420,40 @@ export function UnitDetails() {
           </Row>
           <Row>
             <SectionColumn>
-              <StrongText>Parking: </StrongText>
-              {parkingRequirements}
-              <StrongText>Pets/Animals: </StrongText>
-              {pets}
-              <StrongText>Appliances: </StrongText>
-              {appliances}
-              <StrongText>Housing Authority: </StrongText>
-              <ListText> {unit.housingAuthority}</ListText>
-              <StrongText>Additional Comments from Landlord: </StrongText>
-              <ListText> {unit.landlordComments}</ListText>
+              <InfoBlock>
+                <StrongText>Parking: </StrongText>
+                {parkingRequirements}
+              </InfoBlock>
+              <InfoBlock>
+                <StrongText>Pets/Animals: </StrongText>
+                {pets}
+              </InfoBlock>
+              <InfoBlock>
+                <StrongText>Appliances: </StrongText>
+                {appliances}
+              </InfoBlock>
+              <InfoBlock>
+                <StrongText>Housing Authority: </StrongText>
+                <ListText> {unit.housingAuthority}</ListText>
+              </InfoBlock>
+              <InfoBlock>
+                <StrongText>Additional Comments from Landlord: </StrongText>
+                <ListText> {unit.landlordComments}</ListText>
+              </InfoBlock>
             </SectionColumn>
             <SectionColumn>
-              <StrongText>Accessibility Access: </StrongText>
-              {accessibility}
-              <StrongText>Sharing House Acceptable: </StrongText>
-              <ListText>{unit.sharingAcceptable}</ListText>
-              <StrongText>Community/Neighborhood Information: </StrongText>
-              {communityFeatures}
+              <InfoBlock>
+                <StrongText>Accessibility Access: </StrongText>
+                {accessibility}
+              </InfoBlock>
+              <InfoBlock>
+                <StrongText>Sharing House Acceptable: </StrongText>
+                <ListText>{unit.sharingAcceptable}</ListText>
+              </InfoBlock>
+              <InfoBlock>
+                <StrongText>Community/Neighborhood Information: </StrongText>
+                {communityFeatures}
+              </InfoBlock>
             </SectionColumn>
           </Row>
 
@@ -402,14 +462,20 @@ export function UnitDetails() {
           </Row>
           <Row>
             <SectionColumn>
-              <StrongText>Where Was Unit Found: </StrongText>
-              <ListText>{unit.whereFound}</ListText>
-              <StrongText>Additional Rules and Regulation: </StrongText>
-              <ListText>{additionalRules}</ListText>
+              <InfoBlock>
+                <StrongText>Where Was Unit Found: </StrongText>
+                <ListText>{unit.whereFound}</ListText>
+              </InfoBlock>
+              <InfoBlock>
+                <StrongText>Additional Rules and Regulation: </StrongText>
+                <ListText>{additionalRules}</ListText>
+              </InfoBlock>
             </SectionColumn>
             <SectionColumn>
-              <StrongText>Notes from Housing Locator: </StrongText>
-              {unit.internalComments}
+              <InfoBlock>
+                <StrongText>Notes from Housing Locator: </StrongText>
+                {unit.internalComments}
+              </InfoBlock>
             </SectionColumn>
           </Row>
         </MainColumn>
