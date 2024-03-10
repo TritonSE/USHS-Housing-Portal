@@ -31,7 +31,7 @@ type TextboxProps = {
   name: string;
   value: string | number | undefined;
   requiredField?: boolean;
-  handler: (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => void;
+  handler: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 };
 
 export const Textbox = (props: TextboxProps) => {
