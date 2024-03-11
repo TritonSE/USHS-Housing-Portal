@@ -10,7 +10,7 @@ type ApplicationFeeCostProps = {
 };
 
 const MarginOffset = styled.div`
-  margin-bottom: -48px;
+  margin-bottom: -40px;
 `;
 
 export const ApplicationFeeCost = (props: ApplicationFeeCostProps) => {

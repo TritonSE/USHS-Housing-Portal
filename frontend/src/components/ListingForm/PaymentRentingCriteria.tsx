@@ -20,7 +20,7 @@ export const PaymentRentingCriteria = (props: PaymentRentingCriteriaProps) => {
   return (
     <Margin32>
       <FieldHeader>
-        Payment/Renting Criteria (select ALL that apply){" "}
+        Payment/Renting Criteria{" "}
         {!props.notRequired && <Required>*</Required>}
       </FieldHeader>
       <label>

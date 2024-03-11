@@ -30,14 +30,14 @@ export const TextContainer = styled.div`
   display: flex;
 `;
 
-export const CustomInputText = styled.input`
-  background-color: #fbf7f3;
-  color: black;
-  padding: 5px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  width: 300px;
-`;
+// export const CustomInputText = styled.input`
+//   background-color: #fbf7f3;
+//   color: black;
+//   padding: 5px;
+//   border-radius: 5px;
+//   border: 1px solid #ccc;
+//   width: 300px;
+// `;
 
 export const CustomInputDate = styled.input`
   background-color: #fbf7f3;
