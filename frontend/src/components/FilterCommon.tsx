@@ -105,4 +105,11 @@ export const ApplyButton = styled.button`
   font-size: 14px;
   font-weight: 300;
   min-width: 100%;
+
+  cursor: pointer;
+  transition-duration: 300ms;
+  &:hover {
+    background-color: #ec8537;
+    border-color: #ec8537;
+  }
 `;
