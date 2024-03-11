@@ -1,4 +1,4 @@
-import { APIResult, get, handleAPIError, post } from "./requests";
+import { APIResult, get, handleAPIError, post, put } from "./requests";
 
 // Represents a Unit object as it will be received from the backend.
 export type Unit = {
@@ -63,21 +63,6 @@ export async function getUnit(id: string): Promise<APIResult<Unit>> {
 
 export async function getUnits(_params: FilterParams): Promise<APIResult<Unit[]>> {
   try {
-    // const query = new URLSearchParams(params);
-
-    // const keysForDel: string[] = [];
-    // query.forEach((value, key) => {
-    //   if (value === "" || value === null || value === "undefined") {
-    //     keysForDel.push(key);
-    //   }
-    // });
-
-    // keysForDel.forEach((key) => {
-    //   query.delete(key);
-    // });
-
-    // console.log(query.toString());
-
     const response = await get("/units");
     const json = (await response.json()) as Unit[];
     return { success: true, data: json };
@@ -85,6 +70,16 @@ export async function getUnits(_params: FilterParams): Promise<APIResult<Unit[]>
     return handleAPIError(error);
   }
 }
+
+// export async function updateUnit(id: string): Promise<APIResult<Unit>> {
+//   try {
+//     const response = await put(`/units/${id}`, getUnit(id));
+//     const json = (await response.json()) as Unit;
+//     return { success: true, data: json };
+//   } catch (error) {
+//     return handleAPIError(error);
+//   }
+// }
 
 type HousingLocatorFields =
   | "whereFound"

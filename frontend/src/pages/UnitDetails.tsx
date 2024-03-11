@@ -54,20 +54,17 @@ const MainColumn = styled.div`
 
 const DetailsColumn = styled(MainColumn)`
   margin: 90px;
-  gap: 40px;
+  gap: 60px;
 `;
 
 const RentPerMonth = styled.h1`
   font-size: 48px;
   font-family: "Montserrat";
   font-weight: 600;
-  line-height: 150%;
-  line-spacing: 0.96px;
 `;
 
 const Header = styled.div`
   font-size: 32px;
-  margin: 0;
   font-weight: 700;
   font-family: "Neutraface Text";
 `;
@@ -123,12 +120,6 @@ const ChangeAvailabilityButton = styled(Button)`
   padding-bottom: 10px;
 `;
 
-const ButtonPadding = styled.div`
-  display: flex;
-  flex-direction: row;
-  padding: 20px 0px 0px 10%;
-`;
-
 const DoesNotExist = styled.h1`
   font-size: 48px;
   font-family: "Neutraface Text", sans-serif;
@@ -138,6 +129,7 @@ const DoesNotExist = styled.h1`
   padding: 20px 10% 20px 10%;
 `;
 
+// POPUP STYLING
 const Overlay = styled.div`
   width: 100vw;
   height: 100vh;
@@ -269,11 +261,9 @@ export function UnitDetails() {
         </Helmet>
         <NavBar page="" />
         <Column>
-          <ButtonPadding>
-            <Link to="/">
-              <Button kind="secondary"> Back to Listing</Button>
-            </Link>
-          </ButtonPadding>
+          <Link to="/">
+            <Button kind="secondary"> Back to Listing</Button>
+          </Link>
           <DoesNotExist>This unit does not exist!</DoesNotExist>
         </Column>
       </Page>
@@ -310,11 +300,6 @@ export function UnitDetails() {
         <title>{unit.listingAddress} | USHS Housing Portal</title>
       </Helmet>
       <NavBar page="" />
-      {/* <ButtonPadding>
-        <Link to="/">
-          <Button kind="secondary">Back to Listing</Button>
-        </Link>
-      </ButtonPadding> */}
       <MainColumn>
         <DetailsColumn>
           <Section>
@@ -324,6 +309,7 @@ export function UnitDetails() {
               </Link>
             </Row>
           </Section>
+
           <Section>
             <TopRow>
               <RentPerMonth>${unit.monthlyRent}/month</RentPerMonth>
@@ -355,6 +341,7 @@ export function UnitDetails() {
               </Column>
             </DetailsRow>
           </Section>
+
           <Section>
             <Row>
               <Header>Fees</Header>
@@ -373,14 +360,10 @@ export function UnitDetails() {
                 <List>
                   <ListText>${unit.applicationFeeCost}</ListText>
                 </List>
-                {/* I don't think we have this anymore? */}
-                {/* <StrongText>Holding Fee: </StrongText>
-          <List>
-            <ListText>${unit.holdingFeeAmount}</ListText>
-          </List> */}
               </SectionColumn>
             </Row>
           </Section>
+
           <Section>
             <Row>
               <Header>Housing Specifications</Header>
@@ -408,6 +391,7 @@ export function UnitDetails() {
               </SectionColumn>
             </Row>
           </Section>
+
           <Section>
             <Row>
               <Header>Additional Information</Header>

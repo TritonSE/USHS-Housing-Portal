@@ -1,4 +1,6 @@
 import { RequestHandler } from "express";
+import { validationResult } from "express-validator";
+import { createUnitValidators } from "@/validators/units";
 import createHttpError from "http-errors";
 
 import { asyncHandler } from "./wrappers";
@@ -32,3 +34,25 @@ export const getUnitHandler: RequestHandler = asyncHandler(async (req, res, _) =
 
   res.status(200).json(unit);
 });
+
+/**
+ * Handle a request to update a unit.
+ */
+export const updateUnitHandler: RequestHandler = async (req, res, next) => {
+  try {
+    if (req.params.id != req.body._id) {
+      res.status(400);
+    }
+
+    const id = req.params.id;
+    const updatedUnit = await UnitModel.findByIdAndUpdate(id, req.body);
+
+    if (updatedUnit === null) {
+      throw createHttpError(404, "Unit not found.");
+    }
+
+    res.status(200).json(updatedUnit);
+  } catch (error) {
+    next(error);
+  }
+};

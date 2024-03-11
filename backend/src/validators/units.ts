@@ -132,3 +132,79 @@ export const createUnitValidators = [
     body("landlordComments").optional().isString().withMessage("must be a string"),
   ]),
 ];
+
+export const updateUnitValidators = [
+  checkExact([
+    body("landlordFirstName")
+      .optional()
+      .isString()
+      .withMessage("must be a string")
+      .notEmpty()
+      .withMessage("cannot be empty"),
+    body("landlordLastName")
+      .optional()
+      .isString()
+      .withMessage("must be a string")
+      .notEmpty()
+      .withMessage("cannot be empty"),
+    body("landlordEmail").optional().isEmail().withMessage("must be a valid email"),
+    body("landlordPhone").optional().isString().withMessage("must be a string"),
+    body("streetAddress")
+      .optional()
+      .isString()
+      .withMessage("must be a string")
+      .notEmpty()
+      .withMessage("cannot be empty"),
+    body("suiteNumber")
+      .optional()
+      .isString()
+      .withMessage("must be a string")
+      .notEmpty()
+      .withMessage("cannot be empty"),
+    body("city")
+      .optional()
+      .isString()
+      .withMessage("must be a string")
+      .notEmpty()
+      .withMessage("cannot be empty"),
+    body("state")
+      .optional()
+      .isString()
+      .withMessage("must be a string")
+      .notEmpty()
+      .withMessage("cannot be empty"),
+    body("areaCode")
+      .optional()
+      .isString()
+      .withMessage("must be a string")
+      .notEmpty()
+      .withMessage("cannot be empty"),
+    body("sqft").optional().isNumeric().withMessage("must be a number"),
+    body("monthlyRent").optional().isNumeric().withMessage("must be a number"),
+    body("securityDeposit").optional().isNumeric().withMessage("must be a number"),
+    body("acceptThirdParty").optional().isBoolean().withMessage("must be a boolean"),
+    body("housingAuthority")
+      .optional()
+      .isString()
+      .withMessage("must be a string")
+      .notEmpty()
+      .withMessage("cannot be empty"),
+    body("applicationFeeCost").optional().isNumeric().withMessage("must be a number"),
+    body("dateAvailable").optional().isISO8601().withMessage("must be a ISO8601 date"),
+    body("availableNow").optional().isBoolean().withMessage("must be a boolean"),
+    body("numBeds").optional().isNumeric().withMessage("must be a number"),
+    body("numBaths").optional().isNumeric().withMessage("must be a number"),
+    body("appliances").optional().isArray().withMessage("must be an array"),
+    body("communityFeatures").optional().isArray().withMessage("must be an array"),
+    body("parking").optional().isArray().withMessage("must be an array"),
+    body("accessibility").optional().isArray().withMessage("must be an array"),
+    body("pets").optional().isArray().withMessage("must be an array"),
+    body("sharingAcceptable")
+      .optional()
+      .isString()
+      .withMessage("must be a string")
+      .notEmpty()
+      .withMessage("cannot be empty"),
+    body("landlordComments").optional().isString().withMessage("must be a string"),
+  ]),
+];
