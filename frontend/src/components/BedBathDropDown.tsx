@@ -13,10 +13,6 @@ import {
   Sort,
 } from "@/components/FilterCommon";
 
-const BnbDropdownRow = styled(DropdownRow)`
-  gap: 40px;
-`;
-
 const PopupHeaderText = styled(Sort)`
   margin: 0;
   font-weight: 700;
@@ -32,16 +28,15 @@ const BedBox = styled.div`
   border: 0.5px solid #cdcaca;
   background-color: #f5f5f5;
   box-shadow: 1px 1px 2px 0px rgba(228, 227, 226, 0.4);
-  padding-left: 30px;
-  padding-right: 30px;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  width: 80px;
+  height: 30px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 `;
 
-const BathBox = styled(BedBox)`
-  padding-left: 22px;
-  padding-right: 22px;
-`;
+const BathBox = styled(BedBox)``;
 
 const AdjustButton = styled.button`
   color: #fff;
@@ -52,6 +47,10 @@ const AdjustButton = styled.button`
   padding-bottom: 2px;
   padding-left: 7px;
   padding-right: 7px;
+`;
+
+const BedBatFilterSubContainer = styled(FilterSubContainer)`
+  width: 182px;
 `;
 
 export type BedBathState = {
@@ -80,17 +79,17 @@ export const BedBathDropDown = (props: BedBathDropDownProps) => {
     : `${props.value.beds}+ bds, ${props.value.baths}+ ba`;
 
   return (
-    <FilterSubContainer>
+    <BedBatFilterSubContainer>
       <Dropdown
         onClick={() => {
           setIsActive(!isActive);
         }}
         active={isActive}
       >
-        <BnbDropdownRow>
+        <DropdownRow>
           <FilterText>{dropdownText}</FilterText>
           <DropdownIcon src={isActive ? "/up_arrow.svg" : "/dropdown.svg"} />
-        </BnbDropdownRow>
+        </DropdownRow>
       </Dropdown>
       {isActive && (
         <DropDownPopup>
@@ -168,6 +167,6 @@ export const BedBathDropDown = (props: BedBathDropDownProps) => {
           </ApplyButton>
         </DropDownPopup>
       )}
-    </FilterSubContainer>
+    </BedBatFilterSubContainer>
   );
 };
