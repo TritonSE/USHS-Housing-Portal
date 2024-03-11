@@ -73,7 +73,7 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
   const [securityDeposit, setSecurityDeposit] = useState<number | undefined>(undefined);
   const [thirdPartyPayment, setThirdPartyPayment] = useState<boolean | undefined>(undefined);
   const [housingAuthority, setHousingAuthority] = useState<string>("");
-  const [applicationFeeCost, setApplicationFeeCost] = useState(undefined);
+  const [applicationFeeCost, setApplicationFeeCost] = useState<number | undefined>(undefined);
   const [dateAvailable, setDateAvailable] = useState<Date | undefined>();
   //   const [availableNow, setAvailableNow] = useState(false);
   const [numberOfBedrooms, setNumberOfBedrooms] = useState<number | undefined>(undefined);
@@ -93,51 +93,83 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
   const [additionalRulesRegulations, setAdditionalRulesRegulations] = useState<string[]>([]);
 
   const handleFirstName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFirstName(event.target.value);
+    const hasNumber = /\d/;
+
+    if (!hasNumber.test(event.target.value)) setFirstName(event.target.value);
+    else return;
   };
 
   const handleLastName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLastName(event.target.value);
+    const hasNumber = /\d/;
+
+    if (!hasNumber.test(event.target.value)) setLastName(event.target.value);
+    else return;
   };
 
   const handleEmailAddress = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value);
+    const isEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+    if (isEmail.test(event.target.value)) setEmail(event.target.value);
+    else return;
   };
 
   const handlePhoneNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const hasLetter = /[A-Za-z]/;
+    if (hasLetter.test(event.target.value)) return;
     setPhone(event.target.value);
   };
 
   const handleStreetAddress = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.value === "") return;
     setStreetAddress(event.target.value);
   };
 
   const handleApartmentNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.value === "") return;
     setAptNum(event.target.value);
   };
 
   const handleCity = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.value === "") return;
     setCity(event.target.value);
   };
 
   const handleState = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const hasNumber = /\d/;
+    if (hasNumber.test(event.target.value)) return;
     setState(event.target.value);
   };
 
   const handleAreaCode = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const isAreaCode = /^\d{5}$/;
+    if (!isAreaCode.test(event.target.value)) return;
     setAreaCode(event.target.value);
   };
 
   const handleSqFootage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSqFootage(event.target.value);
+    const n = event.target.value;
+    if (n === "" || isNaN(parseFloat(n))) return;
+    if (n.includes("-")) return;
+    if (parseFloat(n) <= 0) return;
+
+    setSqFootage(parseFloat(n));
   };
 
   const handleRentPerMonth = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRentPerMonth(event.target.value);
+    const n = event.target.value;
+    if (n === "" || isNaN(parseFloat(n))) return;
+    if (n.includes("-")) return;
+    if (parseFloat(n) <= 0) return;
+
+    setRentPerMonth(parseFloat(n));
   };
 
   const handleSecurityDeposit = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSecurityDeposit(event.target.value);
+    const n = event.target.value;
+    if (n === "" || isNaN(parseFloat(n))) return;
+    if (n.includes("-")) return;
+    if (parseFloat(n) <= 0) return;
+
+    setSecurityDeposit(parseFloat(n));
   };
 
   const handleThirdPartyPayment = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -155,12 +187,49 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
   };
 
   const handleApplicationFeeCost = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // TODO: Check if float
+    const n = event.target.value;
+
+    if (n === undefined) {
+      setApplicationFeeCost(undefined);
+      return;
+    }
+
+    if (n === "" || isNaN(parseFloat(n))) return;
+    if (n.includes("-")) return;
+    if (parseFloat(n) <= 0) return;
     setApplicationFeeCost(parseFloat(event.target.value));
   };
 
   const handleDateAvailable = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDateAvailable(event.target.value);
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+
+    const dateArray = event.target.value.split(" ");
+
+    if (dateArray.length < 3) return;
+    if (!months.includes(dateArray[0])) return;
+    if (isNaN(parseInt(dateArray[1], 10))) return;
+    if (isNaN(parseInt(dateArray[2]))) return;
+    if (parseInt(dateArray[2]) > 9999) return;
+
+    const toReturn = new Date(
+      months.indexOf(dateArray[0]),
+      parseInt(dateArray[1], 10),
+      parseInt(dateArray[2], 1000),
+    );
+    setDateAvailable(toReturn);
   };
 
   //   const handleAvailableNow = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -168,12 +237,14 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
   //   };
 
   const handleNumberOfBedrooms = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNumberOfBedroomsOther(undefined);
     setNumberOfBedrooms(parseInt(event.target.value));
+    setNumberOfBedroomsOther(undefined);
   };
 
   const handleNumberOfBedroomsOther = (event: React.ChangeEvent<HTMLInputElement>) => {
     // TODO: Check if int
+    if (isNaN(parseInt(event.target.value))) return;
+
     setNumberOfBedrooms(undefined);
     setNumberOfBedroomsOther(parseInt(event.target.value));
   };
@@ -185,6 +256,8 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
 
   const handleNumberOfBathsOther = (event: React.ChangeEvent<HTMLInputElement>) => {
     // TODO: Check if float
+    if (isNaN(parseFloat(event.target.value))) return;
+
     setNumberOfBaths(undefined);
     setNumberOfBathsOther(parseInt(event.target.value));
   };
