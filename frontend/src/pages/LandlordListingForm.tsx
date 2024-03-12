@@ -1,11 +1,11 @@
 import { Page } from "@/components";
 import { ListingFormComponents } from "@/components/ListingFormComponents";
 
-export function ListingForm() {
+export function LandlordListingForm() {
   return (
     <div>
       <Page>
-        <ListingFormComponents formType={2} />
+        <ListingFormComponents formType={1} />
       </Page>
     </div>
   );

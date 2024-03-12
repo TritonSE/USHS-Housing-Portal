@@ -6,7 +6,14 @@ import { ThemeProvider } from "styled-components";
 import { AuthContext, AuthProvider } from "./contexts/AuthContext";
 import { DataProvider } from "./contexts/DataContext";
 
-import { Home, ListingForm, Login, Profile, UnitDetails } from "@/pages";
+import {
+  Home,
+  HousingLocatorForm,
+  LandlordListingForm,
+  Login,
+  Profile,
+  UnitDetails,
+} from "@/pages";
 import { GlobalStyle, theme } from "@/theme";
 
 function AppRouter() {
@@ -18,7 +25,6 @@ function AppRouter() {
         {!signedIn && (
           <>
             <Route path="/login" element={<Login />} />
-            <Route path="/form" element={<ListingForm />} />
             <Route path="*" element={<Navigate replace to="/login" />} />
           </>
         )}
@@ -26,7 +32,8 @@ function AppRouter() {
         {signedIn && (
           <>
             <Route path="/" element={<Home />} />
-            <Route path="/form" element={<ListingForm />} />
+            <Route path="/landlord-listing-form" element={<LandlordListingForm />} />
+            <Route path="/housing-locator-form" element={<HousingLocatorForm />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/unit/:id" element={<UnitDetails />} />
             <Route path="*" element={<Navigate to="/" />} />

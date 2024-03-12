@@ -125,9 +125,6 @@ export const Pets = (props: PetsProps) => {
             />
             N/A
           </label>
-          {console.log(props.pets)}
-          {console.log("props.pets.includes(\"N/A\"): " + props.pets.includes("N/A"))}
-
         </div>
       </RadioCheckBoxContainer>
     </Margin32>

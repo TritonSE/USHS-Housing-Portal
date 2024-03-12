@@ -9,7 +9,7 @@ import {
 
 export type DateAvailableProps = {
   dateAvailable: string | undefined;
-  handleDateAvailable: () => void;
+  handleDateAvailable: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 export const DateAvailable = (props: DateAvailableProps) => {

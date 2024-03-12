@@ -439,7 +439,10 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
           handleApplicationFeeCost={handleApplicationFeeCost}
         />
         <MidSectionHeader>House Specifics</MidSectionHeader>
-        <DateAvailable dateAvailable={dateAvailable} handleDateAvailable={handleDateAvailable} />
+        <DateAvailable
+          dateAvailable={dateAvailable?.toString()}
+          handleDateAvailable={handleDateAvailable}
+        />
 
         <RadioCheckBoxContainer>
           <NumberBedrooms
@@ -508,17 +511,15 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
               handleCheckBoxNA={handleCheckBoxNA}
             />
             <Textbox
-          elementName="Additional Comments"
-          requiredField={true}
-          kind="textarea"
-          name="additionalCommentsHL"
-          value={additionalCommentsHL}
-          handler={handleadditionalCommentsHL}
-        />
+              elementName="Additional Comments"
+              requiredField={true}
+              kind="textarea"
+              name="additionalCommentsHL"
+              value={additionalCommentsHL}
+              handler={handleadditionalCommentsHL}
+            />
           </div>
         )}
-
-        
       </ContentContainer>
       <SubmitButtonMarginOffset>
         <Button kind="primary">Submit</Button>
