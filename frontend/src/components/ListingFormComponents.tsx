@@ -27,6 +27,8 @@ import { Pets } from "@/components/ListingForm/Pets";
 import { SharingHousing } from "@/components/ListingForm/SharingHousing";
 import { Textbox } from "@/components/ListingForm/Textbox";
 import { ThirdPartyPayment } from "@/components/ListingForm/ThirdPartyPayment";
+import { CreateUnitRequest, createUnit } from "@/api/units";
+import { useNavigate } from "react-router-dom";
 
 const MidSectionHeader = styled.h2`
   margin-bottom: 32px;
@@ -59,6 +61,7 @@ const SubmitButtonMarginOffset = styled.div`
 `;
 
 export function ListingFormComponents(props: ListingFormComponentsProps) {
+  const navigate = useNavigate();
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -325,6 +328,51 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
     setWhereFindUnit(event.target.value);
   };
 
+  const handleSubmit = (event: React.MouseEvent) => {
+    // Access the event object
+    console.log(event);
+
+    const newUser: CreateUnitRequest = {
+      _id: "1",
+      landlordFirstName: firstName,
+      landlordLastName: lastName,
+      landlordEmail: email,
+      landlordPhone: phone,
+      streetAddress: streetAddress,
+      suiteNumber: aptNum,
+      city: city,
+      state: state,
+      listingAddress: streetAddress,
+      areaCode: areaCode,
+      sqft: sqFootage ?? 0,
+      monthlyRent: rentPerMonth ?? 0,
+      securityDeposit: securityDeposit ?? 0,
+      acceptThirdParty: thirdPartyPayment ?? false,
+      housingAuthority: housingAuthority,
+      applicationFeeCost: applicationFeeCost ?? 0,
+      dateAvailable: dateAvailable?.toDateString() ?? "",
+      availableNow: dateAvailable?.getDate() === Date.now(),
+      numBeds: numberOfBedrooms ?? 0,
+      numBaths: numberOfBaths ?? 0,
+      appliances: appliances,
+      communityFeatures: communityAndNeighborInfo,
+      parking: parking,
+      accessibility: accessibility,
+      pets: pets,
+      sharingAcceptable: sharingHousing,
+      landlordComments: additionalCommentsLL,
+    };
+
+    createUnit(newUser)
+      .then((res) => {
+        console.log(res);
+        navigate("/final");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <MainContainer>
       <Logo />
@@ -508,20 +556,20 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
               handleCheckBoxNA={handleCheckBoxNA}
             />
             <Textbox
-          elementName="Additional Comments"
-          requiredField={true}
-          kind="textarea"
-          name="additionalCommentsHL"
-          value={additionalCommentsHL}
-          handler={handleadditionalCommentsHL}
-        />
+              elementName="Additional Comments"
+              requiredField={true}
+              kind="textarea"
+              name="additionalCommentsHL"
+              value={additionalCommentsHL}
+              handler={handleadditionalCommentsHL}
+            />
           </div>
         )}
-
-        
       </ContentContainer>
       <SubmitButtonMarginOffset>
-        <Button kind="primary">Submit</Button>
+        <Button kind="primary" onClick={handleSubmit}>
+          Submit
+        </Button>
       </SubmitButtonMarginOffset>
     </MainContainer>
   );
