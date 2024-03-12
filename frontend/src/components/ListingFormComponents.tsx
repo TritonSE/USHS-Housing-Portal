@@ -336,6 +336,9 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
     // Access the event object
     console.log(event);
 
+    if (numberOfBedrooms === undefined && numberOfBedroomsOther === undefined) return;
+    if (numberOfBaths === undefined && numberOfBathsOther === undefined) return;
+
     const newUser: CreateUnitRequest = {
       _id: "1",
       landlordFirstName: firstName,
