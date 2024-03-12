@@ -153,19 +153,17 @@ export function UnitDetails() {
   }, []);
 
   const approveListing = () => {
-    try {
-      if (unit && id && !unit.approved) {
-        approveUnit(id)
-          .then((result) => {
-            console.log(result);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-        window.location.reload();
-      }
-    } catch (error) {
-      console.error(error);
+    console.log("Approve Listing");
+    if (unit && id && !unit.approved) {
+      approveUnit(id)
+        .then((result) => {
+          console.log(result);
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.log("Error approving listing");
+          console.error(error);
+        });
     }
   };
 
