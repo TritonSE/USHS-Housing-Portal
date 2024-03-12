@@ -50,7 +50,8 @@ const HousingLocatorSection = styled.div`
 */
 
 type ListingFormComponentsProps = {
-  formType: number;
+  formType: "landlord listing form" | "housing locator form";
+  // formType: number;
   firstName?: string;
   lastName?: string;
   email?: string;
@@ -331,8 +332,8 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
   return (
     <MainContainer>
       <Logo />
-      {props.formType === 1 && <LandlordListingFormHeader />}
-      {props.formType === 2 && <HousingLocatorHeader />}
+      {props.formType === "landlord listing form" && <LandlordListingFormHeader />}
+      {props.formType === "housing locator form" && <HousingLocatorHeader />}
       <ContentContainer>
         <TextContainer>
           <Textbox
@@ -492,7 +493,7 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
           handler={handleadditionalCommentsLL}
         />
 
-        {props.formType === 2 && (
+        {props.formType === "housing locator form" && (
           <HousingLocatorSection>
             <MidSectionHeader>Additional fields to be entered by housing locator</MidSectionHeader>
             <Textbox

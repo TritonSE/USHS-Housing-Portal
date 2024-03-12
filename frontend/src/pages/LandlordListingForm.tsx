@@ -5,7 +5,7 @@ export function LandlordListingForm() {
   return (
     <div>
       <Page>
-        <ListingFormComponents formType={1} />
+        <ListingFormComponents formType={"landlord listing form"} />
       </Page>
     </div>
   );
