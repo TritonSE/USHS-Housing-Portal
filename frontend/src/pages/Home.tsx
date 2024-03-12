@@ -34,8 +34,10 @@ export function Home() {
       <FilterDropdown refreshUnits={setFilters}></FilterDropdown>
       <UnitCardGrid
         units={units}
-        refreshUnits={() => {
-          fetchUnits(filters);
+        refreshUnits={(approved) => {
+          const newFilters = { ...filters, approved: approved };
+          fetchUnits(newFilters);
+          setFilters(newFilters);
         }}
       />
     </Page>

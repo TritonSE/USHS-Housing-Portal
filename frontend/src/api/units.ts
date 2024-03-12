@@ -48,6 +48,7 @@ export type FilterParams = {
   beds?: string;
   baths?: string;
   sort?: string;
+  approved?: string;
 };
 
 export async function getUnit(id: string): Promise<APIResult<Unit>> {

@@ -23,6 +23,7 @@ export type FilterParams = {
   sort?: string;
   minPrice?: string;
   maxPrice?: string;
+  approved?: string;
 };
 
 /**
@@ -43,7 +44,7 @@ export const deleteUnit = async (id: string) => {
 export const getUnits = async (filters: FilterParams) => {
   // If FilterParams is empty return all available units
   if (Object.keys(filters).length === 0 && filters.constructor === Object) {
-    const units = await UnitModel.find({ dateAvailable: { $lte: new Date() } });
+    const units = await UnitModel.find({ dateAvailable: { $lte: new Date() }, approved: true });
     return units;
   }
 
@@ -53,6 +54,7 @@ export const getUnits = async (filters: FilterParams) => {
   const maxPrice = filters.maxPrice === "undefined" ? 100000 : +(filters.maxPrice ?? 100000);
 
   const avail = filters.availability ? (filters.availability === "Available" ? true : false) : true;
+  const approved = filters.approved ? (filters.approved === "approved" ? true : false) : true;
 
   let sortingCriteria;
   switch (filters.sort) {
@@ -80,6 +82,7 @@ export const getUnits = async (filters: FilterParams) => {
     numBeds: { $gte: filters.beds ?? 1 },
     numBaths: { $gte: filters.baths ?? 0.5 },
     monthlyRent: { $gte: minPrice, $lte: maxPrice },
+    approved: approved,
   }).sort(sortingCriteria);
 
   const filteredUnits = units.filter((unit: VUnit) => {

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import styled from "styled-components";
 
 import { Unit } from "@/api/units";
@@ -93,22 +93,15 @@ const AddListings = styled.div`
 
 export type UnitCardGridProps = {
   units: Unit[];
-  refreshUnits: () => void;
+  refreshUnits: (approved: string) => void;
 };
 
 export const UnitCardGrid = ({ units, refreshUnits }: UnitCardGridProps) => {
   const [pendingSelected, setPendingSelected] = useState<boolean>(false);
-  const [pendingUnits, setPendingUnits] = useState<Unit[]>([]);
-  const [approvedUnits, setApprovedUnits] = useState<Unit[]>([]);
-
-  useEffect(() => {
-    const pending = units.filter((unit: Unit) => !unit.approved);
-    const approved = units.filter((unit: Unit) => unit.approved);
-    setPendingUnits(pending);
-    setApprovedUnits(approved);
-  }, [units]);
 
   const dataContext = useContext(DataContext);
+
+  const approvedString = pendingSelected ? "pending" : "approved";
 
   return (
     <>
@@ -129,6 +122,7 @@ export const UnitCardGrid = ({ units, refreshUnits }: UnitCardGridProps) => {
                 <ListingsButton
                   onClick={() => {
                     setPendingSelected(false);
+                    refreshUnits("approved");
                   }}
                   selected={!pendingSelected}
                 >
@@ -137,11 +131,17 @@ export const UnitCardGrid = ({ units, refreshUnits }: UnitCardGridProps) => {
               </ButtonsWrapper>
             </PropertiesRow>
             <UnitCardLayout>
-              {pendingUnits.length > 0 &&
-                pendingUnits.map((option, index) => (
-                  <UnitCard unit={option} refreshUnits={refreshUnits} key={index} />
+              {units.length > 0 &&
+                units.map((option, index) => (
+                  <UnitCard
+                    unit={option}
+                    refreshUnits={() => {
+                      refreshUnits(approvedString);
+                    }}
+                    key={index}
+                  />
                 ))}
-              {pendingUnits.length === 0 && <HeaderText>No matching units found</HeaderText>}
+              {units.length === 0 && <HeaderText>No matching units found</HeaderText>}
             </UnitCardLayout>
           </>
         ) : (
@@ -153,6 +153,7 @@ export const UnitCardGrid = ({ units, refreshUnits }: UnitCardGridProps) => {
                   <PendingButton
                     onClick={() => {
                       setPendingSelected(true);
+                      refreshUnits("pending");
                     }}
                     selected={pendingSelected}
                   >
@@ -170,11 +171,17 @@ export const UnitCardGrid = ({ units, refreshUnits }: UnitCardGridProps) => {
               )}
             </PropertiesRow>
             <UnitCardLayout>
-              {approvedUnits.length > 0 &&
-                approvedUnits.map((option, index) => (
-                  <UnitCard unit={option} refreshUnits={refreshUnits} key={index} />
+              {units.length > 0 &&
+                units.map((option, index) => (
+                  <UnitCard
+                    unit={option}
+                    refreshUnits={() => {
+                      refreshUnits(approvedString);
+                    }}
+                    key={index}
+                  />
                 ))}
-              {approvedUnits.length === 0 && <HeaderText>No matching units found</HeaderText>}
+              {units.length === 0 && <HeaderText>No matching units found</HeaderText>}
             </UnitCardLayout>
           </>
         )}
