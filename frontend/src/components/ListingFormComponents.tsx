@@ -32,13 +32,16 @@ const MidSectionHeader = styled.h2`
   margin-bottom: 32px;
   font-size: 32px;
   line-height: 150%;
-  color: #000;
   font-family: "Neutraface Text", sans-serif;
   font-size: 32px;
   font-style: normal;
   font-weight: 700;
   line-height: 150%;
   letter-spacing: 0.64px;
+`;
+
+const HousingLocatorSection = styled.div`
+  color: #b64201;
 `;
 
 /*
@@ -490,7 +493,7 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
         />
 
         {props.formType === 2 && (
-          <div>
+          <HousingLocatorSection>
             <MidSectionHeader>Additional fields to be entered by housing locator</MidSectionHeader>
             <Textbox
               elementName="Where did you find the unit?"
@@ -518,7 +521,7 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
               value={additionalCommentsHL}
               handler={handleadditionalCommentsHL}
             />
-          </div>
+          </HousingLocatorSection>
         )}
       </ContentContainer>
       <SubmitButtonMarginOffset>

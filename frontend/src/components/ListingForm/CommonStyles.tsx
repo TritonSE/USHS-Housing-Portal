@@ -17,35 +17,16 @@ export const FieldHeader = styled.h3`
   font-size: 20px;
   font-style: normal;
   font-weight: 600;
-  line-height: 150%; /* 30px */
+  line-height: 150%;
   letter-spacing: 0.4px;
 `;
 
 export const ContentContainer = styled.div`
-  //   width: 80%; /* Adjust as needed */
   margin: 20px auto;
 `;
 
 export const TextContainer = styled.div`
   display: flex;
-`;
-
-// export const CustomInputText = styled.input`
-//   background-color: #fbf7f3;
-//   color: black;
-//   padding: 5px;
-//   border-radius: 5px;
-//   border: 1px solid #ccc;
-//   width: 300px;
-// `;
-
-export const CustomInputDate = styled.input`
-  background-color: #fbf7f3;
-  color: black;
-  padding: 5px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  width: 300px;
 `;
 
 export const OtherText = styled.input`
