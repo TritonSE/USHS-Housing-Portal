@@ -352,10 +352,13 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
       applicationFeeCost: applicationFeeCost ?? 0,
       dateAvailable: dateAvailable?.toDateString() ?? "",
       availableNow: dateAvailable?.getDate() === Date.now(),
-      numBeds: numberOfBedrooms ?? 0,
-      numBaths: numberOfBaths ?? 0,
+      numBeds: numberOfBedrooms ?? numberOfBedroomsOther ?? 0,
+      numBaths: numberOfBaths ?? numberOfBathsOther ?? 0,
       appliances: appliances,
-      communityFeatures: communityAndNeighborInfo,
+      communityFeatures:
+        communityAndNeighborInfo[0] === ""
+          ? [communityAndNeighborInfoOther]
+          : communityAndNeighborInfo,
       parking: parking,
       accessibility: accessibility,
       pets: pets,
