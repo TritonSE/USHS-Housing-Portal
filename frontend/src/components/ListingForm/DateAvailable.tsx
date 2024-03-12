@@ -1,15 +1,19 @@
-// import styled from "styled-components";
+import styled from "styled-components";
 
-import {
-  CustomInputDate,
-  FieldHeader,
-  LabelTextCol,
-  Required,
-} from "@/components/ListingForm/CommonStyles";
+import { FieldHeader, LabelTextCol, Required } from "@/components/ListingForm/CommonStyles";
+
+const CustomInputDate = styled.input`
+  background-color: #fbf7f3;
+  color: black;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 300px;
+`;
 
 export type DateAvailableProps = {
   dateAvailable: string | undefined;
-  handleDateAvailable: () => void;
+  handleDateAvailable: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 export const DateAvailable = (props: DateAvailableProps) => {

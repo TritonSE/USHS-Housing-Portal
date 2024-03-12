@@ -1,10 +1,11 @@
+import styled from "styled-components";
+
 import {
   // CustomInputText,
   FieldHeader,
   Required,
   TextCol,
 } from "@/components/ListingForm/CommonStyles";
-import styled from "styled-components";
 
 const CustomInputText = styled.input`
   background-color: #fbf7f3;
@@ -16,13 +17,13 @@ const CustomInputText = styled.input`
 `;
 
 const CustomTextArea = styled.textarea`
-background-color: #fbf7f3;
+  background-color: #fbf7f3;
   color: black;
   padding: 5px;
   border-radius: 5px;
   border: 1px solid #ccc;
   width: 300px;
-`
+`;
 
 type TextboxProps = {
   elementName?: string;
@@ -31,7 +32,9 @@ type TextboxProps = {
   name: string;
   value: string | number | undefined;
   requiredField?: boolean;
-  handler: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  handler:
+    | ((event: React.ChangeEvent<HTMLInputElement>) => void)
+    | ((event: React.ChangeEvent<HTMLTextAreaElement>) => void);
 };
 
 export const Textbox = (props: TextboxProps) => {
@@ -55,21 +58,24 @@ export const Textbox = (props: TextboxProps) => {
               type="text"
               name={props.name}
               value={props.value}
-              onChange={props.handler}
+              onChange={props.handler as (event: React.ChangeEvent<HTMLInputElement>) => void}
             />
           )}
           {(!props.kind || props.kind === "text") && props.placeholder && (
             <CustomInputText
               className="textbox"
-              type= "text"
+              type="text"
               placeholder={props.placeholder}
               name={props.name}
               value={props.value}
-              onChange={props.handler}
+              onChange={props.handler as (event: React.ChangeEvent<HTMLInputElement>) => void}
             />
           )}
-          {(props.kind === "textarea" ) && (
-            <CustomTextArea value={props.value} onChange={props.handler}/>
+          {props.kind === "textarea" && (
+            <CustomTextArea
+              value={props.value}
+              onChange={props.handler as (event: React.ChangeEvent<HTMLTextAreaElement>) => void}
+            />
           )}
         </label>
       </div>
