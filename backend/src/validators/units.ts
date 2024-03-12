@@ -1,17 +1,5 @@
 import { body, checkExact } from "express-validator";
 
-const idValidator = body("id")
-  .exists()
-  .withMessage("is required")
-  .bail()
-  .isString()
-  .withMessage("must be a string")
-  .bail()
-  .notEmpty()
-  .withMessage("cannot be empty");
-
-export const approveUnitValidators = [idValidator];
-
 export const createUnitValidators = [
   checkExact([
     body("landlordFirstName")

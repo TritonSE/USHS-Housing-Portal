@@ -72,7 +72,6 @@ export type BannerProps = {
 
 export const Banner = (props: BannerProps) => {
   const [popup, setPopup] = useState<boolean>(true);
-  console.log(props.value);
   return (
     <div>
       {popup && (
