@@ -4,7 +4,7 @@ import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-import { Unit, getUnit } from "@/api/units";
+import { Unit, getUnit, updateUnit } from "@/api/units";
 import { Page } from "@/components";
 import { Button } from "@/components/Button";
 import { NavBar } from "@/components/NavBar";
@@ -238,9 +238,34 @@ export function UnitDetails() {
   const [unit, setUnit] = useState<Unit>();
   const { id } = useParams();
   const [popup, setPopup] = useState(false);
+  const [selectedPopupOption, setSelectedPopupOption] = useState("");
+  const [dateText, setDateText] = useState("");
+
+  const handleRadioChange = (event) => {
+    setSelectedPopupOption(event.target.value);
+  };
 
   const togglePopup = () => {
     setPopup(!popup);
+  };
+
+  const handleSaveAvailability = () => {
+    // Depending on the selected option, gather the updatedData
+    let updatedData = {};
+
+    if (selectedPopupOption === "enterDate") {
+      updatedData = { availabilityDate: dateText };
+    } else if (selectedPopupOption === "leasedByUSHS") {
+      updatedData = { leasedStatus: false };
+    } else if (selectedPopupOption === "removedFromMarket") {
+      updatedData = { availableNow: false };
+    }
+
+    // Call your updateUnit function here, passing id and updatedData
+    updateUnit(id, updatedData);
+
+    // Close the popup
+    togglePopup();
   };
 
   React.useEffect(() => {
@@ -417,7 +442,6 @@ export function UnitDetails() {
               <XWrapper>
                 <XButton onClick={togglePopup}> &times; </XButton>
               </XWrapper>
-              {/* <h1>Change Availability</h1> */}
               <Heading>Change Availability</Heading>
               <FormWrapper>
                 <RadioColumn>
@@ -426,21 +450,26 @@ export function UnitDetails() {
                       <RadioButton
                         type="radio"
                         name="radio"
-                        value="optionA"
-                        // checked={select === "optionA"}
-                        // onChange={(event) => handleSelectChange(event)}
+                        value="enterDate"
+                        onClick={handleRadioChange}
                       />
                       <RadioButtonLabel>Enter new availability date:</RadioButtonLabel>
                     </RadioRow>
-                    <AvailabilityDate placeholder="01/01/2024" />
+                    <AvailabilityDate
+                      placeholder="01/01/2024"
+                      type="date"
+                      value={dateText}
+                      onChange={(event) => {
+                        setDateText(event.target.value);
+                      }}
+                    />
                   </AvailabilityDateColumn>
                   <RadioRow>
                     <RadioButton
                       type="radio"
                       name="radio"
-                      value="optionA"
-                      // checked={select === "optionA"}
-                      // onChange={(event) => handleSelectChange(event)}
+                      value="leasedByUSHS"
+                      onClick={handleRadioChange}
                     />
                     <RadioButtonLabel>Leased by USHS</RadioButtonLabel>
                   </RadioRow>
@@ -448,15 +477,16 @@ export function UnitDetails() {
                     <RadioButton
                       type="radio"
                       name="radio"
-                      value="optionA"
-                      // checked={select === "optionA"}
-                      // onChange={(event) => handleSelectChange(event)}
+                      value="removedFromMarket"
+                      onClick={handleRadioChange}
                     />
                     <RadioButtonLabel>Removed from market</RadioButtonLabel>
                   </RadioRow>
                 </RadioColumn>
                 <ButtonsWrapper>
-                  <SaveButton kind="primary">Save Availability</SaveButton>
+                  <SaveButton kind="primary" onClick={handleSaveAvailability}>
+                    Save Availability
+                  </SaveButton>
                 </ButtonsWrapper>
               </FormWrapper>
             </Modal>

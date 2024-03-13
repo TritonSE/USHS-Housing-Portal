@@ -71,15 +71,15 @@ export async function getUnits(_params: FilterParams): Promise<APIResult<Unit[]>
   }
 }
 
-// export async function updateUnit(id: string): Promise<APIResult<Unit>> {
-//   try {
-//     const response = await put(`/units/${id}`, getUnit(id));
-//     const json = (await response.json()) as Unit;
-//     return { success: true, data: json };
-//   } catch (error) {
-//     return handleAPIError(error);
-//   }
-// }
+export async function updateUnit(id: string, updatedData: Partial<Unit>): Promise<APIResult<Unit>> {
+  try {
+    const response = await put(`/units/${id}`, updatedData);
+    const json = (await response.json()) as Unit;
+    return { success: true, data: json };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+}
 
 type HousingLocatorFields =
   | "whereFound"
