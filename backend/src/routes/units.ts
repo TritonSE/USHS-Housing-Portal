@@ -18,6 +18,9 @@ router.get("/:id", UnitController.getUnitHandler);
 router.post("/", validateWith(createUnitValidators), UnitController.createUnitsHandler);
 router.get("/", UnitController.getUnitsHandler);
 
+router.put("/:id", requireHousingLocator, UnitController.getUnitHandler);
+router.put("/:id/approve", requireHousingLocator, UnitController.getUnitHandler);
+
 router.delete("/:id", requireHousingLocator, UnitController.deleteUnitsHandler);
 
 export default router;
