@@ -16,6 +16,9 @@ const router = express.Router();
 router.get("/:id", UnitController.getUnitHandler);
 
 router.post("/", validateWith(createUnitValidators), UnitController.createUnitsHandler);
+router.get("/", UnitController.getUnitsHandler);
+
+router.delete("/:id", requireHousingLocator, UnitController.deleteUnitsHandler);
 
 router.put("/:id/approve", requireHousingLocator, UnitController.approveUnitHandler);
 

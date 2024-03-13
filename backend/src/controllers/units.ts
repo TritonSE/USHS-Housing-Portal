@@ -17,6 +17,21 @@ export const createUnitsHandler: RequestHandler = asyncHandler(async (req, res, 
   res.status(201).json(newUnit);
 });
 
+export const deleteUnitsHandler: RequestHandler = asyncHandler(async (req, res, _) => {
+  const id = req.params.id;
+  const response = await deleteUnit(id);
+  if (response === null) {
+    res.status(400);
+  } else {
+    res.status(200).json(response);
+  }
+});
+
+export const getUnitsHandler: RequestHandler = asyncHandler(async (req, res, _) => {
+  const units = await getUnits(req.query as FilterParams);
+
+  res.status(200).json(units);
+});
 /**
  * Handle a request to get a unit.
  */
