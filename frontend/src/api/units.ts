@@ -97,6 +97,13 @@ export async function createUnit(unit: CreateUnitRequest): Promise<APIResult<Uni
 export async function approveUnit(unitId: string): Promise<APIResult<Unit>> {
   try {
     const response = await put(`/units/${unitId}/approve`);
+    const json = (await response.json()) as Unit;
+    return { success: true, data: json };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+}
+
 export async function deleteUnit(id: string): Promise<APIResult<Unit>> {
   try {
     const response = await deleteRequest(`/units/${id}`);
