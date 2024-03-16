@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import { Button } from "./Button";
 import { Logo } from "./ListingForm/Logo";
 
+import { CreateUnitRequest, createUnit } from "@/api/units";
 import { AccessibilityAccess } from "@/components/ListingForm/AccessibilityAccess";
 import { AdditionalRulesRegulations } from "@/components/ListingForm/AdditionalRulesRegulations";
 import { Appliances } from "@/components/ListingForm/Appliances";
@@ -27,8 +29,6 @@ import { Pets } from "@/components/ListingForm/Pets";
 import { SharingHousing } from "@/components/ListingForm/SharingHousing";
 import { Textbox } from "@/components/ListingForm/Textbox";
 import { ThirdPartyPayment } from "@/components/ListingForm/ThirdPartyPayment";
-import { CreateUnitRequest, createUnit } from "@/api/units";
-import { useNavigate } from "react-router-dom";
 
 const MidSectionHeader = styled.h2`
   margin-bottom: 32px;
@@ -345,30 +345,30 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
       landlordLastName: lastName,
       landlordEmail: email,
       landlordPhone: phone,
-      streetAddress: streetAddress,
+      streetAddress,
       suiteNumber: aptNum,
-      city: city,
-      state: state,
+      city,
+      state,
       listingAddress: streetAddress,
-      areaCode: areaCode,
+      areaCode,
       sqft: sqFootage ?? 0,
       monthlyRent: rentPerMonth ?? 0,
       securityDeposit: securityDeposit ?? 0,
       acceptThirdParty: thirdPartyPayment ?? false,
-      housingAuthority: housingAuthority,
+      housingAuthority,
       applicationFeeCost: applicationFeeCost ?? 0,
       dateAvailable: dateAvailable?.toDateString() ?? "",
       availableNow: dateAvailable?.getDate() === Date.now(),
       numBeds: numberOfBedrooms ?? numberOfBedroomsOther ?? 0,
       numBaths: numberOfBaths ?? numberOfBathsOther ?? 0,
-      appliances: appliances,
+      appliances,
       communityFeatures:
         communityAndNeighborInfo[0] === ""
           ? [communityAndNeighborInfoOther]
           : communityAndNeighborInfo,
-      parking: parking,
-      accessibility: accessibility,
-      pets: pets,
+      parking,
+      accessibility,
+      pets,
       sharingAcceptable: sharingHousing,
       landlordComments: additionalCommentsLL,
     };
