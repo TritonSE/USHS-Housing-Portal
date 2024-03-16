@@ -18,7 +18,6 @@ import { GlobalStyle, theme } from "@/theme";
 
 function AppRouter() {
   const { signedIn } = useContext(AuthContext);
-  console.log(signedIn);
   return (
     <BrowserRouter>
       <Routes>

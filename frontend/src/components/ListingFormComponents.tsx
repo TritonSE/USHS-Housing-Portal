@@ -332,9 +332,9 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
     setWhereFindUnit(event.target.value);
   };
 
-  const handleSubmit = (event: React.MouseEvent) => {
+  const handleSubmit = () => {
     // Access the event object
-    console.log(event);
+    // console.log(event);
 
     if (numberOfBedrooms === undefined && numberOfBedroomsOther === undefined) return;
     if (numberOfBaths === undefined && numberOfBathsOther === undefined) return;
