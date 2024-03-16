@@ -35,7 +35,7 @@ export function AuthProvider({ children }: ProviderProps) {
     return unsubscribe;
   }, []);
 
-  const value = useMemo(() => ({ currentUser, signedIn: !currentUser, loading }), [currentUser]);
+  const value = useMemo(() => ({ currentUser, signedIn: !!currentUser, loading }), [currentUser]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
