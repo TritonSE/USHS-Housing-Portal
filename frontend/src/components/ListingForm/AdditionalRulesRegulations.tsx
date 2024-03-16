@@ -143,7 +143,7 @@ export const AdditionalRulesRegulations = (props: AdditionalRulesRegulationsProp
         <label>
           <CustomCheckboxRadio
             type="radio"
-            name="N/A"
+            name="N/A_additionalrulesregs"
             value="N/A"
             checked={props.additionalRulesRegulations.includes("N/A")}
             onChange={() => {

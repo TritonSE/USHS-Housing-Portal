@@ -116,7 +116,7 @@ export const Pets = (props: PetsProps) => {
           <label>
             <CustomCheckboxRadio
               type="radio"
-              name="N/A"
+              name="N/A_pets"
               value="N/A"
               checked={props.pets.includes("N/A")}
               onChange={() => {
