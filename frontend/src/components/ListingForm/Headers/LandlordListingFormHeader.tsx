@@ -23,7 +23,7 @@ export const LandlordListingFormHeader = () => {
       <HeaderMain>
         Union Station Homeless Services
         <br />
-        Land Lord Listing Form
+        Landlord Listing Form
       </HeaderMain>
       <HeaderSubtext>
         Thank you for considering adding your listing to our database! Our organization aims to
