@@ -134,33 +134,15 @@ const EditButton = styled.div`
 
 export function UnitDetails() {
   const [unit, setUnit] = useState<Unit>();
-  const approvedBannerValues = {
-    image: "/check_mark.svg",
-    withTitle: true,
-    title: "Approval Confirmed",
-    message: "The listing is now visible to case manager and ready for referrals.",
-    withX: true,
-    color: "#C4F4DF",
-    width: "1120px",
-    height: "80px",
-  };
-  const unapprovedBannerValues = {
-    image: "/Caution.svg",
-    withTitle: true,
-    title: "Pending Approval",
-    message:
-      "The following information is submitted by the landlord. Fill in additional information and approve at the bottom of the page to make the listing visible to case managers.",
-    withX: false,
-    color: "#FCE9C9",
-    width: "1120px",
-    height: "80px",
-  };
+  const [showApprovedBanner, setShowApprovedBanner] = useState(false);
+  const [showPendingApprovalBanner, setShowPendingApprovalBanner] = useState(false);
+
   const { id } = useParams();
   //using Data Context to get currentUser info
   const { currentUser } = useContext(DataContext);
 
   //checks for which view to return
-  const [isEditing, setIsEditing] = useState(false);
+  const [_isEditing, setIsEditing] = useState(false);
 
   const toggleEditing = () => {
     setIsEditing((prevState) => !prevState);
@@ -170,6 +152,9 @@ export function UnitDetails() {
     if (id !== undefined) {
       void getUnit(id).then((result) => {
         if (result.success) {
+          if (!result.data.approved) {
+            setShowPendingApprovalBanner(true);
+          }
           setUnit(result.data);
         }
       });
@@ -177,17 +162,14 @@ export function UnitDetails() {
   }, []);
 
   const approveListing = () => {
-    console.log("Approve Listing");
     if (unit && id && !unit.approved) {
       approveUnit(id)
-        .then((result) => {
-          console.log(result);
-          window.location.reload();
+        .then(() => {
+          setShowApprovedBanner(true);
+          setShowPendingApprovalBanner(false);
+          window.scrollTo(0, 0); // scroll to top of page
         })
-        .catch((error) => {
-          console.log("Error approving listing");
-          console.error(error);
-        });
+        .catch(console.error);
     }
   };
 
@@ -275,14 +257,33 @@ export function UnitDetails() {
           </Link>
           {currentUser?.isHousingLocator && (
             <Button kind="secondary">
-              <EditButton>
+              <EditButton onClick={toggleEditing}>
                 <img src={"/pencil.svg"} alt="" style={{ marginRight: "12px" }} />
                 Edit
               </EditButton>
             </Button>
           )}
         </ButtonPadding>
-        <Banner value={unit.approved ? approvedBannerValues : unapprovedBannerValues}></Banner>
+
+        <Banner
+          visible={showApprovedBanner}
+          image="/check_mark.svg"
+          withTitle={true}
+          title="Approval Confirmed"
+          message="The listing is now visible to case manager and ready for referrals."
+          withX={true}
+          color="#C4F4DF"
+        />
+
+        <Banner
+          visible={showPendingApprovalBanner}
+          image="/Caution.svg"
+          withTitle={true}
+          title="Pending Approval"
+          message="The following information is submitted by the landlord. Fill in additional information and approve at the bottom of the page to make the listing visible to case managers."
+          withX={false}
+          color="#FCE9C9"
+        />
 
         <Row>
           <RentPerMonth>${unit.monthlyRent}/month</RentPerMonth>

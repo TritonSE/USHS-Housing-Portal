@@ -36,7 +36,7 @@ export const createUnit = async (newUnit: NewUnit) => {
   return unit;
 };
 
-export async function approveUnit(unitId: string) {
+export const approveUnit = async (unitId: string) => {
   const unit = await UnitModel.findById(unitId);
   if (unit === null) {
     return null;
@@ -44,7 +44,8 @@ export async function approveUnit(unitId: string) {
   unit.approved = true;
   await unit.save();
   return unit;
-}
+};
+
 export const deleteUnit = async (id: string) => {
   const unit = await UnitModel.deleteOne({ _id: id });
   return unit;
