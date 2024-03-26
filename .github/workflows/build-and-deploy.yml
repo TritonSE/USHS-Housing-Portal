@@ -31,12 +31,12 @@ jobs:
       - name: Build Frontend
         run: |
           cd frontend
-          bun install --frozen-lockfile
+          bun install --ignore-scripts
           bun run build
       - name: Build Backend
         run: |
           cd backend
-          bun install --frozen-lockfile
+          bun install --ignore-scripts
           bun run build
       - name: Create Backend .env
         run: |

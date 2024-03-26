@@ -1,5 +1,6 @@
 import { signOut } from "firebase/auth";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 import { Button } from "@/components/Button";
@@ -50,15 +51,23 @@ const ConfirmLogout = styled(LogoutButton)`
   border-radius: 12px;
 `;
 
-const Link = styled.a<{ active: boolean }>`
+const NavItem = styled(Link)<{ $active: boolean }>`
   text-decoration: none;
-  color: ${(props) => (props.active ? "#b64201" : "black")};
-  background-color: ${(props) => (props.active ? "rgba(236, 133, 55, 0.10)" : "none")};
+  color: ${(props) => (props.$active ? "#b64201" : "black")};
+  background-color: ${(props) => (props.$active ? "rgba(236, 133, 55, 0.10)" : "none")};
   padding: 8px 16px;
   border-radius: 16px;
   &:hover {
     color: #b64201;
   }
+`;
+
+const StagingIndicator = styled.p`
+  text-decoration: none;
+  color: red;
+  padding: 8px 16px;
+  font-size: 24px;
+  font-weight: bold;
 `;
 
 const Overlay = styled.div`
@@ -137,17 +146,21 @@ export function NavBar({ page }: NavBarProps) {
       });
   };
 
+  const currUrl = window.location.href;
+  const isStaging = /ushs-housing-portal-staging/i.test(currUrl);
+
   return (
     <div>
       <NavbarItems>
         <LeftWrapper>
-          <Icon src="USHSLogo2.png" />
-          <Link href="/" active={page === "Home"}>
+          <Icon src="/USHSLogo2.png" />
+          <NavItem to="/" $active={page === "Home"}>
             Home
-          </Link>
-          <Link href="/profile" active={page === "Profile"}>
+          </NavItem>
+          <NavItem to="/profile" $active={page === "Profile"}>
             Profile
-          </Link>
+          </NavItem>
+          {isStaging && <StagingIndicator>Staging Environment</StagingIndicator>}
         </LeftWrapper>
         <LogoutButton kind="primary" onClick={togglePopup}>
           Log Out

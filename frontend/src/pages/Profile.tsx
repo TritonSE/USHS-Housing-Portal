@@ -10,10 +10,10 @@ import { UserDropdown } from "@/components/UserDropdown";
 import { AuthContext } from "@/contexts/AuthContext";
 import { DataContext } from "@/contexts/DataContext";
 
-const Items = styled.div<{ IsHL: boolean }>`
+const Items = styled.div<{ isHL: boolean }>`
   display: flex;
   flex-direction: column;
-  padding: ${(props) => (props.IsHL ? "8vh" : "30vh")} 0px 0px 0px;
+  padding: ${(props) => (props.isHL ? "8vh" : "30vh")} 0px 0px 0px;
   max-height: 100vh;
   gap: 7vh;
 `;
@@ -177,7 +177,7 @@ export function Profile() {
         <title>Profile | USHS Housing Portal</title>
       </Helmet>
       <NavBar page="Profile" />
-      <Items IsHL={dataContext.currentUser?.isHousingLocator ?? false}>
+      <Items isHL={dataContext.currentUser?.isHousingLocator ?? false}>
         <ProfileWrapper>
           <ProfilePicture src={authContext.currentUser?.photoURL ?? ""} alt="Profile Img" />
           <InfoWrapper>

@@ -13,10 +13,6 @@ import {
   Sort,
 } from "@/components/FilterCommon";
 
-const BnbDropdownRow = styled(DropdownRow)`
-  gap: 40px;
-`;
-
 const PopupHeaderText = styled(Sort)`
   margin: 0;
   font-weight: 700;
@@ -32,16 +28,15 @@ const BedBox = styled.div`
   border: 0.5px solid #cdcaca;
   background-color: #f5f5f5;
   box-shadow: 1px 1px 2px 0px rgba(228, 227, 226, 0.4);
-  padding-left: 30px;
-  padding-right: 30px;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  width: 80px;
+  height: 30px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 `;
 
-const BathBox = styled(BedBox)`
-  padding-left: 22px;
-  padding-right: 22px;
-`;
+const BathBox = styled(BedBox)``;
 
 const AdjustButton = styled.button`
   color: #fff;
@@ -54,9 +49,16 @@ const AdjustButton = styled.button`
   padding-right: 7px;
 `;
 
+const BedBatFilterSubContainer = styled(FilterSubContainer)`
+  width: 182px;
+`;
+
 export type BedBathState = {
   beds: number;
   baths: number;
+};
+
+export type BedBathDisplayState = {
   bedsDisplay: number;
   bathsDisplay: number;
   notApplied: boolean;
@@ -65,48 +67,55 @@ export type BedBathState = {
 export type BedBathDropDownProps = {
   value: BedBathState;
   setValue(val: BedBathState): void;
-  onApply(): void;
+  displayValue: BedBathDisplayState;
+  setDisplayValue(val: BedBathDisplayState): void;
 };
 
 export const BedBathDropDown = (props: BedBathDropDownProps) => {
   const [isActive, setIsActive] = useState(false);
 
-  const dropdownText = props.value.notApplied
+  const dropdownText = props.displayValue.notApplied
     ? "Beds & Bath"
     : `${props.value.beds}+ bds, ${props.value.baths}+ ba`;
 
   return (
-    <FilterSubContainer>
+    <BedBatFilterSubContainer>
       <Dropdown
         onClick={() => {
           setIsActive(!isActive);
         }}
         active={isActive}
       >
-        <BnbDropdownRow>
+        <DropdownRow>
           <FilterText>{dropdownText}</FilterText>
           <DropdownIcon src={isActive ? "/up_arrow.svg" : "/dropdown.svg"} />
-        </BnbDropdownRow>
+        </DropdownRow>
       </Dropdown>
       {isActive && (
         <DropDownPopup>
           <PopupHeaderText>Bedrooms</PopupHeaderText>
           <BnbRow>
             <BedBox>
-              <PopupHeaderText>{props.value.bedsDisplay}+</PopupHeaderText>
+              <PopupHeaderText>{props.displayValue.bedsDisplay}+</PopupHeaderText>
             </BedBox>
             <AdjustButton
               onClick={() => {
-                if (props.value.bedsDisplay > 1)
-                  props.setValue({ ...props.value, bedsDisplay: props.value.bedsDisplay - 1 });
+                if (props.displayValue.bedsDisplay > 1)
+                  props.setDisplayValue({
+                    ...props.displayValue,
+                    bedsDisplay: props.displayValue.bedsDisplay - 1,
+                  });
               }}
             >
               -
             </AdjustButton>
             <AdjustButton
               onClick={() => {
-                if (props.value.bedsDisplay < 4)
-                  props.setValue({ ...props.value, bedsDisplay: props.value.bedsDisplay + 1 });
+                if (props.displayValue.bedsDisplay < 4)
+                  props.setDisplayValue({
+                    ...props.displayValue,
+                    bedsDisplay: props.displayValue.bedsDisplay + 1,
+                  });
               }}
             >
               +
@@ -115,20 +124,26 @@ export const BedBathDropDown = (props: BedBathDropDownProps) => {
           <PopupHeaderText>Bathrooms</PopupHeaderText>
           <BnbRow>
             <BathBox>
-              <PopupHeaderText>{props.value.bathsDisplay}+</PopupHeaderText>
+              <PopupHeaderText>{props.displayValue.bathsDisplay}+</PopupHeaderText>
             </BathBox>
             <AdjustButton
               onClick={() => {
-                if (props.value.bathsDisplay > 0.5)
-                  props.setValue({ ...props.value, bathsDisplay: props.value.bathsDisplay - 0.5 });
+                if (props.displayValue.bathsDisplay > 0.5)
+                  props.setDisplayValue({
+                    ...props.displayValue,
+                    bathsDisplay: props.displayValue.bathsDisplay - 0.5,
+                  });
               }}
             >
               -
             </AdjustButton>
             <AdjustButton
               onClick={() => {
-                if (props.value.bathsDisplay < 2)
-                  props.setValue({ ...props.value, bathsDisplay: props.value.bathsDisplay + 0.5 });
+                if (props.displayValue.bathsDisplay < 2)
+                  props.setDisplayValue({
+                    ...props.displayValue,
+                    bathsDisplay: props.displayValue.bathsDisplay + 0.5,
+                  });
               }}
             >
               +
@@ -139,17 +154,19 @@ export const BedBathDropDown = (props: BedBathDropDownProps) => {
               setIsActive(false);
               props.setValue({
                 ...props.value,
-                beds: props.value.bedsDisplay,
-                baths: props.value.bathsDisplay,
+                beds: props.displayValue.bedsDisplay,
+                baths: props.displayValue.bathsDisplay,
+              });
+              props.setDisplayValue({
+                ...props.displayValue,
                 notApplied: false,
               });
-              props.onApply();
             }}
           >
             Apply
           </ApplyButton>
         </DropDownPopup>
       )}
-    </FilterSubContainer>
+    </BedBatFilterSubContainer>
   );
 };

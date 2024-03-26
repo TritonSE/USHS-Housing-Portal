@@ -8,7 +8,7 @@ import { auth } from "@/firebase";
 /**
  * A custom type defining which HTTP methods we will handle in this file
  */
-type Method = "GET" | "POST" | "PUT";
+type Method = "GET" | "POST" | "PUT" | "DELETE";
 
 /**
  * The first part of the backend API URL, which we will automatically prepend to
@@ -132,8 +132,18 @@ export async function put(
   return response;
 }
 
+export async function deleteRequest(
+  url: string,
+  headers: Record<string, string> = {},
+): Promise<Response> {
+  const response = await fetchRequest("DELETE", API_BASE_URL + url, undefined, headers);
+  await assertOk(response);
+  return response;
+}
+
 export type APIData<T> = { success: true; data: T };
 export type APIError = { success: false; error: string };
+
 /**
  * Utility type for the result of an API request. API client functions should
  * always return an object of this type (without throwing an exception if
