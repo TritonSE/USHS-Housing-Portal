@@ -152,7 +152,7 @@ export function NavBar({ page }: NavBarProps) {
     <div>
       <NavbarItems>
         <LeftWrapper>
-          <Icon src="USHSLogo2.png" />
+          <Icon src="/USHSLogo2.png" />
           <Link href="/" active={page === "Home"}>
             Home
           </Link>

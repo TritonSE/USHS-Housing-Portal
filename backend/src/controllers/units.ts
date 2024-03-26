@@ -60,7 +60,6 @@ export const getUnitHandler: RequestHandler = asyncHandler(async (req, res, _) =
  */
 export const approveUnitHandler: RequestHandler = asyncHandler(async (req, res, _) => {
   const unitId = req.params.id;
-  console.log(unitId);
 
   const unit = await approveUnit(unitId);
 

@@ -27,6 +27,7 @@
     }
   },
   "rules": {
+    "@typescript-eslint/use-unknown-in-catch-callback-variable": "off",
     // Uncomment this if you have verbatimModuleSyntax enabled and importing
     // .ts files with a .js extension gives lint errors.
     // "import/no-unresolved": "off",

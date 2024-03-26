@@ -1,17 +1,11 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-
-type ElevatePopupProps = {
-  height: string;
-  width: string;
-};
 
 const ElevatePopup = styled.div`
   position: relative;
   display: flex;
   flex-direction: row;
-  width: ${(props: ElevatePopupProps) => props.width};
-  height: ${(props: ElevatePopupProps) => props.height};
+  width: 100%;
   gap: 10px;
   padding: 8px 12px 8px 20px;
   align-items: center;
@@ -55,49 +49,44 @@ const XButton = styled.div`
   right: 1%;
 `;
 
-export type BannerState = {
+export type BannerProps = {
+  visible: boolean;
   image: string;
   withTitle: boolean;
   title: string;
   message: string;
   withX: boolean;
   color: string;
-  width: string;
-  height: string;
-};
-
-export type BannerProps = {
-  value: BannerState;
 };
 
 export const Banner = (props: BannerProps) => {
-  const [popup, setPopup] = useState<boolean>(true);
-  return (
-    <div>
-      {popup && (
-        <ElevatePopup
-          color={props.value.color}
-          width={props.value.width}
-          height={props.value.height}
-        >
-          <PopupWrapper>
-            <img src={props.value.image} alt="Check" />
-            <TextWrapper>
-              {props.value.withTitle && <TitleText>{props.value.title}</TitleText>}
-              {props.value.message}
-            </TextWrapper>
-          </PopupWrapper>
-          {props.value.withX && (
-            <XButton
-              onClick={() => {
-                setPopup(false);
-              }}
-            >
-              &times;
-            </XButton>
-          )}
-        </ElevatePopup>
-      )}
-    </div>
-  );
+  const [popup, setPopup] = useState<boolean>(props.visible);
+
+  React.useEffect(() => {
+    setPopup(props.visible);
+  }, [props.visible]);
+
+  if (popup)
+    return (
+      <ElevatePopup color={props.color}>
+        <PopupWrapper>
+          <img src={props.image} alt="Check" />
+          <TextWrapper>
+            {props.withTitle && <TitleText>{props.title}</TitleText>}
+            {props.message}
+          </TextWrapper>
+        </PopupWrapper>
+        {props.withX && (
+          <XButton
+            onClick={() => {
+              setPopup(false);
+            }}
+          >
+            &times;
+          </XButton>
+        )}
+      </ElevatePopup>
+    );
+
+  return null;
 };
