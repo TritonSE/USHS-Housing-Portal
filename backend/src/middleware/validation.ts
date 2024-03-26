@@ -25,9 +25,9 @@ const validateRequest: RequestHandler = (req, res, next) => {
   const errorMessages = Object.entries(allErrors).map(([fieldName, error]) => {
     if (error.type === "unknown_fields") {
       // Catch unknown fields error and return a more user-friendly message
-      return `${error.msg}: ${error.fields.map(({ path }) => path).join(", ")}`;
+      return `${error.msg as string}: ${error.fields.map(({ path }) => path).join(", ")}`;
     }
-    return `${fieldName} ${error.msg}`;
+    return `${fieldName} ${error.msg as string}`;
   });
 
   const errorString = `Invalid fields: ${[...errorMessages].join(", ")}`;
