@@ -27,13 +27,14 @@ const ArrowIcon = styled.img`
 const MinMaxBox = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
   border-radius: 3px;
   border: 0.5px solid #cdcaca;
   background: #f5f5f5;
   box-shadow: 1px 1px 2px 0px rgba(228, 227, 226, 0.4);
   padding: 7px;
+  width: 85px;
 `;
 
 const MinMaxRow = styled.div`
@@ -81,9 +82,7 @@ const PriceSubcontainer = styled.div`
   align-items: flex-start;
 `;
 
-const PriceFilterText = styled(FilterText)`
-  padding-right: 80px;
-`;
+const PriceFilterText = styled(FilterText)``;
 
 const PlaceholderText = styled.p<{ active: boolean }>`
   color: #cdcaca;
@@ -103,6 +102,10 @@ const PlaceholderText = styled.p<{ active: boolean }>`
       : css`
           color: #cdcaca;
         `}
+`;
+
+const PriceFilterSubContainer = styled(FilterSubContainer)`
+  width: 231px;
 `;
 
 export type PriceState = {
@@ -148,7 +151,7 @@ export const PriceDropDown = (props: PriceDropDownProps) => {
   }
 
   return (
-    <FilterSubContainer>
+    <PriceFilterSubContainer>
       <Dropdown
         active={isActive}
         onClick={() => {
@@ -240,6 +243,6 @@ export const PriceDropDown = (props: PriceDropDownProps) => {
           </ApplyButton>
         </DropDownPopup>
       )}
-    </FilterSubContainer>
+    </PriceFilterSubContainer>
   );
 };

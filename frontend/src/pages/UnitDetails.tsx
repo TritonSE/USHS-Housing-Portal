@@ -4,8 +4,9 @@ import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-import { Unit, getUnit } from "@/api/units";
+import { Unit, approveUnit, getUnit } from "@/api/units";
 import { Page } from "@/components";
+import { Banner } from "@/components/Banner";
 import { Button } from "@/components/Button";
 import { NavBar } from "@/components/NavBar";
 import { DataContext } from "@/contexts/DataContext";
@@ -36,7 +37,7 @@ const SectionColumn = styled(Column)`
 `;
 
 const MainColumn = styled(Column)`
-  padding: 20px 8% 0 10%;
+  padding: 32px 10%;
 `;
 
 const RentPerMonth = styled.h1`
@@ -95,21 +96,19 @@ const Address = styled(Header)`
   padding: 0;
   margin: 0 0 5px 0;
 `;
+
 const DoesNotExist = styled(Header)`
   font-size: 48px;
   font-family: "Neutraface Text";
   font-weight: 700;
   line-height: 72px;
   line-spacing: 0.96px;
-  padding: 20px 10px 10px 10%;
-  margin: 0px;
 `;
 
 const ButtonPadding = styled.div`
   display: flex;
   flex-direction: row;
-  padding: 20px 100px 0px 0;
-  margin: 20px 0 0 10%;
+  margin-bottom: 32px;
   justify-content: space-between;
 `;
 
@@ -127,10 +126,38 @@ const InfoBlock = styled.div`
   gap: 10px;
 `;
 
+const EditButton = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
 export function UnitDetails() {
   const [unit, setUnit] = useState<Unit>();
+  const approvedBannerValues = {
+    image: "/check_mark.svg",
+    withTitle: true,
+    title: "Approval Confirmed",
+    message: "The listing is now visible to case manager and ready for referrals.",
+    withX: true,
+    color: "#C4F4DF",
+    width: "1120px",
+    height: "80px",
+  };
+  const unapprovedBannerValues = {
+    image: "/Caution.svg",
+    withTitle: true,
+    title: "Pending Approval",
+    message:
+      "The following information is submitted by the landlord. Fill in additional information and approve at the bottom of the page to make the listing visible to case managers.",
+    withX: false,
+    color: "#FCE9C9",
+    width: "1120px",
+    height: "80px",
+  };
   const { id } = useParams();
-  const dataContext = useContext(DataContext);
+  //using Data Context to get currentUser info
+  const { currentUser } = useContext(DataContext);
 
   //checks for which view to return
   const [isEditing, setIsEditing] = useState(false);
@@ -149,6 +176,21 @@ export function UnitDetails() {
     }
   }, []);
 
+  const approveListing = () => {
+    console.log("Approve Listing");
+    if (unit && id && !unit.approved) {
+      approveUnit(id)
+        .then((result) => {
+          console.log(result);
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.log("Error approving listing");
+          console.error(error);
+        });
+    }
+  };
+
   if (!unit) {
     return (
       <Page>
@@ -156,17 +198,19 @@ export function UnitDetails() {
           <title>Unit Does Not Exist | USHS Housing Portal</title>
         </Helmet>
         <NavBar page="Home" />
-        <ButtonPadding>
-          <Link to="/">
-            <Button kind="secondary">
-              <PaddingInButton>
-                <img className="back-arrow" src="/back_arrow.svg" alt={"Back arrow"} />
-                Back to Listing
-              </PaddingInButton>
-            </Button>
-          </Link>
-        </ButtonPadding>
-        <DoesNotExist>This unit does not exist!</DoesNotExist>
+        <MainColumn>
+          <ButtonPadding>
+            <Link to="/">
+              <Button kind="secondary">
+                <PaddingInButton>
+                  <img className="back-arrow" src="/back_arrow.svg" alt={"Back arrow"} />
+                  Back to Listing
+                </PaddingInButton>
+              </Button>
+            </Link>
+          </ButtonPadding>
+          <DoesNotExist>This unit does not exist!</DoesNotExist>
+        </MainColumn>
       </Page>
     );
   }
@@ -219,26 +263,27 @@ export function UnitDetails() {
         <title>{unit.listingAddress} | USHS Housing Portal</title>
       </Helmet>
       <NavBar page="Home" />
-
-      <ButtonPadding>
-        <Link to="/">
-          <Button kind="secondary">
-            <PaddingInButton>
-              <img className="back-arrow" src="/back_arrow.svg" alt={"Back arrow"} />
-              Back to Listing
-            </PaddingInButton>
-          </Button>
-        </Link>
-        {dataContext.currentUser?.isHousingLocator && (
-          <Button kind="secondary" onClick={toggleEditing}>
-            <PaddingInButton>
-              <img className="edit-button-pen" src="/edit_button_pen.svg" alt={"Edit Button Pen"} />
-              Edit
-            </PaddingInButton>
-          </Button>
-        )}
-      </ButtonPadding>
       <MainColumn>
+        <ButtonPadding>
+          <Link to="/">
+            <Button kind="secondary">
+              <PaddingInButton>
+                <img className="back-arrow" src="/back_arrow.svg" alt={"Back arrow"} />
+                Back to Listing
+              </PaddingInButton>
+            </Button>
+          </Link>
+          {currentUser?.isHousingLocator && (
+            <Button kind="secondary">
+              <EditButton>
+                <img src={"/pencil.svg"} alt="" style={{ marginRight: "12px" }} />
+                Edit
+              </EditButton>
+            </Button>
+          )}
+        </ButtonPadding>
+        <Banner value={unit.approved ? approvedBannerValues : unapprovedBannerValues}></Banner>
+
         <Row>
           <RentPerMonth>${unit.monthlyRent}/month</RentPerMonth>
         </Row>
@@ -260,13 +305,12 @@ export function UnitDetails() {
               <Text>sqft</Text>
             </Column>
           </Row>
-          {dataContext.currentUser?.isHousingLocator ? (
+          {currentUser?.isHousingLocator ? (
             <HousingLocatorComponent />
           ) : (
             <NotHousingLocatorComponent />
           )}
         </DetailsRow>
-
         <Row>
           <Header>Fees</Header>
         </Row>
@@ -357,6 +401,15 @@ export function UnitDetails() {
             </InfoBlock>
           </SectionColumn>
         </Row>
+        {!unit.approved && (
+          <Button
+            kind="primary"
+            style={{ margin: "99px 941px", width: 210, height: 50 }}
+            onClick={approveListing}
+          >
+            Approve Listing
+          </Button>
+        )}
       </MainColumn>
     </Page>
   );
