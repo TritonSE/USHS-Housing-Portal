@@ -51,10 +51,10 @@ const ConfirmLogout = styled(LogoutButton)`
   border-radius: 12px;
 `;
 
-const NavItem = styled(Link)<{ active: boolean }>`
+const NavItem = styled(Link)<{ $active: boolean }>`
   text-decoration: none;
-  color: ${(props) => (props.active ? "#b64201" : "black")};
-  background-color: ${(props) => (props.active ? "rgba(236, 133, 55, 0.10)" : "none")};
+  color: ${(props) => (props.$active ? "#b64201" : "black")};
+  background-color: ${(props) => (props.$active ? "rgba(236, 133, 55, 0.10)" : "none")};
   padding: 8px 16px;
   border-radius: 16px;
   &:hover {
@@ -154,10 +154,10 @@ export function NavBar({ page }: NavBarProps) {
       <NavbarItems>
         <LeftWrapper>
           <Icon src="/USHSLogo2.png" />
-          <NavItem to="/" active={page === "Home"}>
+          <NavItem to="/" $active={page === "Home"}>
             Home
           </NavItem>
-          <NavItem to="/profile" active={page === "Profile"}>
+          <NavItem to="/profile" $active={page === "Profile"}>
             Profile
           </NavItem>
           {isStaging && <StagingIndicator>Staging Environment</StagingIndicator>}

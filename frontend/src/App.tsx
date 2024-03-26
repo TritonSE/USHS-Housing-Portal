@@ -7,7 +7,7 @@ import { AuthContext, AuthProvider } from "./contexts/AuthContext";
 import { DataProvider } from "./contexts/DataContext";
 
 import { Home, Login, Profile, UnitDetails } from "@/pages";
-import { GlobalStyle, theme } from "@/theme";
+import { GlobalStyle, StyledComponentsManager, theme } from "@/theme";
 
 function AppRouter() {
   const { signedIn } = useContext(AuthContext);
@@ -36,15 +36,17 @@ function AppRouter() {
 
 export default function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <AuthProvider>
-        <DataProvider>
-          <GlobalStyle />
-          <HelmetProvider>
-            <AppRouter />
-          </HelmetProvider>
-        </DataProvider>
-      </AuthProvider>
-    </ThemeProvider>
+    <StyledComponentsManager>
+      <ThemeProvider theme={theme}>
+        <AuthProvider>
+          <DataProvider>
+            <GlobalStyle />
+            <HelmetProvider>
+              <AppRouter />
+            </HelmetProvider>
+          </DataProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </StyledComponentsManager>
   );
 }
