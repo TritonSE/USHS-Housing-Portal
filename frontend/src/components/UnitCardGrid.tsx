@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import styled from "styled-components";
 
 import { Unit } from "@/api/units";
@@ -22,6 +22,11 @@ const PropertiesRow = styled.span`
   font-size: 27px;
   font-weight: 700;
   margin-bottom: 15px;
+`;
+
+const HeaderText = styled.span`
+  font-family: "Neutraface Text";
+  font-size: 32px;
 `;
 
 const GridContainer = styled.div`
@@ -88,22 +93,15 @@ const AddListings = styled.div`
 
 export type UnitCardGridProps = {
   units: Unit[];
-  refreshUnits: () => void;
+  refreshUnits: (approved: "pending" | "approved") => void;
 };
 
 export const UnitCardGrid = ({ units, refreshUnits }: UnitCardGridProps) => {
   const [pendingSelected, setPendingSelected] = useState<boolean>(false);
-  const [pendingUnits, setPendingUnits] = useState<Unit[]>([]);
-  const [approvedUnits, setApprovedUnits] = useState<Unit[]>([]);
-
-  useEffect(() => {
-    const pending = units.filter((unit: Unit) => !unit.approved);
-    const approved = units.filter((unit: Unit) => unit.approved);
-    setPendingUnits(pending);
-    setApprovedUnits(approved);
-  }, [units]);
 
   const dataContext = useContext(DataContext);
+
+  const approvedString = pendingSelected ? "pending" : "approved";
 
   return (
     <>
@@ -111,7 +109,7 @@ export const UnitCardGrid = ({ units, refreshUnits }: UnitCardGridProps) => {
         {pendingSelected ? (
           <>
             <PropertiesRow>
-              <div>Pending Approval</div>
+              <HeaderText>Pending Approval</HeaderText>
               <ButtonsWrapper>
                 <PendingButton
                   onClick={() => {
@@ -124,6 +122,7 @@ export const UnitCardGrid = ({ units, refreshUnits }: UnitCardGridProps) => {
                 <ListingsButton
                   onClick={() => {
                     setPendingSelected(false);
+                    refreshUnits("approved");
                   }}
                   selected={!pendingSelected}
                 >
@@ -132,21 +131,29 @@ export const UnitCardGrid = ({ units, refreshUnits }: UnitCardGridProps) => {
               </ButtonsWrapper>
             </PropertiesRow>
             <UnitCardLayout>
-              {pendingUnits.length > 0 &&
-                pendingUnits.map((option, index) => (
-                  <UnitCard unit={option} refreshUnits={refreshUnits} key={index} />
+              {units.length > 0 &&
+                units.map((option, index) => (
+                  <UnitCard
+                    unit={option}
+                    refreshUnits={() => {
+                      refreshUnits(approvedString);
+                    }}
+                    key={index}
+                  />
                 ))}
+              {units.length === 0 && <HeaderText>No matching units found</HeaderText>}
             </UnitCardLayout>
           </>
         ) : (
           <>
             <PropertiesRow>
-              <div>Available Properties</div>
+              <HeaderText>Available Properties</HeaderText>
               {dataContext.currentUser?.isHousingLocator && (
                 <ButtonsWrapper>
                   <PendingButton
                     onClick={() => {
                       setPendingSelected(true);
+                      refreshUnits("pending");
                     }}
                     selected={pendingSelected}
                   >
@@ -164,10 +171,17 @@ export const UnitCardGrid = ({ units, refreshUnits }: UnitCardGridProps) => {
               )}
             </PropertiesRow>
             <UnitCardLayout>
-              {approvedUnits.length > 0 &&
-                approvedUnits.map((option, index) => (
-                  <UnitCard unit={option} refreshUnits={refreshUnits} key={index} />
+              {units.length > 0 &&
+                units.map((option, index) => (
+                  <UnitCard
+                    unit={option}
+                    refreshUnits={() => {
+                      refreshUnits(approvedString);
+                    }}
+                    key={index}
+                  />
                 ))}
+              {units.length === 0 && <HeaderText>No matching units found</HeaderText>}
             </UnitCardLayout>
           </>
         )}

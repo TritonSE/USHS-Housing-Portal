@@ -23,6 +23,7 @@ export type FilterParams = {
   sort?: string;
   minPrice?: string;
   maxPrice?: string;
+  approved?: "pending" | "approved";
 };
 
 /**
@@ -52,7 +53,7 @@ export const deleteUnit = async (id: string) => {
 export const getUnits = async (filters: FilterParams) => {
   // If FilterParams is empty return all available units
   if (Object.keys(filters).length === 0 && filters.constructor === Object) {
-    const units = await UnitModel.find({ dateAvailable: { $lte: new Date() } });
+    const units = await UnitModel.find({ dateAvailable: { $lte: new Date() }, approved: true });
     return units;
   }
 
@@ -62,13 +63,7 @@ export const getUnits = async (filters: FilterParams) => {
   const maxPrice = filters.maxPrice === "undefined" ? 100000 : +(filters.maxPrice ?? 100000);
 
   const avail = filters.availability ? (filters.availability === "Available" ? true : false) : true;
-
-  let dateAvail;
-  if (avail) {
-    dateAvail = { $lte: new Date() };
-  } else {
-    dateAvail = { $gt: new Date() };
-  }
+  const approved = filters.approved ? (filters.approved === "approved" ? true : false) : true;
 
   let sortingCriteria;
   switch (filters.sort) {
@@ -93,12 +88,15 @@ export const getUnits = async (filters: FilterParams) => {
   }
 
   const units = await UnitModel.find({
-    streetAddress: addressRegex,
     numBeds: { $gte: filters.beds ?? 1 },
     numBaths: { $gte: filters.baths ?? 0.5 },
     monthlyRent: { $gte: minPrice, $lte: maxPrice },
-    dateAvailable: dateAvail,
+    approved,
   }).sort(sortingCriteria);
 
-  return units;
+  const filteredUnits = units.filter((unit: Unit) => {
+    return addressRegex.test(unit.listingAddress) && unit.availableNow === avail;
+  });
+
+  return filteredUnits;
 };
