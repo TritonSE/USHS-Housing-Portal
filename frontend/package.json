@@ -22,7 +22,7 @@
     "react-dom": "^18.2.0",
     "react-helmet-async": "^2.0.4",
     "react-router-dom": "^6.21.0",
-    "styled-components": "^6.0.0"
+    "styled-components": "^6.1.8"
   },
   "devDependencies": {
     "@types/bun": "^1.0.3",
