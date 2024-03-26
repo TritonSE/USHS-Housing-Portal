@@ -1,4 +1,4 @@
-import { InferSchemaType, Schema, model } from "mongoose";
+import { InferSchemaType, ObtainSchemaGeneric, Schema, model } from "mongoose";
 
 const unitSchema = new Schema(
   {
@@ -62,8 +62,7 @@ const unitSchema = new Schema(
   },
 );
 
-export type Unit = InferSchemaType<typeof unitSchema>;
+export type Unit = InferSchemaType<typeof unitSchema> &
+  ObtainSchemaGeneric<typeof unitSchema, "TVirtuals">;
 
-export type VUnit = Unit & { listingAddress?: string; availableNow?: boolean };
-
-export const UnitModel = model<Unit>("Unit", unitSchema);
+export const UnitModel = model("Unit", unitSchema);

@@ -48,7 +48,7 @@ export type FilterParams = {
   beds?: string;
   baths?: string;
   sort?: string;
-  approved?: string;
+  approved?: "pending" | "approved";
 };
 
 export async function getUnit(id: string): Promise<APIResult<Unit>> {
@@ -61,9 +61,9 @@ export async function getUnit(id: string): Promise<APIResult<Unit>> {
   }
 }
 
-export async function getUnits(_params: FilterParams): Promise<APIResult<Unit[]>> {
+export async function getUnits(params: FilterParams): Promise<APIResult<Unit[]>> {
   try {
-    const queryParams = new URLSearchParams(_params);
+    const queryParams = new URLSearchParams(params);
     const url = `/units?${queryParams.toString()}`;
     const response = await get(url);
 

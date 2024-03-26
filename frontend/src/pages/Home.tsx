@@ -35,7 +35,7 @@ export function Home() {
       <UnitCardGrid
         units={units}
         refreshUnits={(approved) => {
-          const newFilters = { ...filters, approved: approved };
+          const newFilters = { ...filters, approved };
           fetchUnits(newFilters);
           setFilters(newFilters);
         }}

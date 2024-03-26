@@ -93,7 +93,7 @@ const AddListings = styled.div`
 
 export type UnitCardGridProps = {
   units: Unit[];
-  refreshUnits: (approved: string) => void;
+  refreshUnits: (approved: "pending" | "approved") => void;
 };
 
 export const UnitCardGrid = ({ units, refreshUnits }: UnitCardGridProps) => {
