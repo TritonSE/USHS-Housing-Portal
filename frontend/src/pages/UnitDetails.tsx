@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-import { Unit, getUnit } from "@/api/units";
+import { Unit, approveUnit, getUnit } from "@/api/units";
 import { Page } from "@/components";
+import { Banner } from "@/components/Banner";
 import { Button } from "@/components/Button";
+import { NavBar } from "@/components/NavBar";
+import { DataContext } from "@/contexts/DataContext";
 
 const Row = styled.div`
   display: flex;
@@ -30,27 +33,29 @@ const DetailsRow = styled(Row)`
 
 const SectionColumn = styled(Column)`
   width: 50%;
+  gap: 25px;
 `;
 
 const MainColumn = styled(Column)`
-  padding: 10%;
+  padding: 32px 10%;
 `;
 
 const RentPerMonth = styled.h1`
   font-size: 48px;
-  font-family: "Montserrat";
-  font-weight: 600;
-  line-height: 150%;
+  font-family: "Neutraface Text";
+  font-weight: 700;
+  line-height: 72px;
   line-spacing: 0.96px;
 
   margin: 0;
+  padding: 0;
 `;
 
 const Header = styled.div`
   font-size: 32px;
   margin: 0;
   font-weight: 700;
-  font-family: "Montserrat";
+  font-family: "Neutraface Text";
   line-height: 150%;
   line-spacing: 0.64px;
   margin-top: 32px;
@@ -72,6 +77,8 @@ const List = styled.ul`
 
 const StrongText = styled(Text)`
   font-weight: 600;
+  line-height: 30px;
+  letter-spacing: 0.4px;
 `;
 
 const ListText = styled.li`
@@ -85,36 +92,86 @@ const ListText = styled.li`
     margin-right: 10px;
   `;
 
-const Address = styled(Header)``;
+const Address = styled(Header)`
+  padding: 0;
+  margin: 0 0 5px 0;
+`;
+
+const DoesNotExist = styled(Header)`
+  font-size: 48px;
+  font-family: "Neutraface Text";
+  font-weight: 700;
+  line-height: 72px;
+  line-spacing: 0.96px;
+`;
 
 const ButtonPadding = styled.div`
   display: flex;
   flex-direction: row;
-  padding: 20px 10% 0px 10%;
+  margin-bottom: 32px;
+  justify-content: space-between;
 `;
 
-const DoesNotExist = styled.h1`
-  font-size: 48px;
-  font-family: "Neutraface Text", sans-serif;
-  font-weight: 550;
-  line-height: 150%;
-  line-spacing: 0.96px;
-  padding: 20px 10% 20px 10%;
+const PaddingInButton = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin: 0 0px 0px 0;
+  justify-content: space-between;
+  gap: 10px;
+`;
+
+const InfoBlock = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
+const EditButton = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 export function UnitDetails() {
   const [unit, setUnit] = useState<Unit>();
+  const [showApprovedBanner, setShowApprovedBanner] = useState(false);
+  const [showPendingApprovalBanner, setShowPendingApprovalBanner] = useState(false);
+
   const { id } = useParams();
+  //using Data Context to get currentUser info
+  const { currentUser } = useContext(DataContext);
+
+  //checks for which view to return
+  const [_isEditing, setIsEditing] = useState(false);
+
+  const toggleEditing = () => {
+    setIsEditing((prevState) => !prevState);
+  };
 
   React.useEffect(() => {
     if (id !== undefined) {
       void getUnit(id).then((result) => {
         if (result.success) {
+          if (!result.data.approved) {
+            setShowPendingApprovalBanner(true);
+          }
           setUnit(result.data);
         }
       });
     }
   }, []);
+
+  const approveListing = () => {
+    if (unit && id && !unit.approved) {
+      approveUnit(id)
+        .then(() => {
+          setShowApprovedBanner(true);
+          setShowPendingApprovalBanner(false);
+          window.scrollTo(0, 0); // scroll to top of page
+        })
+        .catch(console.error);
+    }
+  };
 
   if (!unit) {
     return (
@@ -122,14 +179,20 @@ export function UnitDetails() {
         <Helmet>
           <title>Unit Does Not Exist | USHS Housing Portal</title>
         </Helmet>
-        <Column>
+        <NavBar page="Home" />
+        <MainColumn>
           <ButtonPadding>
             <Link to="/">
-              <Button kind="secondary">Back to Listing</Button>
+              <Button kind="secondary">
+                <PaddingInButton>
+                  <img className="back-arrow" src="/back_arrow.svg" alt={"Back arrow"} />
+                  Back to Listing
+                </PaddingInButton>
+              </Button>
             </Link>
           </ButtonPadding>
           <DoesNotExist>This unit does not exist!</DoesNotExist>
-        </Column>
+        </MainColumn>
       </Page>
     );
   }
@@ -158,18 +221,70 @@ export function UnitDetails() {
     <ListText key={rule}>{rule}</ListText>
   ));
 
+  const HousingLocatorComponent = () => {
+    return (
+      <Column>
+        <StrongText>Landlord: {unit.landlordFirstName + " " + unit.landlordLastName}</StrongText>
+        <Text>{unit.landlordPhone}</Text>
+        <Text>{unit.landlordEmail}</Text>
+      </Column>
+    );
+  };
+
+  const NotHousingLocatorComponent = () => {
+    return (
+      <Column>
+        <StrongText>{availableNow}</StrongText>
+      </Column>
+    );
+  };
+
   return (
     <Page>
       <Helmet>
         <title>{unit.listingAddress} | USHS Housing Portal</title>
       </Helmet>
-
-      <ButtonPadding>
-        <Link to="/">
-          <Button kind="secondary">Back to Listing</Button>
-        </Link>
-      </ButtonPadding>
+      <NavBar page="Home" />
       <MainColumn>
+        <ButtonPadding>
+          <Link to="/">
+            <Button kind="secondary">
+              <PaddingInButton>
+                <img className="back-arrow" src="/back_arrow.svg" alt={"Back arrow"} />
+                Back to Listing
+              </PaddingInButton>
+            </Button>
+          </Link>
+          {currentUser?.isHousingLocator && (
+            <Button kind="secondary">
+              <EditButton onClick={toggleEditing}>
+                <img src={"/pencil.svg"} alt="" style={{ marginRight: "12px" }} />
+                Edit
+              </EditButton>
+            </Button>
+          )}
+        </ButtonPadding>
+
+        <Banner
+          visible={showApprovedBanner}
+          image="/check_mark.svg"
+          withTitle={true}
+          title="Approval Confirmed"
+          message="The listing is now visible to case manager and ready for referrals."
+          withX={true}
+          color="#C4F4DF"
+        />
+
+        <Banner
+          visible={showPendingApprovalBanner}
+          image="/Caution.svg"
+          withTitle={true}
+          title="Pending Approval"
+          message="The following information is submitted by the landlord. Fill in additional information and approve at the bottom of the page to make the listing visible to case managers."
+          withX={false}
+          color="#FCE9C9"
+        />
+
         <Row>
           <RentPerMonth>${unit.monthlyRent}/month</RentPerMonth>
         </Row>
@@ -191,33 +306,36 @@ export function UnitDetails() {
               <Text>sqft</Text>
             </Column>
           </Row>
-          <Column>
-            <StrongText>{availableNow}</StrongText>
-          </Column>
+          {currentUser?.isHousingLocator ? (
+            <HousingLocatorComponent />
+          ) : (
+            <NotHousingLocatorComponent />
+          )}
         </DetailsRow>
-
         <Row>
           <Header>Fees</Header>
         </Row>
         <Row>
           <SectionColumn>
-            <StrongText>Security Deposit: </StrongText>
-            <List>
-              <ListText> ${unit.securityDeposit}</ListText>
-            </List>
-            <StrongText>Payment/Renting Criteria: </StrongText>
-            {rentingCriteria}
+            <InfoBlock>
+              <StrongText>Security Deposit: </StrongText>
+              <List>
+                <ListText> ${unit.securityDeposit}</ListText>
+              </List>
+            </InfoBlock>
+            <InfoBlock>
+              <StrongText>Payment/Renting Criteria: </StrongText>
+              {rentingCriteria}
+            </InfoBlock>
           </SectionColumn>
+
           <SectionColumn>
-            <StrongText>Application Fee: </StrongText>
-            <List>
-              <ListText>${unit.applicationFeeCost}</ListText>
-            </List>
-            {/* I don't think we have this anymore? */}
-            {/* <StrongText>Holding Fee: </StrongText>
-          <List>
-            <ListText>${unit.holdingFeeAmount}</ListText>
-          </List> */}
+            <InfoBlock>
+              <StrongText>Application Fee: </StrongText>
+              <List>
+                <ListText>${unit.applicationFeeCost}</ListText>
+              </List>
+            </InfoBlock>
           </SectionColumn>
         </Row>
 
@@ -226,24 +344,40 @@ export function UnitDetails() {
         </Row>
         <Row>
           <SectionColumn>
-            <StrongText>Parking: </StrongText>
-            {parkingRequirements}
-            <StrongText>Pets/Animals: </StrongText>
-            {pets}
-            <StrongText>Appliances: </StrongText>
-            {appliances}
-            <StrongText>Housing Authority: </StrongText>
-            <ListText> {unit.housingAuthority}</ListText>
-            <StrongText>Additional Comments from Landlord: </StrongText>
-            <ListText> {unit.landlordComments}</ListText>
+            <InfoBlock>
+              <StrongText>Parking: </StrongText>
+              {parkingRequirements}
+            </InfoBlock>
+            <InfoBlock>
+              <StrongText>Pets/Animals: </StrongText>
+              {pets}
+            </InfoBlock>
+            <InfoBlock>
+              <StrongText>Appliances: </StrongText>
+              {appliances}
+            </InfoBlock>
+            <InfoBlock>
+              <StrongText>Housing Authority: </StrongText>
+              <ListText> {unit.housingAuthority}</ListText>
+            </InfoBlock>
+            <InfoBlock>
+              <StrongText>Additional Comments from Landlord: </StrongText>
+              <ListText> {unit.landlordComments}</ListText>
+            </InfoBlock>
           </SectionColumn>
           <SectionColumn>
-            <StrongText>Accessibility Access: </StrongText>
-            {accessibility}
-            <StrongText>Sharing House Acceptable: </StrongText>
-            <ListText>{unit.sharingAcceptable}</ListText>
-            <StrongText>Community/Neighborhood Information: </StrongText>
-            {communityFeatures}
+            <InfoBlock>
+              <StrongText>Accessibility Access: </StrongText>
+              {accessibility}
+            </InfoBlock>
+            <InfoBlock>
+              <StrongText>Sharing House Acceptable: </StrongText>
+              <ListText>{unit.sharingAcceptable}</ListText>
+            </InfoBlock>
+            <InfoBlock>
+              <StrongText>Community/Neighborhood Information: </StrongText>
+              {communityFeatures}
+            </InfoBlock>
           </SectionColumn>
         </Row>
 
@@ -252,16 +386,31 @@ export function UnitDetails() {
         </Row>
         <Row>
           <SectionColumn>
-            <StrongText>Where Was Unit Found: </StrongText>
-            <ListText>{unit.whereFound}</ListText>
-            <StrongText>Additional Rules and Regulation: </StrongText>
-            <ListText>{additionalRules}</ListText>
+            <InfoBlock>
+              <StrongText>Where Was Unit Found: </StrongText>
+              <ListText>{unit.whereFound}</ListText>
+            </InfoBlock>
+            <InfoBlock>
+              <StrongText>Additional Rules and Regulation: </StrongText>
+              <ListText>{additionalRules}</ListText>
+            </InfoBlock>
           </SectionColumn>
           <SectionColumn>
-            <StrongText>Notes from Housing Locator: </StrongText>
-            {unit.internalComments}
+            <InfoBlock>
+              <StrongText>Notes from Housing Locator: </StrongText>
+              {unit.internalComments}
+            </InfoBlock>
           </SectionColumn>
         </Row>
+        {!unit.approved && (
+          <Button
+            kind="primary"
+            style={{ margin: "99px 941px", width: 210, height: 50 }}
+            onClick={approveListing}
+          >
+            Approve Listing
+          </Button>
+        )}
       </MainColumn>
     </Page>
   );
