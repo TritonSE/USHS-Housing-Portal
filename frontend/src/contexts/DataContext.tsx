@@ -29,17 +29,19 @@ export function DataProvider({ children }: ProviderProps) {
   const auth = useContext(AuthContext);
 
   const fetchData = useCallback(async () => {
-    const response = await getUsers();
-    if (response.success) {
-      const data = response.data;
-      setAllHousingLocators(data.filter((user: User) => user.isHousingLocator));
-      setAllReferringStaff(data.filter((user: User) => !user.isHousingLocator));
-      setUser(
-        data.find((user: User) => auth.currentUser && user.email === auth.currentUser.email) ??
-          null,
-      );
-    } else {
-      console.error(response.error);
+    if (auth.currentUser) {
+      const response = await getUsers();
+      if (response.success) {
+        const data = response.data;
+        setAllHousingLocators(data.filter((user: User) => user.isHousingLocator));
+        setAllReferringStaff(data.filter((user: User) => !user.isHousingLocator));
+        setUser(
+          data.find((user: User) => auth.currentUser && user.email === auth.currentUser.email) ??
+            null,
+        );
+      } else {
+        console.error(response.error);
+      }
     }
   }, [auth]);
 

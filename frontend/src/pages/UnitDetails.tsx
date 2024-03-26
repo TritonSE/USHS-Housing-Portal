@@ -201,24 +201,24 @@ export function UnitDetails() {
   const availableNow = unit.availableNow ? "Available Now" : "Not Available";
 
   //move data into an array
-  const rentingCriteria = unit.paymentRentingCriteria.map((criteria) => (
-    <ListText key={criteria}>{criteria}</ListText>
+  const rentingCriteria = unit.paymentRentingCriteria.map((criteria, i) => (
+    <ListText key={criteria + i}>{criteria}</ListText>
   ));
-  const appliances = unit.appliances.map((appliance) => (
-    <ListText key={appliance}>{appliance}</ListText>
+  const appliances = unit.appliances.map((appliance, i) => (
+    <ListText key={appliance + i}>{appliance}</ListText>
   ));
-  const parkingRequirements = unit.parking.map((parking) => (
-    <ListText key={parking}>{parking}</ListText>
+  const parkingRequirements = unit.parking.map((parking, i) => (
+    <ListText key={parking + i}>{parking}</ListText>
   ));
-  const communityFeatures = unit.communityFeatures.map((feature) => (
-    <ListText key={feature}>{feature}</ListText>
+  const communityFeatures = unit.communityFeatures.map((feature, i) => (
+    <ListText key={feature + i}>{feature}</ListText>
   ));
-  const accessibility = unit.accessibility.map((access) => (
-    <ListText key={access}>{access}</ListText>
+  const accessibility = unit.accessibility.map((access, i) => (
+    <ListText key={access + i}>{access}</ListText>
   ));
-  const pets = unit.pets.map((pet) => <ListText key={pet}>{pet}</ListText>);
-  const additionalRules = unit.additionalRules.map((rule) => (
-    <ListText key={rule}>{rule}</ListText>
+  const pets = unit.pets.map((pet, i) => <ListText key={pet + i}>{pet}</ListText>);
+  const additionalRules = unit.additionalRules.map((rule, i) => (
+    <ListText key={rule + i}>{rule}</ListText>
   ));
 
   const HousingLocatorComponent = () => {
