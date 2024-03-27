@@ -107,7 +107,8 @@ export async function createUnit(unit: CreateUnitRequest): Promise<APIResult<Uni
   }
 }
 
-export type RenterCandidate = {
+export type User = {
+  _id: string;
   firstName: string;
   lastName: string;
   phone: string;
@@ -117,11 +118,11 @@ export type RenterCandidate = {
 export type Referral = {
   _id: string;
   status: string;
-  renterCandidate: RenterCandidate;
+  renterCandidate: User;
   unitId: string;
-  assignedHousingLocatorId: string;
-  assignedReferringStaffId: string;
-  updatedAt: Date;
+  assignedHousingLocator: User;
+  assignedReferringStaff: User;
+  timestamp: Date;
 };
 
 export async function getUnitReferrals(id: string): Promise<APIResult<Referral[]>> {

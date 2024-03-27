@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { ReferralTablePagination } from "./ReferralTablePagination";
 import { ReferralTableRow } from "./ReferralTableRow";
 
-import { Referral, getUnitReferrals } from "@/api/units";
+import { Referral, User, getUnitReferrals } from "@/api/units";
 import { AuthContext } from "@/contexts/AuthContext";
 import { DataContext } from "@/contexts/DataContext";
 
@@ -38,7 +38,7 @@ const ReferralTableTitleSection = styled.div`
 const ReferralTableTitle = styled.h2`
   color: #000;
 
-  font-family: "Neutra Text";
+  font-family: "Neutraface Text", sans-serif;
   font-size: 32px;
   font-style: normal;
   font-weight: 700;
@@ -125,6 +125,7 @@ export const ReferralTable = (props: ReferralTableProps) => {
       void getUnitReferrals(props.id).then((res) => {
         if (res.success) {
           setReferrals(res.data);
+          console.log(res.data);
         }
       });
     }
@@ -135,14 +136,16 @@ export const ReferralTable = (props: ReferralTableProps) => {
     }
   }, [authContext, dataContext]);
 
-  const getReferringStaff = (staffId: string): string => {
-    const staff = dataContext.allCaseManagers.find((manager) => manager._id === staffId);
+  const getReferringStaff = (assignedReferringStaff: User): string => {
+    const staff = dataContext.allCaseManagers.find(
+      (manager) => manager._id === assignedReferringStaff._id,
+    );
     return staff === undefined ? "N/A" : staff.firstName + " " + staff.lastName;
   };
 
-  const getHousingLocator = (locatorId: string): string => {
+  const getHousingLocator = (assignedHousingLocator: User): string => {
     const locator = dataContext.allHousingLocators.find(
-      (currLocator) => currLocator._id === locatorId,
+      (currLocator) => currLocator._id === assignedHousingLocator._id,
     );
     return locator === undefined ? "N/A" : locator.firstName + " " + locator.lastName;
   };
@@ -178,12 +181,12 @@ export const ReferralTable = (props: ReferralTableProps) => {
                 name={referral.renterCandidate.firstName}
                 email={referral.renterCandidate.email}
                 phone={referral.renterCandidate.phone}
-                referringStaff={getReferringStaff(referral.assignedReferringStaffId)}
+                referringStaff={getReferringStaff(referral.assignedReferringStaff)}
                 allReferringStaff={referringStaff}
-                housingLocator={getHousingLocator(referral.assignedHousingLocatorId)}
+                housingLocator={getHousingLocator(referral.assignedHousingLocator)}
                 allHousingLocators={housingLocators}
                 status={referral.status}
-                lastUpdate={referral.updatedAt.toString()}
+                lastUpdate={referral.timestamp.toString()}
               />
             ))}
           <ReferralTableFooter>

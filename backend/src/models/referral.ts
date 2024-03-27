@@ -14,13 +14,15 @@ const referralSchema = new Schema(
       required: true,
     },
     // Will be set later on in the flow
-    assignedHousingLocatorId: {
+    assignedHousingLocator: {
       type: Schema.Types.ObjectId,
+      ref: "User",
       required: false,
     },
     // Should be set to the user that created the referral (RS or HL)
-    assignedReferringStaffId: {
+    assignedReferringStaff: {
       type: Schema.Types.ObjectId,
+      ref: "User",
       required: true,
     },
   },
