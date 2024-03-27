@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styled from "styled-components";
 
 const PaginationLayout = styled.div`
@@ -33,7 +34,7 @@ const PaginationText = styled.p`
   letter-spacing: 0.28px;
 `;
 
-const CurrPage = styled(PaginationText)`
+const CurrPage = styled.input`
   display: flex;
   width: 32px;
   padding: 4px 8px;
@@ -54,15 +55,31 @@ type ReferralTablePaginationProps = {
 };
 
 export const ReferralTablePagination = (props: ReferralTablePaginationProps) => {
+  const [activePageNumber, setActivePageNumber] = useState(props.currPage);
   const handleClick = (increase: boolean): void => {
     if (increase && props.currPage !== props.totalPages) {
       props.setPageNumber(props.currPage + 1);
+      setActivePageNumber(props.currPage + 1);
     }
 
     if (!increase && props.currPage > 1) {
       props.setPageNumber(props.currPage - 1);
+      setActivePageNumber(props.currPage - 1);
     }
   };
+
+  const handlePageNumberInput = (newPage: string): void => {
+    try {
+      const newPageNumber = Number(newPage);
+      setActivePageNumber(newPageNumber);
+      if (newPageNumber >= 1 && newPageNumber <= props.totalPages) {
+        props.setPageNumber(newPageNumber);
+      }
+    } catch (error) {
+      console.log("Can't access that page");
+    }
+  };
+
   return (
     <PaginationLayout>
       <NavButton>
@@ -74,7 +91,13 @@ export const ReferralTablePagination = (props: ReferralTablePaginationProps) => 
         />
       </NavButton>
       <PaginationText>page</PaginationText>
-      <CurrPage>{props.currPage}</CurrPage>
+      <CurrPage
+        type="number"
+        value={activePageNumber}
+        onChange={(event) => {
+          handlePageNumberInput(event.target.value);
+        }}
+      />
       <PaginationText>of</PaginationText>
       <PaginationText>{props.totalPages}</PaginationText>
       <NavButton>

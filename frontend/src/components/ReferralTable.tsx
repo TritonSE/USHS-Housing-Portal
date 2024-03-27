@@ -55,7 +55,7 @@ const ReferralTableButton = styled.button`
 
   border-radius: 12px;
   border: none;
-  background: var(--Primary, #b64201);
+  background: #b64201;
   color: #ffffff;
 
   &:hover {
