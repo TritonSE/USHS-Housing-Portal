@@ -68,16 +68,7 @@ async function assertOk(response: Response): Promise<void> {
     return;
   }
 
-  let message = `${response.status} ${response.statusText}`;
-
-  try {
-    const text = await response.text();
-    if (text) {
-      message += ": " + text;
-    }
-  } catch (e) {
-    // skip errors
-  }
+  const message = await response.text();
 
   throw new Error(message);
 }

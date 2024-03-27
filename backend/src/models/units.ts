@@ -7,7 +7,7 @@ const unitSchema = new Schema(
     landlordEmail: { type: String, required: true },
     landlordPhone: { type: String, required: true },
     streetAddress: { type: String, required: true },
-    suiteNumber: { type: String, required: true },
+    suiteNumber: { type: String, required: false },
     city: { type: String, required: true },
     state: { type: String, required: true },
     areaCode: { type: String, required: true },
@@ -48,7 +48,7 @@ const unitSchema = new Schema(
       // Full address of the unit.
       listingAddress: {
         get: function () {
-          return `${this.streetAddress}, ${this.suiteNumber}, ${this.city}, ${this.state} ${this.areaCode}`;
+          return `${this.streetAddress}, ${this.suiteNumber ? this.suiteNumber + "," : ""} ${this.city}, ${this.state} ${this.areaCode}`;
         },
       },
     },

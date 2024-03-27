@@ -36,10 +36,7 @@ export function AuthProvider({ children }: ProviderProps) {
     return unsubscribe;
   }, []);
 
-  const value = useMemo(
-    () => ({ currentUser, signedIn: currentUser !== undefined, loading }),
-    [currentUser],
-  );
+  const value = useMemo(() => ({ currentUser, signedIn: !!currentUser, loading }), [currentUser]);
 
   if (loading) {
     // TODO: Make a loading screen
