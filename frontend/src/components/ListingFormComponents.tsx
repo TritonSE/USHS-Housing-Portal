@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import { Button } from "./Button";
@@ -46,10 +45,9 @@ const HousingLocatorSection = styled.div`
   color: #b64201;
 `;
 
-/*
-    formType === 1 -> Union Station Homeless Services Landlord Listing Form
-    formType === 2 -> Housing Locator Add Listing Form
-*/
+const ErrorMessage = styled(HousingLocatorSection)`
+  max-width: 800px;
+`;
 
 type ListingFormComponentsProps = {
   formType: "landlord listing form" | "housing locator form";
@@ -64,8 +62,9 @@ const SubmitButtonMarginOffset = styled.div`
   margin-bottom: 54px;
 `;
 
+const isNumber = /^\d*$/;
+
 export function ListingFormComponents(props: ListingFormComponentsProps) {
-  const navigate = useNavigate();
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -75,18 +74,17 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
   const [city, setCity] = useState<string>("");
   const [state, setState] = useState<string>("");
   const [areaCode, setAreaCode] = useState<string>("");
-  const [sqFootage, setSqFootage] = useState<number>();
-  const [rentPerMonth, setRentPerMonth] = useState<number | undefined>(undefined);
-  const [securityDeposit, setSecurityDeposit] = useState<number | undefined>(undefined);
+  const [sqFootage, setSqFootage] = useState<string>("");
+  const [rentPerMonth, setRentPerMonth] = useState<string>("");
+  const [securityDeposit, setSecurityDeposit] = useState<string>("");
   const [thirdPartyPayment, setThirdPartyPayment] = useState<boolean | undefined>(undefined);
   const [housingAuthority, setHousingAuthority] = useState<string>("");
-  const [applicationFeeCost, setApplicationFeeCost] = useState<number | undefined>(undefined);
-  const [dateAvailable, setDateAvailable] = useState<Date | undefined>();
-  //   const [availableNow, setAvailableNow] = useState(false);
+  const [applicationFeeCost, setApplicationFeeCost] = useState<string>("");
+  const [dateAvailable, setDateAvailable] = useState<string>("");
   const [numberOfBedrooms, setNumberOfBedrooms] = useState<number | undefined>(undefined);
-  const [numberOfBedroomsOther, setNumberOfBedroomsOther] = useState<number | undefined>(undefined);
+  const [numberOfBedroomsOther, setNumberOfBedroomsOther] = useState<string | undefined>(undefined);
   const [numberOfBaths, setNumberOfBaths] = useState<number | undefined>(undefined);
-  const [numberOfBathsOther, setNumberOfBathsOther] = useState<number | undefined>(undefined);
+  const [numberOfBathsOther, setNumberOfBathsOther] = useState<string | undefined>(undefined);
   const [appliances, setAppliances] = useState<string[]>([]);
   const [communityAndNeighborInfo, setCommunityAndNeighborInfo] = useState<string[]>([]);
   const [communityAndNeighborInfoOther, setCommunityAndNeighborInfoOther] = useState<string>("");
@@ -94,11 +92,12 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
   const [accessibility, setAccessibility] = useState<string[]>([]);
   const [pets, setPets] = useState<string[]>([]);
   const [sharingHousing, setSharingHousing] = useState<string>("");
-  const [additionalCommentsLL, setadditionalCommentsLL] = useState<string>("");
-  const [additionalCommentsHL, setadditionalCommentsHL] = useState<string>("");
+  const [additionalCommentsLL, setAdditionalCommentsLL] = useState<string>("");
+  const [additionalCommentsHL, setAdditionalCommentsHL] = useState<string>("");
   const [whereFindUnit, setWhereFindUnit] = useState<string>("");
   const [paymentRantingCriteria, setPaymentRentingCriteria] = useState<string[]>([]);
   const [additionalRulesRegulations, setAdditionalRulesRegulations] = useState<string[]>([]);
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const handleFirstName = (event: React.ChangeEvent<HTMLInputElement>) => {
     const hasNumber = /\d/;
@@ -121,18 +120,18 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
   };
 
   const handlePhoneNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const hasLetter = /[A-Za-z]/;
-    if (hasLetter.test(event.target.value)) return;
+    const numberRegex = /^\d{0,10}$/;
+    if (!numberRegex.test(event.target.value)) return;
     setPhone(event.target.value);
   };
 
   const handleStreetAddress = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.value === "") return;
+    // if (event.target.value === "") return;
     setStreetAddress(event.target.value);
   };
 
   const handleApartmentNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.value === "") return;
+    // if (event.target.value === "") return;
     setAptNum(event.target.value);
   };
 
@@ -148,44 +147,36 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
   };
 
   const handleAreaCode = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const isAreaCode = /^\d{5}$/;
+    const isAreaCode = /^\d{0,5}$/;
     if (!isAreaCode.test(event.target.value)) return;
     setAreaCode(event.target.value);
   };
 
   const handleSqFootage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const n = event.target.value;
-    if (n === "" || isNaN(parseFloat(n))) return;
-    if (n.includes("-")) return;
-    if (parseFloat(n) <= 0) return;
+    const value = event.target.value;
+    if (!isNumber.test(value)) return;
 
-    setSqFootage(parseFloat(n));
+    setSqFootage(value);
   };
 
   const handleRentPerMonth = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const n = event.target.value;
-    if (n === "" || isNaN(parseFloat(n))) return;
-    if (n.includes("-")) return;
-    if (parseFloat(n) <= 0) return;
+    const value = event.target.value;
+    if (!isNumber.test(value)) return;
 
-    setRentPerMonth(parseFloat(n));
+    setRentPerMonth(value);
   };
 
   const handleSecurityDeposit = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const n = event.target.value;
-    if (n === "" || isNaN(parseFloat(n))) return;
-    if (n.includes("-")) return;
-    if (parseFloat(n) <= 0) return;
+    const value = event.target.value;
+    if (!isNumber.test(value)) return;
 
-    setSecurityDeposit(parseFloat(n));
+    setSecurityDeposit(value);
   };
 
   const handleThirdPartyPayment = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value === "Yes") {
-      // setThirdPartyPayment("Yes")
       setThirdPartyPayment(true);
     } else if (event.target.value === "No") {
-      // setThirdPartyPayment("No")
       setThirdPartyPayment(false);
     }
   };
@@ -197,52 +188,14 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
   const handleApplicationFeeCost = (event: React.ChangeEvent<HTMLInputElement>) => {
     const n = event.target.value;
 
-    if (n === undefined) {
-      setApplicationFeeCost(undefined);
-      return;
-    }
+    if (!isNumber.test(n)) return;
 
-    if (n === "" || isNaN(parseFloat(n))) return;
-    if (n.includes("-")) return;
-    if (parseFloat(n) <= 0) return;
-    setApplicationFeeCost(parseFloat(event.target.value));
+    setApplicationFeeCost(n);
   };
 
   const handleDateAvailable = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
-
-    const dateArray = event.target.value.split(" ");
-
-    if (dateArray.length < 3) return;
-    if (!months.includes(dateArray[0])) return;
-    if (isNaN(parseInt(dateArray[1], 10))) return;
-    if (isNaN(parseInt(dateArray[2]))) return;
-    if (parseInt(dateArray[2]) > 9999) return;
-
-    const toReturn = new Date(
-      months.indexOf(dateArray[0]),
-      parseInt(dateArray[1], 10),
-      parseInt(dateArray[2], 1000),
-    );
-    setDateAvailable(toReturn);
+    setDateAvailable(event.target.value);
   };
-
-  //   const handleAvailableNow = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //     setAvailableNow(!availableNow);
-  //   };
 
   const handleNumberOfBedrooms = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNumberOfBedrooms(parseInt(event.target.value));
@@ -250,24 +203,23 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
   };
 
   const handleNumberOfBedroomsOther = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // TODO: Check if int
-    if (isNaN(parseInt(event.target.value))) return;
+    if (!isNumber.test(event.target.value)) return;
 
     setNumberOfBedrooms(undefined);
-    setNumberOfBedroomsOther(parseInt(event.target.value));
+    setNumberOfBedroomsOther(event.target.value);
   };
 
   const handleNumberOfBaths = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNumberOfBathsOther(undefined);
-    setNumberOfBaths(parseInt(event.target.value));
+    setNumberOfBaths(parseFloat(event.target.value));
   };
 
   const handleNumberOfBathsOther = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // TODO: Check if float
-    if (isNaN(parseFloat(event.target.value))) return;
+    const isBath = /^\d*\.?5?$/;
+    if (!isBath.test(event.target.value)) return;
 
     setNumberOfBaths(undefined);
-    setNumberOfBathsOther(parseInt(event.target.value));
+    setNumberOfBathsOther(event.target.value);
   };
 
   const handleCommunityAndNeighborInfo = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -320,12 +272,12 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
     setSharingHousing(event.target.value);
   };
 
-  const handleadditionalCommentsLL = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setadditionalCommentsLL(event.target.value);
+  const handleAdditionalCommentsLL = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setAdditionalCommentsLL(event.target.value);
   };
 
-  const handleadditionalCommentsHL = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setadditionalCommentsHL(event.target.value);
+  const handleAdditionalCommentsHL = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setAdditionalCommentsHL(event.target.value);
   };
 
   const handleWhereFindUnit = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -333,14 +285,7 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
   };
 
   const handleSubmit = () => {
-    // Access the event object
-    // console.log(event);
-
-    if (numberOfBedrooms === undefined && numberOfBedroomsOther === undefined) return;
-    if (numberOfBaths === undefined && numberOfBathsOther === undefined) return;
-
-    const newUser: CreateUnitRequest = {
-      _id: "1",
+    const newUnit: CreateUnitRequest = {
       landlordFirstName: firstName,
       landlordLastName: lastName,
       landlordEmail: email,
@@ -349,18 +294,16 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
       suiteNumber: aptNum,
       city,
       state,
-      listingAddress: streetAddress,
       areaCode,
-      sqft: sqFootage ?? 0,
-      monthlyRent: rentPerMonth ?? 0,
-      securityDeposit: securityDeposit ?? 0,
+      sqft: parseInt(sqFootage ?? ""),
+      monthlyRent: parseInt(rentPerMonth ?? ""),
+      securityDeposit: parseInt(securityDeposit ?? ""),
       acceptThirdParty: thirdPartyPayment ?? false,
       housingAuthority,
-      applicationFeeCost: applicationFeeCost ?? 0,
-      dateAvailable: dateAvailable?.toDateString() ?? "",
-      availableNow: dateAvailable?.getDate() === Date.now(),
-      numBeds: numberOfBedrooms ?? numberOfBedroomsOther ?? 0,
-      numBaths: numberOfBaths ?? numberOfBathsOther ?? 0,
+      applicationFeeCost: parseInt(applicationFeeCost ?? ""),
+      dateAvailable: dateAvailable ? new Date(dateAvailable).toISOString() : "",
+      numBeds: numberOfBedrooms ?? parseInt(numberOfBedroomsOther ?? ""),
+      numBaths: numberOfBaths ?? parseFloat(numberOfBathsOther ?? ""),
       appliances,
       communityFeatures:
         communityAndNeighborInfo[0] === ""
@@ -373,14 +316,16 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
       landlordComments: additionalCommentsLL,
     };
 
-    createUnit(newUser)
+    createUnit(newUnit)
       .then((res) => {
+        if (res.success) {
+          setErrorMessage("");
+        } else {
+          setErrorMessage(res.error);
+        }
         console.log(res);
-        navigate("/final");
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch(console.log);
   };
 
   return (
@@ -462,7 +407,7 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
             elementName="Square Footage"
             requiredField={true}
             name="sqFootage"
-            value={sqFootage === -1 ? "" : sqFootage}
+            value={sqFootage}
             handler={handleSqFootage}
           />
         </TextContainer>
@@ -479,7 +424,7 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
           <Textbox
             elementName="Security Deposit"
             requiredField={true}
-            name="rentPerMonth"
+            name="securityDeposit"
             value={securityDeposit ?? undefined}
             handler={handleSecurityDeposit}
           />
@@ -541,10 +486,9 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
         />
         <Textbox
           elementName="Additional Comments"
-          requiredField={true}
           name="additionalCommentsLL"
           value={additionalCommentsLL}
-          handler={handleadditionalCommentsLL}
+          handler={handleAdditionalCommentsLL}
         />
 
         {props.formType === "housing locator form" && (
@@ -570,11 +514,10 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
             />
             <Textbox
               elementName="Additional Comments"
-              requiredField={true}
               kind="textarea"
               name="additionalCommentsHL"
               value={additionalCommentsHL}
-              handler={handleadditionalCommentsHL}
+              handler={handleAdditionalCommentsHL}
             />
           </HousingLocatorSection>
         )}
@@ -584,6 +527,7 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
           Submit
         </Button>
       </SubmitButtonMarginOffset>
+      <ErrorMessage>{errorMessage}</ErrorMessage>
     </MainContainer>
   );
 }

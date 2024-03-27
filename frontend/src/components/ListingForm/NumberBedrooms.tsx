@@ -15,7 +15,7 @@ export const WidthOffset = styled.label`
 type NumberBedroomsProps = {
   numberOfBedrooms: number | undefined;
   handleNumberOfBedrooms: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  numberOfBedroomsOther: number | undefined;
+  numberOfBedroomsOther: string | undefined;
   handleNumberOfBedroomsOther: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
@@ -74,7 +74,7 @@ export const NumberBedrooms = (props: NumberBedroomsProps) => {
           <CustomCheckboxRadio
             type="radio"
             name="Bedroom_Other"
-            // value="-2"
+            value=""
             checked={props.numberOfBedroomsOther !== undefined}
             onChange={props.handleNumberOfBedroomsOther}
           />

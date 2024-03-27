@@ -9,7 +9,7 @@ import {
 type NumberBathsProps = {
   numberOfBaths: number | undefined;
   handleNumberOfBaths: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  numberOfBathsOther: number | undefined;
+  numberOfBathsOther: string | undefined;
   handleNumberOfBathsOther: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
@@ -79,7 +79,7 @@ export const NumberBaths = (props: NumberBathsProps) => {
           <CustomCheckboxRadio
             type="radio"
             name="Baths_Other"
-            // value="-2"
+            value=""
             checked={props.numberOfBathsOther !== undefined}
             onChange={props.handleNumberOfBathsOther}
           />

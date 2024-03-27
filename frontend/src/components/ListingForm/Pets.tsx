@@ -56,16 +56,12 @@ export const Pets = (props: PetsProps) => {
               type="checkbox"
               name="ESA letter required"
               value="ESA letter required"
-              checked={props.pets.includes("ESA letter requirequired")}
+              checked={props.pets.includes("ESA letter required")}
               onChange={() => {
-                props.handleCheckBoxNA(
-                  "ESA letter requirequiredFieldColor",
-                  props.pets,
-                  props.setPets,
-                );
+                props.handleCheckBoxNA("ESA letter required", props.pets, props.setPets);
               }}
             />
-            ESA letter requirequiredFieldColor
+            ESA letter required
           </label>
           <br />
           <label>

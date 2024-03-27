@@ -42,6 +42,7 @@ export const MainContainer = styled.div`
   flex-direction: column;
   align-items: center;
   text-align: left;
+  margin-bottom: 32px;
 `;
 
 export const TextCol = styled.div`
@@ -58,7 +59,7 @@ export const RadioCheckboxCol = styled.div`
   width: 433px;
 `;
 
-export const Header = styled.h1`
+export const Header = styled.div`
   margin: auto 150px;
   text-align: center;
   margin-bottom: 22px;

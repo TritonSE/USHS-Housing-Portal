@@ -5,7 +5,7 @@ import { CustomCheckboxRadio, Margin32 } from "@/components/ListingForm/CommonSt
 import { Textbox } from "@/components/ListingForm/Textbox";
 
 type ApplicationFeeCostProps = {
-  applicationFeeCost: number | undefined;
+  applicationFeeCost: string | undefined;
   handleApplicationFeeCost: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
@@ -22,11 +22,7 @@ export const ApplicationFeeCost = (props: ApplicationFeeCostProps) => {
           elementName="Application Fee Cost"
           requiredField={true}
           name="Application Fee Cost"
-          value={
-            props.applicationFeeCost !== undefined && props.applicationFeeCost !== 0
-              ? props.applicationFeeCost
-              : ""
-          }
+          value={props.applicationFeeCost === "0" ? "" : props.applicationFeeCost}
           handler={props.handleApplicationFeeCost}
         />
       </MarginOffset>
@@ -37,7 +33,7 @@ export const ApplicationFeeCost = (props: ApplicationFeeCostProps) => {
           type="radio"
           name="appFeeCostN/A"
           value="0"
-          checked={props.applicationFeeCost === 0}
+          checked={props.applicationFeeCost === "0"}
           onChange={props.handleApplicationFeeCost}
         />
         N/A
