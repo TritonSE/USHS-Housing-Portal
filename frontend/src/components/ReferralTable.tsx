@@ -186,7 +186,7 @@ export const ReferralTable = (props: ReferralTableProps) => {
                 housingLocator={getHousingLocator(referral.assignedHousingLocator)}
                 allHousingLocators={housingLocators}
                 status={referral.status}
-                lastUpdate={referral.timestamp.toString()}
+                lastUpdate={referral.updatedAt.toString()}
               />
             ))}
           <ReferralTableFooter>
