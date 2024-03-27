@@ -33,10 +33,7 @@ export const createUnitValidators = [
       .withMessage("must be a string")
       .notEmpty()
       .withMessage("cannot be empty"),
-    body("suiteNumber")
-      .optional()
-      .isString()
-      .withMessage("must be a string"),
+    body("suiteNumber").optional().isString().withMessage("must be a string"),
     body("city")
       .exists()
       .withMessage("is required")
