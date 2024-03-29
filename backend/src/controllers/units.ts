@@ -44,8 +44,11 @@ export const updateUnitHandler: RequestHandler = async (req, res, next) => {
       res.status(400);
     }
 
+    console.log("backend/controllers/units.ts");
+    console.log(req.body);
     const id = req.params.id;
     const updatedUnit = await UnitModel.findByIdAndUpdate(id, req.body);
+    console.log(updatedUnit);
 
     if (updatedUnit === null) {
       throw createHttpError(404, "Unit not found.");

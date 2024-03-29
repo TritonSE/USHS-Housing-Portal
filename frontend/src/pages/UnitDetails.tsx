@@ -250,19 +250,23 @@ export function UnitDetails() {
   };
 
   const handleSaveAvailability = () => {
-    // Depending on the selected option, gather the updatedData
-    let updatedData = {};
-
     if (selectedPopupOption === "enterDate") {
-      updatedData = { availabilityDate: dateText };
+      updateUnit(unit._id, { dateAvailable: dateText }).then((result) => {
+        if (result.success) {
+          console.log("result.data: ");
+          console.log(result.data);
+          setUnit(result.data);
+        } else {
+          alert(result.error);
+        }
+      });
     } else if (selectedPopupOption === "leasedByUSHS") {
-      updatedData = { leasedStatus: false };
+      // updatedData = { leasedStatus: "ushs" };
+      updateUnit(unit._id, { leasedStatus: "ushs" });
     } else if (selectedPopupOption === "removedFromMarket") {
-      updatedData = { availableNow: false };
+      // updatedData = { leasedStatus: "removed" };
+      updateUnit(unit._id, { leasedStatus: "removed" });
     }
-
-    // Call your updateUnit function here, passing id and updatedData
-    updateUnit(id, updatedData);
 
     // Close the popup
     togglePopup();

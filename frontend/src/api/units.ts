@@ -51,6 +51,12 @@ export type FilterParams = {
   sort: number;
 };
 
+export interface UpdateUnitRequest {
+  // _id: string;
+  dateAvailable?: string;
+  leasedStatus?: "ushs" | "removed";
+}
+
 export async function getUnit(id: string): Promise<APIResult<Unit>> {
   try {
     const response = await get(`/units/${id}`);
@@ -71,9 +77,10 @@ export async function getUnits(_params: FilterParams): Promise<APIResult<Unit[]>
   }
 }
 
-export async function updateUnit(id: string, updatedData: Partial<Unit>): Promise<APIResult<Unit>> {
+export async function updateUnit(id: string, unit: UpdateUnitRequest): Promise<APIResult<Unit>> {
   try {
-    const response = await put(`/units/${id}`, updatedData);
+    console.log("frontend api units.ts: ");
+    const response = await put(`/units/${id}`, unit);
     const json = (await response.json()) as Unit;
     return { success: true, data: json };
   } catch (error) {
