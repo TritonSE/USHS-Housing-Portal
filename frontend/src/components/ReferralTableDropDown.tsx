@@ -18,8 +18,8 @@ import {
 const RT_Row_DD_Container = styled(FilterSubContainer)``;
 
 const RT_Row_DD_Row = styled(FilterRow)`
-  min-width: 9.24vw;
-  max-width: 9.25vw;
+  min-width: 10.27vw;
+  max-width: 10.28vw;
   max-height: 2vh;
   overflow: hidden;
   &:hover {
