@@ -125,7 +125,6 @@ export const ReferralTable = (props: ReferralTableProps) => {
       void getUnitReferrals(props.id).then((res) => {
         if (res.success) {
           setReferrals(res.data);
-          console.log(res.data);
         }
       });
     }

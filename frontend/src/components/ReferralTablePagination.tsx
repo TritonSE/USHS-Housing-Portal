@@ -71,12 +71,14 @@ export const ReferralTablePagination = (props: ReferralTablePaginationProps) => 
   const handlePageNumberInput = (newPage: string): void => {
     try {
       const newPageNumber = Number(newPage);
-      setActivePageNumber(newPageNumber);
+      if (!Number.isNaN(newPageNumber)) {
+        setActivePageNumber(newPageNumber);
+      }
       if (newPageNumber >= 1 && newPageNumber <= props.totalPages) {
         props.setPageNumber(newPageNumber);
       }
     } catch (error) {
-      console.log("Can't access that page");
+      console.error("Can't access that page");
     }
   };
 
@@ -92,7 +94,7 @@ export const ReferralTablePagination = (props: ReferralTablePaginationProps) => 
       </NavButton>
       <PaginationText>page</PaginationText>
       <CurrPage
-        type="number"
+        type="string"
         value={activePageNumber}
         onChange={(event) => {
           handlePageNumberInput(event.target.value);
