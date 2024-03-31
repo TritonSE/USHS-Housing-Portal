@@ -38,20 +38,27 @@ const RT_Row_DD_Display = styled(DropdownRow)`
 
 const RT_Row_DD_Display_Text = styled.p`
   color: var(--Neutral-Black, #000);
+  display: in-block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 
   font-family: Montserrat;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
   letter-spacing: 0.32px;
-  white-space: nowrap;
-  overflow: hidden;
 `;
 
 const PopupBodyText = styled(Sort)`
   font-weight: 400;
   font-size: 12px;
   margin-left: 0;
+
+  display: in-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export type ReferralTableDropDownProps = {
