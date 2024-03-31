@@ -31,12 +31,12 @@ jobs:
       - name: Build Frontend
         run: |
           cd frontend
-          bun install --frozen-lockfile
+          bun install --ignore-scripts
           bun run build
       - name: Build Backend
         run: |
           cd backend
-          bun install --frozen-lockfile
+          bun install --ignore-scripts
           bun run build
       - name: Create Backend .env
         run: |
@@ -45,6 +45,7 @@ jobs:
           echo NODE_ENV=${{ vars.NODE_ENV }} >> .env
           echo MONGODB_URI=${{ secrets.MONGODB_URI }} >> .env
           echo FRONTEND_ORIGIN=${{ vars.FRONTEND_ORIGIN }} >> .env
+          echo FIREBASE=${{ secrets.FIREBASE }} >> .env
       - name: Deploy to Firebase
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:

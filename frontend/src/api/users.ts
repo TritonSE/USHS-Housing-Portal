@@ -6,7 +6,7 @@
  *
  */
 
-import { APIResult, get, handleAPIError, post } from "./requests";
+import { APIResult, get, handleAPIError, post, put } from "./requests";
 
 export type User = {
   _id: string;
@@ -35,6 +35,16 @@ export async function getUsers(): Promise<APIResult<User[]>> {
 export async function createUser(user: createUserRequest): Promise<APIResult<User>> {
   try {
     const response = await post("/users", user);
+    const json = (await response.json()) as User;
+    return { success: true, data: json };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+}
+
+export async function elevateUser(user: User): Promise<APIResult<User>> {
+  try {
+    const response = await put(`/users/${user._id}/elevate`, user);
     const json = (await response.json()) as User;
     return { success: true, data: json };
   } catch (error) {

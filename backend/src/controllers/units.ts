@@ -5,7 +5,14 @@ import { asyncHandler } from "./wrappers";
 
 import { UnitModel } from "@/models/units";
 import { getUnitReferrals } from "@/services/referral";
-import { NewUnit, createUnit } from "@/services/units";
+import {
+  FilterParams,
+  NewUnit,
+  approveUnit,
+  createUnit,
+  deleteUnit,
+  getUnits,
+} from "@/services/units";
 
 /**
  * Handle a request to create a new unit.
@@ -16,6 +23,22 @@ export const createUnitsHandler: RequestHandler = asyncHandler(async (req, res, 
   const newUnit = await createUnit(newUnitBody);
 
   res.status(201).json(newUnit);
+});
+
+export const deleteUnitsHandler: RequestHandler = asyncHandler(async (req, res, _) => {
+  const id = req.params.id;
+  const response = await deleteUnit(id);
+  if (response === null) {
+    res.status(400);
+  } else {
+    res.status(200).json(response);
+  }
+});
+
+export const getUnitsHandler: RequestHandler = asyncHandler(async (req, res, _) => {
+  const units = await getUnits(req.query as FilterParams);
+
+  res.status(200).json(units);
 });
 
 /**
@@ -43,4 +66,19 @@ export const getUnitReferralsHandler: RequestHandler = asyncHandler(async (req, 
   }
 
   res.status(200).json(referrals);
+});
+
+/**
+ * Handle a request to approve a unit listing.
+ */
+export const approveUnitHandler: RequestHandler = asyncHandler(async (req, res, _) => {
+  const unitId = req.params.id;
+
+  const unit = await approveUnit(unitId);
+
+  if (unit !== null) {
+    res.status(200).json(unit);
+  } else {
+    res.status(404).send("Unit not found");
+  }
 });

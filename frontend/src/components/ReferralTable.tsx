@@ -117,7 +117,9 @@ export const ReferralTable = (props: ReferralTableProps) => {
   const [pageNumber, setPageNumber] = useState<number>(1);
 
   const getAllReferringStaff = (): string[] => {
-    return dataContext.allCaseManagers.map((manager) => manager.firstName + " " + manager.lastName);
+    return dataContext.allReferringStaff.map(
+      (manager) => manager.firstName + " " + manager.lastName,
+    );
   };
 
   const getAllHousingLocators = (): string[] => {
@@ -142,7 +144,7 @@ export const ReferralTable = (props: ReferralTableProps) => {
   }, [authContext, dataContext]);
 
   const getReferringStaff = (assignedReferringStaff: User): string => {
-    const staff = dataContext.allCaseManagers.find(
+    const staff = dataContext.allReferringStaff.find(
       (manager) => manager._id === assignedReferringStaff._id,
     );
     return staff === undefined ? "N/A" : staff.firstName + " " + staff.lastName;

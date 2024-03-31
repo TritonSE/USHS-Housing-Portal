@@ -24,12 +24,13 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 13.67vh;
-  padding: 20vh 364.6px 0vh 365px;
+  padding: 22.5vh 364.6px 0vh 365px;
 `;
 
 const Image = styled.img`
-  width: 600px;
-  height: 250px;
+  height: auto;
+  width: auto;
+  max-width: 80%;
 `;
 const Error = styled.div`
   color: red;
@@ -55,14 +56,12 @@ export function Login() {
 
         const email = user.email ?? "";
 
-        createUser({ firstName, lastName, email })
-          .then((res) => {
-            console.log(res);
-            navigate("/");
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        // 404 User already exists error does not need to be caught
+        // This is okay because we need to call this every time
+        // to ensure the user is in the database if not already
+        void createUser({ firstName, lastName, email }).then(() => {
+          navigate("/");
+        });
       })
       .catch((error: FirebaseError) => {
         console.log(error);
