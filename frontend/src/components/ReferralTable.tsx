@@ -69,8 +69,10 @@ const ReferralTableButtonIcon = styled.img`
 
 const ReferralTableColumnHeaders = styled.div`
   display: flex;
-  margin: 3vh 0vw 1vh 0vw;
+  flex-direction: row;
   justify-content: space-between;
+  padding: 2vh 2vw 2vh 2vw;
+  margin: 2vh 0vw 0vh 0vw;
   flex-grow: 1;
   background: #ffffff;
 `;
@@ -80,16 +82,21 @@ const ReferralTableColumnHeader = styled.div`
   justify-content: flex-start;
   color: var(--Neutral-Black, #000);
 
-  min-width: 200px;
-  max-width: 201px;
-
   font-family: Montserrat;
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
   line-height: 150%; /* 24px */
   letter-spacing: 0.32px;
-  padding: 1vh 0px 1vh 1vw;
+
+  min-width: 200px;
+  max-width: 201px;
+`;
+
+const ReferralTableColumnHeaderEnd = styled(ReferralTableColumnHeader)`
+  display: flex;
+  align-items: cetner;
+  justify-content: center;
 `;
 
 const ReferralTableFooter = styled.div`
@@ -163,9 +170,13 @@ export const ReferralTable = (props: ReferralTableProps) => {
       </ReferralTableTitleSection>
 
       <ReferralTableColumnHeaders>
-        {TableColumnNames.map((name, idx) => (
-          <ReferralTableColumnHeader key={idx}>{name}</ReferralTableColumnHeader>
-        ))}
+        {TableColumnNames.map((name, idx) =>
+          idx === TableColumnNames.length - 1 ? (
+            <ReferralTableColumnHeaderEnd key={idx}>{name}</ReferralTableColumnHeaderEnd>
+          ) : (
+            <ReferralTableColumnHeader key={idx}>{name}</ReferralTableColumnHeader>
+          ),
+        )}
       </ReferralTableColumnHeaders>
 
       {referrals && referrals.length > 0 ? (
