@@ -36,8 +36,13 @@ const RTR_Wrapper = styled.div<{ index: number }>`
     div.index % 2 ? "var(--Neutral-Gray0, #F3F3F3);" : "background: var(--Background, #FBF7F3);"};
 `;
 
-const RTR_Text = styled.p`
+const RTR_Text_Wrapper = styled.div`
   display: flex;
+  align-items: center;
+`;
+
+const RTR_Text = styled.p`
+  display: in-block;
   align-items: center;
   overflow: hidden;
   color: var(--Primary, #0c2b35);
@@ -70,10 +75,15 @@ const formatDate = (date: string): string => {
 export const ReferralTableRow = (props: ReferralTableRowProps) => {
   return (
     <RTR_Wrapper index={props.index}>
-      <RTR_Text title={props.name}>{props.name}</RTR_Text>
-      <RTR_Text title={props.email + " " + props.phone}>
-        {props.email} <br /> {props.phone}
-      </RTR_Text>
+      <RTR_Text_Wrapper>
+        <RTR_Text title={props.name}>{props.name}</RTR_Text>
+      </RTR_Text_Wrapper>
+      <RTR_Text_Wrapper>
+        <RTR_Text title={props.email + " " + props.phone}>
+          {props.email} <br /> {props.phone}
+        </RTR_Text>
+      </RTR_Text_Wrapper>
+
       {/* Referring Staff (Case Manager) */}
       <ReferralTableDropDown values={props.allReferringStaff} defaultValue={props.referringStaff} />
       {/* Housing Locator */}
