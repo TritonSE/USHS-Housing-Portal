@@ -30,7 +30,6 @@ const RTR_Wrapper = styled.div<{ index: number }>`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin: 0vh 5vw 0vh 5vw;
   padding: 2vh 2vw 2vh 2vw;
   background: ${(div) =>
     div.index % 2 ? "var(--Neutral-Gray0, #F3F3F3);" : "background: var(--Background, #FBF7F3);"};

@@ -263,8 +263,8 @@ export function UnitDetails() {
             {unit.internalComments}
           </SectionColumn>
         </Row>
+        <ReferralTable id={id ?? ""} />
       </MainColumn>
-      <ReferralTable id={id ?? ""} />
     </Page>
   );
 }
