@@ -9,6 +9,7 @@ import { Page } from "@/components";
 import { Banner } from "@/components/Banner";
 import { Button } from "@/components/Button";
 import { NavBar } from "@/components/NavBar";
+import { ReferralTable } from "@/components/ReferralTable";
 import { DataContext } from "@/contexts/DataContext";
 
 const Row = styled.div`
@@ -402,10 +403,11 @@ export function UnitDetails() {
             </InfoBlock>
           </SectionColumn>
         </Row>
+        <ReferralTable id={id ?? ""} />
         {!unit.approved && (
           <Button
             kind="primary"
-            style={{ margin: "99px 941px", width: 210, height: 50 }}
+            style={{ alignSelf: "flex-end", width: "fit-content" }}
             onClick={approveListing}
           >
             Approve Listing
