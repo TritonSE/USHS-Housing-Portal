@@ -27,6 +27,7 @@ const ReferralTableContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin-top: 44px;
 `;
 
 const ReferralTableTitleSection = styled.div`
@@ -95,7 +96,7 @@ const ReferralTableColumnHeader = styled.div`
 
 const ReferralTableColumnHeaderEnd = styled(ReferralTableColumnHeader)`
   display: flex;
-  align-items: cetner;
+  align-items: center;
   justify-content: center;
 `;
 
@@ -105,7 +106,7 @@ const ReferralTableFooter = styled.div`
 `;
 
 const ReferralTablePlaceholder = styled.div`
-  padding: 0vh 0vw 6vh 6vw;
+  padding: 12px 2vw;
 `;
 
 export const ReferralTable = (props: ReferralTableProps) => {

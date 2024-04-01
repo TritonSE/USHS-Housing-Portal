@@ -407,7 +407,7 @@ export function UnitDetails() {
         {!unit.approved && (
           <Button
             kind="primary"
-            style={{ margin: "99px 941px", width: 210, height: 50 }}
+            style={{ alignSelf: "flex-end", width: "fit-content" }}
             onClick={approveListing}
           >
             Approve Listing
