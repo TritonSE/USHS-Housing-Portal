@@ -1,3 +1,5 @@
+import { ObjectId } from "mongodb";
+
 import { ReferralModel } from "@/models/referral";
 
 export async function getUnitReferrals(id: string) {
@@ -7,4 +9,17 @@ export async function getUnitReferrals(id: string) {
     .populate("assignedReferringStaff");
 
   return referrals;
+}
+
+export async function createReferral(
+  renterCandidateId: string,
+  unitId: string,
+  referringStaff: ObjectId,
+) {
+  const referral = await ReferralModel.create({
+    renterCandidate: renterCandidateId,
+    unitId,
+    assignedReferringStaff: referringStaff,
+  });
+  return referral;
 }

@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 
 import { Button } from "./Button";
 import { UserDropdown } from "./UserDropdown";
 
+import { createReferral, createReferralRequest } from "@/api/referrals";
 import {
   RenterCandidate,
   createRenterCandidate,
@@ -177,14 +179,18 @@ const Error = styled.div`
 type PopupProps = {
   active: boolean;
   onClose: () => void;
+  onSubmit: () => void;
 };
 
-export const ReferralPopup = ({ active, onClose }: PopupProps) => {
+export const ReferralPopup = ({ active, onClose, onSubmit }: PopupProps) => {
   const [popup, setPopup] = useState<boolean>(false);
   const [addRC, setAddRC] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string>("");
+  const [currentRC, setCurrentRC] = useState<RenterCandidate>();
   const [allRCs, setAllRCs] = useState<RenterCandidate[]>([]);
   const { register, handleSubmit, reset } = useForm();
+
+  const { id } = useParams();
 
   useEffect(() => {
     setPopup(active);
@@ -202,16 +208,30 @@ export const ReferralPopup = ({ active, onClose }: PopupProps) => {
       });
   }, [popup]);
 
+  const handleCreateReferral = (renterCandidateId: string | undefined) => {
+    if (renterCandidateId !== undefined) {
+      createReferral({ renterCandidateId, unitId: id } as createReferralRequest)
+        .then((value) => {
+          if (value.success) {
+            console.log(value.data);
+            onSubmit();
+            onClose();
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
+
   const handleCreateRC = (data: FieldValues) => {
     if (data.email === "") delete data.email;
     if (data.phone === "") delete data.phone;
     createRenterCandidate(data as createRenterCandidateRequest)
       .then((value) => {
         if (value.success) {
-          const id = value.data._id;
-          console.log(id);
+          handleCreateReferral(value.data._id);
           reset();
-          onClose();
           setAddRC(false);
           setErrorMsg("");
         } else {
@@ -253,9 +273,19 @@ export const ReferralPopup = ({ active, onClose }: PopupProps) => {
                     <UserDropdown
                       placeholder={"Choose from dropdown"}
                       options={allRCs}
+                      onSelect={(selectedRC) => {
+                        setCurrentRC(selectedRC as RenterCandidate);
+                      }}
                       isRCDropdown={true}
                     ></UserDropdown>
-                    <Button kind="secondary">Apply</Button>
+                    <Button
+                      kind="secondary"
+                      onClick={() => {
+                        handleCreateReferral(currentRC?._id);
+                      }}
+                    >
+                      Apply
+                    </Button>
                   </DropdownWrapper>
                   <Or>or</Or>
                   <div>Add new renter candidate</div>

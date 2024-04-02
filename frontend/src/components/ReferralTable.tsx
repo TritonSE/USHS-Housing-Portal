@@ -133,15 +133,22 @@ export const ReferralTable = (props: ReferralTableProps) => {
     );
   };
 
-  React.useEffect(() => {
-    if (authContext.currentUser) {
-      void getUnitReferrals(props.id).then((res) => {
+  const getAllReferrals = () => {
+    getUnitReferrals(props.id)
+      .then((res) => {
         if (res.success) {
           setReferrals(res.data);
         }
+      })
+      .catch((error) => {
+        console.log(error);
       });
-    }
+  };
 
+  React.useEffect(() => {
+    if (authContext.currentUser) {
+      getAllReferrals();
+    }
     if (dataContext) {
       setReferringStaff(getAllReferringStaff());
       setHousingLocators(getAllHousingLocators());
@@ -149,6 +156,8 @@ export const ReferralTable = (props: ReferralTableProps) => {
   }, [authContext, dataContext]);
 
   const getReferringStaff = (assignedReferringStaff: User): string => {
+    console.log(assignedReferringStaff);
+    console.log(dataContext.allReferringStaff);
     const staff = dataContext.allReferringStaff.find(
       (manager) => manager._id === assignedReferringStaff._id,
     );
@@ -157,7 +166,7 @@ export const ReferralTable = (props: ReferralTableProps) => {
 
   const getHousingLocator = (assignedHousingLocator: User): string => {
     const locator = dataContext.allHousingLocators.find(
-      (currLocator) => currLocator._id === assignedHousingLocator._id,
+      (currLocator) => assignedHousingLocator && currLocator._id === assignedHousingLocator._id,
     );
     return locator === undefined ? "N/A" : locator.firstName + " " + locator.lastName;
   };
@@ -184,6 +193,7 @@ export const ReferralTable = (props: ReferralTableProps) => {
           onClose={() => {
             setPopup(false);
           }}
+          onSubmit={getAllReferrals}
         />
       </ReferralTableTitleSection>
 
@@ -205,7 +215,7 @@ export const ReferralTable = (props: ReferralTableProps) => {
               <ReferralTableRow
                 key={Math.random()}
                 index={idx}
-                name={referral.renterCandidate.firstName}
+                name={referral.renterCandidate.firstName + " " + referral.renterCandidate.lastName}
                 email={referral.renterCandidate.email}
                 phone={referral.renterCandidate.phone}
                 referringStaff={getReferringStaff(referral.assignedReferringStaff)}
