@@ -12,7 +12,7 @@ export const Logo = () => {
   return (
     <LogoPosition>
       <img
-        src="/LogoTransparent.png"
+        src="/USHSLogo.svg"
         alt="Logo"
         style={{
           width: "80%",
