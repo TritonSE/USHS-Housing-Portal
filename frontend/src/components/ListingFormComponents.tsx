@@ -51,10 +51,10 @@ const ErrorMessage = styled(HousingLocatorSection)`
 
 type ListingFormComponentsProps = {
   formType: "landlord listing form" | "housing locator form";
-  // formType: number;
   firstName?: string;
   lastName?: string;
   email?: string;
+  handleAfterSubmit: () => void; // Function to call after the form is submitted
 };
 
 const SubmitButtonMarginOffset = styled.div`
@@ -114,9 +114,7 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
   };
 
   const handleEmailAddress = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const isEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
-    if (isEmail.test(event.target.value)) setEmail(event.target.value);
-    else return;
+    setEmail(event.target.value);
   };
 
   const handlePhoneNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -126,12 +124,10 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
   };
 
   const handleStreetAddress = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // if (event.target.value === "") return;
     setStreetAddress(event.target.value);
   };
 
   const handleApartmentNumber = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // if (event.target.value === "") return;
     setAptNum(event.target.value);
   };
 
@@ -320,12 +316,12 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
       .then((res) => {
         if (res.success) {
           setErrorMessage("");
+          props.handleAfterSubmit();
         } else {
           setErrorMessage(res.error);
         }
-        console.log(res);
       })
-      .catch(console.log);
+      .catch(console.error);
   };
 
   return (

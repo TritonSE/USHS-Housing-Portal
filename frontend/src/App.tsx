@@ -31,7 +31,7 @@ function AppRouter() {
         {signedIn && (
           <>
             <Route path="/" element={<Home />} />
-            <Route path="/landlord-listing-form" element={<LandlordListingForm />} />
+            <Route path="/listing-form" element={<LandlordListingForm />} />
             <Route path="/housing-locator-form" element={<HousingLocatorForm />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/unit/:id" element={<UnitDetails />} />
