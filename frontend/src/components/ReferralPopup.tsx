@@ -185,7 +185,6 @@ export const ReferralPopup = ({ active, onClose }: PopupProps) => {
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [allRCs, setAllRCs] = useState<RenterCandidate[]>([]);
   const { register, handleSubmit, reset } = useForm();
-  const errorMapping = { email: "Email", adults: "Adults field", children: "Children field" };
 
   useEffect(() => {
     setPopup(active);
@@ -216,14 +215,11 @@ export const ReferralPopup = ({ active, onClose }: PopupProps) => {
           setAddRC(false);
           setErrorMsg("");
         } else {
-          //scuffed string parsing
-          const errorMessage = value.error.substring(value.error.indexOf("Invalid fields") + 16);
-          const firstWord = errorMessage.substring(
-            0,
-            errorMessage.indexOf(" "),
-          ) as keyof typeof errorMapping;
-          const secondHalf = errorMessage.substring(firstWord.length, errorMessage.length - 2);
-          setErrorMsg(errorMapping[firstWord] + secondHalf);
+          if (value.error.includes("email")) {
+            setErrorMsg("Email is invalid!");
+          } else {
+            setErrorMsg(value.error);
+          }
         }
       })
       .catch((error) => {
@@ -289,6 +285,12 @@ export const ReferralPopup = ({ active, onClose }: PopupProps) => {
                       <InputBox
                         placeholder="(xxx) xxx-xxxx"
                         {...register("phone", { required: false })}
+                        onKeyDown={(e) => {
+                          const re = /[a-zA-Z]/g;
+                          if (re.test(e.key) && e.key.length === 1) {
+                            e.preventDefault();
+                          }
+                        }}
                       />
                     </InputSection>
                     <InputSection>
@@ -305,11 +307,29 @@ export const ReferralPopup = ({ active, onClose }: PopupProps) => {
                     </InputSection>
                     <InputSection>
                       <div>Number of adults (include self) *</div>
-                      <InputBox placeholder="Ex: 3" {...register("adults", { required: true })} />
+                      <InputBox
+                        placeholder="Ex: 3"
+                        {...register("adults", { required: true })}
+                        onKeyDown={(e) => {
+                          const re = /[0-9]/g;
+                          if (!re.test(e.key) && e.key.length === 1) {
+                            e.preventDefault();
+                          }
+                        }}
+                      />
                     </InputSection>
                     <InputSection>
                       <div>Number of children *</div>
-                      <InputBox placeholder="Ex: 3" {...register("children", { required: true })} />
+                      <InputBox
+                        placeholder="Ex: 3"
+                        {...register("children", { required: true })}
+                        onKeyDown={(e) => {
+                          const re = /[0-9]/g;
+                          if (!re.test(e.key) && e.key.length === 1) {
+                            e.preventDefault();
+                          }
+                        }}
+                      />
                     </InputSection>
                     <ButtonsWrapper>
                       <Button
