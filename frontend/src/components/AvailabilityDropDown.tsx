@@ -26,6 +26,10 @@ const PopupBodyText = styled(Sort)`
   margin-left: 0;
 `;
 
+const AvailabilitySubContainer = styled(FilterSubContainer)`
+  min-width: 183px;
+`;
+
 export type AvailabilityState = {
   dropdownText: string;
 };
@@ -47,7 +51,7 @@ export const AvailabilityDropDown = (props: AvailabilityDropDownProps) => {
   const availabilityOptions: string[] = ["Available", "Leased"];
 
   return (
-    <FilterSubContainer>
+    <AvailabilitySubContainer>
       <Dropdown
         onClick={() => {
           setIsActive(!isActive);
@@ -91,6 +95,6 @@ export const AvailabilityDropDown = (props: AvailabilityDropDownProps) => {
           </ApplyButton>
         </DropDownPopup>
       )}
-    </FilterSubContainer>
+    </AvailabilitySubContainer>
   );
 };
