@@ -1,18 +1,16 @@
 {
-  "functions": [
-    {
-      "runtime": "nodejs18",
-      "source": "backend",
-      "codebase": "default",
-      "ignore": [
-        ".git",
-        "firebase-debug.log",
-        "firebase-debug.*.log",
-        "**/.*",
-        "**/node_modules/**"
-      ]
-    }
-  ],
+  "functions": {
+    "runtime": "nodejs18",
+    "source": "backend",
+    "codebase": "default",
+    "ignore": [
+      ".git",
+      "firebase-debug.log",
+      "firebase-debug.*.log",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  },
   "hosting": {
     "public": "frontend/dist",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],

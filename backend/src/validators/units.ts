@@ -33,13 +33,7 @@ export const createUnitValidators = [
       .withMessage("must be a string")
       .notEmpty()
       .withMessage("cannot be empty"),
-    body("suiteNumber")
-      .exists()
-      .withMessage("is required")
-      .isString()
-      .withMessage("must be a string")
-      .notEmpty()
-      .withMessage("cannot be empty"),
+    body("suiteNumber").optional().isString().withMessage("must be a string"),
     body("city")
       .exists()
       .withMessage("is required")
@@ -94,11 +88,6 @@ export const createUnitValidators = [
       .withMessage("is required")
       .isISO8601()
       .withMessage("must be a ISO8601 date"),
-    body("availableNow")
-      .exists()
-      .withMessage("is required")
-      .isBoolean()
-      .withMessage("must be a boolean"),
     body("numBeds").exists().withMessage("is required").isNumeric().withMessage("must be a number"),
     body("numBaths")
       .exists()

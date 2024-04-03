@@ -56,14 +56,12 @@ export function Login() {
 
         const email = user.email ?? "";
 
-        createUser({ firstName, lastName, email })
-          .then((res) => {
-            console.log(res);
-            navigate("/");
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        // 404 User already exists error does not need to be caught
+        // This is okay because we need to call this every time
+        // to ensure the user is in the database if not already
+        void createUser({ firstName, lastName, email }).then(() => {
+          navigate("/");
+        });
       })
       .catch((error: FirebaseError) => {
         console.log(error);
@@ -80,7 +78,7 @@ export function Login() {
       </Helmet>
       <Items>
         <Wrapper>
-          <Image src="USHSLogo.png" alt="" />
+          <Image src="USHSWideLogo.svg" alt="" />
           <Button kind="primary" onClick={login}>
             Log in with Google
           </Button>

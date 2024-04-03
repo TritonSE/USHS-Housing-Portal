@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-import { Unit, getUnit, updateUnit } from "@/api/units";
+import { Unit, approveUnit, getUnit, updateUnit } from "@/api/units";
 import { Page } from "@/components";
+import { Banner } from "@/components/Banner";
 import { Button } from "@/components/Button";
 import { NavBar } from "@/components/NavBar";
+import { ReferralTable } from "@/components/ReferralTable";
+import { DataContext } from "@/contexts/DataContext";
 
 const Section = styled.div`
   display: flex;
@@ -44,6 +47,7 @@ const DetailsRow = styled(Row)`
 
 const SectionColumn = styled(Column)`
   width: 50%;
+  gap: 25px;
 `;
 
 const MainColumn = styled.div`
@@ -59,14 +63,22 @@ const DetailsColumn = styled(MainColumn)`
 
 const RentPerMonth = styled.h1`
   font-size: 48px;
-  font-family: "Montserrat";
-  font-weight: 600;
+  font-family: "Neutraface Text";
+  font-weight: 700;
+  line-height: 72px;
+  line-spacing: 0.96px;
+
+  margin: 0;
+  padding: 0;
 `;
 
 const Header = styled.div`
   font-size: 32px;
   font-weight: 700;
   font-family: "Neutraface Text";
+  line-height: 150%;
+  line-spacing: 0.64px;
+  margin-top: 32px;
 `;
 
 const Text = styled.div`
@@ -85,6 +97,8 @@ const List = styled.ul`
 
 const StrongText = styled(Text)`
   font-weight: 600;
+  line-height: 30px;
+  letter-spacing: 0.4px;
 `;
 
 const ListText = styled.li`
@@ -98,7 +112,18 @@ const ListText = styled.li`
     margin-right: 10px;
   `;
 
-const Address = styled(Header)``;
+const Address = styled(Header)`
+  padding: 0;
+  margin: 0 0 5px 0;
+`;
+
+const DoesNotExist = styled(Header)`
+  font-size: 48px;
+  font-family: "Neutraface Text";
+  font-weight: 700;
+  line-height: 72px;
+  line-spacing: 0.96px;
+`;
 
 const Availability = styled(Header)`
   font-size: 30px;
@@ -119,14 +144,29 @@ const ChangeAvailabilityButton = styled(Button)`
   padding-top: 10px;
   padding-bottom: 10px;
 `;
+const ButtonPadding = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 32px;
+  justify-content: space-between;
+`;
 
-const DoesNotExist = styled.h1`
-  font-size: 48px;
-  font-family: "Neutraface Text", sans-serif;
-  font-weight: 550;
-  line-height: 150%;
-  line-spacing: 0.96px;
-  padding: 20px 10% 20px 10%;
+const PaddingInButton = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin: 0 0px 0px 0;
+  justify-content: space-between;
+  gap: 10px;
+`;
+
+const InfoRow = styled(Row)`
+  gap: 20px;
+`;
+
+const EditButton = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 // POPUP STYLING
@@ -236,10 +276,36 @@ const Heading = styled.h1`
 
 export function UnitDetails() {
   const [unit, setUnit] = useState<Unit>();
+  const [showApprovedBanner, setShowApprovedBanner] = useState(false);
+  const [showPendingApprovalBanner, setShowPendingApprovalBanner] = useState(false);
+
   const { id } = useParams();
   const [popup, setPopup] = useState(false);
   const [selectedPopupOption, setSelectedPopupOption] = useState("");
   const [dateText, setDateText] = useState("");
+
+  //using Data Context to get currentUser info
+  const { currentUser } = useContext(DataContext);
+
+  //checks for which view to return
+  const [_isEditing, setIsEditing] = useState(false);
+
+  const toggleEditing = () => {
+    setIsEditing((prevState) => !prevState);
+  };
+
+  React.useEffect(() => {
+    if (id !== undefined) {
+      void getUnit(id).then((result) => {
+        if (result.success) {
+          if (!result.data.approved) {
+            setShowPendingApprovalBanner(true);
+          }
+          setUnit(result.data);
+        }
+      });
+    }
+  }, []);
 
   const handleRadioChange = (event) => {
     setSelectedPopupOption(event.target.value);
@@ -272,15 +338,17 @@ export function UnitDetails() {
     togglePopup();
   };
 
-  React.useEffect(() => {
-    if (id !== undefined) {
-      void getUnit(id).then((result) => {
-        if (result.success) {
-          setUnit(result.data);
-        }
-      });
+  const approveListing = () => {
+    if (unit && id && !unit.approved) {
+      approveUnit(id)
+        .then(() => {
+          setShowApprovedBanner(true);
+          setShowPendingApprovalBanner(false);
+          window.scrollTo(0, 0); // scroll to top of page
+        })
+        .catch(console.error);
     }
-  }, []);
+  };
 
   if (!unit) {
     return (
@@ -288,13 +356,20 @@ export function UnitDetails() {
         <Helmet>
           <title>Unit Does Not Exist | USHS Housing Portal</title>
         </Helmet>
-        <NavBar page="" />
-        <Column>
-          <Link to="/">
-            <Button kind="secondary"> Back to Listing</Button>
-          </Link>
+        <NavBar page="Home" />
+        <MainColumn>
+          <ButtonPadding>
+            <Link to="/">
+              <Button kind="secondary">
+                <PaddingInButton>
+                  <img className="back-arrow" src="/back_arrow.svg" alt={"Back arrow"} />
+                  Back to Listing
+                </PaddingInButton>
+              </Button>
+            </Link>
+          </ButtonPadding>
           <DoesNotExist>This unit does not exist!</DoesNotExist>
-        </Column>
+        </MainColumn>
       </Page>
     );
   }
@@ -303,25 +378,43 @@ export function UnitDetails() {
   const availableNow = unit.availableNow ? "Available Now" : "Not Available";
 
   //move data into an array
-  const rentingCriteria = unit.paymentRentingCriteria.map((criteria) => (
-    <ListText key={criteria}>{criteria}</ListText>
+  const rentingCriteria = unit.paymentRentingCriteria.map((criteria, i) => (
+    <ListText key={criteria + i}>{criteria}</ListText>
   ));
-  const appliances = unit.appliances.map((appliance) => (
-    <ListText key={appliance}>{appliance}</ListText>
+  const appliances = unit.appliances.map((appliance, i) => (
+    <ListText key={appliance + i}>{appliance}</ListText>
   ));
-  const parkingRequirements = unit.parking.map((parking) => (
-    <ListText key={parking}>{parking}</ListText>
+  const parkingRequirements = unit.parking.map((parking, i) => (
+    <ListText key={parking + i}>{parking}</ListText>
   ));
-  const communityFeatures = unit.communityFeatures.map((feature) => (
-    <ListText key={feature}>{feature}</ListText>
+  const communityFeatures = unit.communityFeatures.map((feature, i) => (
+    <ListText key={feature + i}>{feature}</ListText>
   ));
-  const accessibility = unit.accessibility.map((access) => (
-    <ListText key={access}>{access}</ListText>
+  const accessibility = unit.accessibility.map((access, i) => (
+    <ListText key={access + i}>{access}</ListText>
   ));
-  const pets = unit.pets.map((pet) => <ListText key={pet}>{pet}</ListText>);
-  const additionalRules = unit.additionalRules.map((rule) => (
-    <ListText key={rule}>{rule}</ListText>
+  const pets = unit.pets.map((pet, i) => <ListText key={pet + i}>{pet}</ListText>);
+  const additionalRules = unit.additionalRules.map((rule, i) => (
+    <ListText key={rule + i}>{rule}</ListText>
   ));
+
+  const HousingLocatorComponent = () => {
+    return (
+      <Column>
+        <StrongText>Landlord: {unit.landlordFirstName + " " + unit.landlordLastName}</StrongText>
+        <Text>{unit.landlordPhone}</Text>
+        <Text>{unit.landlordEmail}</Text>
+      </Column>
+    );
+  };
+
+  const NotHousingLocatorComponent = () => {
+    return (
+      <Column>
+        <StrongText>{availableNow}</StrongText>
+      </Column>
+    );
+  };
 
   return (
     <Page>
@@ -334,10 +427,43 @@ export function UnitDetails() {
           <Section>
             <Row>
               <Link to="/">
-                <Button kind="secondary">Back to Listing</Button>
+                <Button kind="secondary">
+                  <PaddingInButton>
+                    <img className="back-arrow" src="/back_arrow.svg" alt={"Back arrow"} />
+                    Back to Listing
+                  </PaddingInButton>
+                </Button>
               </Link>
             </Row>
+            {currentUser?.isHousingLocator && (
+              <Button kind="secondary">
+                <EditButton onClick={toggleEditing}>
+                  <img src={"/pencil.svg"} alt="" style={{ marginRight: "12px" }} />
+                  Edit
+                </EditButton>
+              </Button>
+            )}
           </Section>
+
+          <Banner
+            visible={showApprovedBanner}
+            image="/check_mark.svg"
+            withTitle={true}
+            title="Approval Confirmed"
+            message="The listing is now visible to case manager and ready for referrals."
+            withX={true}
+            color="#C4F4DF"
+          />
+
+          <Banner
+            visible={showPendingApprovalBanner}
+            image="/Caution.svg"
+            withTitle={true}
+            title="Pending Approval"
+            message="The following information is submitted by the landlord. Fill in additional information and approve at the bottom of the page to make the listing visible to case managers."
+            withX={false}
+            color="#FCE9C9"
+          />
 
           <Section>
             <TopRow>
@@ -351,7 +477,7 @@ export function UnitDetails() {
               </ChangeAvailabilityButton>
             </TopRow>
             <DetailsRow>
-              <Row>
+              <InfoRow>
                 <Column>
                   <StrongText>{unit.numBeds}</StrongText>
                   <Text>beds</Text>
@@ -364,9 +490,13 @@ export function UnitDetails() {
                   <StrongText>{unit.sqft}</StrongText>
                   <Text>sqft</Text>
                 </Column>
-              </Row>
+              </InfoRow>
               <Column>
-                <StrongText>{availableNow}</StrongText>
+                {currentUser?.isHousingLocator ? (
+                  <HousingLocatorComponent />
+                ) : (
+                  <NotHousingLocatorComponent />
+                )}
               </Column>
             </DetailsRow>
           </Section>
@@ -438,9 +568,20 @@ export function UnitDetails() {
               </SectionColumn>
             </Row>
           </Section>
+          <ReferralTable id={id ?? ""} />
+          {!unit.approved && (
+            <Button
+              kind="primary"
+              style={{ alignSelf: "flex-end", width: "fit-content" }}
+              onClick={approveListing}
+            >
+              Approve Listing
+            </Button>
+          )}
         </DetailsColumn>
+
         {popup && (
-          <>
+          <MainColumn>
             <Overlay />
             <Modal>
               <XWrapper>
@@ -494,7 +635,7 @@ export function UnitDetails() {
                 </ButtonsWrapper>
               </FormWrapper>
             </Modal>
-          </>
+          </MainColumn>
         )}
       </MainColumn>
     </Page>

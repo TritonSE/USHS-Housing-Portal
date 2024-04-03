@@ -26,15 +26,23 @@ const PopupBodyText = styled(Sort)`
   margin-left: 0;
 `;
 
+const AvailabilitySubContainer = styled(FilterSubContainer)`
+  min-width: 183px;
+`;
+
 export type AvailabilityState = {
-  selectedIdx: number;
   dropdownText: string;
+};
+
+export type AvailabilityDisplayState = {
+  selectedIdx: number;
 };
 
 export type AvailabilityDropDownProps = {
   value: AvailabilityState;
   setValue(val: AvailabilityState): void;
-  onApply(): void;
+  displayValue: AvailabilityDisplayState;
+  setDisplayValue(val: AvailabilityDisplayState): void;
 };
 
 export const AvailabilityDropDown = (props: AvailabilityDropDownProps) => {
@@ -43,7 +51,7 @@ export const AvailabilityDropDown = (props: AvailabilityDropDownProps) => {
   const availabilityOptions: string[] = ["Available", "Leased"];
 
   return (
-    <FilterSubContainer>
+    <AvailabilitySubContainer>
       <Dropdown
         onClick={() => {
           setIsActive(!isActive);
@@ -61,12 +69,12 @@ export const AvailabilityDropDown = (props: AvailabilityDropDownProps) => {
             <AvailabilityRow
               key={idx}
               onClick={() => {
-                props.setValue({ ...props.value, selectedIdx: idx });
+                props.setDisplayValue({ ...props.displayValue, selectedIdx: idx });
               }}
             >
               <FilterRadioButton
                 src={
-                  idx === props.value.selectedIdx
+                  idx === props.displayValue.selectedIdx
                     ? "/filled_filter_radio_button.svg"
                     : "/filter_radio_button.svg"
                 }
@@ -79,15 +87,14 @@ export const AvailabilityDropDown = (props: AvailabilityDropDownProps) => {
               setIsActive(false);
               props.setValue({
                 ...props.value,
-                dropdownText: availabilityOptions[props.value.selectedIdx],
+                dropdownText: availabilityOptions[props.displayValue.selectedIdx],
               });
-              props.onApply();
             }}
           >
             Apply
           </ApplyButton>
         </DropDownPopup>
       )}
-    </FilterSubContainer>
+    </AvailabilitySubContainer>
   );
 };
