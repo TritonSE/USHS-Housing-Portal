@@ -7,7 +7,7 @@ import { IStyleSheetContext, StyleSheetManager, createGlobalStyle } from "styled
 // See: https://styled-components.com/docs/advanced#theming
 export const theme = {
   colors: {
-    // primary: "",
+    primary: "#B64201",
     // background: "",
     // ...etc
     text: "black",
