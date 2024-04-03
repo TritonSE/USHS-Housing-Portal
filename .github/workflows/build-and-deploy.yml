@@ -28,6 +28,7 @@ jobs:
           cd frontend
           touch .env
           echo VITE_APP_FIREBASE=${{ secrets.VITE_APP_FIREBASE }} >> .env
+          echo VITE_APP_LANDLORD_FORM_PASSWORD=${{ secrets.VITE_APP_LANDLORD_FORM_PASSWORD }} >> .env
       - name: Build Frontend
         run: |
           cd frontend
