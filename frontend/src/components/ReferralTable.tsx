@@ -4,7 +4,8 @@ import styled from "styled-components";
 import { ReferralTablePagination } from "./ReferralTablePagination";
 import { ReferralTableRow } from "./ReferralTableRow";
 
-import { Referral, User, getUnitReferrals } from "@/api/units";
+import { Referral, getUnitReferrals } from "@/api/units";
+import { User } from "@/api/users";
 import { AuthContext } from "@/contexts/AuthContext";
 import { DataContext } from "@/contexts/DataContext";
 

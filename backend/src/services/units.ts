@@ -1,19 +1,23 @@
 import { Unit, UnitModel } from "@/models/units";
 
+type UserReadOnlyFields = "approved" | "createdAt" | "updatedAt";
+
 type HousingLocatorFields =
+  | "leasedStatus"
   | "whereFound"
   | "paymentRentingCriteria"
   | "additionalRules"
-  | "internalComments"
-  | "approved"
-  | "createdAt"
-  | "updatedAt";
+  | "internalComments";
 
 // Define a new type that extends the Unit type excluding the fields
 // that are filled out by an HL.
 // Override dateAvailable to be a string instead of a Date object since the frontend
 // will send a string. Mongoose will automatically convert it to a Date object.
-export type NewUnit = { dateAvailable: string } & Omit<Unit, HousingLocatorFields>;
+export type NewUnitBody = { dateAvailable: string } & Omit<
+  Unit,
+  HousingLocatorFields | UserReadOnlyFields
+>;
+export type EditUnitBody = { dateAvailable: string } & Omit<Unit, UserReadOnlyFields>;
 
 export type FilterParams = {
   search?: string;
@@ -31,7 +35,7 @@ export type FilterParams = {
  * @param newUnit new unit to be created
  * @returns newly created unit object
  */
-export const createUnit = async (newUnit: NewUnit) => {
+export const createUnit = async (newUnit: NewUnitBody) => {
   const unit = await UnitModel.create(newUnit);
   return unit;
 };

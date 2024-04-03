@@ -1,6 +1,4 @@
 import { RequestHandler } from "express";
-import { validationResult } from "express-validator";
-import { createUnitValidators } from "@/validators/units";
 import createHttpError from "http-errors";
 
 import { asyncHandler } from "./wrappers";
@@ -8,8 +6,9 @@ import { asyncHandler } from "./wrappers";
 import { UnitModel } from "@/models/units";
 import { getUnitReferrals } from "@/services/referral";
 import {
+  EditUnitBody,
   FilterParams,
-  NewUnit,
+  NewUnitBody,
   approveUnit,
   createUnit,
   deleteUnit,
@@ -20,7 +19,7 @@ import {
  * Handle a request to create a new unit.
  */
 export const createUnitsHandler: RequestHandler = asyncHandler(async (req, res, _) => {
-  const newUnitBody = req.body as NewUnit;
+  const newUnitBody = req.body as NewUnitBody;
 
   const newUnit = await createUnit(newUnitBody);
 
@@ -62,27 +61,18 @@ export const getUnitHandler: RequestHandler = asyncHandler(async (req, res, _) =
 /**
  * Handle a request to update a unit.
  */
-export const updateUnitHandler: RequestHandler = async (req, res, next) => {
-  try {
-    if (req.params.id != req.body._id) {
-      res.status(400);
-    }
+export const updateUnitHandler: RequestHandler = asyncHandler(async (req, res, _) => {
+  const editUnitBody = req.body as EditUnitBody;
 
-    console.log("backend/controllers/units.ts");
-    console.log(req.body);
-    const id = req.params.id;
-    const updatedUnit = await UnitModel.findByIdAndUpdate(id, req.body);
-    console.log(updatedUnit);
+  const id = req.params.id;
+  const updatedUnit = await UnitModel.findByIdAndUpdate(id, editUnitBody, { new: true });
 
-    if (updatedUnit === null) {
-      throw createHttpError(404, "Unit not found.");
-    }
-
-    res.status(200).json(updatedUnit);
-  } catch (error) {
-    next(error);
+  if (updatedUnit === null) {
+    throw createHttpError(404, "Unit not found.");
   }
-};
+
+  res.status(200).json(updatedUnit);
+});
 
 export const getUnitReferralsHandler: RequestHandler = asyncHandler(async (req, res, _) => {
   const { id } = req.params;

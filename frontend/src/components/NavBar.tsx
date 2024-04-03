@@ -126,7 +126,7 @@ const ButtonsWrapper = styled.div`
 `;
 
 type NavBarProps = {
-  page: "Home" | "Profile";
+  page?: "Home" | "Profile";
 };
 
 export function NavBar({ page }: NavBarProps) {

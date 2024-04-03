@@ -14,8 +14,8 @@ const referralStatuses = [
 type ReferralTableRowProps = {
   index: number;
   name: string;
-  email: string;
-  phone: string;
+  email?: string;
+  phone?: string;
   referringStaff: string;
   allReferringStaff: string[];
   housingLocator: string;

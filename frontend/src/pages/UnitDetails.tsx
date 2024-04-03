@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import { Unit, approveUnit, getUnit, updateUnit } from "@/api/units";
@@ -117,14 +117,6 @@ const Address = styled(Header)`
   margin: 0 0 5px 0;
 `;
 
-const DoesNotExist = styled(Header)`
-  font-size: 48px;
-  font-family: "Neutraface Text";
-  font-weight: 700;
-  line-height: 72px;
-  line-spacing: 0.96px;
-`;
-
 const Availability = styled(Header)`
   font-size: 30px;
 `;
@@ -143,12 +135,6 @@ const ChangeAvailabilityButton = styled(Button)`
   padding-right: 20px;
   padding-top: 10px;
   padding-bottom: 10px;
-`;
-const ButtonPadding = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 32px;
-  justify-content: space-between;
 `;
 
 const PaddingInButton = styled.div`
@@ -242,7 +228,7 @@ const ButtonsWrapper = styled.div`
 
 const RadioRow = styled.div`
   display: flex;
-  flex-direciton: row;
+  flex-direction: row;
   align-items: flex-start;
   gap: 13px;
 `;
@@ -275,6 +261,8 @@ const Heading = styled.h1`
 `;
 
 export function UnitDetails() {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
   const [unit, setUnit] = useState<Unit>();
   const [showApprovedBanner, setShowApprovedBanner] = useState(false);
   const [showPendingApprovalBanner, setShowPendingApprovalBanner] = useState(false);
@@ -294,20 +282,32 @@ export function UnitDetails() {
     setIsEditing((prevState) => !prevState);
   };
 
-  React.useEffect(() => {
+  const fetchUnit = () => {
     if (id !== undefined) {
+      setLoading(true);
       void getUnit(id).then((result) => {
         if (result.success) {
           if (!result.data.approved) {
             setShowPendingApprovalBanner(true);
           }
           setUnit(result.data);
+        } else {
+          // Go back to the home page if the unit is not found
+          navigate("/");
         }
+        setLoading(false);
       });
     }
-  }, []);
+  };
 
-  const handleRadioChange = (event) => {
+  React.useEffect(fetchUnit, []);
+
+  if (loading || !unit) {
+    // TODO: Loading state
+    return null;
+  }
+
+  const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedPopupOption(event.target.value);
   };
 
@@ -316,8 +316,21 @@ export function UnitDetails() {
   };
 
   const handleSaveAvailability = () => {
+    let updatedData = {};
+
     if (selectedPopupOption === "enterDate") {
-      updateUnit(unit._id, { dateAvailable: dateText }).then((result) => {
+      updatedData = {
+        dateAvailable: dateText,
+        leasedStatus: null,
+      };
+    } else if (selectedPopupOption === "leasedByUSHS") {
+      updatedData = { leasedStatus: "ushs" };
+    } else if (selectedPopupOption === "removedFromMarket") {
+      updatedData = { leasedStatus: "removed" };
+    }
+
+    updateUnit(unit._id, updatedData)
+      .then((result) => {
         if (result.success) {
           console.log("result.data: ");
           console.log(result.data);
@@ -325,14 +338,8 @@ export function UnitDetails() {
         } else {
           alert(result.error);
         }
-      });
-    } else if (selectedPopupOption === "leasedByUSHS") {
-      // updatedData = { leasedStatus: "ushs" };
-      updateUnit(unit._id, { leasedStatus: "ushs" });
-    } else if (selectedPopupOption === "removedFromMarket") {
-      // updatedData = { leasedStatus: "removed" };
-      updateUnit(unit._id, { leasedStatus: "removed" });
-    }
+      })
+      .catch(console.error);
 
     // Close the popup
     togglePopup();
@@ -349,30 +356,6 @@ export function UnitDetails() {
         .catch(console.error);
     }
   };
-
-  if (!unit) {
-    return (
-      <Page>
-        <Helmet>
-          <title>Unit Does Not Exist | USHS Housing Portal</title>
-        </Helmet>
-        <NavBar page="Home" />
-        <MainColumn>
-          <ButtonPadding>
-            <Link to="/">
-              <Button kind="secondary">
-                <PaddingInButton>
-                  <img className="back-arrow" src="/back_arrow.svg" alt={"Back arrow"} />
-                  Back to Listing
-                </PaddingInButton>
-              </Button>
-            </Link>
-          </ButtonPadding>
-          <DoesNotExist>This unit does not exist!</DoesNotExist>
-        </MainColumn>
-      </Page>
-    );
-  }
 
   //checks for availability
   const availableNow = unit.availableNow ? "Available Now" : "Not Available";
@@ -421,11 +404,11 @@ export function UnitDetails() {
       <Helmet>
         <title>{unit.listingAddress} | USHS Housing Portal</title>
       </Helmet>
-      <NavBar page="" />
+      <NavBar />
       <MainColumn>
         <DetailsColumn>
           <Section>
-            <Row>
+            <TopRow>
               <Link to="/">
                 <Button kind="secondary">
                   <PaddingInButton>
@@ -434,15 +417,15 @@ export function UnitDetails() {
                   </PaddingInButton>
                 </Button>
               </Link>
-            </Row>
-            {currentUser?.isHousingLocator && (
-              <Button kind="secondary">
-                <EditButton onClick={toggleEditing}>
-                  <img src={"/pencil.svg"} alt="" style={{ marginRight: "12px" }} />
-                  Edit
-                </EditButton>
-              </Button>
-            )}
+              {currentUser?.isHousingLocator && (
+                <Button kind="secondary">
+                  <EditButton onClick={toggleEditing}>
+                    <img src={"/pencil.svg"} alt="" style={{ marginRight: "12px" }} />
+                    Edit
+                  </EditButton>
+                </Button>
+              )}
+            </TopRow>
           </Section>
 
           <Banner
@@ -596,7 +579,7 @@ export function UnitDetails() {
                         type="radio"
                         name="radio"
                         value="enterDate"
-                        onClick={handleRadioChange}
+                        onChange={handleRadioChange}
                       />
                       <RadioButtonLabel>Enter new availability date:</RadioButtonLabel>
                     </RadioRow>
@@ -614,7 +597,8 @@ export function UnitDetails() {
                       type="radio"
                       name="radio"
                       value="leasedByUSHS"
-                      onClick={handleRadioChange}
+                      checked={unit.leasedStatus === "ushs"}
+                      onChange={handleRadioChange}
                     />
                     <RadioButtonLabel>Leased by USHS</RadioButtonLabel>
                   </RadioRow>
@@ -623,7 +607,8 @@ export function UnitDetails() {
                       type="radio"
                       name="radio"
                       value="removedFromMarket"
-                      onClick={handleRadioChange}
+                      checked={unit.leasedStatus === "removed"}
+                      onChange={handleRadioChange}
                     />
                     <RadioButtonLabel>Removed from market</RadioButtonLabel>
                   </RadioRow>

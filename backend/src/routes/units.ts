@@ -18,7 +18,12 @@ router.get("/:id", requireUser, UnitController.getUnitHandler);
 router.post("/", validateWith(createUnitValidators), UnitController.createUnitsHandler);
 router.get("/", requireUser, UnitController.getUnitsHandler);
 
-router.put("/:id", validateWith(updateUnitValidators), UnitController.updateUnitHandler); // TODO
+router.put(
+  "/:id",
+  requireHousingLocator,
+  validateWith(updateUnitValidators),
+  UnitController.updateUnitHandler,
+);
 
 router.delete("/:id", requireHousingLocator, UnitController.deleteUnitsHandler);
 
