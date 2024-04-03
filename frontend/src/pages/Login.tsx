@@ -78,7 +78,7 @@ export function Login() {
       </Helmet>
       <Items>
         <Wrapper>
-          <Image src="USHSLogo.png" alt="" />
+          <Image src="USHSWideLogo.svg" alt="" />
           <Button kind="primary" onClick={login}>
             Log in with Google
           </Button>
