@@ -22,4 +22,5 @@ router.delete("/:id", requireHousingLocator, UnitController.deleteUnitsHandler);
 
 router.put("/:id/approve", requireHousingLocator, UnitController.approveUnitHandler);
 
+router.get("/:id/referrals", requireUser, UnitController.getUnitReferralsHandler);
 export default router;

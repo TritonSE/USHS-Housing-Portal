@@ -97,6 +97,49 @@ export async function createUnit(unit: CreateUnitRequest): Promise<APIResult<Uni
   }
 }
 
+export type RenterCandidate = {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  email: string;
+  program: string;
+  adults: number;
+  children: number;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type User = {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  isHousingLocator: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type Referral = {
+  _id: string;
+  status: string;
+  renterCandidate: RenterCandidate;
+  unitId: string;
+  assignedHousingLocator: User;
+  assignedReferringStaff: User;
+  updatedAt: Date;
+};
+
+export async function getUnitReferrals(id: string): Promise<APIResult<Referral[]>> {
+  try {
+    const response = await get(`/units/${id}/referrals`);
+    const json = (await response.json()) as Referral[];
+    return { success: true, data: json };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+}
+
 export async function approveUnit(unitId: string): Promise<APIResult<Unit>> {
   try {
     const response = await put(`/units/${unitId}/approve`, {});
