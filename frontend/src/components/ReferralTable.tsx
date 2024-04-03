@@ -5,7 +5,9 @@ import { Button } from "./Button";
 import { ReferralTablePagination } from "./ReferralTablePagination";
 import { ReferralTableRow } from "./ReferralTableRow";
 
-import { Referral, User, getUnitReferrals } from "@/api/units";
+import { updateReferral, updateReferralRequest } from "@/api/referrals";
+import { Referral, getUnitReferrals } from "@/api/units";
+import { User } from "@/api/users";
 import { ReferralPopup } from "@/components/ReferralPopup";
 import { AuthContext } from "@/contexts/AuthContext";
 import { DataContext } from "@/contexts/DataContext";
@@ -116,21 +118,18 @@ export const ReferralTable = (props: ReferralTableProps) => {
   const authContext = useContext(AuthContext);
   const dataContext = useContext(DataContext);
   const [referrals, setReferrals] = useState<Referral[]>([]);
-  const [referringStaff, setReferringStaff] = useState<string[]>([]);
-  const [housingLocators, setHousingLocators] = useState<string[]>([]);
+  const [referringStaff, setReferringStaff] = useState<User[]>([]);
+  const [housingLocators, setHousingLocators] = useState<User[]>([]);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [popup, setPopup] = useState<boolean>(false);
 
-  const getAllReferringStaff = (): string[] => {
-    return dataContext.allReferringStaff.map(
-      (manager) => manager.firstName + " " + manager.lastName,
-    );
+  const getAllReferringStaff = (): User[] => {
+    const users = dataContext.allUsers;
+    return users;
   };
 
-  const getAllHousingLocators = (): string[] => {
-    return dataContext.allHousingLocators.map(
-      (locator) => locator.firstName + " " + locator.lastName,
-    );
+  const getAllHousingLocators = (): User[] => {
+    return dataContext.allHousingLocators;
   };
 
   const getAllReferrals = () => {
@@ -156,16 +155,12 @@ export const ReferralTable = (props: ReferralTableProps) => {
   }, [authContext, dataContext]);
 
   const getReferringStaff = (assignedReferringStaff: User): string => {
-    console.log(assignedReferringStaff);
-    console.log(dataContext.allReferringStaff);
-    const staff = dataContext.allReferringStaff.find(
-      (manager) => manager._id === assignedReferringStaff._id,
-    );
+    const staff = referringStaff.find((manager) => manager._id === assignedReferringStaff._id);
     return staff === undefined ? "N/A" : staff.firstName + " " + staff.lastName;
   };
 
   const getHousingLocator = (assignedHousingLocator: User): string => {
-    const locator = dataContext.allHousingLocators.find(
+    const locator = housingLocators.find(
       (currLocator) => assignedHousingLocator && currLocator._id === assignedHousingLocator._id,
     );
     return locator === undefined ? "N/A" : locator.firstName + " " + locator.lastName;
@@ -174,6 +169,42 @@ export const ReferralTable = (props: ReferralTableProps) => {
   if (!authContext || !dataContext) {
     return <ReferralTablePlaceholder>Loading Referrals Table...</ReferralTablePlaceholder>;
   }
+
+  const handleSelect = (value: string[], referral: Referral) => {
+    const id = referral._id;
+    let request = {} as updateReferralRequest;
+    if (value[0] === "referringStaff") {
+      request = {
+        id,
+        housingLocator: referral.assignedHousingLocator?._id,
+        referringStaff: value[1],
+        status: referral.status,
+      };
+    } else if (value[0] === "housingLocator") {
+      request = {
+        id,
+        housingLocator: value[1],
+        referringStaff: referral.assignedReferringStaff._id,
+        status: referral.status,
+      };
+    } else {
+      request = {
+        id,
+        housingLocator: referral.assignedHousingLocator?._id,
+        referringStaff: referral.assignedReferringStaff._id,
+        status: value[1],
+      };
+    }
+    updateReferral(request)
+      .then((result) => {
+        if (result.success) {
+          getAllReferrals();
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <ReferralTableContainer>
@@ -224,6 +255,9 @@ export const ReferralTable = (props: ReferralTableProps) => {
                 allHousingLocators={housingLocators}
                 status={referral.status}
                 lastUpdate={referral.updatedAt.toString()}
+                onSelect={(value) => {
+                  handleSelect(value, referral);
+                }}
               />
             ))}
           <ReferralTableFooter>
