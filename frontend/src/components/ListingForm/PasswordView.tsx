@@ -30,13 +30,14 @@ type PasswordViewProps = {
   handleNext: () => void;
 };
 
+const LANDLORD_FORM_PASSWORD = import.meta.env.VITE_APP_LANDLORD_FORM_PASSWORD as string;
+
 export function PasswordView({ handleNext: next }: PasswordViewProps) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | undefined>();
-  const correct = "password";
 
   const checkPassword = () => {
-    if (password === correct) {
+    if (password === LANDLORD_FORM_PASSWORD) {
       setError(undefined);
       next();
     } else {
@@ -44,9 +45,13 @@ export function PasswordView({ handleNext: next }: PasswordViewProps) {
     }
   };
 
+  const handleKeyPress = (event: React.KeyboardEvent) => {
+    if (event.key === "Enter") checkPassword();
+  };
+
   return (
     <Wrapper>
-      <Header>USHS Landlord Submissions Form</Header>
+      <Header>USHS Landlord Submission Form</Header>
       <Image src="USHSWideLogo.svg" alt="" />
       <Textbox
         errorMessage={error}
@@ -58,6 +63,7 @@ export function PasswordView({ handleNext: next }: PasswordViewProps) {
         handler={(event: React.ChangeEvent<HTMLInputElement>) => {
           setPassword(event.target.value);
         }}
+        onKeyDown={handleKeyPress}
       />
       <Button kind="primary" onClick={checkPassword}>
         Enter

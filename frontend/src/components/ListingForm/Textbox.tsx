@@ -1,11 +1,6 @@
 import styled from "styled-components";
 
-import {
-  // CustomInputText,
-  FieldHeader,
-  Required,
-  TextCol,
-} from "@/components/ListingForm/CommonStyles";
+import { FieldHeader, Required, TextCol } from "@/components/ListingForm/CommonStyles";
 
 const CustomInputText = styled.input<{ fontSize?: number; error: boolean }>`
   background-color: #fbf7f3;
@@ -54,55 +49,71 @@ type TextboxProps = {
   handler:
     | ((event: React.ChangeEvent<HTMLInputElement>) => void)
     | ((event: React.ChangeEvent<HTMLTextAreaElement>) => void);
-};
+} & React.HTMLProps<HTMLInputElement> &
+  React.HTMLProps<HTMLTextAreaElement>;
 
-export const Textbox = (props: TextboxProps) => {
+export const Textbox = ({
+  elementName,
+  requiredField,
+  kind,
+  placeholder,
+  type,
+  name,
+  value,
+  handler,
+  fontSize,
+  errorMessage,
+  ...restProps
+}: TextboxProps) => {
   return (
     <TextCol>
-      {props.elementName && props.requiredField ? (
+      {elementName && requiredField ? (
         <FieldHeader>
-          {props.elementName} <Required>*</Required>
+          {elementName} <Required>*</Required>
         </FieldHeader>
       ) : (
-        <FieldHeader>{props.elementName}</FieldHeader>
+        <FieldHeader>{elementName}</FieldHeader>
       )}
 
-      {!props.elementName && <FieldHeader>&nbsp;</FieldHeader>}
+      {!elementName && <FieldHeader>&nbsp;</FieldHeader>}
 
       <div>
         <label>
-          {(!props.kind || props.kind === "text") && !props.placeholder && (
+          {(!kind || kind === "text") && !placeholder && (
             <CustomInputText
               className="textbox"
-              type={props.type ?? "text"}
-              name={props.name}
-              value={props.value}
-              onChange={props.handler as (event: React.ChangeEvent<HTMLInputElement>) => void}
-              fontSize={props.fontSize}
-              error={!!props.errorMessage}
+              type={type ?? "text"}
+              name={name}
+              value={value}
+              onChange={handler as (event: React.ChangeEvent<HTMLInputElement>) => void}
+              fontSize={fontSize}
+              error={!!errorMessage}
+              {...restProps}
             />
           )}
-          {(!props.kind || props.kind === "text") && props.placeholder && (
+          {(!kind || kind === "text") && placeholder && (
             <CustomInputText
               className="textbox"
-              type={props.type ?? "text"}
-              placeholder={props.placeholder}
-              name={props.name}
-              value={props.value}
-              onChange={props.handler as (event: React.ChangeEvent<HTMLInputElement>) => void}
-              fontSize={props.fontSize}
-              error={!!props.errorMessage}
+              type={type ?? "text"}
+              placeholder={placeholder}
+              name={name}
+              value={value}
+              onChange={handler as (event: React.ChangeEvent<HTMLInputElement>) => void}
+              fontSize={fontSize}
+              error={!!errorMessage}
+              {...restProps}
             />
           )}
-          {props.kind === "textarea" && (
+          {kind === "textarea" && (
             <CustomTextArea
-              value={props.value}
-              onChange={props.handler as (event: React.ChangeEvent<HTMLTextAreaElement>) => void}
-              error={!!props.errorMessage}
+              value={value}
+              onChange={handler as (event: React.ChangeEvent<HTMLTextAreaElement>) => void}
+              error={!!errorMessage}
+              {...restProps}
             />
           )}
         </label>
-        {props.errorMessage && <Error>{props.errorMessage}</Error>}
+        {errorMessage && <Error>{errorMessage}</Error>}
       </div>
     </TextCol>
   );

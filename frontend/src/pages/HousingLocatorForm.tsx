@@ -5,7 +5,12 @@ export function HousingLocatorForm() {
   return (
     <div>
       <Page>
-        <ListingFormComponents formType={"housing locator form"} />
+        <ListingFormComponents
+          formType={"housing locator form"}
+          handleAfterSubmit={() => {
+            //
+          }}
+        />
       </Page>
     </div>
   );
