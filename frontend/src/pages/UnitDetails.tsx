@@ -41,6 +41,10 @@ const Column = styled.div`
   gap: 16px;
 `;
 
+const HLActions = styled(Column)`
+  align-items: center;
+`;
+
 const DetailsRow = styled(Row)`
   gap: 120px;
 `;
@@ -455,14 +459,18 @@ export function UnitDetails() {
 
           <Section>
             <TopRow>
-              <RentPerMonth>${unit.monthlyRent}/month</RentPerMonth>
-              <Availability>{availableNow}</Availability>
-            </TopRow>
-            <TopRow>
-              <Address>{unit.listingAddress}</Address>
-              <ChangeAvailabilityButton kind="primary" onClick={togglePopup}>
-                Change Availability
-              </ChangeAvailabilityButton>
+              <Column>
+                <RentPerMonth>${unit.monthlyRent}/month</RentPerMonth>
+                <Address>{unit.listingAddress}</Address>
+              </Column>
+              {currentUser?.isHousingLocator && (
+                <HLActions>
+                  <Availability>{availableNow}</Availability>
+                  <ChangeAvailabilityButton kind="primary" onClick={togglePopup}>
+                    Change Availability
+                  </ChangeAvailabilityButton>
+                </HLActions>
+              )}
             </TopRow>
             <DetailsRow>
               <InfoRow>
