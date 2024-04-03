@@ -53,5 +53,6 @@ jobs:
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
           projectId: ${{ inputs.firebaseProjectId }}
           channelId: ${{ inputs.firebaseHostingChannelId }}
+          firebaseToolsVersion: "13.6.0"
         env:
           FIREBASE_CLI_EXPERIMENTS: pintags # This will deploy both the frontend and backend
