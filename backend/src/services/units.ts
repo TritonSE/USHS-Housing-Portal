@@ -1,3 +1,5 @@
+import { UpdateQuery } from "mongoose";
+
 import { Unit, UnitModel } from "@/models/units";
 
 type UserReadOnlyFields = "approved" | "createdAt" | "updatedAt";
@@ -38,6 +40,17 @@ export type FilterParams = {
 export const createUnit = async (newUnit: NewUnitBody) => {
   const unit = await UnitModel.create(newUnit);
   return unit;
+};
+
+export const updateUnit = async (id: string, unitData: EditUnitBody) => {
+  const updateQuery: UpdateQuery<Unit> = { ...unitData };
+  if (unitData.leasedStatus === null) {
+    delete updateQuery.leasedStatus;
+    // unset leasedStatus if null
+    updateQuery.$unset = { leasedStatus: 1 };
+  }
+  const updatedUnit = UnitModel.findByIdAndUpdate(id, updateQuery, { new: true });
+  return updatedUnit;
 };
 
 export const approveUnit = async (unitId: string) => {

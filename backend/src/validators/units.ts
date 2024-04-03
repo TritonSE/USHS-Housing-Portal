@@ -119,7 +119,7 @@ export const updateUnitValidators = [
     // mark all create unit fields as optional
     newUnitSchema.map((validator) => validator.optional()),
     // check housing locator fields
-    body("leasedStatus").optional().isString().withMessage("must be a string"),
+    body("leasedStatus").optional(),
     body("whereFound").optional().isString().withMessage("must be a string"),
     body("paymentRentingCriteria").optional().isArray().withMessage("must be an array"),
     body("additionalRules").optional().isArray().withMessage("must be an array"),

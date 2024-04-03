@@ -13,6 +13,7 @@ import {
   createUnit,
   deleteUnit,
   getUnits,
+  updateUnit,
 } from "@/services/units";
 
 /**
@@ -65,7 +66,7 @@ export const updateUnitHandler: RequestHandler = asyncHandler(async (req, res, _
   const editUnitBody = req.body as EditUnitBody;
 
   const id = req.params.id;
-  const updatedUnit = await UnitModel.findByIdAndUpdate(id, editUnitBody, { new: true });
+  const updatedUnit = await updateUnit(id, editUnitBody);
 
   if (updatedUnit === null) {
     throw createHttpError(404, "Unit not found.");

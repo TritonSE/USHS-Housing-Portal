@@ -291,6 +291,13 @@ export function UnitDetails() {
             setShowPendingApprovalBanner(true);
           }
           setUnit(result.data);
+
+          // Initialize change availability popup selection
+          if (result.data.leasedStatus === "ushs") {
+            setSelectedPopupOption("leasedByUSHS");
+          } else if (result.data.leasedStatus === "removed") {
+            setSelectedPopupOption("removedFromMarket");
+          }
         } else {
           // Go back to the home page if the unit is not found
           navigate("/");
@@ -332,11 +339,9 @@ export function UnitDetails() {
     updateUnit(unit._id, updatedData)
       .then((result) => {
         if (result.success) {
-          console.log("result.data: ");
-          console.log(result.data);
           setUnit(result.data);
         } else {
-          alert(result.error);
+          console.error(result.error);
         }
       })
       .catch(console.error);
@@ -451,7 +456,7 @@ export function UnitDetails() {
           <Section>
             <TopRow>
               <RentPerMonth>${unit.monthlyRent}/month</RentPerMonth>
-              <Availability>{unit.availableNow ? "Available Now" : null}</Availability>
+              <Availability>{availableNow}</Availability>
             </TopRow>
             <TopRow>
               <Address>{unit.listingAddress}</Address>
@@ -579,6 +584,7 @@ export function UnitDetails() {
                         type="radio"
                         name="radio"
                         value="enterDate"
+                        checked={selectedPopupOption === "enterDate"}
                         onChange={handleRadioChange}
                       />
                       <RadioButtonLabel>Enter new availability date:</RadioButtonLabel>
@@ -589,6 +595,7 @@ export function UnitDetails() {
                       value={dateText}
                       onChange={(event) => {
                         setDateText(event.target.value);
+                        setSelectedPopupOption("enterDate");
                       }}
                     />
                   </AvailabilityDateColumn>
@@ -597,7 +604,7 @@ export function UnitDetails() {
                       type="radio"
                       name="radio"
                       value="leasedByUSHS"
-                      checked={unit.leasedStatus === "ushs"}
+                      checked={selectedPopupOption === "leasedByUSHS"}
                       onChange={handleRadioChange}
                     />
                     <RadioButtonLabel>Leased by USHS</RadioButtonLabel>
@@ -607,7 +614,7 @@ export function UnitDetails() {
                       type="radio"
                       name="radio"
                       value="removedFromMarket"
-                      checked={unit.leasedStatus === "removed"}
+                      checked={selectedPopupOption === "removedFromMarket"}
                       onChange={handleRadioChange}
                     />
                     <RadioButtonLabel>Removed from market</RadioButtonLabel>
