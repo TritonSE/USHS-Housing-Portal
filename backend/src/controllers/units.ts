@@ -6,19 +6,21 @@ import { asyncHandler } from "./wrappers";
 import { UnitModel } from "@/models/units";
 import { getUnitReferrals } from "@/services/referral";
 import {
+  EditUnitBody,
   FilterParams,
-  NewUnit,
+  NewUnitBody,
   approveUnit,
   createUnit,
   deleteUnit,
   getUnits,
+  updateUnit,
 } from "@/services/units";
 
 /**
  * Handle a request to create a new unit.
  */
 export const createUnitsHandler: RequestHandler = asyncHandler(async (req, res, _) => {
-  const newUnitBody = req.body as NewUnit;
+  const newUnitBody = req.body as NewUnitBody;
 
   const newUnit = await createUnit(newUnitBody);
 
@@ -55,6 +57,22 @@ export const getUnitHandler: RequestHandler = asyncHandler(async (req, res, _) =
   }
 
   res.status(200).json(unit);
+});
+
+/**
+ * Handle a request to update a unit.
+ */
+export const updateUnitHandler: RequestHandler = asyncHandler(async (req, res, _) => {
+  const editUnitBody = req.body as EditUnitBody;
+
+  const id = req.params.id;
+  const updatedUnit = await updateUnit(id, editUnitBody);
+
+  if (updatedUnit === null) {
+    throw createHttpError(404, "Unit not found.");
+  }
+
+  res.status(200).json(updatedUnit);
 });
 
 export const getUnitReferralsHandler: RequestHandler = asyncHandler(async (req, res, _) => {
