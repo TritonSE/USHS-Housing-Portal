@@ -101,8 +101,6 @@ export const UnitCardGrid = ({ units, refreshUnits }: UnitCardGridProps) => {
 
   const dataContext = useContext(DataContext);
 
-  const approvedString = pendingSelected ? "pending" : "approved";
-
   return (
     <>
       <GridContainer>
@@ -136,7 +134,7 @@ export const UnitCardGrid = ({ units, refreshUnits }: UnitCardGridProps) => {
                   <UnitCard
                     unit={option}
                     refreshUnits={() => {
-                      refreshUnits(approvedString);
+                      refreshUnits("pending");
                     }}
                     key={index}
                   />
@@ -176,7 +174,7 @@ export const UnitCardGrid = ({ units, refreshUnits }: UnitCardGridProps) => {
                   <UnitCard
                     unit={option}
                     refreshUnits={() => {
-                      refreshUnits(approvedString);
+                      refreshUnits("approved");
                     }}
                     key={index}
                   />

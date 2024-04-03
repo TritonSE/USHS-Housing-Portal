@@ -14,6 +14,8 @@ export type User = {
   lastName: string;
   email: string;
   isHousingLocator: boolean;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type createUserRequest = {

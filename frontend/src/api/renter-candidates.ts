@@ -10,6 +10,8 @@ export type RenterCandidate = {
   program: string;
   adults: number;
   children: number;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type createRenterCandidateRequest = {

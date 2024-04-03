@@ -160,8 +160,12 @@ export const ReferralTable = (props: ReferralTableProps) => {
   };
 
   const getHousingLocator = (assignedHousingLocator: User): string => {
+    if (!assignedHousingLocator) {
+      return "N/A";
+    }
+
     const locator = housingLocators.find(
-      (currLocator) => assignedHousingLocator && currLocator._id === assignedHousingLocator._id,
+      (currLocator) => currLocator._id === assignedHousingLocator._id,
     );
     return locator === undefined ? "N/A" : locator.firstName + " " + locator.lastName;
   };

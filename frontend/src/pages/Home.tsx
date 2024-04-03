@@ -9,7 +9,7 @@ import { UnitCardGrid } from "@/components/UnitCardGrid";
 
 export function Home() {
   const [units, setUnits] = useState<Unit[]>([]);
-  const [filters, setFilters] = useState<FilterParams>({});
+  const [filters, setFilters] = useState<FilterParams>({ availability: "Available" });
 
   const fetchUnits = (filterParams: FilterParams) => {
     getUnits(filterParams)
@@ -31,7 +31,12 @@ export function Home() {
         <title>Home | USHS Housing Portal</title>
       </Helmet>
       <NavBar page="Home" />
-      <FilterDropdown refreshUnits={setFilters}></FilterDropdown>
+      <FilterDropdown
+        refreshUnits={(filterParams) => {
+          filterParams.approved = filters.approved;
+          setFilters(filterParams);
+        }}
+      ></FilterDropdown>
       <UnitCardGrid
         units={units}
         refreshUnits={(approved) => {
