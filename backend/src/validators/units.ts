@@ -1,6 +1,6 @@
 import { body, checkExact } from "express-validator";
 
-const newUnitSchema = [
+const createUnitSchema = [
   body("landlordFirstName")
     .exists()
     .withMessage("is required")
@@ -112,17 +112,21 @@ const newUnitSchema = [
   body("landlordComments").optional().isString().withMessage("must be a string"),
 ];
 
-export const createUnitValidators = [checkExact(newUnitSchema)];
+const housingLocatorFields = [
+  body("leasedStatus").optional(),
+  body("whereFound").optional().isString().withMessage("must be a string"),
+  body("paymentRentingCriteria").optional().isArray().withMessage("must be an array"),
+  body("additionalRules").optional().isArray().withMessage("must be an array"),
+  body("internalComments").optional().isString().withMessage("must be a string"),
+];
+
+export const createUnitValidators = [checkExact([...createUnitSchema, ...housingLocatorFields])];
 
 export const updateUnitValidators = [
   checkExact([
     // mark all create unit fields as optional
-    newUnitSchema.map((validator) => validator.optional()),
+    createUnitSchema.map((validator) => validator.optional()),
     // check housing locator fields
-    body("leasedStatus").optional(),
-    body("whereFound").optional().isString().withMessage("must be a string"),
-    body("paymentRentingCriteria").optional().isArray().withMessage("must be an array"),
-    body("additionalRules").optional().isArray().withMessage("must be an array"),
-    body("internalComments").optional().isString().withMessage("must be a string"),
+    ...housingLocatorFields,
   ]),
 ];

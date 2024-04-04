@@ -42,10 +42,14 @@ const MidSectionHeader = styled.h2`
 `;
 
 const HousingLocatorSection = styled.div`
-  color: #b64201;
+  h2,
+  h3 {
+    color: #b64201;
+  }
 `;
 
-const ErrorMessage = styled(HousingLocatorSection)`
+const ErrorMessage = styled.div`
+  color: #b64201;
   max-width: 800px;
 `;
 
@@ -132,7 +136,6 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
   };
 
   const handleCity = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.value === "") return;
     setCity(event.target.value);
   };
 
@@ -281,7 +284,7 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
   };
 
   const handleSubmit = () => {
-    const newUnit: CreateUnitRequest = {
+    const newUnit = {
       landlordFirstName: firstName,
       landlordLastName: lastName,
       landlordEmail: email,
@@ -310,7 +313,14 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
       pets,
       sharingAcceptable: sharingHousing,
       landlordComments: additionalCommentsLL,
-    };
+    } as CreateUnitRequest;
+
+    if (props.formType === "housing locator form") {
+      newUnit.whereFound = whereFindUnit;
+      newUnit.paymentRentingCriteria = paymentRantingCriteria;
+      newUnit.additionalRules = additionalRulesRegulations;
+      newUnit.internalComments = additionalCommentsHL;
+    }
 
     createUnit(newUnit)
       .then((res) => {
@@ -370,7 +380,7 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
           <Textbox
             elementName="State"
             requiredField={true}
-            name="email"
+            name="state"
             value={state}
             handler={handleState}
           />
@@ -395,7 +405,7 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
           <Textbox
             elementName="Area Code"
             requiredField={true}
-            name="areaCode"
+            name="zip"
             value={areaCode}
             handler={handleAreaCode}
           />
@@ -481,15 +491,17 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
           handleSharingHousing={handleSharingHousing}
         />
         <Textbox
-          elementName="Additional Comments"
+          elementName="Landlord Comments"
           name="additionalCommentsLL"
+          kind="textarea"
+          rows={5}
           value={additionalCommentsLL}
           handler={handleAdditionalCommentsLL}
         />
 
         {props.formType === "housing locator form" && (
           <HousingLocatorSection>
-            <MidSectionHeader>Additional fields to be entered by housing locator</MidSectionHeader>
+            <MidSectionHeader>Fill Out Additional Information</MidSectionHeader>
             <Textbox
               elementName="Where did you find the unit?"
               requiredField={true}
@@ -509,8 +521,9 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
               handleCheckBoxNA={handleCheckBoxNA}
             />
             <Textbox
-              elementName="Additional Comments"
+              elementName="Internal Comments"
               kind="textarea"
+              rows={5}
               name="additionalCommentsHL"
               value={additionalCommentsHL}
               handler={handleAdditionalCommentsHL}

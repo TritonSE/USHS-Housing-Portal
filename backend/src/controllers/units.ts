@@ -22,7 +22,9 @@ import {
 export const createUnitsHandler: RequestHandler = asyncHandler(async (req, res, _) => {
   const newUnitBody = req.body as NewUnitBody;
 
-  const newUnit = await createUnit(newUnitBody);
+  const isHL = req.currentUser?.isHousingLocator ?? false;
+
+  const newUnit = await createUnit(newUnitBody, isHL);
 
   res.status(201).json(newUnit);
 });

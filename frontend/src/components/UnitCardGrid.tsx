@@ -1,4 +1,5 @@
 import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import { Unit } from "@/api/units";
@@ -97,6 +98,7 @@ export type UnitCardGridProps = {
 };
 
 export const UnitCardGrid = ({ units, refreshUnits }: UnitCardGridProps) => {
+  const navigate = useNavigate();
   const [pendingSelected, setPendingSelected] = useState<boolean>(false);
 
   const dataContext = useContext(DataContext);
@@ -185,7 +187,11 @@ export const UnitCardGrid = ({ units, refreshUnits }: UnitCardGridProps) => {
         )}
       </GridContainer>
       {dataContext.currentUser?.isHousingLocator && (
-        <AddListings>
+        <AddListings
+          onClick={() => {
+            navigate("/new-listing");
+          }}
+        >
           <img src="add_symbol.svg" alt="add" />
           <div>Listings</div>
         </AddListings>
