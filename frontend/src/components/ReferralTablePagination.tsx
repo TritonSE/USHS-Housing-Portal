@@ -3,9 +3,9 @@ import styled from "styled-components";
 
 const PaginationLayout = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
-  max-width: 10vw;
+  gap: 16px;
 `;
 
 const NavButton = styled.button`

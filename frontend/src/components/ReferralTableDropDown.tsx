@@ -41,8 +41,6 @@ const RT_Row_DD_Row = styled(FilterRow)`
 const RT_Row_DD_Display = styled(DropdownRow)`
   min-width: 10.95vw;
   max-width: 11vw;
-  max-height: 2vh;
-
   justify-content: space-between;
 `;
 
