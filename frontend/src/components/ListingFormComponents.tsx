@@ -2,11 +2,12 @@ import { useState } from "react";
 import styled from "styled-components";
 
 import { Button } from "./Button";
+import { MidSectionHeader } from "./ListingForm/Headers/HeaderStyles";
+import { HousingLocatorFields } from "./ListingForm/HousingLocatorFields";
 import { Logo } from "./ListingForm/Logo";
 
 import { CreateUnitRequest, createUnit } from "@/api/units";
 import { AccessibilityAccess } from "@/components/ListingForm/AccessibilityAccess";
-import { AdditionalRulesRegulations } from "@/components/ListingForm/AdditionalRulesRegulations";
 import { Appliances } from "@/components/ListingForm/Appliances";
 import { ApplicationFeeCost } from "@/components/ListingForm/ApplicationFeeCost";
 import {
@@ -23,30 +24,10 @@ import { HousingAuthority } from "@/components/ListingForm/HousingAuthority";
 import { NumberBaths } from "@/components/ListingForm/NumberBaths";
 import { NumberBedrooms } from "@/components/ListingForm/NumberBedrooms";
 import { Parking } from "@/components/ListingForm/Parking";
-import { PaymentRentingCriteria } from "@/components/ListingForm/PaymentRentingCriteria";
 import { Pets } from "@/components/ListingForm/Pets";
 import { SharingHousing } from "@/components/ListingForm/SharingHousing";
 import { Textbox } from "@/components/ListingForm/Textbox";
 import { ThirdPartyPayment } from "@/components/ListingForm/ThirdPartyPayment";
-
-const MidSectionHeader = styled.h2`
-  margin-bottom: 32px;
-  font-size: 32px;
-  line-height: 150%;
-  font-family: "Neutraface Text", sans-serif;
-  font-size: 32px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 150%;
-  letter-spacing: 0.64px;
-`;
-
-const HousingLocatorSection = styled.div`
-  h2,
-  h3 {
-    color: #b64201;
-  }
-`;
 
 const ErrorMessage = styled.div`
   color: #b64201;
@@ -500,35 +481,17 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
         />
 
         {props.formType === "housing locator form" && (
-          <HousingLocatorSection>
-            <MidSectionHeader>Fill Out Additional Information</MidSectionHeader>
-            <Textbox
-              elementName="Where did you find the unit?"
-              requiredField={true}
-              name="whereFindUnit"
-              value={whereFindUnit}
-              handler={handleWhereFindUnit}
-            />
-            <PaymentRentingCriteria
-              paymentRentingCriteria={paymentRantingCriteria}
-              setPaymentRentingCriteria={setPaymentRentingCriteria}
-              handleCheckBoxNA={handleCheckBoxNA}
-              notRequired={true}
-            />
-            <AdditionalRulesRegulations
-              additionalRulesRegulations={additionalRulesRegulations}
-              setAdditionalRulesRegulations={setAdditionalRulesRegulations}
-              handleCheckBoxNA={handleCheckBoxNA}
-            />
-            <Textbox
-              elementName="Internal Comments"
-              kind="textarea"
-              rows={5}
-              name="additionalCommentsHL"
-              value={additionalCommentsHL}
-              handler={handleAdditionalCommentsHL}
-            />
-          </HousingLocatorSection>
+          <HousingLocatorFields
+            whereFindUnit={whereFindUnit}
+            handleWhereFindUnit={handleWhereFindUnit}
+            paymentRantingCriteria={paymentRantingCriteria}
+            setPaymentRentingCriteria={setPaymentRentingCriteria}
+            additionalRulesRegulations={additionalRulesRegulations}
+            setAdditionalRulesRegulations={setAdditionalRulesRegulations}
+            handleCheckBoxNA={handleCheckBoxNA}
+            additionalCommentsHL={additionalCommentsHL}
+            handleAdditionalCommentsHL={handleAdditionalCommentsHL}
+          />
         )}
       </ContentContainer>
       <SubmitButtonMarginOffset>

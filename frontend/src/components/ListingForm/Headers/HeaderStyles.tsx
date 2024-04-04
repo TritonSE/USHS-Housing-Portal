@@ -22,3 +22,15 @@ export const HeaderRequired = styled.em`
   line-height: 150%;
   letter-spacing: 0.4px;
 `;
+
+export const MidSectionHeader = styled.h2`
+  margin-bottom: 32px;
+  font-size: 32px;
+  line-height: 150%;
+  font-family: "Neutraface Text", sans-serif;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%;
+  letter-spacing: 0.64px;
+`;
