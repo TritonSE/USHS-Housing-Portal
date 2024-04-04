@@ -9,11 +9,7 @@ const CustomInputText = styled.input<{ fontSize?: number; error: boolean }>`
   border-radius: 5px;
   border: 1px solid ${(props) => (props.error ? props.theme.colors.primary : "#ccc")};
   width: 300px;
-  ${(props) =>
-    props.fontSize &&
-    `
-      font-size: ${props.fontSize}px;
-    `}
+  font-size: ${(props) => props.fontSize ?? 16}px;
 `;
 
 const CustomTextArea = styled.textarea<{ fontSize?: number; error: boolean }>`
@@ -23,11 +19,7 @@ const CustomTextArea = styled.textarea<{ fontSize?: number; error: boolean }>`
   border-radius: 5px;
   border: 1px solid ${(props) => (props.error ? props.theme.colors.primary : "#ccc")};
   width: 300px;
-  ${(props) =>
-    props.fontSize &&
-    `
-      font-size: ${props.fontSize}px;
-    `}
+  font-size: ${(props) => props.fontSize ?? 16}px;
 `;
 
 const Error = styled.div`

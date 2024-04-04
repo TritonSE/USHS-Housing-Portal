@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import { HeaderMain, HeaderRequired } from "./HeaderSyles";
+import { HeaderMain, HeaderRequired } from "./HeaderStyles";
 
 import { Header, Required } from "@/components/ListingForm/CommonStyles";
 

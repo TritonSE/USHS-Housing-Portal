@@ -1,7 +1,7 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import {
   CustomCheckboxRadio,
   FieldHeader,
+  OptionLabel,
   OtherText,
   Required,
 } from "@/components/ListingForm/CommonStyles";
@@ -20,7 +20,7 @@ export const NumberBaths = (props: NumberBathsProps) => {
         Number of Baths <Required>*</Required>
       </FieldHeader>
       <div>
-        <label>
+        <OptionLabel>
           <CustomCheckboxRadio
             type="radio"
             name="Baths_1"
@@ -29,9 +29,9 @@ export const NumberBaths = (props: NumberBathsProps) => {
             onChange={props.handleNumberOfBaths}
           />
           1
-        </label>
-        <br />
-        <label>
+        </OptionLabel>
+
+        <OptionLabel>
           <CustomCheckboxRadio
             type="radio"
             name="Baths_1.5"
@@ -40,9 +40,9 @@ export const NumberBaths = (props: NumberBathsProps) => {
             onChange={props.handleNumberOfBaths}
           />
           1.5
-        </label>
-        <br />
-        <label>
+        </OptionLabel>
+
+        <OptionLabel>
           <CustomCheckboxRadio
             type="radio"
             name="Baths_2"
@@ -51,9 +51,9 @@ export const NumberBaths = (props: NumberBathsProps) => {
             onChange={props.handleNumberOfBaths}
           />
           2
-        </label>
-        <br />
-        <label>
+        </OptionLabel>
+
+        <OptionLabel>
           <CustomCheckboxRadio
             type="radio"
             name="Baths_2.5"
@@ -62,9 +62,9 @@ export const NumberBaths = (props: NumberBathsProps) => {
             onChange={props.handleNumberOfBaths}
           />
           2.5
-        </label>
-        <br />
-        <label>
+        </OptionLabel>
+
+        <OptionLabel>
           <CustomCheckboxRadio
             type="radio"
             name="Baths_3"
@@ -73,9 +73,9 @@ export const NumberBaths = (props: NumberBathsProps) => {
             onChange={props.handleNumberOfBaths}
           />
           3
-        </label>
-        <br />
-        <label>
+        </OptionLabel>
+
+        <OptionLabel>
           <CustomCheckboxRadio
             type="radio"
             name="Baths_Other"
@@ -90,7 +90,7 @@ export const NumberBaths = (props: NumberBathsProps) => {
             value={props.numberOfBathsOther ?? ""}
             onChange={props.handleNumberOfBathsOther}
           />
-        </label>
+        </OptionLabel>
       </div>
     </div>
   );

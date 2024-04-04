@@ -1,8 +1,8 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import {
   CustomCheckboxRadio,
   FieldHeader,
   Margin32,
+  OptionLabel,
   RadioCheckBoxContainer,
   RadioCheckboxCol,
   Required,
@@ -26,7 +26,7 @@ export const Appliances = (props: ApplicancesProps) => {
       </FieldHeader>
       <RadioCheckBoxContainer>
         <RadioCheckboxCol>
-          <label>
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="Refrigerator"
@@ -37,9 +37,9 @@ export const Appliances = (props: ApplicancesProps) => {
               }}
             />
             Refrigerator
-          </label>
-          <br />
-          <label>
+          </OptionLabel>
+
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="Dishwasher"
@@ -50,9 +50,9 @@ export const Appliances = (props: ApplicancesProps) => {
               }}
             />
             Dishwasher
-          </label>
-          <br />
-          <label>
+          </OptionLabel>
+
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="Disposal"
@@ -63,9 +63,9 @@ export const Appliances = (props: ApplicancesProps) => {
               }}
             />
             Disposal
-          </label>
-          <br />
-          <label>
+          </OptionLabel>
+
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="Microwave"
@@ -76,9 +76,9 @@ export const Appliances = (props: ApplicancesProps) => {
               }}
             />
             Microwave
-          </label>
-          <br />
-          <label>
+          </OptionLabel>
+
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="Central AC/Heat"
@@ -89,9 +89,9 @@ export const Appliances = (props: ApplicancesProps) => {
               }}
             />
             Central AC/Heat
-          </label>
-          <br />
-          <label>
+          </OptionLabel>
+
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="Window unit AC"
@@ -102,9 +102,9 @@ export const Appliances = (props: ApplicancesProps) => {
               }}
             />
             Window unit AC
-          </label>
-          <br />
-          <label>
+          </OptionLabel>
+
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="Wall unit header - gas"
@@ -119,9 +119,9 @@ export const Appliances = (props: ApplicancesProps) => {
               }}
             />
             Wall unit header - gas
-          </label>
-          <br />
-          <label>
+          </OptionLabel>
+
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="Wall unit heater - electric"
@@ -136,10 +136,10 @@ export const Appliances = (props: ApplicancesProps) => {
               }}
             />
             Wall unit heater - electric
-          </label>
+          </OptionLabel>
         </RadioCheckboxCol>
         <div>
-          <label>
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="Landry hookups in unit"
@@ -154,9 +154,9 @@ export const Appliances = (props: ApplicancesProps) => {
               }}
             />
             Landry hookups in unit
-          </label>
-          <br />
-          <label>
+          </OptionLabel>
+
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="Water header - gas"
@@ -167,9 +167,9 @@ export const Appliances = (props: ApplicancesProps) => {
               }}
             />
             Water header - gas
-          </label>
-          <br />
-          <label>
+          </OptionLabel>
+
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="Water heater - electric"
@@ -184,9 +184,9 @@ export const Appliances = (props: ApplicancesProps) => {
               }}
             />
             Water heater - electric
-          </label>
-          <br />
-          <label>
+          </OptionLabel>
+
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="Laundry facilities on site"
@@ -201,9 +201,9 @@ export const Appliances = (props: ApplicancesProps) => {
               }}
             />
             Laundry facilities on site
-          </label>
-          <br />
-          <label>
+          </OptionLabel>
+
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="Laundry appliances in unit"
@@ -218,9 +218,9 @@ export const Appliances = (props: ApplicancesProps) => {
               }}
             />
             Laundry appliances in unit
-          </label>
-          <br />
-          <label>
+          </OptionLabel>
+
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="Stove/oven"
@@ -231,9 +231,9 @@ export const Appliances = (props: ApplicancesProps) => {
               }}
             />
             Stove/oven
-          </label>
-          <br />
-          <label>
+          </OptionLabel>
+
+          <OptionLabel>
             <CustomCheckboxRadio
               type="radio"
               name="applianceN/A"
@@ -244,9 +244,8 @@ export const Appliances = (props: ApplicancesProps) => {
               }}
             />
             N/A
-          </label>
+          </OptionLabel>
         </div>
-        <br />
       </RadioCheckBoxContainer>
     </Margin32>
   );

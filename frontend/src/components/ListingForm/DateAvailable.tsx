@@ -9,6 +9,7 @@ const CustomInputDate = styled.input`
   border-radius: 5px;
   border: 1px solid #ccc;
   width: 300px;
+  font-size: 16px;
 `;
 
 export type DateAvailableProps = {
@@ -26,7 +27,7 @@ export const DateAvailable = (props: DateAvailableProps) => {
       <div>
         <CustomInputDate
           type="date"
-          name="No"
+          name="Date Available"
           value={props.dateAvailable}
           onChange={props.handleDateAvailable}
         />

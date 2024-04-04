@@ -1,5 +1,5 @@
 import { Header, Required } from "@/components/ListingForm/CommonStyles";
-import { HeaderMain, HeaderRequired } from "@/components/ListingForm/Headers/HeaderSyles";
+import { HeaderMain, HeaderRequired } from "@/components/ListingForm/Headers/HeaderStyles";
 
 export const HousingLocatorHeader = () => {
   return (

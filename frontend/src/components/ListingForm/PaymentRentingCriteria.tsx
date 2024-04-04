@@ -1,8 +1,8 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import {
   CustomCheckboxRadio,
   FieldHeader,
   Margin32,
+  OptionLabel,
   Required,
 } from "@/components/ListingForm/CommonStyles";
 
@@ -22,7 +22,7 @@ export const PaymentRentingCriteria = (props: PaymentRentingCriteriaProps) => {
       <FieldHeader>
         Payment/Renting Criteria {!props.notRequired && <Required>*</Required>}
       </FieldHeader>
-      <label>
+      <OptionLabel>
         <CustomCheckboxRadio
           type="checkbox"
           name="3rd party payment accepting"
@@ -37,9 +37,9 @@ export const PaymentRentingCriteria = (props: PaymentRentingCriteriaProps) => {
           }}
         />
         3rd party payment accepting
-      </label>
-      <br />
-      <label>
+      </OptionLabel>
+
+      <OptionLabel>
         <CustomCheckboxRadio
           type="checkbox"
           name="Credit check required"
@@ -54,9 +54,9 @@ export const PaymentRentingCriteria = (props: PaymentRentingCriteriaProps) => {
           }}
         />
         Credit check required
-      </label>
-      <br />
-      <label>
+      </OptionLabel>
+
+      <OptionLabel>
         <CustomCheckboxRadio
           type="checkbox"
           name="Background check required"
@@ -71,9 +71,9 @@ export const PaymentRentingCriteria = (props: PaymentRentingCriteriaProps) => {
           }}
         />
         Background check required
-      </label>
-      <br />
-      <label>
+      </OptionLabel>
+
+      <OptionLabel>
         <CustomCheckboxRadio
           type="checkbox"
           name="Program letter required"
@@ -88,7 +88,7 @@ export const PaymentRentingCriteria = (props: PaymentRentingCriteriaProps) => {
           }}
         />
         Program letter required
-      </label>
+      </OptionLabel>
     </Margin32>
   );
 };

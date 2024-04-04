@@ -86,7 +86,7 @@ export const ReferralTableRow = (props: ReferralTableRowProps) => {
         </RTR_Text>
       </RTR_Text_Wrapper>
 
-      {/* Referring Staff (Case Manager) */}
+      {/* Referring Staff */}
       <ReferralTableDropDown
         onSelect={(value) => {
           props.onSelect(["referringStaff", value]);

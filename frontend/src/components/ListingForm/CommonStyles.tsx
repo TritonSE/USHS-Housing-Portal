@@ -67,6 +67,15 @@ export const Header = styled.div`
 
 export const CustomCheckboxRadio = styled.input`
   accent-color: #b64201;
-  margin-bottom: 8px;
-  margin-right: 16px;
+  height: 20px;
+  width: 20px;
+`;
+
+export const OptionLabel = styled.label`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+  margin: 8px 0;
+  cursor: pointer;
 `;

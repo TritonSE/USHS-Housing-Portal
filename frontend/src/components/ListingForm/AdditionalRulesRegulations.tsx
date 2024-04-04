@@ -1,8 +1,8 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import {
   CustomCheckboxRadio,
   FieldHeader,
   Margin32,
+  OptionLabel,
   Required,
 } from "@/components/ListingForm/CommonStyles";
 
@@ -21,24 +21,24 @@ export const AdditionalRulesRegulations = (props: AdditionalRulesRegulationsProp
       <FieldHeader>
         Additional Rules/Regulations <Required>*</Required>
       </FieldHeader>
-      <label>
+      <OptionLabel>
         <CustomCheckboxRadio
           type="checkbox"
-          name="additionalRulesRegulations allowed"
-          value="additionalRulesRegulations allowed"
-          checked={props.additionalRulesRegulations.includes("additionalRulesRegulations allowed")}
+          name="Pets allowed"
+          value="Pets allowed"
+          checked={props.additionalRulesRegulations.includes("Pets allowed")}
           onChange={() => {
             props.handleCheckBoxNA(
-              "additionalRulesRegulations allowed",
+              "Pets allowed",
               props.additionalRulesRegulations,
               props.setAdditionalRulesRegulations,
             );
           }}
         />
-        additionalRulesRegulations allowed
-      </label>
-      <br />
-      <label>
+        Pets allowed
+      </OptionLabel>
+
+      <OptionLabel>
         <CustomCheckboxRadio
           type="checkbox"
           name="Manager on site"
@@ -53,9 +53,9 @@ export const AdditionalRulesRegulations = (props: AdditionalRulesRegulationsProp
           }}
         />
         Manager on site
-      </label>
-      <br />
-      <label>
+      </OptionLabel>
+
+      <OptionLabel>
         <CustomCheckboxRadio
           type="checkbox"
           name="Quiet Building"
@@ -70,9 +70,9 @@ export const AdditionalRulesRegulations = (props: AdditionalRulesRegulationsProp
           }}
         />
         Quiet Building
-      </label>
-      <br />
-      <label>
+      </OptionLabel>
+
+      <OptionLabel>
         <CustomCheckboxRadio
           type="checkbox"
           name="Visitor Policies"
@@ -87,9 +87,9 @@ export const AdditionalRulesRegulations = (props: AdditionalRulesRegulationsProp
           }}
         />
         Visitor Policies
-      </label>
+      </OptionLabel>
       <div>
-        <label>
+        <OptionLabel>
           <CustomCheckboxRadio
             type="checkbox"
             name="Kid friendly"
@@ -104,9 +104,9 @@ export const AdditionalRulesRegulations = (props: AdditionalRulesRegulationsProp
             }}
           />
           Kid friendly
-        </label>
-        <br />
-        <label>
+        </OptionLabel>
+
+        <OptionLabel>
           <CustomCheckboxRadio
             type="checkbox"
             name="Minimal-management interactions"
@@ -121,9 +121,9 @@ export const AdditionalRulesRegulations = (props: AdditionalRulesRegulationsProp
             }}
           />
           Minimal-management interactions
-        </label>
-        <br />
-        <label>
+        </OptionLabel>
+
+        <OptionLabel>
           <CustomCheckboxRadio
             type="checkbox"
             name="High-management interactions"
@@ -138,9 +138,9 @@ export const AdditionalRulesRegulations = (props: AdditionalRulesRegulationsProp
             }}
           />
           High-management interactions
-        </label>
-        <br />
-        <label>
+        </OptionLabel>
+
+        <OptionLabel>
           <CustomCheckboxRadio
             type="radio"
             name="N/A_additionalrulesregs"
@@ -155,7 +155,7 @@ export const AdditionalRulesRegulations = (props: AdditionalRulesRegulationsProp
             }}
           />
           N/A
-        </label>
+        </OptionLabel>
       </div>
     </Margin32>
   );

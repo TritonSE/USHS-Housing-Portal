@@ -24,9 +24,7 @@ export function LandlordListingForm() {
       case "password":
         return <PasswordView handleNext={goToForm} />;
       case "form":
-        return (
-          <ListingFormComponents formType={"landlord listing form"} handleAfterSubmit={goToDone} />
-        );
+        return <ListingFormComponents formType={"landlord"} handleAfterSubmit={goToDone} />;
       case "done":
         return <DoneView handleResubmit={goToForm} />;
     }

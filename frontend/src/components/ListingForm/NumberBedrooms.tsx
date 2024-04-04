@@ -1,9 +1,9 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import styled from "styled-components";
 
 import {
   CustomCheckboxRadio,
   FieldHeader,
+  OptionLabel,
   OtherText,
   Required,
 } from "@/components/ListingForm/CommonStyles";
@@ -26,7 +26,7 @@ export const NumberBedrooms = (props: NumberBedroomsProps) => {
         Number of Bedrooms <Required>*</Required>
       </FieldHeader>
       <div>
-        <label>
+        <OptionLabel>
           <CustomCheckboxRadio
             type="radio"
             name="Bedroom_1"
@@ -35,9 +35,8 @@ export const NumberBedrooms = (props: NumberBedroomsProps) => {
             onChange={props.handleNumberOfBedrooms}
           />
           1
-        </label>
-        <br />
-        <label>
+        </OptionLabel>
+        <OptionLabel>
           <CustomCheckboxRadio
             type="radio"
             name="Bedroom_2"
@@ -46,9 +45,8 @@ export const NumberBedrooms = (props: NumberBedroomsProps) => {
             onChange={props.handleNumberOfBedrooms}
           />
           2
-        </label>{" "}
-        <br />
-        <label>
+        </OptionLabel>{" "}
+        <OptionLabel>
           <CustomCheckboxRadio
             type="radio"
             name="Bedroom_3"
@@ -57,9 +55,8 @@ export const NumberBedrooms = (props: NumberBedroomsProps) => {
             onChange={props.handleNumberOfBedrooms}
           />
           3
-        </label>
-        <br />
-        <label>
+        </OptionLabel>
+        <OptionLabel>
           <CustomCheckboxRadio
             type="radio"
             name="Bedroom_4"
@@ -68,9 +65,8 @@ export const NumberBedrooms = (props: NumberBedroomsProps) => {
             onChange={props.handleNumberOfBedrooms}
           />
           4
-        </label>
-        <br />
-        <label>
+        </OptionLabel>
+        <OptionLabel>
           <CustomCheckboxRadio
             type="radio"
             name="Bedroom_Other"
@@ -85,7 +81,7 @@ export const NumberBedrooms = (props: NumberBedroomsProps) => {
             value={props.numberOfBedroomsOther ?? ""}
             onChange={props.handleNumberOfBedroomsOther}
           />
-        </label>
+        </OptionLabel>
       </div>
     </WidthOffset>
   );

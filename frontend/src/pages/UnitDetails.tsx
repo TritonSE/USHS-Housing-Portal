@@ -8,6 +8,8 @@ import { Unit, approveUnit, getUnit, updateUnit } from "@/api/units";
 import { Page } from "@/components";
 import { Banner } from "@/components/Banner";
 import { Button } from "@/components/Button";
+import { HousingLocatorFields } from "@/components/ListingForm/HousingLocatorFields";
+import { ListingFormComponents } from "@/components/ListingFormComponents";
 import { NavBar } from "@/components/NavBar";
 import { ReferralTable } from "@/components/ReferralTable";
 import { DataContext } from "@/contexts/DataContext";
@@ -61,7 +63,7 @@ const MainColumn = styled.div`
 `;
 
 const DetailsColumn = styled(MainColumn)`
-  margin: 90px;
+  margin: 32px 160px;
   gap: 60px;
 `;
 
@@ -153,7 +155,7 @@ const InfoRow = styled(Row)`
   gap: 20px;
 `;
 
-const EditButton = styled.div`
+const EditButton = styled(Button)`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -273,11 +275,17 @@ export function UnitDetails() {
   const [selectedPopupOption, setSelectedPopupOption] = useState("");
   const [dateText, setDateText] = useState("");
 
+  // Additional HL fields (for pending units)
+  const [internalComments, setInternalComments] = useState<string>("");
+  const [whereFound, setWhereFound] = useState<string>("");
+  const [paymentRentingCriteria, setPaymentRentingCriteria] = useState<string[]>([]);
+  const [additionalRulesHL, setAdditionalRulesHL] = useState<string[]>([]);
+
   //using Data Context to get currentUser info
   const { currentUser } = useContext(DataContext);
 
   //checks for which view to return
-  const [_isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const toggleEditing = () => {
     setIsEditing((prevState) => !prevState);
@@ -352,16 +360,44 @@ export function UnitDetails() {
     togglePopup();
   };
 
-  const approveListing = () => {
+  const approveListing = async () => {
     if (unit && id && !unit.approved) {
-      approveUnit(id)
-        .then(() => {
-          setShowApprovedBanner(true);
-          setShowPendingApprovalBanner(false);
-          window.scrollTo(0, 0); // scroll to top of page
+      // Update unit with additional HL fields
+      await updateUnit(id, {
+        whereFound,
+        paymentRentingCriteria,
+        additionalRules: additionalRulesHL,
+        internalComments,
+      })
+        .then((result) => {
+          if (result.success) {
+            setUnit(result.data);
+          } else {
+            console.error(result.error);
+          }
+        })
+        .catch(console.error);
+
+      // Approve Unit
+      await approveUnit(id)
+        .then((result) => {
+          if (result.success) {
+            setUnit(result.data);
+
+            setShowApprovedBanner(true);
+            setShowPendingApprovalBanner(false);
+            window.scrollTo(0, 0); // scroll to top of page
+          } else {
+            console.error(result.error);
+          }
         })
         .catch(console.error);
     }
+  };
+
+  const handleAfterUpdate = (updatedUnit: Unit) => {
+    setUnit(updatedUnit);
+    toggleEditing();
   };
 
   //checks for availability
@@ -425,12 +461,10 @@ export function UnitDetails() {
                 </Button>
               </Link>
               {currentUser?.isHousingLocator && (
-                <Button kind="secondary">
-                  <EditButton onClick={toggleEditing}>
-                    <img src={"/pencil.svg"} alt="" style={{ marginRight: "12px" }} />
-                    Edit
-                  </EditButton>
-                </Button>
+                <EditButton kind="secondary" onClick={toggleEditing}>
+                  <img src={"/pencil.svg"} alt="" style={{ marginRight: "12px" }} />
+                  Edit
+                </EditButton>
               )}
             </TopRow>
           </Section>
@@ -440,7 +474,7 @@ export function UnitDetails() {
             image="/check_mark.svg"
             withTitle={true}
             title="Approval Confirmed"
-            message="The listing is now visible to case manager and ready for referrals."
+            message="The listing is now visible to referring staff and ready for referrals."
             withX={true}
             color="#C4F4DF"
           />
@@ -450,127 +484,162 @@ export function UnitDetails() {
             image="/Caution.svg"
             withTitle={true}
             title="Pending Approval"
-            message="The following information is submitted by the landlord. Fill in additional information and approve at the bottom of the page to make the listing visible to case managers."
+            message="The following information is submitted by the landlord. Fill in additional information and approve at the bottom of the page to make the listing visible to referring staff."
             withX={false}
             color="#FCE9C9"
           />
 
-          <Section>
-            <TopRow>
-              <Column>
-                <RentPerMonth>${unit.monthlyRent}/month</RentPerMonth>
-                <Address>{unit.listingAddress}</Address>
-              </Column>
-              {currentUser?.isHousingLocator && (
-                <HLActions>
-                  <Availability>{availableNow}</Availability>
-                  <ChangeAvailabilityButton kind="primary" onClick={togglePopup}>
-                    Change Availability
-                  </ChangeAvailabilityButton>
-                </HLActions>
+          {isEditing ? (
+            // Editing mode
+            <ListingFormComponents
+              formType="edit"
+              initialValues={unit}
+              handleAfterSubmit={handleAfterUpdate}
+            />
+          ) : (
+            // Viewing mode
+            <>
+              <Section>
+                <TopRow>
+                  <Column>
+                    <RentPerMonth>${unit.monthlyRent}/month</RentPerMonth>
+                    <Address>{unit.listingAddress}</Address>
+                  </Column>
+                  {currentUser?.isHousingLocator && (
+                    <HLActions>
+                      <Availability>{availableNow}</Availability>
+                      <ChangeAvailabilityButton kind="primary" onClick={togglePopup}>
+                        Change Availability
+                      </ChangeAvailabilityButton>
+                    </HLActions>
+                  )}
+                </TopRow>
+                <DetailsRow>
+                  <InfoRow>
+                    <Column>
+                      <StrongText>{unit.numBeds}</StrongText>
+                      <Text>beds</Text>
+                    </Column>
+                    <Column>
+                      <StrongText>{unit.numBaths}</StrongText>
+                      <Text>baths</Text>
+                    </Column>
+                    <Column>
+                      <StrongText>{unit.sqft}</StrongText>
+                      <Text>sqft</Text>
+                    </Column>
+                  </InfoRow>
+                  <Column>
+                    {currentUser?.isHousingLocator ? (
+                      <HousingLocatorComponent />
+                    ) : (
+                      <NotHousingLocatorComponent />
+                    )}
+                  </Column>
+                </DetailsRow>
+              </Section>
+
+              <Section>
+                <Row>
+                  <Header>Fees</Header>
+                </Row>
+                <Row>
+                  <SectionColumn>
+                    <StrongText>Security Deposit: </StrongText>
+                    <List>
+                      <ListText> ${unit.securityDeposit}</ListText>
+                    </List>
+                    <StrongText>Payment/Renting Criteria: </StrongText>
+                    {rentingCriteria}
+                  </SectionColumn>
+                  <SectionColumn>
+                    <StrongText>Application Fee: </StrongText>
+                    <List>
+                      <ListText>${unit.applicationFeeCost}</ListText>
+                    </List>
+                  </SectionColumn>
+                </Row>
+              </Section>
+
+              <Section>
+                <Row>
+                  <Header>Housing Specifications</Header>
+                </Row>
+                <Row>
+                  <SectionColumn>
+                    <StrongText>Parking: </StrongText>
+                    {parkingRequirements}
+                    <StrongText>Pets/Animals: </StrongText>
+                    {pets}
+                    <StrongText>Appliances: </StrongText>
+                    {appliances}
+                    <StrongText>Housing Authority: </StrongText>
+                    <ListText> {unit.housingAuthority}</ListText>
+                    <StrongText>Additional Comments from Landlord: </StrongText>
+                    <ListText> {unit.landlordComments}</ListText>
+                  </SectionColumn>
+                  <SectionColumn>
+                    <StrongText>Accessibility Access: </StrongText>
+                    {accessibility}
+                    <StrongText>Sharing House Acceptable: </StrongText>
+                    <ListText>{unit.sharingAcceptable}</ListText>
+                    <StrongText>Community/Neighborhood Information: </StrongText>
+                    {communityFeatures}
+                  </SectionColumn>
+                </Row>
+              </Section>
+
+              {unit.approved && (
+                <>
+                  <Section>
+                    <Row>
+                      <Header>Additional Information</Header>
+                    </Row>
+                    <Row>
+                      <SectionColumn>
+                        <StrongText>Where Was Unit Found: </StrongText>
+                        <ListText>{unit.whereFound}</ListText>
+                        <StrongText>Additional Rules and Regulation: </StrongText>
+                        {additionalRules}
+                      </SectionColumn>
+                      <SectionColumn>
+                        <StrongText>Notes from Housing Locator: </StrongText>
+                        {unit.internalComments}
+                      </SectionColumn>
+                    </Row>
+                  </Section>
+                  <ReferralTable id={id ?? ""} />{" "}
+                </>
               )}
-            </TopRow>
-            <DetailsRow>
-              <InfoRow>
-                <Column>
-                  <StrongText>{unit.numBeds}</StrongText>
-                  <Text>beds</Text>
-                </Column>
-                <Column>
-                  <StrongText>{unit.numBaths}</StrongText>
-                  <Text>baths</Text>
-                </Column>
-                <Column>
-                  <StrongText>{unit.sqft}</StrongText>
-                  <Text>sqft</Text>
-                </Column>
-              </InfoRow>
-              <Column>
-                {currentUser?.isHousingLocator ? (
-                  <HousingLocatorComponent />
-                ) : (
-                  <NotHousingLocatorComponent />
-                )}
-              </Column>
-            </DetailsRow>
-          </Section>
 
-          <Section>
-            <Row>
-              <Header>Fees</Header>
-            </Row>
-            <Row>
-              <SectionColumn>
-                <StrongText>Security Deposit: </StrongText>
-                <List>
-                  <ListText> ${unit.securityDeposit}</ListText>
-                </List>
-                <StrongText>Payment/Renting Criteria: </StrongText>
-                {rentingCriteria}
-              </SectionColumn>
-              <SectionColumn>
-                <StrongText>Application Fee: </StrongText>
-                <List>
-                  <ListText>${unit.applicationFeeCost}</ListText>
-                </List>
-              </SectionColumn>
-            </Row>
-          </Section>
-
-          <Section>
-            <Row>
-              <Header>Housing Specifications</Header>
-            </Row>
-            <Row>
-              <SectionColumn>
-                <StrongText>Parking: </StrongText>
-                {parkingRequirements}
-                <StrongText>Pets/Animals: </StrongText>
-                {pets}
-                <StrongText>Appliances: </StrongText>
-                {appliances}
-                <StrongText>Housing Authority: </StrongText>
-                <ListText> {unit.housingAuthority}</ListText>
-                <StrongText>Additional Comments from Landlord: </StrongText>
-                <ListText> {unit.landlordComments}</ListText>
-              </SectionColumn>
-              <SectionColumn>
-                <StrongText>Accessibility Access: </StrongText>
-                {accessibility}
-                <StrongText>Sharing House Acceptable: </StrongText>
-                <ListText>{unit.sharingAcceptable}</ListText>
-                <StrongText>Community/Neighborhood Information: </StrongText>
-                {communityFeatures}
-              </SectionColumn>
-            </Row>
-          </Section>
-
-          <Section>
-            <Row>
-              <Header>Additional Information</Header>
-            </Row>
-            <Row>
-              <SectionColumn>
-                <StrongText>Where Was Unit Found: </StrongText>
-                <ListText>{unit.whereFound}</ListText>
-                <StrongText>Additional Rules and Regulation: </StrongText>
-                {additionalRules}
-              </SectionColumn>
-              <SectionColumn>
-                <StrongText>Notes from Housing Locator: </StrongText>
-                {unit.internalComments}
-              </SectionColumn>
-            </Row>
-          </Section>
-          <ReferralTable id={id ?? ""} />
-          {!unit.approved && (
-            <Button
-              kind="primary"
-              style={{ alignSelf: "flex-end", width: "fit-content" }}
-              onClick={approveListing}
-            >
-              Approve Listing
-            </Button>
+              {!unit.approved && (
+                <>
+                  <HousingLocatorFields
+                    whereFindUnit={whereFound}
+                    handleWhereFindUnit={(e) => {
+                      setWhereFound(e.target.value);
+                    }}
+                    paymentRentingCriteria={paymentRentingCriteria}
+                    setPaymentRentingCriteria={setPaymentRentingCriteria}
+                    additionalRulesRegulations={additionalRulesHL}
+                    setAdditionalRulesRegulations={setAdditionalRulesHL}
+                    additionalCommentsHL={internalComments}
+                    handleAdditionalCommentsHL={(e) => {
+                      setInternalComments(e.target.value);
+                    }}
+                  />
+                  <Button
+                    kind="primary"
+                    style={{ alignSelf: "flex-end", width: "fit-content" }}
+                    onClick={() => {
+                      void approveListing();
+                    }}
+                  >
+                    Approve Listing
+                  </Button>
+                </>
+              )}
+            </>
           )}
         </DetailsColumn>
 

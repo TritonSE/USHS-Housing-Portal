@@ -1,7 +1,6 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import styled from "styled-components";
 
-import { CustomCheckboxRadio, Margin32 } from "@/components/ListingForm/CommonStyles";
+import { CustomCheckboxRadio, Margin32, OptionLabel } from "@/components/ListingForm/CommonStyles";
 import { Textbox } from "@/components/ListingForm/Textbox";
 
 type ApplicationFeeCostProps = {
@@ -10,7 +9,7 @@ type ApplicationFeeCostProps = {
 };
 
 const MarginOffset = styled.div`
-  margin-bottom: -40px;
+  margin-bottom: -20px;
 `;
 
 export const ApplicationFeeCost = (props: ApplicationFeeCostProps) => {
@@ -26,9 +25,7 @@ export const ApplicationFeeCost = (props: ApplicationFeeCostProps) => {
           handler={props.handleApplicationFeeCost}
         />
       </MarginOffset>
-      <br />
-
-      <label>
+      <OptionLabel>
         <CustomCheckboxRadio
           type="radio"
           name="appFeeCostN/A"
@@ -37,7 +34,7 @@ export const ApplicationFeeCost = (props: ApplicationFeeCostProps) => {
           onChange={props.handleApplicationFeeCost}
         />
         N/A
-      </label>
+      </OptionLabel>
     </Margin32>
   );
 };
