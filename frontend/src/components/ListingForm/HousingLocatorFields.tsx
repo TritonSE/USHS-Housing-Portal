@@ -1,10 +1,10 @@
-import { Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
 
 import { AdditionalRulesRegulations } from "./AdditionalRulesRegulations";
 import { MidSectionHeader } from "./Headers/HeaderStyles";
 import { PaymentRentingCriteria } from "./PaymentRentingCriteria";
 import { Textbox } from "./Textbox";
+import { handleCheckBoxNA } from "./helpers";
 
 const HousingLocatorSection = styled.div`
   h2,
@@ -20,11 +20,6 @@ type HousingLocatorFieldsProps = {
   setPaymentRentingCriteria: React.Dispatch<React.SetStateAction<string[]>>;
   additionalRulesRegulations: string[];
   setAdditionalRulesRegulations: React.Dispatch<React.SetStateAction<string[]>>;
-  handleCheckBoxNA: (
-    option: string,
-    getter: string[],
-    setter: Dispatch<SetStateAction<string[]>>,
-  ) => void;
   additionalCommentsHL: string;
   handleAdditionalCommentsHL: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 };
@@ -36,7 +31,6 @@ export const HousingLocatorFields = ({
   setPaymentRentingCriteria,
   additionalRulesRegulations,
   setAdditionalRulesRegulations,
-  handleCheckBoxNA,
   additionalCommentsHL,
   handleAdditionalCommentsHL,
 }: HousingLocatorFieldsProps) => {

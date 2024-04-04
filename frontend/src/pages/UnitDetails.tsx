@@ -8,6 +8,7 @@ import { Unit, approveUnit, getUnit, updateUnit } from "@/api/units";
 import { Page } from "@/components";
 import { Banner } from "@/components/Banner";
 import { Button } from "@/components/Button";
+import { HousingLocatorFields } from "@/components/ListingForm/HousingLocatorFields";
 import { NavBar } from "@/components/NavBar";
 import { ReferralTable } from "@/components/ReferralTable";
 import { DataContext } from "@/contexts/DataContext";
@@ -273,6 +274,12 @@ export function UnitDetails() {
   const [selectedPopupOption, setSelectedPopupOption] = useState("");
   const [dateText, setDateText] = useState("");
 
+  // Additional HL fields (for pending units)
+  const [internalComments, setInternalComments] = useState<string>("");
+  const [whereFound, setWhereFound] = useState<string>("");
+  const [paymentRentingCriteria, setPaymentRentingCriteria] = useState<string[]>([]);
+  const [additionalRulesHL, setAdditionalRulesHL] = useState<string[]>([]);
+
   //using Data Context to get currentUser info
   const { currentUser } = useContext(DataContext);
 
@@ -352,13 +359,36 @@ export function UnitDetails() {
     togglePopup();
   };
 
-  const approveListing = () => {
+  const approveListing = async () => {
     if (unit && id && !unit.approved) {
-      approveUnit(id)
-        .then(() => {
-          setShowApprovedBanner(true);
-          setShowPendingApprovalBanner(false);
-          window.scrollTo(0, 0); // scroll to top of page
+      // Update unit with additional HL fields
+      await updateUnit(id, {
+        whereFound,
+        paymentRentingCriteria,
+        additionalRules: additionalRulesHL,
+        internalComments,
+      })
+        .then((result) => {
+          if (result.success) {
+            setUnit(result.data);
+          } else {
+            console.error(result.error);
+          }
+        })
+        .catch(console.error);
+
+      // Approve Unit
+      await approveUnit(id)
+        .then((result) => {
+          if (result.success) {
+            setUnit(result.data);
+
+            setShowApprovedBanner(true);
+            setShowPendingApprovalBanner(false);
+            window.scrollTo(0, 0); // scroll to top of page
+          } else {
+            console.error(result.error);
+          }
         })
         .catch(console.error);
     }
@@ -440,7 +470,7 @@ export function UnitDetails() {
             image="/check_mark.svg"
             withTitle={true}
             title="Approval Confirmed"
-            message="The listing is now visible to case manager and ready for referrals."
+            message="The listing is now visible to referring staff and ready for referrals."
             withX={true}
             color="#C4F4DF"
           />
@@ -450,7 +480,7 @@ export function UnitDetails() {
             image="/Caution.svg"
             withTitle={true}
             title="Pending Approval"
-            message="The following information is submitted by the landlord. Fill in additional information and approve at the bottom of the page to make the listing visible to case managers."
+            message="The following information is submitted by the landlord. Fill in additional information and approve at the bottom of the page to make the listing visible to referring staff."
             withX={false}
             color="#FCE9C9"
           />
@@ -545,32 +575,55 @@ export function UnitDetails() {
             </Row>
           </Section>
 
-          <Section>
-            <Row>
-              <Header>Additional Information</Header>
-            </Row>
-            <Row>
-              <SectionColumn>
-                <StrongText>Where Was Unit Found: </StrongText>
-                <ListText>{unit.whereFound}</ListText>
-                <StrongText>Additional Rules and Regulation: </StrongText>
-                {additionalRules}
-              </SectionColumn>
-              <SectionColumn>
-                <StrongText>Notes from Housing Locator: </StrongText>
-                {unit.internalComments}
-              </SectionColumn>
-            </Row>
-          </Section>
-          <ReferralTable id={id ?? ""} />
+          {unit.approved && (
+            <>
+              <Section>
+                <Row>
+                  <Header>Additional Information</Header>
+                </Row>
+                <Row>
+                  <SectionColumn>
+                    <StrongText>Where Was Unit Found: </StrongText>
+                    <ListText>{unit.whereFound}</ListText>
+                    <StrongText>Additional Rules and Regulation: </StrongText>
+                    {additionalRules}
+                  </SectionColumn>
+                  <SectionColumn>
+                    <StrongText>Notes from Housing Locator: </StrongText>
+                    {unit.internalComments}
+                  </SectionColumn>
+                </Row>
+              </Section>
+              <ReferralTable id={id ?? ""} />{" "}
+            </>
+          )}
+
           {!unit.approved && (
-            <Button
-              kind="primary"
-              style={{ alignSelf: "flex-end", width: "fit-content" }}
-              onClick={approveListing}
-            >
-              Approve Listing
-            </Button>
+            <>
+              <HousingLocatorFields
+                whereFindUnit={whereFound}
+                handleWhereFindUnit={(e) => {
+                  setWhereFound(e.target.value);
+                }}
+                paymentRantingCriteria={paymentRentingCriteria}
+                setPaymentRentingCriteria={setPaymentRentingCriteria}
+                additionalRulesRegulations={additionalRulesHL}
+                setAdditionalRulesRegulations={setAdditionalRulesHL}
+                additionalCommentsHL={internalComments}
+                handleAdditionalCommentsHL={(e) => {
+                  setInternalComments(e.target.value);
+                }}
+              />
+              <Button
+                kind="primary"
+                style={{ alignSelf: "flex-end", width: "fit-content" }}
+                onClick={() => {
+                  void approveListing();
+                }}
+              >
+                Approve Listing
+              </Button>
+            </>
           )}
         </DetailsColumn>
 

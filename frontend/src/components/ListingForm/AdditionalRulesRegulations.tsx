@@ -24,18 +24,18 @@ export const AdditionalRulesRegulations = (props: AdditionalRulesRegulationsProp
       <label>
         <CustomCheckboxRadio
           type="checkbox"
-          name="additionalRulesRegulations allowed"
-          value="additionalRulesRegulations allowed"
-          checked={props.additionalRulesRegulations.includes("additionalRulesRegulations allowed")}
+          name="Pets allowed"
+          value="Pets allowed"
+          checked={props.additionalRulesRegulations.includes("Pets allowed")}
           onChange={() => {
             props.handleCheckBoxNA(
-              "additionalRulesRegulations allowed",
+              "Pets allowed",
               props.additionalRulesRegulations,
               props.setAdditionalRulesRegulations,
             );
           }}
         />
-        additionalRulesRegulations allowed
+        Pets allowed
       </label>
       <br />
       <label>

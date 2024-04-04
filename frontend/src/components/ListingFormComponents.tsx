@@ -5,6 +5,7 @@ import { Button } from "./Button";
 import { MidSectionHeader } from "./ListingForm/Headers/HeaderStyles";
 import { HousingLocatorFields } from "./ListingForm/HousingLocatorFields";
 import { Logo } from "./ListingForm/Logo";
+import { handleCheckBoxNA } from "./ListingForm/helpers";
 
 import { CreateUnitRequest, createUnit } from "@/api/units";
 import { AccessibilityAccess } from "@/components/ListingForm/AccessibilityAccess";
@@ -36,9 +37,6 @@ const ErrorMessage = styled.div`
 
 type ListingFormComponentsProps = {
   formType: "landlord listing form" | "housing locator form";
-  firstName?: string;
-  lastName?: string;
-  email?: string;
   handleAfterSubmit: () => void; // Function to call after the form is submitted
 };
 
@@ -80,7 +78,7 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
   const [additionalCommentsLL, setAdditionalCommentsLL] = useState<string>("");
   const [additionalCommentsHL, setAdditionalCommentsHL] = useState<string>("");
   const [whereFindUnit, setWhereFindUnit] = useState<string>("");
-  const [paymentRantingCriteria, setPaymentRentingCriteria] = useState<string[]>([]);
+  const [paymentRentingCriteria, setPaymentRentingCriteria] = useState<string[]>([]);
   const [additionalRulesRegulations, setAdditionalRulesRegulations] = useState<string[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
@@ -223,31 +221,6 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
     setCommunityAndNeighborInfoOther(event.target.value);
   };
 
-  const handleCheckBoxNA = (
-    option: string,
-    getter: string[],
-    setter: React.Dispatch<React.SetStateAction<string[]>>,
-  ) => {
-    if (option === "N/A") {
-      setter(["N/A"]);
-    } else if (getter.includes(option)) {
-      const valueToRemove = "N/A";
-      const index = getter.indexOf(valueToRemove);
-      if (index !== -1) {
-        getter.splice(index, 1);
-      }
-
-      setter(getter.filter((item: string) => item !== option));
-    } else {
-      const valueToRemove = "N/A";
-      const index = getter.indexOf(valueToRemove);
-      if (index !== -1) {
-        getter.splice(index, 1);
-      }
-      setter([...getter, option]);
-    }
-  };
-
   const handleSharingHousing = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSharingHousing(event.target.value);
   };
@@ -298,7 +271,7 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
 
     if (props.formType === "housing locator form") {
       newUnit.whereFound = whereFindUnit;
-      newUnit.paymentRentingCriteria = paymentRantingCriteria;
+      newUnit.paymentRentingCriteria = paymentRentingCriteria;
       newUnit.additionalRules = additionalRulesRegulations;
       newUnit.internalComments = additionalCommentsHL;
     }
@@ -484,11 +457,10 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
           <HousingLocatorFields
             whereFindUnit={whereFindUnit}
             handleWhereFindUnit={handleWhereFindUnit}
-            paymentRantingCriteria={paymentRantingCriteria}
+            paymentRantingCriteria={paymentRentingCriteria}
             setPaymentRentingCriteria={setPaymentRentingCriteria}
             additionalRulesRegulations={additionalRulesRegulations}
             setAdditionalRulesRegulations={setAdditionalRulesRegulations}
-            handleCheckBoxNA={handleCheckBoxNA}
             additionalCommentsHL={additionalCommentsHL}
             handleAdditionalCommentsHL={handleAdditionalCommentsHL}
           />
