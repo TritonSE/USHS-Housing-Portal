@@ -1,8 +1,8 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import {
   CustomCheckboxRadio,
   FieldHeader,
   Margin32,
+  OptionLabel,
   RadioCheckBoxContainer,
   RadioCheckboxCol,
   Required,
@@ -25,7 +25,7 @@ export const Pets = (props: PetsProps) => {
       </FieldHeader>
       <RadioCheckBoxContainer>
         <RadioCheckboxCol>
-          <label>
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="Pets allowed"
@@ -36,9 +36,9 @@ export const Pets = (props: PetsProps) => {
               }}
             />
             Pets allowed
-          </label>
-          <br />
-          <label>
+          </OptionLabel>
+
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="Pets not allowed"
@@ -49,9 +49,9 @@ export const Pets = (props: PetsProps) => {
               }}
             />
             Pets not allowed
-          </label>
-          <br />
-          <label>
+          </OptionLabel>
+
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="ESA letter required"
@@ -62,9 +62,9 @@ export const Pets = (props: PetsProps) => {
               }}
             />
             ESA letter required
-          </label>
-          <br />
-          <label>
+          </OptionLabel>
+
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="Small dogs/cats allowed only"
@@ -75,11 +75,11 @@ export const Pets = (props: PetsProps) => {
               }}
             />
             Small dogs/cats allowed only
-          </label>
+          </OptionLabel>
         </RadioCheckboxCol>
         <div>
           {" "}
-          <label>
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="Big dogs allowed"
@@ -90,9 +90,8 @@ export const Pets = (props: PetsProps) => {
               }}
             />
             Big dogs allowed
-          </label>
-          <br />
-          <label>
+          </OptionLabel>
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="Pet deposit fee (included in security deposit)"
@@ -107,9 +106,8 @@ export const Pets = (props: PetsProps) => {
               }}
             />
             Pet deposit fee (included in security deposit)
-          </label>
-          <br />
-          <label>
+          </OptionLabel>
+          <OptionLabel>
             <CustomCheckboxRadio
               type="radio"
               name="N/A_pets"
@@ -120,7 +118,7 @@ export const Pets = (props: PetsProps) => {
               }}
             />
             N/A
-          </label>
+          </OptionLabel>
         </div>
       </RadioCheckBoxContainer>
     </Margin32>

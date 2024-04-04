@@ -1,8 +1,8 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import {
   CustomCheckboxRadio,
   FieldHeader,
   Margin32,
+  OptionLabel,
   RadioCheckBoxContainer,
   RadioCheckboxCol,
   Required,
@@ -26,7 +26,7 @@ export const Parking = (props: ParkingProps) => {
       </FieldHeader>
       <RadioCheckBoxContainer>
         <RadioCheckboxCol>
-          <label>
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="Garage with assigned spots"
@@ -41,9 +41,9 @@ export const Parking = (props: ParkingProps) => {
               }}
             />
             Garage with assigned spots
-          </label>
-          <br />
-          <label>
+          </OptionLabel>
+
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="Attached to house"
@@ -54,9 +54,9 @@ export const Parking = (props: ParkingProps) => {
               }}
             />
             Attached to house
-          </label>
-          <br />
-          <label>
+          </OptionLabel>
+
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="Gated"
@@ -67,9 +67,9 @@ export const Parking = (props: ParkingProps) => {
               }}
             />
             Gated
-          </label>
-          <br />
-          <label>
+          </OptionLabel>
+
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="Covered"
@@ -80,10 +80,10 @@ export const Parking = (props: ParkingProps) => {
               }}
             />
             Covered
-          </label>
+          </OptionLabel>
         </RadioCheckboxCol>
         <div>
-          <label>
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="Underground"
@@ -94,9 +94,9 @@ export const Parking = (props: ParkingProps) => {
               }}
             />
             Underground
-          </label>
-          <br />
-          <label>
+          </OptionLabel>
+
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="No parking on site"
@@ -107,9 +107,9 @@ export const Parking = (props: ParkingProps) => {
               }}
             />
             No parking on site
-          </label>
-          <br />
-          <label>
+          </OptionLabel>
+
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="Street parking"
@@ -120,9 +120,9 @@ export const Parking = (props: ParkingProps) => {
               }}
             />
             Street parking
-          </label>
-          <br />
-          <label>
+          </OptionLabel>
+
+          <OptionLabel>
             <CustomCheckboxRadio
               type="radio"
               name="parkingN/A"
@@ -133,7 +133,7 @@ export const Parking = (props: ParkingProps) => {
               }}
             />
             N/A
-          </label>
+          </OptionLabel>
         </div>
       </RadioCheckBoxContainer>
     </Margin32>

@@ -1,8 +1,8 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import {
   CustomCheckboxRadio,
   FieldHeader,
   Margin32,
+  OptionLabel,
   RadioCheckBoxContainer,
   RadioCheckboxCol,
   Required,
@@ -25,7 +25,7 @@ export const AccessibilityAccess = (props: AccessibilityAccessProps) => {
       </FieldHeader>
       <RadioCheckBoxContainer>
         <RadioCheckboxCol>
-          <label>
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="1st floor"
@@ -36,9 +36,9 @@ export const AccessibilityAccess = (props: AccessibilityAccessProps) => {
               }}
             />
             1st floor{" "}
-          </label>
-          <br />
-          <label>
+          </OptionLabel>
+
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="2nd floor and above"
@@ -53,9 +53,9 @@ export const AccessibilityAccess = (props: AccessibilityAccessProps) => {
               }}
             />
             2nd floor and above{" "}
-          </label>
-          <br />
-          <label>
+          </OptionLabel>
+
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="Ramps up to unit"
@@ -70,10 +70,10 @@ export const AccessibilityAccess = (props: AccessibilityAccessProps) => {
               }}
             />
             Ramps up to unit
-          </label>
+          </OptionLabel>
         </RadioCheckboxCol>
         <div>
-          <label>
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="Stairs only"
@@ -84,9 +84,9 @@ export const AccessibilityAccess = (props: AccessibilityAccessProps) => {
               }}
             />
             Stairs only
-          </label>
-          <br />
-          <label>
+          </OptionLabel>
+
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="Elevators to unit"
@@ -101,9 +101,9 @@ export const AccessibilityAccess = (props: AccessibilityAccessProps) => {
               }}
             />
             Elevators to unit
-          </label>
-          <br />
-          <label>
+          </OptionLabel>
+
+          <OptionLabel>
             <CustomCheckboxRadio
               type="radio"
               name="accessibilityN/A"
@@ -114,7 +114,7 @@ export const AccessibilityAccess = (props: AccessibilityAccessProps) => {
               }}
             />
             N/A
-          </label>
+          </OptionLabel>
         </div>
       </RadioCheckBoxContainer>
     </Margin32>

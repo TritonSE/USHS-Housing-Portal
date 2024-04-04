@@ -1,9 +1,8 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-
 import {
   CustomCheckboxRadio,
   FieldHeader,
   Margin32,
+  OptionLabel,
   Required,
 } from "@/components/ListingForm/CommonStyles";
 
@@ -19,7 +18,7 @@ export const ThirdPartyPayment = (props: ThirdPartyPaymentProps) => {
         3rd party payment accepting <Required>*</Required>
       </FieldHeader>
       <div>
-        <label>
+        <OptionLabel>
           <CustomCheckboxRadio
             type="radio"
             name="Yes"
@@ -28,9 +27,8 @@ export const ThirdPartyPayment = (props: ThirdPartyPaymentProps) => {
             onChange={props.handleThirdPartyPayment}
           />
           Yes
-        </label>
-        <label>
-          <br />
+        </OptionLabel>
+        <OptionLabel>
           <CustomCheckboxRadio
             type="radio"
             name="No"
@@ -39,7 +37,7 @@ export const ThirdPartyPayment = (props: ThirdPartyPaymentProps) => {
             onChange={props.handleThirdPartyPayment}
           />
           No
-        </label>
+        </OptionLabel>
       </div>
     </Margin32>
   );

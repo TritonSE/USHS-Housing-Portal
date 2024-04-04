@@ -1,8 +1,8 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import {
   CustomCheckboxRadio,
   FieldHeader,
   Margin32,
+  OptionLabel,
   Required,
 } from "@/components/ListingForm/CommonStyles";
 
@@ -18,7 +18,7 @@ export const SharingHousing = (props: SharingHousingProps) => {
         Sharing house acceptable? <Required>*</Required>
       </FieldHeader>
       <div>
-        <label>
+        <OptionLabel>
           <CustomCheckboxRadio
             type="radio"
             name="sharingHousingYes"
@@ -27,9 +27,9 @@ export const SharingHousing = (props: SharingHousingProps) => {
             onChange={props.handleSharingHousing}
           />
           Yes
-        </label>
-        <br />
-        <label>
+        </OptionLabel>
+
+        <OptionLabel>
           <CustomCheckboxRadio
             type="radio"
             name="sharingHousingNo"
@@ -38,9 +38,9 @@ export const SharingHousing = (props: SharingHousingProps) => {
             onChange={props.handleSharingHousing}
           />
           No
-        </label>
-        <br />
-        <label>
+        </OptionLabel>
+
+        <OptionLabel>
           <CustomCheckboxRadio
             type="radio"
             name="sharingHousingUncertain"
@@ -49,8 +49,7 @@ export const SharingHousing = (props: SharingHousingProps) => {
             onChange={props.handleSharingHousing}
           />
           Uncertain
-        </label>
-        <br />
+        </OptionLabel>
       </div>
     </Margin32>
   );

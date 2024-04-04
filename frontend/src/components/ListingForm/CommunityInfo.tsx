@@ -1,8 +1,8 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import {
   CustomCheckboxRadio,
   FieldHeader,
   Margin32,
+  OptionLabel,
   OtherText,
   RadioCheckBoxContainer,
   RadioCheckboxCol,
@@ -24,7 +24,7 @@ export const CommunityInfo = (props: CommunityInfoProps) => {
       </FieldHeader>
       <RadioCheckBoxContainer>
         <RadioCheckboxCol>
-          <label>
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="Automatic gate"
@@ -33,9 +33,9 @@ export const CommunityInfo = (props: CommunityInfoProps) => {
               onChange={props.handleCommunityAndNeighborInfo}
             />
             Automatic gate
-          </label>
-          <br />
-          <label>
+          </OptionLabel>
+
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="Gated community"
@@ -44,9 +44,9 @@ export const CommunityInfo = (props: CommunityInfoProps) => {
               onChange={props.handleCommunityAndNeighborInfo}
             />
             Gated community
-          </label>
-          <br />
-          <label>
+          </OptionLabel>
+
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="Pool"
@@ -55,9 +55,9 @@ export const CommunityInfo = (props: CommunityInfoProps) => {
               onChange={props.handleCommunityAndNeighborInfo}
             />
             Pool
-          </label>
-          <br />
-          <label>
+          </OptionLabel>
+
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="Club house"
@@ -66,10 +66,10 @@ export const CommunityInfo = (props: CommunityInfoProps) => {
               onChange={props.handleCommunityAndNeighborInfo}
             />
             Clubhouse
-          </label>
+          </OptionLabel>
         </RadioCheckboxCol>
         <div>
-          <label>
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="BBQ"
@@ -78,9 +78,9 @@ export const CommunityInfo = (props: CommunityInfoProps) => {
               onChange={props.handleCommunityAndNeighborInfo}
             />
             BBQ
-          </label>
-          <br />
-          <label>
+          </OptionLabel>
+
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="Smoke area"
@@ -89,10 +89,9 @@ export const CommunityInfo = (props: CommunityInfoProps) => {
               onChange={props.handleCommunityAndNeighborInfo}
             />
             Smoke area
-          </label>
-          <br />
+          </OptionLabel>
 
-          <label>
+          <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
               name="Other"
@@ -111,7 +110,7 @@ export const CommunityInfo = (props: CommunityInfoProps) => {
               }
               onChange={props.handleCommunityAndNeighborInfoOther}
             />
-          </label>
+          </OptionLabel>
         </div>
       </RadioCheckBoxContainer>
     </Margin32>

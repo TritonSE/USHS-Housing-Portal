@@ -1,8 +1,8 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import {
   CustomCheckboxRadio,
   FieldHeader,
   Margin32,
+  OptionLabel,
   Required,
 } from "@/components/ListingForm/CommonStyles";
 
@@ -18,7 +18,7 @@ export const HousingAuthority = (props: HousingAuthorityProps) => {
         Select housing authority <Required>*</Required>
       </FieldHeader>
       <div>
-        <label>
+        <OptionLabel>
           <CustomCheckboxRadio
             type="radio"
             name="LACDA"
@@ -27,9 +27,9 @@ export const HousingAuthority = (props: HousingAuthorityProps) => {
             onChange={props.handleHousingAuthority}
           />
           LACDA
-        </label>
-        <br />
-        <label>
+        </OptionLabel>
+
+        <OptionLabel>
           <CustomCheckboxRadio
             type="radio"
             name="HACLA"
@@ -38,9 +38,9 @@ export const HousingAuthority = (props: HousingAuthorityProps) => {
             onChange={props.handleHousingAuthority}
           />
           HACLA
-        </label>
-        <br />
-        <label>
+        </OptionLabel>
+
+        <OptionLabel>
           <CustomCheckboxRadio
             type="radio"
             name="Other"
@@ -49,7 +49,7 @@ export const HousingAuthority = (props: HousingAuthorityProps) => {
             onChange={props.handleHousingAuthority}
           />
           Other
-        </label>
+        </OptionLabel>
       </div>
     </Margin32>
   );

@@ -497,19 +497,18 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
           handler={handleAdditionalCommentsLL}
         />
 
-        {props.formType === "housingLocator" ||
-          (props.formType === "edit" && (
-            <HousingLocatorFields
-              whereFindUnit={whereFindUnit}
-              handleWhereFindUnit={handleWhereFindUnit}
-              paymentRentingCriteria={paymentRentingCriteria}
-              setPaymentRentingCriteria={setPaymentRentingCriteria}
-              additionalRulesRegulations={additionalRulesRegulations}
-              setAdditionalRulesRegulations={setAdditionalRulesRegulations}
-              additionalCommentsHL={additionalCommentsHL}
-              handleAdditionalCommentsHL={handleAdditionalCommentsHL}
-            />
-          ))}
+        {(props.formType === "housingLocator" || props.formType === "edit") && (
+          <HousingLocatorFields
+            whereFindUnit={whereFindUnit}
+            handleWhereFindUnit={handleWhereFindUnit}
+            paymentRentingCriteria={paymentRentingCriteria}
+            setPaymentRentingCriteria={setPaymentRentingCriteria}
+            additionalRulesRegulations={additionalRulesRegulations}
+            setAdditionalRulesRegulations={setAdditionalRulesRegulations}
+            additionalCommentsHL={additionalCommentsHL}
+            handleAdditionalCommentsHL={handleAdditionalCommentsHL}
+          />
+        )}
       </ContentContainer>
 
       <Button kind="primary" onClick={handleSubmit}>
