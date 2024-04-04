@@ -16,7 +16,7 @@ const HousingLocatorSection = styled.div`
 type HousingLocatorFieldsProps = {
   whereFindUnit: string;
   handleWhereFindUnit: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  paymentRantingCriteria: string[];
+  paymentRentingCriteria: string[];
   setPaymentRentingCriteria: React.Dispatch<React.SetStateAction<string[]>>;
   additionalRulesRegulations: string[];
   setAdditionalRulesRegulations: React.Dispatch<React.SetStateAction<string[]>>;
@@ -27,7 +27,7 @@ type HousingLocatorFieldsProps = {
 export const HousingLocatorFields = ({
   whereFindUnit,
   handleWhereFindUnit,
-  paymentRantingCriteria,
+  paymentRentingCriteria,
   setPaymentRentingCriteria,
   additionalRulesRegulations,
   setAdditionalRulesRegulations,
@@ -45,7 +45,7 @@ export const HousingLocatorFields = ({
         handler={handleWhereFindUnit}
       />
       <PaymentRentingCriteria
-        paymentRentingCriteria={paymentRantingCriteria}
+        paymentRentingCriteria={paymentRentingCriteria}
         setPaymentRentingCriteria={setPaymentRentingCriteria}
         handleCheckBoxNA={handleCheckBoxNA}
         notRequired={true}

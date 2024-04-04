@@ -5,9 +5,9 @@ import { Button } from "./Button";
 import { MidSectionHeader } from "./ListingForm/Headers/HeaderStyles";
 import { HousingLocatorFields } from "./ListingForm/HousingLocatorFields";
 import { Logo } from "./ListingForm/Logo";
-import { handleCheckBoxNA } from "./ListingForm/helpers";
+import { formatDateForInput, handleCheckBoxNA } from "./ListingForm/helpers";
 
-import { CreateUnitRequest, createUnit } from "@/api/units";
+import { CreateUnitRequest, Unit, createUnit, updateUnit } from "@/api/units";
 import { AccessibilityAccess } from "@/components/ListingForm/AccessibilityAccess";
 import { Appliances } from "@/components/ListingForm/Appliances";
 import { ApplicationFeeCost } from "@/components/ListingForm/ApplicationFeeCost";
@@ -36,50 +36,80 @@ const ErrorMessage = styled.div`
 `;
 
 type ListingFormComponentsProps = {
-  formType: "landlord listing form" | "housing locator form";
-  handleAfterSubmit: () => void; // Function to call after the form is submitted
+  formType: "landlord" | "housingLocator" | "edit";
+  // Function to call after the form is submitted
+  // `unit` is the updated/created unit object
+  handleAfterSubmit: (unit: Unit) => void;
+  initialValues?: Unit;
 };
-
-const SubmitButtonMarginOffset = styled.div`
-  margin-top: 54px;
-  margin-bottom: 54px;
-`;
 
 const isNumber = /^\d*$/;
 
 export function ListingFormComponents(props: ListingFormComponentsProps) {
-  const [firstName, setFirstName] = useState<string>("");
-  const [lastName, setLastName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [phone, setPhone] = useState<string>("");
-  const [streetAddress, setStreetAddress] = useState<string>("");
-  const [aptNum, setAptNum] = useState<string>("");
-  const [city, setCity] = useState<string>("");
-  const [state, setState] = useState<string>("");
-  const [areaCode, setAreaCode] = useState<string>("");
-  const [sqFootage, setSqFootage] = useState<string>("");
-  const [rentPerMonth, setRentPerMonth] = useState<string>("");
-  const [securityDeposit, setSecurityDeposit] = useState<string>("");
-  const [thirdPartyPayment, setThirdPartyPayment] = useState<boolean | undefined>(undefined);
-  const [housingAuthority, setHousingAuthority] = useState<string>("");
-  const [applicationFeeCost, setApplicationFeeCost] = useState<string>("");
-  const [dateAvailable, setDateAvailable] = useState<string>("");
-  const [numberOfBedrooms, setNumberOfBedrooms] = useState<number | undefined>(undefined);
-  const [numberOfBedroomsOther, setNumberOfBedroomsOther] = useState<string | undefined>(undefined);
-  const [numberOfBaths, setNumberOfBaths] = useState<number | undefined>(undefined);
-  const [numberOfBathsOther, setNumberOfBathsOther] = useState<string | undefined>(undefined);
-  const [appliances, setAppliances] = useState<string[]>([]);
-  const [communityAndNeighborInfo, setCommunityAndNeighborInfo] = useState<string[]>([]);
+  const [firstName, setFirstName] = useState<string>(props.initialValues?.landlordFirstName ?? "");
+  const [lastName, setLastName] = useState<string>(props.initialValues?.landlordLastName ?? "");
+  const [email, setEmail] = useState<string>(props.initialValues?.landlordEmail ?? "");
+  const [phone, setPhone] = useState<string>(props.initialValues?.landlordPhone ?? "");
+  const [streetAddress, setStreetAddress] = useState<string>(
+    props.initialValues?.streetAddress ?? "",
+  );
+  const [aptNum, setAptNum] = useState<string>(props.initialValues?.suiteNumber ?? "");
+  const [city, setCity] = useState<string>(props.initialValues?.city ?? "");
+  const [state, setState] = useState<string>(props.initialValues?.state ?? "");
+  const [areaCode, setAreaCode] = useState<string>(props.initialValues?.areaCode ?? "");
+  const [sqFootage, setSqFootage] = useState<string>(String(props.initialValues?.sqft ?? ""));
+  const [rentPerMonth, setRentPerMonth] = useState<string>(
+    String(props.initialValues?.monthlyRent ?? ""),
+  );
+  const [securityDeposit, setSecurityDeposit] = useState<string>(
+    String(props.initialValues?.securityDeposit ?? ""),
+  );
+  const [thirdPartyPayment, setThirdPartyPayment] = useState<boolean | undefined>(
+    props.initialValues?.acceptThirdParty,
+  );
+  const [housingAuthority, setHousingAuthority] = useState<string>(
+    props.initialValues?.housingAuthority ?? "",
+  );
+  const [applicationFeeCost, setApplicationFeeCost] = useState<string>(
+    String(props.initialValues?.applicationFeeCost ?? ""),
+  );
+  const [dateAvailable, setDateAvailable] = useState<string>(
+    formatDateForInput(props.initialValues?.dateAvailable) ?? "",
+  );
+  const [numberOfBedrooms, setNumberOfBedrooms] = useState<number | undefined>(
+    props.initialValues?.numBeds,
+  );
+  const [numberOfBedroomsOther, setNumberOfBedroomsOther] = useState<string | undefined>();
+  const [numberOfBaths, setNumberOfBaths] = useState<number | undefined>(
+    props.initialValues?.numBaths,
+  );
+  const [numberOfBathsOther, setNumberOfBathsOther] = useState<string | undefined>();
+  const [appliances, setAppliances] = useState<string[]>(props.initialValues?.appliances ?? []);
+  const [communityAndNeighborInfo, setCommunityAndNeighborInfo] = useState<string[]>(
+    props.initialValues?.communityFeatures ?? [],
+  );
   const [communityAndNeighborInfoOther, setCommunityAndNeighborInfoOther] = useState<string>("");
-  const [parking, setParking] = useState<string[]>([]);
-  const [accessibility, setAccessibility] = useState<string[]>([]);
-  const [pets, setPets] = useState<string[]>([]);
-  const [sharingHousing, setSharingHousing] = useState<string>("");
-  const [additionalCommentsLL, setAdditionalCommentsLL] = useState<string>("");
-  const [additionalCommentsHL, setAdditionalCommentsHL] = useState<string>("");
-  const [whereFindUnit, setWhereFindUnit] = useState<string>("");
-  const [paymentRentingCriteria, setPaymentRentingCriteria] = useState<string[]>([]);
-  const [additionalRulesRegulations, setAdditionalRulesRegulations] = useState<string[]>([]);
+  const [parking, setParking] = useState<string[]>(props.initialValues?.parking ?? []);
+  const [accessibility, setAccessibility] = useState<string[]>(
+    props.initialValues?.accessibility ?? [],
+  );
+  const [pets, setPets] = useState<string[]>(props.initialValues?.pets ?? []);
+  const [sharingHousing, setSharingHousing] = useState<string>(
+    props.initialValues?.sharingAcceptable ?? "",
+  );
+  const [additionalCommentsLL, setAdditionalCommentsLL] = useState<string>(
+    props.initialValues?.landlordComments ?? "",
+  );
+  const [additionalCommentsHL, setAdditionalCommentsHL] = useState<string>(
+    props.initialValues?.internalComments ?? "",
+  );
+  const [whereFindUnit, setWhereFindUnit] = useState<string>(props.initialValues?.whereFound ?? "");
+  const [paymentRentingCriteria, setPaymentRentingCriteria] = useState<string[]>(
+    props.initialValues?.paymentRentingCriteria ?? [],
+  );
+  const [additionalRulesRegulations, setAdditionalRulesRegulations] = useState<string[]>(
+    props.initialValues?.additionalRules ?? [],
+  );
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   const handleFirstName = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -269,30 +299,44 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
       landlordComments: additionalCommentsLL,
     } as CreateUnitRequest;
 
-    if (props.formType === "housing locator form") {
+    if (props.formType === "housingLocator" || props.formType === "edit") {
       newUnit.whereFound = whereFindUnit;
       newUnit.paymentRentingCriteria = paymentRentingCriteria;
       newUnit.additionalRules = additionalRulesRegulations;
       newUnit.internalComments = additionalCommentsHL;
     }
 
-    createUnit(newUnit)
-      .then((res) => {
-        if (res.success) {
-          setErrorMessage("");
-          props.handleAfterSubmit();
-        } else {
-          setErrorMessage(res.error);
-        }
-      })
-      .catch(console.error);
+    if (props.formType === "edit") {
+      if (props.initialValues)
+        updateUnit(props.initialValues._id, newUnit)
+          .then((res) => {
+            if (res.success) {
+              setErrorMessage("");
+              props.handleAfterSubmit(res.data);
+            } else {
+              setErrorMessage(res.error);
+            }
+          })
+          .catch(console.error);
+    } else {
+      createUnit(newUnit)
+        .then((res) => {
+          if (res.success) {
+            setErrorMessage("");
+            props.handleAfterSubmit(res.data);
+          } else {
+            setErrorMessage(res.error);
+          }
+        })
+        .catch(console.error);
+    }
   };
 
   return (
     <MainContainer>
-      <Logo />
-      {props.formType === "landlord listing form" && <LandlordListingFormHeader />}
-      {props.formType === "housing locator form" && <HousingLocatorHeader />}
+      {props.formType !== "edit" && <Logo />}
+      {props.formType === "landlord" && <LandlordListingFormHeader />}
+      {props.formType === "housingLocator" && <HousingLocatorHeader />}
       <ContentContainer>
         <TextContainer>
           <Textbox
@@ -453,24 +497,24 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
           handler={handleAdditionalCommentsLL}
         />
 
-        {props.formType === "housing locator form" && (
-          <HousingLocatorFields
-            whereFindUnit={whereFindUnit}
-            handleWhereFindUnit={handleWhereFindUnit}
-            paymentRantingCriteria={paymentRentingCriteria}
-            setPaymentRentingCriteria={setPaymentRentingCriteria}
-            additionalRulesRegulations={additionalRulesRegulations}
-            setAdditionalRulesRegulations={setAdditionalRulesRegulations}
-            additionalCommentsHL={additionalCommentsHL}
-            handleAdditionalCommentsHL={handleAdditionalCommentsHL}
-          />
-        )}
+        {props.formType === "housingLocator" ||
+          (props.formType === "edit" && (
+            <HousingLocatorFields
+              whereFindUnit={whereFindUnit}
+              handleWhereFindUnit={handleWhereFindUnit}
+              paymentRentingCriteria={paymentRentingCriteria}
+              setPaymentRentingCriteria={setPaymentRentingCriteria}
+              additionalRulesRegulations={additionalRulesRegulations}
+              setAdditionalRulesRegulations={setAdditionalRulesRegulations}
+              additionalCommentsHL={additionalCommentsHL}
+              handleAdditionalCommentsHL={handleAdditionalCommentsHL}
+            />
+          ))}
       </ContentContainer>
-      <SubmitButtonMarginOffset>
-        <Button kind="primary" onClick={handleSubmit}>
-          Submit
-        </Button>
-      </SubmitButtonMarginOffset>
+
+      <Button kind="primary" onClick={handleSubmit}>
+        {props.formType === "edit" ? "Save changes" : "Submit"}
+      </Button>
       <ErrorMessage>{errorMessage}</ErrorMessage>
     </MainContainer>
   );

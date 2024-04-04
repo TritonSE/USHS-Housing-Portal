@@ -10,7 +10,7 @@ export function HousingLocatorForm() {
     <div>
       <Page>
         <ListingFormComponents
-          formType={"housing locator form"}
+          formType={"housingLocator"}
           handleAfterSubmit={() => {
             navigate("/");
           }}
