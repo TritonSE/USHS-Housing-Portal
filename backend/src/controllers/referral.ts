@@ -21,7 +21,7 @@ export const createReferralHandler: RequestHandler = asyncHandler(async (req, re
   const { renterCandidateId, unitId } = req.body as CreateReferralRequestBody;
 
   const referringStaff = req.currentUser;
-  const referringStaffID = referringStaff._id as ObjectId;
+  const referringStaffID = referringStaff?._id as ObjectId;
   const isHL = referringStaff?.isHousingLocator ?? false;
 
   const referral = await createReferral(renterCandidateId, unitId, referringStaffID, isHL);

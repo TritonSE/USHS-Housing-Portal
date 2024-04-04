@@ -31,13 +31,15 @@ function AppRouter() {
         {signedIn && (
           <>
             <Route path="/" element={<Home />} />
-            <Route path="/listing-form" element={<LandlordListingForm />} />
-            <Route path="/housing-locator-form" element={<HousingLocatorForm />} />
+            <Route path="/new-listing" element={<HousingLocatorForm />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/unit/:id" element={<UnitDetails />} />
             <Route path="*" element={<Navigate to="/" />} />
           </>
         )}
+
+        {/* Common Routes */}
+        <Route path="/listing-form" element={<LandlordListingForm />} />
       </Routes>
     </BrowserRouter>
   );

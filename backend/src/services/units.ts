@@ -37,18 +37,27 @@ export type FilterParams = {
  * @param newUnit new unit to be created
  * @returns newly created unit object
  */
-export const createUnit = async (newUnit: NewUnitBody) => {
-  const unit = await UnitModel.create(newUnit);
+export const createUnit = async (newUnit: NewUnitBody, isHl: boolean) => {
+  const createQuery = {
+    ...newUnit,
+    // Listing is automatically approved if the user is a housing locator
+    approved: isHl,
+  };
+
+  const unit = await UnitModel.create(createQuery);
   return unit;
 };
 
 export const updateUnit = async (id: string, unitData: EditUnitBody) => {
-  const updateQuery: UpdateQuery<Unit> = { ...unitData };
+  const updateQuery: UpdateQuery<Unit> = {};
   if (unitData.leasedStatus === null) {
-    delete updateQuery.leasedStatus;
+    delete unitData.leasedStatus;
     // unset leasedStatus if null
     updateQuery.$unset = { leasedStatus: 1 };
   }
+
+  updateQuery.$set = unitData;
+
   const updatedUnit = UnitModel.findByIdAndUpdate(id, updateQuery, { new: true });
   return updatedUnit;
 };

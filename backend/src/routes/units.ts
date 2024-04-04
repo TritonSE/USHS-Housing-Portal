@@ -7,7 +7,7 @@
 import express from "express";
 
 import * as UnitController from "@/controllers/units";
-import { requireHousingLocator, requireUser } from "@/middleware/auth";
+import { optionalUser, requireHousingLocator, requireUser } from "@/middleware/auth";
 import { validateWith } from "@/middleware/validation";
 import { createUnitValidators, updateUnitValidators } from "@/validators/units";
 
@@ -15,7 +15,13 @@ const router = express.Router();
 
 router.get("/:id", requireUser, UnitController.getUnitHandler);
 
-router.post("/", validateWith(createUnitValidators), UnitController.createUnitsHandler);
+router.post(
+  "/",
+  optionalUser,
+  validateWith(createUnitValidators),
+  UnitController.createUnitsHandler,
+);
+
 router.get("/", requireUser, UnitController.getUnitsHandler);
 
 router.put(

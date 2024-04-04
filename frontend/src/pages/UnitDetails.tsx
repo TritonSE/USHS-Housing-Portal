@@ -230,19 +230,16 @@ const ButtonsWrapper = styled.div`
   justify-content: flex-end;
 `;
 
-const RadioRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 13px;
-`;
-
 const AvailabilityDateColumn = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
 `;
 const RadioButtonLabel = styled.label`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 13px;
   font-family: Montserrat;
   font-size: 14px;
   font-weight: 400;
@@ -319,6 +316,7 @@ export function UnitDetails() {
   }
 
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDateText("");
     setSelectedPopupOption(event.target.value);
   };
 
@@ -556,7 +554,7 @@ export function UnitDetails() {
                 <StrongText>Where Was Unit Found: </StrongText>
                 <ListText>{unit.whereFound}</ListText>
                 <StrongText>Additional Rules and Regulation: </StrongText>
-                <ListText>{additionalRules}</ListText>
+                {additionalRules}
               </SectionColumn>
               <SectionColumn>
                 <StrongText>Notes from Housing Locator: </StrongText>
@@ -587,7 +585,7 @@ export function UnitDetails() {
               <FormWrapper>
                 <RadioColumn>
                   <AvailabilityDateColumn>
-                    <RadioRow>
+                    <RadioButtonLabel>
                       <RadioButton
                         type="radio"
                         name="radio"
@@ -595,8 +593,8 @@ export function UnitDetails() {
                         checked={selectedPopupOption === "enterDate"}
                         onChange={handleRadioChange}
                       />
-                      <RadioButtonLabel>Enter new availability date:</RadioButtonLabel>
-                    </RadioRow>
+                      Enter new availability date:
+                    </RadioButtonLabel>
                     <AvailabilityDate
                       placeholder="01/01/2024"
                       type="date"
@@ -607,7 +605,7 @@ export function UnitDetails() {
                       }}
                     />
                   </AvailabilityDateColumn>
-                  <RadioRow>
+                  <RadioButtonLabel>
                     <RadioButton
                       type="radio"
                       name="radio"
@@ -615,9 +613,9 @@ export function UnitDetails() {
                       checked={selectedPopupOption === "leasedByUSHS"}
                       onChange={handleRadioChange}
                     />
-                    <RadioButtonLabel>Leased by USHS</RadioButtonLabel>
-                  </RadioRow>
-                  <RadioRow>
+                    Leased by USHS
+                  </RadioButtonLabel>
+                  <RadioButtonLabel>
                     <RadioButton
                       type="radio"
                       name="radio"
@@ -625,8 +623,8 @@ export function UnitDetails() {
                       checked={selectedPopupOption === "removedFromMarket"}
                       onChange={handleRadioChange}
                     />
-                    <RadioButtonLabel>Removed from market</RadioButtonLabel>
-                  </RadioRow>
+                    Removed from market
+                  </RadioButtonLabel>
                 </RadioColumn>
                 <ButtonsWrapper>
                   <SaveButton kind="primary" onClick={handleSaveAvailability}>

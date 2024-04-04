@@ -87,7 +87,8 @@ type UnitVirtualFields = "listingAddress" | "availableNow" | "_id"; // _id is ge
 
 type UneditableFields = UnitVirtualFields | "approved" | "createdAt" | "updatedAt";
 
-export type CreateUnitRequest = Omit<Unit, HousingLocatorFields | UneditableFields>;
+export type CreateUnitRequest = Omit<Unit, UneditableFields> &
+  Partial<Pick<Unit, HousingLocatorFields>>;
 
 export type UpdateUnitRequest = Partial<Omit<Unit, UneditableFields>>;
 
