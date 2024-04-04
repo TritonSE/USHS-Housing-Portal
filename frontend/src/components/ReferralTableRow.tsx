@@ -2,6 +2,8 @@ import styled from "styled-components";
 
 import { ReferralTableDropDown } from "./ReferralTableDropDown";
 
+import { User } from "@/api/users";
+
 const referralStatuses = [
   "Referred",
   "Viewing",
@@ -17,11 +19,12 @@ type ReferralTableRowProps = {
   email?: string;
   phone?: string;
   referringStaff: string;
-  allReferringStaff: string[];
+  allReferringStaff: User[];
   housingLocator: string;
-  allHousingLocators: string[];
+  allHousingLocators: User[];
   status: string;
   lastUpdate: string;
+  onSelect: (value: string[]) => void;
 };
 
 // Abbreviation
@@ -84,14 +87,29 @@ export const ReferralTableRow = (props: ReferralTableRowProps) => {
       </RTR_Text_Wrapper>
 
       {/* Referring Staff (Case Manager) */}
-      <ReferralTableDropDown values={props.allReferringStaff} defaultValue={props.referringStaff} />
+      <ReferralTableDropDown
+        onSelect={(value) => {
+          props.onSelect(["referringStaff", value]);
+        }}
+        values={props.allReferringStaff}
+        defaultValue={props.referringStaff}
+      />
       {/* Housing Locator */}
       <ReferralTableDropDown
+        onSelect={(value) => {
+          props.onSelect(["housingLocator", value]);
+        }}
         values={props.allHousingLocators}
         defaultValue={props.housingLocator}
       />
       {/* Status */}
-      <ReferralTableDropDown values={referralStatuses} defaultValue={props.status} />
+      <ReferralTableDropDown
+        onSelect={(value) => {
+          props.onSelect(["status", value]);
+        }}
+        values={referralStatuses}
+        defaultValue={props.status}
+      />
 
       <RTR_Text_End title={formatDate(props.lastUpdate)}>
         {formatDate(props.lastUpdate)}

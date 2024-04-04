@@ -9,16 +9,17 @@ import { UnitCardGrid } from "@/components/UnitCardGrid";
 
 export function Home() {
   const [units, setUnits] = useState<Unit[]>([]);
-  const [filters, setFilters] = useState<FilterParams>({ availability: "Available" });
+  const [filters, setFilters] = useState<FilterParams>({
+    availability: "Available",
+    approved: "approved",
+  });
 
   const fetchUnits = (filterParams: FilterParams) => {
     getUnits(filterParams)
       .then((response) => {
         if (response.success) setUnits(response.data);
       })
-      .catch((error) => {
-        console.error(error);
-      });
+      .catch(console.error);
   };
 
   useEffect(() => {
@@ -31,7 +32,12 @@ export function Home() {
         <title>Home | USHS Housing Portal</title>
       </Helmet>
       <NavBar page="Home" />
-      <FilterDropdown refreshUnits={setFilters}></FilterDropdown>
+      <FilterDropdown
+        refreshUnits={(filterParams) => {
+          filterParams.approved = filters.approved;
+          setFilters(filterParams);
+        }}
+      ></FilterDropdown>
       <UnitCardGrid
         units={units}
         refreshUnits={(approved) => {

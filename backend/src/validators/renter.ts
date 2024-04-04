@@ -22,7 +22,7 @@ const lastNameValidator = body("lastName")
 
 const phoneValidator = body("phone").optional().isString().withMessage("must be a string");
 
-const emailValidator = body("email").optional().isEmail().withMessage("is an invalid format");
+const emailValidator = body("email").optional().isEmail().withMessage("is invalid");
 
 const uidValidator = body("uid")
   .exists()
