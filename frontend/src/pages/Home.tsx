@@ -9,7 +9,10 @@ import { UnitCardGrid } from "@/components/UnitCardGrid";
 
 export function Home() {
   const [units, setUnits] = useState<Unit[]>([]);
-  const [filters, setFilters] = useState<FilterParams>({ availability: "Available", approved: "approved" });
+  const [filters, setFilters] = useState<FilterParams>({
+    availability: "Available",
+    approved: "approved",
+  });
 
   const fetchUnits = (filterParams: FilterParams) => {
     getUnits(filterParams)
