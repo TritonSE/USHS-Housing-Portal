@@ -1,10 +1,10 @@
 import React, { useContext, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-import { Unit, approveUnit, getUnit, updateUnit } from "@/api/units";
+import { FilterParams, Unit, approveUnit, getUnit, updateUnit } from "@/api/units";
 import { Page } from "@/components";
 import { Banner } from "@/components/Banner";
 import { Button } from "@/components/Button";
@@ -264,6 +264,7 @@ const Heading = styled.h1`
 `;
 
 export function UnitDetails() {
+  const filters = useLocation().state as FilterParams;
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [unit, setUnit] = useState<Unit>();
@@ -452,7 +453,7 @@ export function UnitDetails() {
         <DetailsColumn>
           <Section>
             <TopRow>
-              <Link to="/">
+              <Link to="/" state={filters}>
                 <Button kind="secondary">
                   <PaddingInButton>
                     <img className="back-arrow" src="/back_arrow.svg" alt={"Back arrow"} />

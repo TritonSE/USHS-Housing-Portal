@@ -134,14 +134,10 @@ export const PriceDropDown = (props: PriceDropDownProps) => {
   const priceOptions: number[] = [0, 250, 500, 750, 1000, 1250, 1500, 1750, 2000];
 
   const minPriceText =
-    props.displayValue.minPriceDisplay === -1
-      ? "No Min"
-      : `$${priceOptions[props.displayValue.minPriceDisplay]}`;
+    props.displayValue.minPriceDisplay === -1 ? "No Min" : `$${props.displayValue.minPriceDisplay}`;
 
   const maxPriceText =
-    props.displayValue.maxPriceDisplay === -1
-      ? "No Max"
-      : `$${priceOptions[props.displayValue.maxPriceDisplay]}`;
+    props.displayValue.maxPriceDisplay === -1 ? "No Max" : `$${props.displayValue.maxPriceDisplay}`;
 
   let dropdownText = "Price";
   if (!props.displayValue.notApplied) {
@@ -184,7 +180,7 @@ export const PriceDropDown = (props: PriceDropDownProps) => {
                     <MinMaxPopupButton
                       key={idx}
                       onClick={() => {
-                        props.setDisplayValue({ ...props.displayValue, minPriceDisplay: idx });
+                        props.setDisplayValue({ ...props.displayValue, minPriceDisplay: text });
                         setMinPriceOpen(false);
                       }}
                     >
@@ -212,7 +208,7 @@ export const PriceDropDown = (props: PriceDropDownProps) => {
                     <MinMaxPopupButton
                       key={idx}
                       onClick={() => {
-                        props.setDisplayValue({ ...props.displayValue, maxPriceDisplay: idx });
+                        props.setDisplayValue({ ...props.displayValue, maxPriceDisplay: text });
                         setMaxPriceOpen(false);
                       }}
                     >
@@ -230,8 +226,8 @@ export const PriceDropDown = (props: PriceDropDownProps) => {
               setMaxPriceOpen(false);
               props.setValue({
                 ...props.value,
-                minPrice: priceOptions[props.displayValue.minPriceDisplay],
-                maxPrice: priceOptions[props.displayValue.maxPriceDisplay],
+                minPrice: props.displayValue.minPriceDisplay,
+                maxPrice: props.displayValue.maxPriceDisplay,
               });
               props.setDisplayValue({
                 ...props.displayValue,
