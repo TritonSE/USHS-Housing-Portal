@@ -402,7 +402,19 @@ export function UnitDetails() {
   };
 
   //checks for availability
-  const availableNow = unit.availableNow ? "Available Now" : "Not Available";
+  let availabilityText = "";
+
+  if (unit.availableNow && unit.approved) {
+    availabilityText = "Available";
+  } else if (!unit.approved) {
+    availabilityText = "Pending Approval";
+  } else if (unit.leasedStatus === "ushs") {
+    availabilityText = "Leased by USHS";
+  } else if (unit.leasedStatus === "removed") {
+    availabilityText = "Removed from Market";
+  } else {
+    availabilityText = "Not Available";
+  }
 
   //move data into an array
   const rentingCriteria = unit.paymentRentingCriteria.map((criteria, i) => (
@@ -438,7 +450,7 @@ export function UnitDetails() {
   const NotHousingLocatorComponent = () => {
     return (
       <Column>
-        <StrongText>{availableNow}</StrongText>
+        <StrongText>{availabilityText}</StrongText>
       </Column>
     );
   };
@@ -508,7 +520,7 @@ export function UnitDetails() {
                   </Column>
                   {currentUser?.isHousingLocator && (
                     <HLActions>
-                      <Availability>{availableNow}</Availability>
+                      <Availability>{availabilityText}</Availability>
                       <ChangeAvailabilityButton kind="primary" onClick={togglePopup}>
                         Change Availability
                       </ChangeAvailabilityButton>

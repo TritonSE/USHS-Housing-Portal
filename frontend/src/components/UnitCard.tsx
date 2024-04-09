@@ -219,7 +219,7 @@ export const UnitCard = ({ unit, refreshUnits }: CardProps) => {
               <AvailabilityText>Available</AvailabilityText>
             ) : !unit.approved ? (
               <AvailabilityText>Pending Approval</AvailabilityText>
-            ) : unit.leasedStatus !== undefined ? (
+            ) : unit.leasedStatus === "ushs" ? (
               <AvailabilityText>Leased</AvailabilityText>
             ) : (
               <AvailabilityText>Not Available</AvailabilityText>
