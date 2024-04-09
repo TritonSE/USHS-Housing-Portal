@@ -6,7 +6,7 @@ import { RequestHandler } from "express";
 
 import { asyncHandler } from "./wrappers";
 
-import { createUser, elevateUser, getUserByID, getUsers } from "@/services/user";
+import { createUser, demoteUser, elevateUser, getUserByID, getUsers } from "@/services/user";
 
 export const getUsersHandler: RequestHandler = asyncHandler(async (_req, res, _next) => {
   const users = await getUsers();
@@ -35,6 +35,17 @@ export const createUserHandler: RequestHandler = asyncHandler(async (req, res, _
 export const elevateUserHandler: RequestHandler = asyncHandler(async (req, res, _) => {
   const id = req.params.id;
   const response = await elevateUser(id);
+  if (response === null) {
+    res.status(404);
+  } else {
+    const newUser = await getUserByID(id);
+    res.status(200).json(newUser);
+  }
+});
+
+export const demoteUserHandler: RequestHandler = asyncHandler(async (req, res, _) => {
+  const id = req.params.id;
+  const response = await demoteUser(id);
   if (response === null) {
     res.status(404);
   } else {

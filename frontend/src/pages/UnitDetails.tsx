@@ -255,7 +255,7 @@ export function UnitDetails() {
             <StrongText>Where Was Unit Found: </StrongText>
             <ListText>{unit.whereFound}</ListText>
             <StrongText>Additional Rules and Regulation: </StrongText>
-            <ListText>{additionalRules}</ListText>
+            {additionalRules}
           </SectionColumn>
           <SectionColumn>
             <StrongText>Notes from Housing Locator: </StrongText>
