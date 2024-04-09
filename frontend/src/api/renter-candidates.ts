@@ -35,6 +35,16 @@ export async function getRenterCandidates(): Promise<APIResult<RenterCandidate[]
   }
 }
 
+export async function getRenterCandidate(id: string): Promise<APIResult<RenterCandidate>> {
+  try {
+    const response = await get(`/renter-candidates/${id}`);
+    const json = (await response.json()) as RenterCandidate;
+    return { success: true, data: json };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+}
+
 export async function createRenterCandidate(
   renter: createRenterCandidateRequest,
 ): Promise<APIResult<RenterCandidate>> {
