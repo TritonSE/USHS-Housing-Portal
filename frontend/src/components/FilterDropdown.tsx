@@ -115,14 +115,17 @@ export const FilterDropdown = (props: FilterDropdownProps) => {
     selectedIdx: props.value.availability === "Leased" ? 1 : 0,
   });
   const [priceState, setPriceState] = useState({
-    minPrice: props.value.minPrice === "undefined" ? -1 : Number(props.value.minPrice),
-    maxPrice: props.value.maxPrice === "undefined" ? -1 : Number(props.value.maxPrice),
+    minPrice: String(props.value.minPrice) === "undefined" ? -1 : Number(props.value.minPrice),
+    maxPrice: String(props.value.maxPrice) === "undefined" ? -1 : Number(props.value.maxPrice),
   });
 
   const [priceDisplayState, setPriceDisplayState] = useState({
-    minPriceDisplay: props.value.minPrice === "undefined" ? -1 : Number(props.value.minPrice),
-    maxPriceDisplay: props.value.maxPrice === "undefined" ? -1 : Number(props.value.maxPrice),
-    notApplied: props.value.minPrice === "undefined" && props.value.maxPrice === "undefined",
+    minPriceDisplay:
+      String(props.value.minPrice) === "undefined" ? -1 : Number(props.value.minPrice),
+    maxPriceDisplay:
+      String(props.value.maxPrice) === "undefined" ? -1 : Number(props.value.maxPrice),
+    notApplied:
+      String(props.value.minPrice) === "undefined" && String(props.value.maxPrice) === "undefined",
   });
 
   const applyFilters = () => {
