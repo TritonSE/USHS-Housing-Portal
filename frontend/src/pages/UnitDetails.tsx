@@ -4,6 +4,8 @@ import { useParams } from "react-router";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
+import { Loading } from "./Loading";
+
 import { FilterParams, Unit, approveUnit, getUnit, updateUnit } from "@/api/units";
 import { Page } from "@/components";
 import { Banner } from "@/components/Banner";
@@ -320,8 +322,7 @@ export function UnitDetails() {
   React.useEffect(fetchUnit, []);
 
   if (loading || !unit) {
-    // TODO: Loading state
-    return null;
+    return <Loading />;
   }
 
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {

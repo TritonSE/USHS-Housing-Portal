@@ -2,6 +2,7 @@ import { User, onAuthStateChanged } from "firebase/auth";
 import React, { ReactNode, useEffect, useMemo, useState } from "react";
 
 import { auth } from "@/firebase";
+import { Loading } from "@/pages/Loading";
 
 type ProviderProps = {
   children: ReactNode;
@@ -39,8 +40,7 @@ export function AuthProvider({ children }: ProviderProps) {
   const value = useMemo(() => ({ currentUser, signedIn: !!currentUser, loading }), [currentUser]);
 
   if (loading) {
-    // TODO: Make a loading screen
-    return null;
+    return <Loading />;
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
