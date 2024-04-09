@@ -1,6 +1,8 @@
 import { useState } from "react";
 import styled, { css } from "styled-components";
 
+import { ClickAwayListener } from "./ClickAwayListener";
+
 import {
   ApplyButton,
   DropDownPopup,
@@ -35,6 +37,7 @@ const MinMaxBox = styled.div`
   box-shadow: 1px 1px 2px 0px rgba(228, 227, 226, 0.4);
   padding: 7px;
   width: 85px;
+  cursor: pointer;
 `;
 
 const MinMaxRow = styled.div`
@@ -69,13 +72,14 @@ const MinMaxPopupButton = styled.button`
   background-color: transparent;
   padding: 12px;
   min-width: 100%;
+  cursor: pointer;
 
   &:hover {
     background: rgba(236, 133, 55, 0.2);
   }
 `;
 
-const PriceSubcontainer = styled.div`
+const PriceSubContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -147,98 +151,116 @@ export const PriceDropDown = (props: PriceDropDownProps) => {
   }
 
   return (
-    <PriceFilterSubContainer>
-      <Dropdown
-        active={isActive}
-        onClick={() => {
-          setIsActive(!isActive);
-        }}
-      >
-        <DropdownRow>
-          <PriceFilterText>{dropdownText}</PriceFilterText>
-          <DropdownIcon src={isActive ? "/up_arrow.svg" : "/dropdown.svg"} />
-        </DropdownRow>
-      </Dropdown>
-      {isActive && (
-        <DropDownPopup>
-          <PopupHeaderText>Price</PopupHeaderText>
-          <MinMaxRow>
-            <PriceSubcontainer>
-              <MinMaxBox
-                onClick={() => {
-                  setMinPriceOpen(!minPriceOpen);
+    <ClickAwayListener
+      onClickAway={() => {
+        setIsActive(false);
+      }}
+    >
+      <PriceFilterSubContainer>
+        <Dropdown
+          active={isActive}
+          onClick={() => {
+            setIsActive(!isActive);
+          }}
+        >
+          <DropdownRow>
+            <PriceFilterText>{dropdownText}</PriceFilterText>
+            <DropdownIcon src={isActive ? "/up_arrow.svg" : "/dropdown.svg"} />
+          </DropdownRow>
+        </Dropdown>
+        {isActive && (
+          <DropDownPopup>
+            <PopupHeaderText>Price</PopupHeaderText>
+            <MinMaxRow>
+              <ClickAwayListener
+                onClickAway={() => {
+                  setMinPriceOpen(false);
                 }}
               >
-                <PlaceholderText active={props.displayValue.minPriceDisplay !== -1}>
-                  {minPriceText}
-                </PlaceholderText>
-                <ArrowIcon src={minPriceOpen ? "/price_up_arrow.svg" : "/down_arrow.svg"} />
-              </MinMaxBox>
-              {minPriceOpen && (
-                <MinMaxPopup>
-                  {priceOptions.map((text, idx) => (
-                    <MinMaxPopupButton
-                      key={idx}
-                      onClick={() => {
-                        props.setDisplayValue({ ...props.displayValue, minPriceDisplay: text });
-                        setMinPriceOpen(false);
-                      }}
-                    >
-                      {`$${text}`}
-                    </MinMaxPopupButton>
-                  ))}
-                </MinMaxPopup>
-              )}
-            </PriceSubcontainer>
-            <MinMaxDash src="/min_max_dash.svg" />
-            <PriceSubcontainer>
-              <MinMaxBox
-                onClick={() => {
-                  setMaxPriceOpen(!maxPriceOpen);
+                <PriceSubContainer>
+                  <MinMaxBox
+                    onClick={() => {
+                      setMinPriceOpen(!minPriceOpen);
+                    }}
+                  >
+                    <PlaceholderText active={props.displayValue.minPriceDisplay !== -1}>
+                      {minPriceText}
+                    </PlaceholderText>
+                    <ArrowIcon src={minPriceOpen ? "/price_up_arrow.svg" : "/down_arrow.svg"} />
+                  </MinMaxBox>
+                  {minPriceOpen && (
+                    <MinMaxPopup>
+                      {priceOptions.map((text, idx) => (
+                        <MinMaxPopupButton
+                          key={idx}
+                          onClick={() => {
+                            props.setDisplayValue({ ...props.displayValue, minPriceDisplay: text });
+                            setMinPriceOpen(false);
+                          }}
+                        >
+                          {`$${text}`}
+                        </MinMaxPopupButton>
+                      ))}
+                    </MinMaxPopup>
+                  )}
+                </PriceSubContainer>
+              </ClickAwayListener>
+              <MinMaxDash src="/min_max_dash.svg" />
+              <ClickAwayListener
+                onClickAway={() => {
+                  setMaxPriceOpen(false);
                 }}
               >
-                <PlaceholderText active={props.displayValue.maxPriceDisplay !== -1}>
-                  {maxPriceText}
-                </PlaceholderText>
-                <ArrowIcon src={maxPriceOpen ? "/price_up_arrow.svg" : "/down_arrow.svg"} />
-              </MinMaxBox>
-              {maxPriceOpen && (
-                <MinMaxPopup>
-                  {priceOptions.map((text, idx) => (
-                    <MinMaxPopupButton
-                      key={idx}
-                      onClick={() => {
-                        props.setDisplayValue({ ...props.displayValue, maxPriceDisplay: text });
-                        setMaxPriceOpen(false);
-                      }}
-                    >
-                      {`$${text}`}
-                    </MinMaxPopupButton>
-                  ))}
-                </MinMaxPopup>
-              )}
-            </PriceSubcontainer>
-          </MinMaxRow>
-          <ApplyButton
-            onClick={() => {
-              setIsActive(false);
-              setMinPriceOpen(false);
-              setMaxPriceOpen(false);
-              props.setValue({
-                ...props.value,
-                minPrice: props.displayValue.minPriceDisplay,
-                maxPrice: props.displayValue.maxPriceDisplay,
-              });
-              props.setDisplayValue({
-                ...props.displayValue,
-                notApplied: false,
-              });
-            }}
-          >
-            Apply
-          </ApplyButton>
-        </DropDownPopup>
-      )}
-    </PriceFilterSubContainer>
+                <PriceSubContainer>
+                  <MinMaxBox
+                    onClick={() => {
+                      setMaxPriceOpen(!maxPriceOpen);
+                    }}
+                  >
+                    <PlaceholderText active={props.displayValue.maxPriceDisplay !== -1}>
+                      {maxPriceText}
+                    </PlaceholderText>
+                    <ArrowIcon src={maxPriceOpen ? "/price_up_arrow.svg" : "/down_arrow.svg"} />
+                  </MinMaxBox>
+                  {maxPriceOpen && (
+                    <MinMaxPopup>
+                      {priceOptions.map((text, idx) => (
+                        <MinMaxPopupButton
+                          key={idx}
+                          onClick={() => {
+                            props.setDisplayValue({ ...props.displayValue, maxPriceDisplay: text });
+                            setMaxPriceOpen(false);
+                          }}
+                        >
+                          {`$${text}`}
+                        </MinMaxPopupButton>
+                      ))}
+                    </MinMaxPopup>
+                  )}
+                </PriceSubContainer>
+              </ClickAwayListener>
+            </MinMaxRow>
+            <ApplyButton
+              onClick={() => {
+                setIsActive(false);
+                setMinPriceOpen(false);
+                setMaxPriceOpen(false);
+                props.setValue({
+                  ...props.value,
+                  minPrice: props.displayValue.minPriceDisplay,
+                  maxPrice: props.displayValue.maxPriceDisplay,
+                });
+                props.setDisplayValue({
+                  ...props.displayValue,
+                  notApplied: false,
+                });
+              }}
+            >
+              Apply
+            </ApplyButton>
+          </DropDownPopup>
+        )}
+      </PriceFilterSubContainer>
+    </ClickAwayListener>
   );
 };

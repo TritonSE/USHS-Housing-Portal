@@ -1,6 +1,8 @@
 import { useState } from "react";
 import styled from "styled-components";
 
+import { ClickAwayListener } from "./ClickAwayListener";
+
 import { DropDownPopup, DropdownIcon, FilterSubContainer, Sort } from "@/components/FilterCommon";
 
 const SortDropDown = styled(DropDownPopup)`
@@ -33,30 +35,36 @@ export const SortDropDownComp = (props: SortDropDownCompProps) => {
   const [isActive, setIsActive] = useState(false);
 
   return (
-    <FilterSubContainer>
-      <SortRow
-        onClick={() => {
-          setIsActive(!isActive);
-        }}
-      >
-        <Sort active={isActive}>Sort: {sortOptions[props.value]}</Sort>
-        <DropdownIcon src={isActive ? "/up_arrow.svg" : "/dropdown.svg"} />
-      </SortRow>
-      {isActive && (
-        <SortDropDown>
-          {sortOptions.map((text, idx) => (
-            <PopupSortText
-              key={idx}
-              onClick={() => {
-                props.setValue(idx);
-                setIsActive(false);
-              }}
-            >
-              {text}
-            </PopupSortText>
-          ))}
-        </SortDropDown>
-      )}
-    </FilterSubContainer>
+    <ClickAwayListener
+      onClickAway={() => {
+        setIsActive(false);
+      }}
+    >
+      <FilterSubContainer>
+        <SortRow
+          onClick={() => {
+            setIsActive(!isActive);
+          }}
+        >
+          <Sort active={isActive}>Sort: {sortOptions[props.value]}</Sort>
+          <DropdownIcon src={isActive ? "/up_arrow.svg" : "/dropdown.svg"} />
+        </SortRow>
+        {isActive && (
+          <SortDropDown>
+            {sortOptions.map((text, idx) => (
+              <PopupSortText
+                key={idx}
+                onClick={() => {
+                  props.setValue(idx);
+                  setIsActive(false);
+                }}
+              >
+                {text}
+              </PopupSortText>
+            ))}
+          </SortDropDown>
+        )}
+      </FilterSubContainer>
+    </ClickAwayListener>
   );
 };
