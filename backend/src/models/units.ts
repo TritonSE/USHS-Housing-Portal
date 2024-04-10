@@ -1,4 +1,4 @@
-import { InferSchemaType, Schema, model } from "mongoose";
+import { InferSchemaType, ObtainSchemaGeneric, Schema, model } from "mongoose";
 
 const unitSchema = new Schema(
   {
@@ -7,7 +7,7 @@ const unitSchema = new Schema(
     landlordEmail: { type: String, required: true },
     landlordPhone: { type: String, required: true },
     streetAddress: { type: String, required: true },
-    suiteNumber: { type: String, required: true },
+    suiteNumber: { type: String, required: false },
     city: { type: String, required: true },
     state: { type: String, required: true },
     areaCode: { type: String, required: true },
@@ -48,7 +48,7 @@ const unitSchema = new Schema(
       // Full address of the unit.
       listingAddress: {
         get: function () {
-          return `${this.streetAddress}, ${this.suiteNumber}, ${this.city}, ${this.state} ${this.areaCode}`;
+          return `${this.streetAddress}, ${this.suiteNumber ? this.suiteNumber + "," : ""} ${this.city}, ${this.state} ${this.areaCode}`;
         },
       },
     },
@@ -62,6 +62,7 @@ const unitSchema = new Schema(
   },
 );
 
-export type Unit = InferSchemaType<typeof unitSchema>;
+export type Unit = InferSchemaType<typeof unitSchema> &
+  ObtainSchemaGeneric<typeof unitSchema, "TVirtuals">;
 
-export const UnitModel = model<Unit>("Unit", unitSchema);
+export const UnitModel = model("Unit", unitSchema);

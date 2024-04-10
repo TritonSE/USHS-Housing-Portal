@@ -43,6 +43,10 @@ const SearchBarInput = styled.input`
   &:focus {
     outline: none;
   }
+
+  &:focus::placeholder {
+    color: transparent;
+  }
 `;
 
 const SearchIcon = styled.img`
@@ -88,36 +92,40 @@ const ResetFilterRow = styled.div`
 `;
 
 type FilterDropdownProps = {
+  value: FilterParams;
   refreshUnits(filterParams: FilterParams): void;
 };
 
 export const FilterDropdown = (props: FilterDropdownProps) => {
   const [bedBathState, setBedBathState] = useState({
-    beds: 1,
-    baths: 0.5,
+    beds: Number(props.value.beds ?? 1),
+    baths: Number(props.value.baths ?? 0.5),
   });
   const [bedBathDisplayState, setBedBathDisplayState] = useState({
-    bedsDisplay: 1,
-    bathsDisplay: 0.5,
-    notApplied: true,
+    bedsDisplay: Number(props.value.beds ?? 1),
+    bathsDisplay: Number(props.value.baths ?? 0.5),
+    notApplied: props.value.beds === undefined && props.value.baths === undefined,
   });
-  const [searchText, setSearchText] = useState("");
-  const [sortIndex, setSortIndex] = useState(0);
+  const [searchText, setSearchText] = useState(props.value.search ?? "");
+  const [sortIndex, setSortIndex] = useState(Number(props.value.sort ?? 0));
   const [availabilityState, setAvailabilityState] = useState({
-    dropdownText: "Available",
+    dropdownText: props.value.availability ?? "Available",
   });
   const [AvailabilityDisplayState, setAvailabilityDisplayState] = useState({
-    selectedIdx: 0,
+    selectedIdx: props.value.availability === "Leased" ? 1 : 0,
   });
   const [priceState, setPriceState] = useState({
-    minPrice: -1,
-    maxPrice: -1,
+    minPrice: String(props.value.minPrice) === "undefined" ? -1 : Number(props.value.minPrice),
+    maxPrice: String(props.value.maxPrice) === "undefined" ? -1 : Number(props.value.maxPrice),
   });
 
   const [priceDisplayState, setPriceDisplayState] = useState({
-    minPriceDisplay: -1,
-    maxPriceDisplay: -1,
-    notApplied: true,
+    minPriceDisplay:
+      String(props.value.minPrice) === "undefined" ? -1 : Number(props.value.minPrice),
+    maxPriceDisplay:
+      String(props.value.maxPrice) === "undefined" ? -1 : Number(props.value.maxPrice),
+    notApplied:
+      String(props.value.minPrice) === "undefined" && String(props.value.maxPrice) === "undefined",
   });
 
   const applyFilters = () => {

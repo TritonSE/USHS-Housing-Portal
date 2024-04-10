@@ -1,16 +1,22 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
+import { RenterCandidate } from "@/api/renter-candidates";
 import { User } from "@/api/users";
 
-const SearchContainer = styled.div`
-  width: 367px;
+const SearchContainer = styled.div<{ isRCDropdown: boolean }>`
   position: relative;
   z-index: 1;
 `;
 
-const SearchBar = styled.input<{ open: boolean; state: boolean }>`
-  width: 100%;
+const Icon = styled.img`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+`;
+
+const SearchBar = styled.input<{ open: boolean; state: boolean; isRCDropdown: boolean }>`
+  width: ${(props) => (props.isRCDropdown ? "300px" : "367px")};
   height: 44px;
   padding: 9px 40px 9px 12px;
   align-items: center;
@@ -22,17 +28,15 @@ const SearchBar = styled.input<{ open: boolean; state: boolean }>`
   font-weight: ${(props) => (props.state ? "475" : "400")};
   letter-spacing: 0.32px;
   color: ${(props) => (props.state ? "black" : "gray")};
-  background-color: #fbf7f3;
-  background: url("SearchSymbol.svg") no-repeat 330px 9px;
   &:hover {
     border: 1.5px solid black;
   }
 `;
 
-const OptionsContainer = styled.div`
+const OptionsContainer = styled.div<{ isRCDropdown: boolean }>`
   position: absolute;
   top: 47px;
-  max-height: 160px;
+  max-height: ${(props) => (props.isRCDropdown ? "250px" : "160px")};
   width: 100%;
   overflow-y: auto;
   overflow-x: auto;
@@ -41,7 +45,7 @@ const OptionsContainer = styled.div`
   box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  background-color: #fbf7f3;
+  background-color: #fff;
 `;
 const Option = styled.div`
   font-size: 15px;
@@ -79,21 +83,24 @@ const Overlay = styled.div`
   z-index: -1;
 `;
 
+type Option = User | RenterCandidate;
+
 type SelectProps = {
   placeholder: string;
-  options: User[];
-  onSelect?: (value: User | undefined) => void; //callback function for parent, sends current selected user
+  options: Option[];
+  onSelect?: (value: Option | undefined) => void; //callback function for parent, sends current selected user
   reset?: boolean;
+  isRCDropdown?: boolean;
 };
 
-export function UserDropdown({ placeholder, options, onSelect, reset }: SelectProps) {
+export function UserDropdown({ placeholder, options, onSelect, reset, isRCDropdown }: SelectProps) {
   const [openMenu, setOpenMenu] = useState(false);
   const [searchValue, setSearchValue] = useState(""); //current text value in select input box
-  const [validOptions, setValidOptions] = useState<User[]>(options); //all RS filtered through search
+  const [validOptions, setValidOptions] = useState<Option[]>(options); //all RS filtered through search
   const [solid, setSolid] = useState(false); //search text color
-  const [currentSelected, setCurrentSelected] = useState<User>(); //current selected RS
+  const [currentSelected, setCurrentSelected] = useState<Option>(); //current selected RS
 
-  const handleSelect = (selectedValue: User) => {
+  const handleSelect = (selectedValue: Option) => {
     setSearchValue(selectedValue.firstName + " " + selectedValue.lastName);
     setCurrentSelected(selectedValue);
     setOpenMenu(false);
@@ -101,7 +108,7 @@ export function UserDropdown({ placeholder, options, onSelect, reset }: SelectPr
 
   //filters dropdown options (super messy, feedback welcome :D)
   const handleValidOptions = () => {
-    const matches = options.filter((user: User) =>
+    const matches = options.filter((user: Option) =>
       (user.firstName + " " + user.lastName).toLowerCase().includes(searchValue.toLowerCase()),
     );
 
@@ -110,7 +117,7 @@ export function UserDropdown({ placeholder, options, onSelect, reset }: SelectPr
       matches.sort((a, b) => {
         const fullNameA = a.firstName + " " + a.lastName;
         const fullNameB = b.firstName + " " + b.lastName;
-        return fullNameA < fullNameB ? -1 : 1;
+        return fullNameA.toLowerCase() < fullNameB.toLowerCase() ? -1 : 1;
       });
       //sort by 'best' match
     } else {
@@ -159,7 +166,7 @@ export function UserDropdown({ placeholder, options, onSelect, reset }: SelectPr
   }, [validOptions]);
 
   return (
-    <SearchContainer>
+    <SearchContainer isRCDropdown={isRCDropdown ?? false}>
       <SearchBar
         onClick={() => {
           setOpenMenu(true);
@@ -169,13 +176,14 @@ export function UserDropdown({ placeholder, options, onSelect, reset }: SelectPr
         state={solid}
         tabIndex={-1}
         value={searchValue}
+        isRCDropdown={isRCDropdown ?? false}
         onInput={(e) => {
           setSearchValue((e.target as HTMLTextAreaElement).value);
           setCurrentSelected(undefined);
         }}
       />
       {openMenu && (
-        <OptionsContainer>
+        <OptionsContainer isRCDropdown={isRCDropdown ?? false}>
           <Overlay
             onClick={() => {
               setOpenMenu(false);
@@ -190,7 +198,11 @@ export function UserDropdown({ placeholder, options, onSelect, reset }: SelectPr
                 }}
               >
                 <div>{`${option.firstName} ${option.lastName}`}</div>
-                <div>{`(${option.email})`}</div>
+                {isRCDropdown ? (
+                  <div>{"uid" in option && `ID: ${option.uid}`}</div>
+                ) : (
+                  <div>{`(${option.email})`}</div>
+                )}
               </Option>
             ))
           ) : (
@@ -198,6 +210,7 @@ export function UserDropdown({ placeholder, options, onSelect, reset }: SelectPr
           )}
         </OptionsContainer>
       )}
+      <Icon src={"/SearchSymbol.svg"} alt="search" />
     </SearchContainer>
   );
 }

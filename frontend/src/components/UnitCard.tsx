@@ -6,6 +6,7 @@ import { Button } from "./Button";
 
 import { Unit, deleteUnit } from "@/api/units";
 import { DataContext } from "@/contexts/DataContext";
+import { FiltersContext } from "@/pages/Home";
 
 const UnitCardContainer = styled.div<{ pending: boolean }>`
   display: flex;
@@ -188,6 +189,7 @@ type CardProps = {
 };
 
 export const UnitCard = ({ unit, refreshUnits }: CardProps) => {
+  const { filters } = useContext(FiltersContext);
   const [popup, setPopup] = useState<boolean>(false);
   const dataContext = useContext(DataContext);
 
@@ -205,19 +207,24 @@ export const UnitCard = ({ unit, refreshUnits }: CardProps) => {
 
   return (
     <>
-      <Link to={`/unit/${unit._id}`} style={{ textDecoration: "none" }}>
+      <Link to={`/unit/${unit._id}`} state={filters} style={{ textDecoration: "none" }}>
         <UnitCardContainer pending={!unit.approved}>
-          {!unit.approved ? (
-            <AvailabilityRow>
-              <AvailabilityIcon src="/red_ellipse.svg" />
-              <AvailabilityText>Pending Approval</AvailabilityText>
-            </AvailabilityRow>
-          ) : (
-            <AvailabilityRow>
+          <AvailabilityRow>
+            {unit.availableNow && unit.approved ? (
               <AvailabilityIcon src="/green_ellipse.svg" />
+            ) : (
+              <AvailabilityIcon src="/red_ellipse.svg" />
+            )}
+            {unit.availableNow && unit.approved ? (
               <AvailabilityText>Available</AvailabilityText>
-            </AvailabilityRow>
-          )}
+            ) : !unit.approved ? (
+              <AvailabilityText>Pending Approval</AvailabilityText>
+            ) : unit.leasedStatus === "ushs" ? (
+              <AvailabilityText>Leased</AvailabilityText>
+            ) : (
+              <AvailabilityText>Not Available</AvailabilityText>
+            )}
+          </AvailabilityRow>
           <RentText>{`$${unit.monthlyRent}/month`}</RentText>
           <BedBathRow>
             <NumberText>{unit.numBeds}</NumberText>
@@ -234,14 +241,16 @@ export const UnitCard = ({ unit, refreshUnits }: CardProps) => {
           {unit.approved && dataContext.currentUser?.isHousingLocator && (
             <DeleteIcon
               src="delete.png"
-              onClick={() => {
+              onClick={(e) => {
+                // Stop click from propagating to parent (opening the unit page)
+                e.preventDefault();
+                e.stopPropagation();
                 setPopup(true);
               }}
             />
           )}
         </UnitCardContainer>
       </Link>
-
       {popup && (
         <>
           <Overlay />

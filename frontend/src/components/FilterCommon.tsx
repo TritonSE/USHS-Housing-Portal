@@ -43,6 +43,7 @@ export const Dropdown = styled.button<{ active: boolean }>`
         `}
   background-color: #fff;
   box-shadow: 1px 1px 2px 0px rgba(188, 186, 183, 0.4);
+  width: 100%;
 `;
 
 export const FilterText = styled.p`
@@ -55,9 +56,9 @@ export const FilterText = styled.p`
 export const DropdownRow = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: flex-center;
-  gap: 50px;
+  width: 100%;
 `;
 
 export const Sort = styled.button<{ active?: boolean }>`
@@ -67,6 +68,7 @@ export const Sort = styled.button<{ active?: boolean }>`
   font-weight: 400;
   background-color: transparent;
   border-color: transparent;
+  cursor: pointer;
 
   ${(props) =>
     props.active
@@ -89,6 +91,7 @@ export const FilterRow = styled.div`
   flex-direction: row;
   align-items: center;
   gap: 10px;
+  cursor: pointer;
 `;
 
 export const ApplyButton = styled.button`
@@ -104,4 +107,11 @@ export const ApplyButton = styled.button`
   font-size: 14px;
   font-weight: 300;
   min-width: 100%;
+
+  cursor: pointer;
+  transition-duration: 300ms;
+  &:hover {
+    background-color: #ec8537;
+    border-color: #ec8537;
+  }
 `;

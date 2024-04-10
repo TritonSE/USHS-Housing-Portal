@@ -2,6 +2,7 @@ import { User, onAuthStateChanged } from "firebase/auth";
 import React, { ReactNode, useEffect, useMemo, useState } from "react";
 
 import { auth } from "@/firebase";
+import { Loading } from "@/pages/Loading";
 
 type ProviderProps = {
   children: ReactNode;
@@ -25,6 +26,7 @@ export function AuthProvider({ children }: ProviderProps) {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user: User | undefined | null) => {
+      setLoading(true);
       if (user) {
         setUser(user);
       } else {
@@ -35,10 +37,11 @@ export function AuthProvider({ children }: ProviderProps) {
     return unsubscribe;
   }, []);
 
-  const value = useMemo(
-    () => ({ currentUser, signedIn: currentUser !== undefined, loading }),
-    [currentUser],
-  );
+  const value = useMemo(() => ({ currentUser, signedIn: !!currentUser, loading }), [currentUser]);
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

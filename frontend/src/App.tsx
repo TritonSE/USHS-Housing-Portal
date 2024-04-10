@@ -6,8 +6,15 @@ import { ThemeProvider } from "styled-components";
 import { AuthContext, AuthProvider } from "./contexts/AuthContext";
 import { DataProvider } from "./contexts/DataContext";
 
-import { Home, Login, Profile, UnitDetails } from "@/pages";
-import { GlobalStyle, theme } from "@/theme";
+import {
+  Home,
+  HousingLocatorForm,
+  LandlordListingForm,
+  Login,
+  Profile,
+  UnitDetails,
+} from "@/pages";
+import { GlobalStyle, StyledComponentsManager, theme } from "@/theme";
 
 function AppRouter() {
   const { signedIn } = useContext(AuthContext);
@@ -16,19 +23,23 @@ function AppRouter() {
       <Routes>
         {!signedIn && (
           <>
-            <Route path="*" element={<Navigate replace to="/login" />} />
             <Route path="/login" element={<Login />} />
+            <Route path="*" element={<Navigate replace to="/login" />} />
           </>
         )}
 
         {signedIn && (
           <>
             <Route path="/" element={<Home />} />
+            <Route path="/new-listing" element={<HousingLocatorForm />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/unit/:id" element={<UnitDetails />} />
             <Route path="*" element={<Navigate to="/" />} />
           </>
         )}
+
+        {/* Common Routes */}
+        <Route path="/listing-form" element={<LandlordListingForm />} />
       </Routes>
     </BrowserRouter>
   );
@@ -36,15 +47,17 @@ function AppRouter() {
 
 export default function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <AuthProvider>
-        <DataProvider>
-          <GlobalStyle />
-          <HelmetProvider>
-            <AppRouter />
-          </HelmetProvider>
-        </DataProvider>
-      </AuthProvider>
-    </ThemeProvider>
+    <StyledComponentsManager>
+      <ThemeProvider theme={theme}>
+        <AuthProvider>
+          <DataProvider>
+            <GlobalStyle />
+            <HelmetProvider>
+              <AppRouter />
+            </HelmetProvider>
+          </DataProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </StyledComponentsManager>
   );
 }
