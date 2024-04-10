@@ -3,10 +3,10 @@ import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-
 import { Unit, approveUnit, getUnit, updateUnit } from "@/api/units";
 import { Page } from "@/components";
 import { NavBar } from "@/components/NavBar";
+import { Button } from "@/components/Button";
 import { getRenterCandidate, RenterCandidate } from "@/api/renter-candidates";
 
 export function RenterCandidate() {
@@ -43,6 +43,13 @@ export function RenterCandidate() {
     background-color: #fbf7f3;
     margin: 97px;
     gap: 35px;
+  `;
+
+  const TopRow = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
   `;
 
   const Row = styled.div`
@@ -84,13 +91,38 @@ export function RenterCandidate() {
     font-weight: 400;
   `;
 
+  const EditButton = styled(Button)`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  `;
+
   return (
     <Page>
       <Helmet>
-        <title>{} | USHS Housing Portal</title>
+        <title>
+          {renterCandidate.firstName} {renterCandidate.lastName} | USHS Housing Portal
+        </title>
       </Helmet>
       <NavBar />
       <MainColumn>
+        <TopRow>
+          {/* <Link to="/"> */}
+          <Button kind="secondary">
+            <img
+              className="back-arrow"
+              src="/back_arrow.svg"
+              alt={"Back arrow"}
+              style={{ marginRight: "12px" }}
+            />
+            Back to Listing
+          </Button>
+          {/* </Link> */}
+          <EditButton kind="secondary" onClick={console.log("hi")}>
+            <img src={"/pencil.svg"} alt="" style={{ marginRight: "12px" }} />
+            Edit
+          </EditButton>
+        </TopRow>
         <Row>
           <Name>
             {renterCandidate.firstName} {renterCandidate.lastName}
