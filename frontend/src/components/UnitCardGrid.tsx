@@ -94,97 +94,65 @@ const AddListings = styled.div`
 
 export type UnitCardGridProps = {
   units: Unit[];
+  showPendingUnits?: boolean;
   refreshUnits: (approved: "pending" | "approved") => void;
 };
 
-export const UnitCardGrid = ({ units, refreshUnits }: UnitCardGridProps) => {
+export const UnitCardGrid = ({
+  units,
+  refreshUnits,
+  showPendingUnits = false,
+}: UnitCardGridProps) => {
   const navigate = useNavigate();
-  const [pendingSelected, setPendingSelected] = useState<boolean>(false);
+  const [pendingSelected, setPendingSelected] = useState<boolean>(showPendingUnits);
 
   const dataContext = useContext(DataContext);
 
   return (
     <>
       <GridContainer>
-        {pendingSelected ? (
-          <>
-            <PropertiesRow>
-              <HeaderText>Pending Approval</HeaderText>
-              <ButtonsWrapper>
-                <PendingButton
-                  onClick={() => {
-                    setPendingSelected(true);
-                  }}
-                  selected={pendingSelected}
-                >
-                  Pending Listings
-                </PendingButton>
-                <ListingsButton
-                  onClick={() => {
-                    setPendingSelected(false);
-                    refreshUnits("approved");
-                  }}
-                  selected={!pendingSelected}
-                >
-                  All Listings
-                </ListingsButton>
-              </ButtonsWrapper>
-            </PropertiesRow>
-            <UnitCardLayout>
-              {units.length > 0 &&
-                units.map((option, index) => (
-                  <UnitCard
-                    unit={option}
-                    refreshUnits={() => {
-                      refreshUnits("pending");
-                    }}
-                    key={index}
-                  />
-                ))}
-              {units.length === 0 && <HeaderText>No matching units found</HeaderText>}
-            </UnitCardLayout>
-          </>
-        ) : (
-          <>
-            <PropertiesRow>
-              <HeaderText>Available Properties</HeaderText>
-              {dataContext.currentUser?.isHousingLocator && (
-                <ButtonsWrapper>
-                  <PendingButton
-                    onClick={() => {
-                      setPendingSelected(true);
-                      refreshUnits("pending");
-                    }}
-                    selected={pendingSelected}
-                  >
-                    Pending Listings
-                  </PendingButton>
-                  <ListingsButton
-                    onClick={() => {
-                      setPendingSelected(false);
-                    }}
-                    selected={!pendingSelected}
-                  >
-                    All Listings
-                  </ListingsButton>
-                </ButtonsWrapper>
-              )}
-            </PropertiesRow>
-            <UnitCardLayout>
-              {units.length > 0 &&
-                units.map((option, index) => (
-                  <UnitCard
-                    unit={option}
-                    refreshUnits={() => {
-                      refreshUnits("approved");
-                    }}
-                    key={index}
-                  />
-                ))}
-              {units.length === 0 && <HeaderText>No matching units found</HeaderText>}
-            </UnitCardLayout>
-          </>
-        )}
+        <PropertiesRow>
+          {pendingSelected ? (
+            <HeaderText>Pending Approval</HeaderText>
+          ) : (
+            <HeaderText>Available Properties</HeaderText>
+          )}
+          {dataContext.currentUser?.isHousingLocator && (
+            <ButtonsWrapper>
+              <PendingButton
+                onClick={() => {
+                  setPendingSelected(true);
+                  refreshUnits("pending");
+                }}
+                selected={pendingSelected}
+              >
+                Pending Listings
+              </PendingButton>
+              <ListingsButton
+                onClick={() => {
+                  setPendingSelected(false);
+                  refreshUnits("approved");
+                }}
+                selected={!pendingSelected}
+              >
+                All Listings
+              </ListingsButton>
+            </ButtonsWrapper>
+          )}
+        </PropertiesRow>
+        <UnitCardLayout>
+          {units.length > 0 &&
+            units.map((option, index) => (
+              <UnitCard
+                unit={option}
+                refreshUnits={() => {
+                  refreshUnits(pendingSelected ? "pending" : "approved");
+                }}
+                key={index}
+              />
+            ))}
+          {units.length === 0 && <HeaderText>No matching units found</HeaderText>}
+        </UnitCardLayout>
       </GridContainer>
       {dataContext.currentUser?.isHousingLocator && (
         <AddListings

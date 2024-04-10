@@ -1,10 +1,12 @@
 import React, { useContext, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-import { Unit, approveUnit, getUnit, updateUnit } from "@/api/units";
+import { Loading } from "./Loading";
+
+import { FilterParams, Unit, approveUnit, getUnit, updateUnit } from "@/api/units";
 import { Page } from "@/components";
 import { Banner } from "@/components/Banner";
 import { Button } from "@/components/Button";
@@ -264,6 +266,7 @@ const Heading = styled.h1`
 `;
 
 export function UnitDetails() {
+  const filters = useLocation().state as FilterParams;
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [unit, setUnit] = useState<Unit>();
@@ -319,8 +322,7 @@ export function UnitDetails() {
   React.useEffect(fetchUnit, []);
 
   if (loading || !unit) {
-    // TODO: Loading state
-    return null;
+    return <Loading />;
   }
 
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -401,7 +403,19 @@ export function UnitDetails() {
   };
 
   //checks for availability
-  const availableNow = unit.availableNow ? "Available Now" : "Not Available";
+  let availabilityText = "";
+
+  if (unit.availableNow && unit.approved) {
+    availabilityText = "Available";
+  } else if (!unit.approved) {
+    availabilityText = "Pending Approval";
+  } else if (unit.leasedStatus === "ushs") {
+    availabilityText = "Leased by USHS";
+  } else if (unit.leasedStatus === "removed") {
+    availabilityText = "Removed from Market";
+  } else {
+    availabilityText = "Not Available";
+  }
 
   //move data into an array
   const rentingCriteria = unit.paymentRentingCriteria.map((criteria, i) => (
@@ -437,7 +451,7 @@ export function UnitDetails() {
   const NotHousingLocatorComponent = () => {
     return (
       <Column>
-        <StrongText>{availableNow}</StrongText>
+        <StrongText>{availabilityText}</StrongText>
       </Column>
     );
   };
@@ -452,7 +466,7 @@ export function UnitDetails() {
         <DetailsColumn>
           <Section>
             <TopRow>
-              <Link to="/">
+              <Link to="/" state={filters}>
                 <Button kind="secondary">
                   <PaddingInButton>
                     <img className="back-arrow" src="/back_arrow.svg" alt={"Back arrow"} />
@@ -507,7 +521,7 @@ export function UnitDetails() {
                   </Column>
                   {currentUser?.isHousingLocator && (
                     <HLActions>
-                      <Availability>{availableNow}</Availability>
+                      <Availability>{availabilityText}</Availability>
                       <ChangeAvailabilityButton kind="primary" onClick={togglePopup}>
                         Change Availability
                       </ChangeAvailabilityButton>
