@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
@@ -6,23 +6,27 @@ import { Button } from "./Button";
 
 import { Unit, deleteUnit } from "@/api/units";
 import { DataContext } from "@/contexts/DataContext";
+import { getDownloadURL, listAll, ref } from "firebase/storage";
+import { storage } from "@/firebase";
 
 const UnitCardContainer = styled.div<{ pending: boolean }>`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-content: flex-start;
-  gap: 16px;
+  gap: 8px;
 
-  padding-left: 18px;
-  padding-top: 25px;
-  width: 380px;
-  height: 287px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 20px;
+  width: 318px;
+  height: 370px;
   background-color: white;
 
   border-radius: 6.5px;
   border: 1.3px solid ${(props) => (props.pending ? "rgba(230, 159, 28, 0.50)" : "#cdcaca")};
   box-shadow: 1.181px 1.181px 2.362px 0px rgba(188, 186, 183, 0.4);
+
 
   // position: absolute;
 `;
@@ -33,12 +37,17 @@ const UnitCardText = styled.span`
 `;
 
 const AvailabilityRow = styled.div`
+  position: absolute; 
   display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
-  gap: 16px;
-  padding-bottom: 32px;
+  gap: 11px;
+  position: absolute;  
+  background-color: rgba(255, 255, 255, 0.80);
+  padding: 3px 10px 2px 11px;
+  border-radius: 10px;
+  top: 10px;
+  left: 10px;
 `;
 
 const BedBathRow = styled.div`
@@ -46,7 +55,7 @@ const BedBathRow = styled.div`
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  gap: 10px;
+  gap: 4px;
 `;
 
 const AddressRow = styled.div`
@@ -56,13 +65,27 @@ const AddressRow = styled.div`
   align-items: flex-start;
 `;
 
+const ImageWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 275px;
+  height: 175px;
+  flex-shrink: 0;
+  overflow: hidden;
+  position: relative;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  
+`
+
 const AvailabilityIcon = styled.img`
-  width: 23.621px;
-  height: 23.621px;
+  width: 18px;
+  height: 18px;
 `;
 
 const AvailabilityText = styled(UnitCardText)`
   font-family: Montserrat;
+  color: #000;
   font-size: 16.535px;
   font-style: normal;
   font-weight: 300;
@@ -71,11 +94,12 @@ const AvailabilityText = styled(UnitCardText)`
 `;
 
 const RentText = styled(UnitCardText)`
-  font-size: 33.07px;
+  font-size: 30px;
   font-style: normal;
   font-weight: 700;
   line-height: 121%;
   letter-spacing: 0.331px;
+  font-family: Inter;
 `;
 
 const AddressText = styled(UnitCardText)`
@@ -101,13 +125,11 @@ const BedBathText = styled(NumberText)`
 `;
 
 const DeleteIcon = styled.img`
-  width: 35.432px;
-  height: 35.432px;
-  border-radius: 118.107px;
-  background: #ec8537;
+  width: 22px;
+  height: 24px;
   position: relative;
-  top: -27px;
-  left: 310px;
+  top: -32px;
+  left: 250px;
   cursor: pointer;
 `;
 
@@ -182,6 +204,8 @@ const ButtonsWrapper = styled.div`
   gap: 15px;
 `;
 
+
+
 type CardProps = {
   unit: Unit;
   refreshUnits?: () => void;
@@ -190,6 +214,8 @@ type CardProps = {
 export const UnitCard = ({ unit, refreshUnits }: CardProps) => {
   const [popup, setPopup] = useState<boolean>(false);
   const dataContext = useContext(DataContext);
+
+  const [coverImg, setCoverImg] = useState<string>();
 
   const handleDelete = () => {
     deleteUnit(unit._id)
@@ -203,11 +229,32 @@ export const UnitCard = ({ unit, refreshUnits }: CardProps) => {
       });
   };
 
+  const getFiles = () => {
+    listAll(ref(storage, `${unit._id}/images/`)).then(async (res)=>{
+      const {items} = res;
+      const urls = await Promise.all(items.map((item)=>getDownloadURL(item)))
+      console.log(urls)
+      if(urls.length===0){
+        setCoverImg("USHSLogo.svg")
+      }else{
+        setCoverImg(urls[0]); 
+      }
+    })
+  }
+
+  useEffect(()=>{
+    getFiles();
+    console.log("hey")
+  }, [unit])
+
   return (
     <>
       <Link to={`/unit/${unit._id}`} style={{ textDecoration: "none" }}>
         <UnitCardContainer pending={!unit.approved}>
-          <AvailabilityRow>
+          
+            <ImageWrapper>
+            <img src={coverImg} alt=""/>
+            <AvailabilityRow>
             {unit.availableNow && unit.approved ? (
               <AvailabilityIcon src="/green_ellipse.svg" />
             ) : (
@@ -222,7 +269,10 @@ export const UnitCard = ({ unit, refreshUnits }: CardProps) => {
             ) : (
               <AvailabilityText>Not Available</AvailabilityText>
             )}
-          </AvailabilityRow>
+              </AvailabilityRow>
+
+          </ImageWrapper>
+
           <RentText>{`$${unit.monthlyRent}/month`}</RentText>
           <BedBathRow>
             <NumberText>{unit.numBeds}</NumberText>
@@ -238,7 +288,7 @@ export const UnitCard = ({ unit, refreshUnits }: CardProps) => {
           </AddressRow>
           {unit.approved && dataContext.currentUser?.isHousingLocator && (
             <DeleteIcon
-              src="delete.png"
+              src="Trash_Icon.svg"
               onClick={(e) => {
                 // Stop click from propagating to parent (opening the unit page)
                 e.preventDefault();
