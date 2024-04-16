@@ -84,7 +84,7 @@ const ReferralTableColumnHeaders = styled.div`
 `;
 
 const ReferralTableColumnHeader = styled.div`
-  display: flex
+  display: flex;
   justify-content: flex-start;
   color: var(--Neutral-Black, #000);
 
@@ -94,9 +94,7 @@ const ReferralTableColumnHeader = styled.div`
   font-weight: 700;
   line-height: 150%; /* 24px */
   letter-spacing: 0.32px;
-
-  min-width: 200px;
-  max-width: 201px;
+  width: 10vw;
 `;
 
 const ReferralTableColumnHeaderEnd = styled(ReferralTableColumnHeader)`

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import styled from "styled-components";
 
+import { ClickAwayListener } from "./ClickAwayListener";
+
 import {
   ApplyButton,
   DropDownPopup,
@@ -79,94 +81,100 @@ export const BedBathDropDown = (props: BedBathDropDownProps) => {
     : `${props.value.beds}+ bds, ${props.value.baths}+ ba`;
 
   return (
-    <BedBatFilterSubContainer>
-      <Dropdown
-        onClick={() => {
-          setIsActive(!isActive);
-        }}
-        active={isActive}
-      >
-        <DropdownRow>
-          <FilterText>{dropdownText}</FilterText>
-          <DropdownIcon src={isActive ? "/up_arrow.svg" : "/dropdown.svg"} />
-        </DropdownRow>
-      </Dropdown>
-      {isActive && (
-        <DropDownPopup>
-          <PopupHeaderText>Bedrooms</PopupHeaderText>
-          <BnbRow>
-            <BedBox>
-              <PopupHeaderText>{props.displayValue.bedsDisplay}+</PopupHeaderText>
-            </BedBox>
-            <AdjustButton
+    <ClickAwayListener
+      onClickAway={() => {
+        setIsActive(false);
+      }}
+    >
+      <BedBatFilterSubContainer>
+        <Dropdown
+          onClick={() => {
+            setIsActive(!isActive);
+          }}
+          active={isActive}
+        >
+          <DropdownRow>
+            <FilterText>{dropdownText}</FilterText>
+            <DropdownIcon src={isActive ? "/up_arrow.svg" : "/dropdown.svg"} />
+          </DropdownRow>
+        </Dropdown>
+        {isActive && (
+          <DropDownPopup>
+            <PopupHeaderText>Bedrooms</PopupHeaderText>
+            <BnbRow>
+              <BedBox>
+                <PopupHeaderText>{props.displayValue.bedsDisplay}+</PopupHeaderText>
+              </BedBox>
+              <AdjustButton
+                onClick={() => {
+                  if (props.displayValue.bedsDisplay > 1)
+                    props.setDisplayValue({
+                      ...props.displayValue,
+                      bedsDisplay: props.displayValue.bedsDisplay - 1,
+                    });
+                }}
+              >
+                -
+              </AdjustButton>
+              <AdjustButton
+                onClick={() => {
+                  if (props.displayValue.bedsDisplay < 4)
+                    props.setDisplayValue({
+                      ...props.displayValue,
+                      bedsDisplay: props.displayValue.bedsDisplay + 1,
+                    });
+                }}
+              >
+                +
+              </AdjustButton>
+            </BnbRow>
+            <PopupHeaderText>Bathrooms</PopupHeaderText>
+            <BnbRow>
+              <BathBox>
+                <PopupHeaderText>{props.displayValue.bathsDisplay}+</PopupHeaderText>
+              </BathBox>
+              <AdjustButton
+                onClick={() => {
+                  if (props.displayValue.bathsDisplay > 0.5)
+                    props.setDisplayValue({
+                      ...props.displayValue,
+                      bathsDisplay: props.displayValue.bathsDisplay - 0.5,
+                    });
+                }}
+              >
+                -
+              </AdjustButton>
+              <AdjustButton
+                onClick={() => {
+                  if (props.displayValue.bathsDisplay < 2)
+                    props.setDisplayValue({
+                      ...props.displayValue,
+                      bathsDisplay: props.displayValue.bathsDisplay + 0.5,
+                    });
+                }}
+              >
+                +
+              </AdjustButton>
+            </BnbRow>
+            <ApplyButton
               onClick={() => {
-                if (props.displayValue.bedsDisplay > 1)
-                  props.setDisplayValue({
-                    ...props.displayValue,
-                    bedsDisplay: props.displayValue.bedsDisplay - 1,
-                  });
+                setIsActive(false);
+                props.setValue({
+                  ...props.value,
+                  beds: props.displayValue.bedsDisplay,
+                  baths: props.displayValue.bathsDisplay,
+                });
+                props.setDisplayValue({
+                  ...props.displayValue,
+                  notApplied: false,
+                });
               }}
             >
-              -
-            </AdjustButton>
-            <AdjustButton
-              onClick={() => {
-                if (props.displayValue.bedsDisplay < 4)
-                  props.setDisplayValue({
-                    ...props.displayValue,
-                    bedsDisplay: props.displayValue.bedsDisplay + 1,
-                  });
-              }}
-            >
-              +
-            </AdjustButton>
-          </BnbRow>
-          <PopupHeaderText>Bathrooms</PopupHeaderText>
-          <BnbRow>
-            <BathBox>
-              <PopupHeaderText>{props.displayValue.bathsDisplay}+</PopupHeaderText>
-            </BathBox>
-            <AdjustButton
-              onClick={() => {
-                if (props.displayValue.bathsDisplay > 0.5)
-                  props.setDisplayValue({
-                    ...props.displayValue,
-                    bathsDisplay: props.displayValue.bathsDisplay - 0.5,
-                  });
-              }}
-            >
-              -
-            </AdjustButton>
-            <AdjustButton
-              onClick={() => {
-                if (props.displayValue.bathsDisplay < 2)
-                  props.setDisplayValue({
-                    ...props.displayValue,
-                    bathsDisplay: props.displayValue.bathsDisplay + 0.5,
-                  });
-              }}
-            >
-              +
-            </AdjustButton>
-          </BnbRow>
-          <ApplyButton
-            onClick={() => {
-              setIsActive(false);
-              props.setValue({
-                ...props.value,
-                beds: props.displayValue.bedsDisplay,
-                baths: props.displayValue.bathsDisplay,
-              });
-              props.setDisplayValue({
-                ...props.displayValue,
-                notApplied: false,
-              });
-            }}
-          >
-            Apply
-          </ApplyButton>
-        </DropDownPopup>
-      )}
-    </BedBatFilterSubContainer>
+              Apply
+            </ApplyButton>
+          </DropDownPopup>
+        )}
+      </BedBatFilterSubContainer>
+    </ClickAwayListener>
   );
 };

@@ -8,6 +8,7 @@ import { Button } from "./Button";
 import { Unit, deleteUnit } from "@/api/units";
 import { DataContext } from "@/contexts/DataContext";
 import { storage } from "@/firebase";
+import { FiltersContext } from "@/pages/Home";
 
 const UnitCardContainer = styled.div<{ pending: boolean }>`
   display: flex;
@@ -208,6 +209,7 @@ type CardProps = {
 };
 
 export const UnitCard = ({ unit, refreshUnits }: CardProps) => {
+  const { filters } = useContext(FiltersContext);
   const [popup, setPopup] = useState<boolean>(false);
   const dataContext = useContext(DataContext);
 
@@ -263,7 +265,7 @@ export const UnitCard = ({ unit, refreshUnits }: CardProps) => {
 
   return (
     <>
-      <Link to={`/unit/${unit._id}`} style={{ textDecoration: "none" }}>
+      <Link to={`/unit/${unit._id}`} state={filters} style={{ textDecoration: "none" }}>
         <UnitCardContainer pending={!unit.approved}>
           <ImageWrapper>
             <img src={coverImg} alt="" />
@@ -311,7 +313,6 @@ export const UnitCard = ({ unit, refreshUnits }: CardProps) => {
           )}
         </UnitCardContainer>
       </Link>
-
       {popup && (
         <>
           <Overlay />
