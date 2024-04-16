@@ -149,7 +149,6 @@ export function NavBar({ page }: NavBarProps) {
   const currUrl = window.location.href;
   const isStaging = /ushs-housing-portal-staging/i.test(currUrl);
 
- 
   return (
     <div>
       <NavbarItems>

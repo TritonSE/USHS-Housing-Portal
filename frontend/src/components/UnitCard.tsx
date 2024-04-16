@@ -1,3 +1,4 @@
+import { deleteObject, getDownloadURL, listAll, ref } from "firebase/storage";
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -6,7 +7,6 @@ import { Button } from "./Button";
 
 import { Unit, deleteUnit } from "@/api/units";
 import { DataContext } from "@/contexts/DataContext";
-import { getDownloadURL, listAll, ref } from "firebase/storage";
 import { storage } from "@/firebase";
 
 const UnitCardContainer = styled.div<{ pending: boolean }>`
@@ -27,7 +27,6 @@ const UnitCardContainer = styled.div<{ pending: boolean }>`
   border: 1.3px solid ${(props) => (props.pending ? "rgba(230, 159, 28, 0.50)" : "#cdcaca")};
   box-shadow: 1.181px 1.181px 2.362px 0px rgba(188, 186, 183, 0.4);
 
-
   // position: absolute;
 `;
 
@@ -37,13 +36,13 @@ const UnitCardText = styled.span`
 `;
 
 const AvailabilityRow = styled.div`
-  position: absolute; 
+  position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 11px;
-  position: absolute;  
-  background-color: rgba(255, 255, 255, 0.80);
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.8);
   padding: 3px 10px 2px 11px;
   border-radius: 10px;
   top: 10px;
@@ -75,8 +74,7 @@ const ImageWrapper = styled.div`
   position: relative;
   border-radius: 4px;
   margin-bottom: 10px;
-  
-`
+`;
 
 const AvailabilityIcon = styled.img`
   width: 18px;
@@ -204,8 +202,6 @@ const ButtonsWrapper = styled.div`
   gap: 15px;
 `;
 
-
-
 type CardProps = {
   unit: Unit;
   refreshUnits?: () => void;
@@ -217,10 +213,26 @@ export const UnitCard = ({ unit, refreshUnits }: CardProps) => {
 
   const [coverImg, setCoverImg] = useState<string>();
 
+  const deleteFiles = () => {
+    listAll(ref(storage, `${unit._id}/images/`))
+      .then(async (res) => {
+        const { items } = res;
+        await Promise.all(items.map((item) => deleteObject(item)));
+      })
+      .catch(console.error);
+    listAll(ref(storage, `${unit._id}/videos/`))
+      .then(async (res) => {
+        const { items } = res;
+        await Promise.all(items.map((item) => deleteObject(item)));
+      })
+      .catch(console.error);
+  };
+
   const handleDelete = () => {
     deleteUnit(unit._id)
       .then((value) => {
         if (value.success) console.log(value.data);
+        deleteFiles();
         setPopup(false);
         if (refreshUnits) refreshUnits();
       })
@@ -230,47 +242,47 @@ export const UnitCard = ({ unit, refreshUnits }: CardProps) => {
   };
 
   const getFiles = () => {
-    listAll(ref(storage, `${unit._id}/images/`)).then(async (res)=>{
-      const {items} = res;
-      const urls = await Promise.all(items.map((item)=>getDownloadURL(item)))
-      console.log(urls)
-      if(urls.length===0){
-        setCoverImg("USHSLogo.svg")
-      }else{
-        setCoverImg(urls[0]); 
-      }
-    })
-  }
+    listAll(ref(storage, `${unit._id}/images/`))
+      .then(async (res) => {
+        const { items } = res;
+        const urls = await Promise.all(items.map((item) => getDownloadURL(item)));
+        console.log(urls);
+        if (urls.length === 0) {
+          setCoverImg("USHSLogo.svg");
+        } else {
+          setCoverImg(urls[0]);
+        }
+      })
+      .catch(console.error);
+  };
 
-  useEffect(()=>{
+  useEffect(() => {
     getFiles();
-    console.log("hey")
-  }, [unit])
+    console.log("hey");
+  }, [unit]);
 
   return (
     <>
       <Link to={`/unit/${unit._id}`} style={{ textDecoration: "none" }}>
         <UnitCardContainer pending={!unit.approved}>
-          
-            <ImageWrapper>
-            <img src={coverImg} alt=""/>
+          <ImageWrapper>
+            <img src={coverImg} alt="" />
             <AvailabilityRow>
-            {unit.availableNow && unit.approved ? (
-              <AvailabilityIcon src="/green_ellipse.svg" />
-            ) : (
-              <AvailabilityIcon src="/red_ellipse.svg" />
-            )}
-            {unit.availableNow && unit.approved ? (
-              <AvailabilityText>Available</AvailabilityText>
-            ) : !unit.approved ? (
-              <AvailabilityText>Pending Approval</AvailabilityText>
-            ) : unit.leasedStatus !== undefined ? (
-              <AvailabilityText>Leased</AvailabilityText>
-            ) : (
-              <AvailabilityText>Not Available</AvailabilityText>
-            )}
-              </AvailabilityRow>
-
+              {unit.availableNow && unit.approved ? (
+                <AvailabilityIcon src="/green_ellipse.svg" />
+              ) : (
+                <AvailabilityIcon src="/red_ellipse.svg" />
+              )}
+              {unit.availableNow && unit.approved ? (
+                <AvailabilityText>Available</AvailabilityText>
+              ) : !unit.approved ? (
+                <AvailabilityText>Pending</AvailabilityText>
+              ) : unit.leasedStatus !== undefined ? (
+                <AvailabilityText>Leased</AvailabilityText>
+              ) : (
+                <AvailabilityText>Not Available</AvailabilityText>
+              )}
+            </AvailabilityRow>
           </ImageWrapper>
 
           <RentText>{`$${unit.monthlyRent}/month`}</RentText>

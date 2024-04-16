@@ -17,7 +17,7 @@ export function Home() {
   const fetchUnits = (filterParams: FilterParams) => {
     getUnits(filterParams)
       .then((response) => {
-        if (response.success){
+        if (response.success) {
           setUnits(response.data);
         }
       })

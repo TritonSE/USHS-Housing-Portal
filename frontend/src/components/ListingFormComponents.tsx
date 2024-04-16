@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { Button } from "./Button";
 import { MidSectionHeader } from "./ListingForm/Headers/HeaderStyles";
 import { HousingLocatorFields } from "./ListingForm/HousingLocatorFields";
+import { ImagesVideos } from "./ListingForm/ImagesVideos";
 import { Logo } from "./ListingForm/Logo";
 import { formatDateForInput, handleCheckBoxNA } from "./ListingForm/helpers";
 
@@ -103,6 +104,7 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
   const [additionalCommentsHL, setAdditionalCommentsHL] = useState<string>(
     props.initialValues?.internalComments ?? "",
   );
+
   const [whereFindUnit, setWhereFindUnit] = useState<string>(props.initialValues?.whereFound ?? "");
   const [paymentRentingCriteria, setPaymentRentingCriteria] = useState<string[]>(
     props.initialValues?.paymentRentingCriteria ?? [],
@@ -496,6 +498,8 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
           value={additionalCommentsLL}
           handler={handleAdditionalCommentsLL}
         />
+
+        <ImagesVideos unit_id={props.initialValues?._id ?? ""} />
 
         {(props.formType === "housingLocator" || props.formType === "edit") && (
           <HousingLocatorFields

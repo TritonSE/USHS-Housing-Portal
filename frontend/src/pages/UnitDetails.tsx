@@ -1,3 +1,4 @@
+import { getDownloadURL, listAll, ref } from "firebase/storage";
 import React, { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router";
@@ -13,10 +14,9 @@ import { ListingFormComponents } from "@/components/ListingFormComponents";
 import { NavBar } from "@/components/NavBar";
 import { ReferralTable } from "@/components/ReferralTable";
 import { DataContext } from "@/contexts/DataContext";
-import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
 import { storage } from "@/firebase";
 
-const   Section = styled.div`
+const Section = styled.div`
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -273,14 +273,14 @@ const CarouselWrapper = styled.div`
   overflow: hidden;
   width: 100%;
   max-height: 400px;
-`
+`;
 
 const FileWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
   width: 600px;
-`
+`;
 
 export function UnitDetails() {
   const navigate = useNavigate();
@@ -306,39 +306,43 @@ export function UnitDetails() {
   //checks for which view to return
   const [isEditing, setIsEditing] = useState(false);
 
-  const [file, setFile] = useState<File>();
-  const [imgUrls, setImgUrls] = useState<string[]>([])
-  const [vidUrls, setVidUrls] = useState<string[]>([])
+  const [imgUrls, setImgUrls] = useState<string[]>([]);
+  const [vidUrls, setVidUrls] = useState<string[]>([]);
 
   const getFiles = () => {
-    listAll(ref(storage, `${id}/images/`)).then(async (res)=>{
-      const {items} = res;
-      const urls = await Promise.all(items.map((item)=>getDownloadURL(item)))
-      setImgUrls(urls)
-    })
-
-    listAll(ref(storage, `${id}/videos/`)).then(async (res)=>{
-      const {items} = res;
-      const urls = await Promise.all(items.map((item)=>getDownloadURL(item)))
-      setVidUrls(urls)
-    })
-  }
-
-  useEffect(()=>{
-    getFiles();
-  }, [])
-
-  const uploadFile = () => {
-    if(file!==undefined){
-      const folder = file.type.includes("video")?"videos":"images"
-      const storageRef = ref(storage, `${id}/${folder}/${crypto.randomUUID()}`)
-      uploadBytes(storageRef, file as File).then(()=>{
-        alert("Uploaded!")
-        setFile(undefined)
-        getFiles();
+    listAll(ref(storage, `${id}/images/`))
+      .then(async (res) => {
+        const { items } = res;
+        const urls = await Promise.all(
+          items.map((item) =>
+            getDownloadURL(item).then((value) => {
+              return value;
+            }),
+          ),
+        );
+        console.log(urls);
+        setImgUrls(urls);
       })
-    }
-  }
+      .catch(console.error);
+
+    listAll(ref(storage, `${id}/videos/`))
+      .then(async (res) => {
+        const { items } = res;
+        const urls = await Promise.all(
+          items.map((item) =>
+            getDownloadURL(item).then((value) => {
+              return value;
+            }),
+          ),
+        );
+        setVidUrls(urls);
+      })
+      .catch(console.error);
+  };
+
+  useEffect(() => {
+    getFiles();
+  }, [isEditing]);
 
   const toggleEditing = () => {
     setIsEditing((prevState) => !prevState);
@@ -495,7 +499,6 @@ export function UnitDetails() {
     );
   };
 
-
   return (
     <Page>
       <Helmet>
@@ -514,10 +517,6 @@ export function UnitDetails() {
                   </PaddingInButton>
                 </Button>
               </Link>
-              <input type="file" onChange={(event)=>{
-              const files = event.target.files as FileList
-              setFile(files[0])}}/>
-            <Button kind="primary" onClick={uploadFile}>Upload</Button>
               {currentUser?.isHousingLocator && (
                 <EditButton kind="secondary" onClick={toggleEditing}>
                   <img src={"/pencil.svg"} alt="" style={{ marginRight: "12px" }} />
@@ -525,22 +524,7 @@ export function UnitDetails() {
                 </EditButton>
               )}
             </TopRow>
-            <CarouselWrapper>
-            {imgUrls.map((url, index)=>(
-              <FileWrapper>
-                <img src={url} key={index} alt="hey" />
-              </FileWrapper>
-            ))}
-            {vidUrls.map((url, index)=>(
-              <FileWrapper>
-              <video key={index} controls>
-                <source src={url} />
-              </video>
-              </FileWrapper>
-            ))}
-            </CarouselWrapper>
           </Section>
-
           <Banner
             visible={showApprovedBanner}
             image="/check_mark.svg"
@@ -571,6 +555,19 @@ export function UnitDetails() {
           ) : (
             // Viewing mode
             <>
+              <CarouselWrapper>
+                <FileWrapper>
+                  {imgUrls.map((url, index) => (
+                    <img src={url} key={index} alt="hey" />
+                  ))}
+                  {vidUrls.map((url, index) => (
+                    <video key={index} controls>
+                      <source src={url} />
+                      <track src="captions_en.vtt" kind="captions" label="english_captions" />
+                    </video>
+                  ))}
+                </FileWrapper>
+              </CarouselWrapper>
               <Section>
                 <TopRow>
                   <Column>
