@@ -1,6 +1,7 @@
 import { getDownloadURL, listAll, ref } from "firebase/storage";
 import React, { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
+import { Carousel } from "react-responsive-carousel";
 import { useParams } from "react-router";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -17,6 +18,8 @@ import { NavBar } from "@/components/NavBar";
 import { ReferralTable } from "@/components/ReferralTable";
 import { DataContext } from "@/contexts/DataContext";
 import { storage } from "@/firebase";
+
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 const Section = styled.div`
   display: flex;
@@ -68,7 +71,7 @@ const MainColumn = styled.div`
 
 const DetailsColumn = styled(MainColumn)`
   margin: 32px 160px;
-  gap: 60px;
+  gap: 40px;
 `;
 
 const RentPerMonth = styled.h1`
@@ -267,23 +270,6 @@ const Heading = styled.h1`
   font-family: "Neutraface Text";
 `;
 
-const CarouselWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  gap: 20px;
-  overflow: hidden;
-  width: 100%;
-  max-height: 400px;
-`;
-
-const FileWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  width: 600px;
-`;
-
 export function UnitDetails() {
   const filters = useLocation().state as FilterParams;
   const navigate = useNavigate();
@@ -338,6 +324,8 @@ export function UnitDetails() {
             }),
           ),
         );
+        console.log(urls);
+
         setVidUrls(urls);
       })
       .catch(console.error);
@@ -569,19 +557,43 @@ export function UnitDetails() {
           ) : (
             // Viewing mode
             <>
-              <CarouselWrapper>
-                <FileWrapper>
-                  {imgUrls.map((url, index) => (
-                    <img src={url} key={index} alt="hey" />
-                  ))}
-                  {vidUrls.map((url, index) => (
-                    <video key={index} controls>
-                      <source src={url} />
-                      <track src="captions_en.vtt" kind="captions" label="english_captions" />
-                    </video>
-                  ))}
-                </FileWrapper>
-              </CarouselWrapper>
+              <Carousel
+                useKeyboardArrows={true}
+                axis="horizontal"
+                showThumbs={false}
+                dynamicHeight
+                selectedItem={Math.floor(
+                  (imgUrls.length + vidUrls.length) / 2 -
+                    (1 - ((imgUrls.length + vidUrls.length) % 2)),
+                )}
+                centerMode
+                centerSlidePercentage={53}
+                showStatus={false}
+                swipeable={false}
+                transitionTime={400}
+              >
+                {imgUrls
+                  .map((url, index) => (
+                    <img
+                      src={url}
+                      key={index}
+                      alt=""
+                      style={{ objectFit: "cover", height: "50vh", maxWidth: "40vw" }}
+                    />
+                  ))
+                  .concat(
+                    vidUrls.map((url, index) => (
+                      <video
+                        key={index}
+                        style={{ objectFit: "cover", height: "50vh", maxWidth: "40vw" }}
+                        controls
+                      >
+                        <source src={url} />
+                        <track src="captions_en.vtt" kind="captions" label="english_captions" />
+                      </video>
+                    )),
+                  )}
+              </Carousel>
               <Section>
                 <TopRow>
                   <Column>
