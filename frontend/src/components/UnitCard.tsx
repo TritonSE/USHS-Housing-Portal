@@ -228,6 +228,12 @@ export const UnitCard = ({ unit, refreshUnits }: CardProps) => {
         await Promise.all(items.map((item) => deleteObject(item)));
       })
       .catch(console.error);
+    listAll(ref(storage, `${unit._id}/thumbnail/`))
+      .then(async (res) => {
+        const { items } = res;
+        await Promise.all(items.map((item) => deleteObject(item)));
+      })
+      .catch(console.error);
   };
 
   const handleDelete = () => {
@@ -243,16 +249,26 @@ export const UnitCard = ({ unit, refreshUnits }: CardProps) => {
       });
   };
 
+  //Use thumbnail if it exists, pull from images otherwise
   const getFiles = () => {
-    listAll(ref(storage, `${unit._id}/images/`))
+    listAll(ref(storage, `${unit._id}/thumbnail/`))
       .then(async (res) => {
-        const { items } = res;
-        const urls = await Promise.all(items.map((item) => getDownloadURL(item)));
-        console.log(urls);
-        if (urls.length === 0) {
-          setCoverImg("USHSLogo.svg");
+        const thumbnail = res.items;
+        if (thumbnail.length !== 0) {
+          const url = await getDownloadURL(thumbnail[0]);
+          setCoverImg(url);
         } else {
-          setCoverImg(urls[0]);
+          listAll(ref(storage, `${unit._id}/images/`))
+            .then(async (res2) => {
+              const { items } = res2;
+              const urls = await Promise.all(items.map((item) => getDownloadURL(item)));
+              if (urls.length === 0) {
+                setCoverImg("USHSLogo.svg");
+              } else {
+                setCoverImg(urls[0]);
+              }
+            })
+            .catch(console.error);
         }
       })
       .catch(console.error);

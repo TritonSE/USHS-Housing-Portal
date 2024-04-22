@@ -6,6 +6,7 @@ import { MidSectionHeader } from "./ListingForm/Headers/HeaderStyles";
 import { HousingLocatorFields } from "./ListingForm/HousingLocatorFields";
 import { ImagesVideos } from "./ListingForm/ImagesVideos";
 import { Logo } from "./ListingForm/Logo";
+import { Thumbnail } from "./ListingForm/Thumbnail";
 import { formatDateForInput, handleCheckBoxNA } from "./ListingForm/helpers";
 
 import { CreateUnitRequest, Unit, createUnit, updateUnit } from "@/api/units";
@@ -501,6 +502,8 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
         />
 
         <ImagesVideos unit_id={props.initialValues?._id ?? ""} />
+
+        <Thumbnail unit_id={props.initialValues?._id ?? ""} />
 
         {(props.formType === "housingLocator" || props.formType === "edit") && (
           <HousingLocatorFields

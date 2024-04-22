@@ -270,6 +270,44 @@ const Heading = styled.h1`
   font-family: "Neutraface Text";
 `;
 
+const LeftArrowWrapper = styled.div`
+  position: absolute;
+  top: 23vh;
+  left: 0.5vw;
+  z-index: 2;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+`;
+
+const RightArrowWrapper = styled.div`
+  position: absolute;
+  z-index: 2;
+  top: 23vh;
+  right: 0.5vw;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+`;
+
+const CarouselImage = styled.img`
+  object-fit: cover;
+  height: 50vh;
+  max-width: 40vw;
+  user-select: none;
+`;
+
+const CarouselVideo = styled.video`
+  object-fit: cover;
+  height: 50vh;
+  max-width: 40vw;
+  user-select: none;
+`;
+
 export function UnitDetails() {
   const filters = useLocation().state as FilterParams;
   const navigate = useNavigate();
@@ -559,41 +597,43 @@ export function UnitDetails() {
             <>
               <Carousel
                 useKeyboardArrows={true}
-                axis="horizontal"
                 showThumbs={false}
-                dynamicHeight
                 selectedItem={Math.floor(
                   (imgUrls.length + vidUrls.length) / 2 -
                     (1 - ((imgUrls.length + vidUrls.length) % 2)),
                 )}
-                centerMode
-                centerSlidePercentage={53}
+                centerMode={imgUrls.length + vidUrls.length > 1}
+                centerSlidePercentage={52}
                 showStatus={false}
                 swipeable={false}
                 transitionTime={400}
+                renderArrowPrev={(clickHandler, hasPrev) =>
+                  hasPrev && (
+                    <LeftArrowWrapper onClick={clickHandler}>
+                      <img src="/left-arrow.svg" alt="" />
+                    </LeftArrowWrapper>
+                  )
+                }
+                renderArrowNext={(clickHandler, hasNext) =>
+                  hasNext && (
+                    <RightArrowWrapper onClick={clickHandler}>
+                      <img src="/right-arrow.svg" alt="" />
+                    </RightArrowWrapper>
+                  )
+                }
               >
                 {imgUrls
-                  .map((url, index) => (
-                    <img
-                      src={url}
-                      key={index}
-                      alt=""
-                      style={{ objectFit: "cover", height: "50vh", maxWidth: "40vw" }}
-                    />
-                  ))
+                  .map((url, index) => <CarouselImage src={url} key={index} alt="" />)
                   .concat(
                     vidUrls.map((url, index) => (
-                      <video
-                        key={index}
-                        style={{ objectFit: "cover", height: "50vh", maxWidth: "40vw" }}
-                        controls
-                      >
+                      <CarouselVideo key={index} controls>
                         <source src={url} />
                         <track src="captions_en.vtt" kind="captions" label="english_captions" />
-                      </video>
+                      </CarouselVideo>
                     )),
                   )}
               </Carousel>
+
               <Section>
                 <TopRow>
                   <Column>
