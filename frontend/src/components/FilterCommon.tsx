@@ -1,5 +1,15 @@
 import styled, { css } from "styled-components";
 
+export const FilterContainer = styled.div`
+  width: 248px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 15px;
+`;
+
 export const DropDownPopup = styled.div`
   position: absolute;
   margin-top: 45px;

@@ -73,7 +73,7 @@ const ListingsButton = styled(PendingButton)`
 
 const AddListings = styled.div`
   display: flex;
-  flex-direction: column
+  flex-direction: column;
   width: 160px;
   padding: 15px 32px 15px 24px;
   align-items: center;

@@ -6,6 +6,11 @@ import styled from "styled-components";
 import { Button } from "@/components/Button";
 import { auth } from "@/firebase";
 
+const NavBarContainer = styled.div`
+  position: sticky;
+  top: 0;
+`;
+
 const NavbarItems = styled.div`
   background-color: #ffffff;
   border-radius: 0px 0px 10px 10px;
@@ -150,7 +155,7 @@ export function NavBar({ page }: NavBarProps) {
   const isStaging = /ushs-housing-portal-staging/i.test(currUrl);
 
   return (
-    <div>
+    <NavBarContainer>
       <NavbarItems>
         <LeftWrapper>
           <Icon src="/USHSLogo2.png" />
@@ -186,6 +191,6 @@ export function NavBar({ page }: NavBarProps) {
           </Modal>
         </>
       )}
-    </div>
+    </NavBarContainer>
   );
 }
