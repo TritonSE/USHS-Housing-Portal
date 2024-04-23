@@ -158,7 +158,7 @@ export function NavBar({ page }: NavBarProps) {
     <NavBarContainer>
       <NavbarItems>
         <LeftWrapper>
-          <Icon src="/USHSLogo2.png" />
+          <Icon src="/USHSLogo.svg" />
           <NavItem to="/" $active={page === "Home"}>
             Home
           </NavItem>

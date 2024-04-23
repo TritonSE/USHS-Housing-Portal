@@ -78,6 +78,7 @@ export const Sort = styled.button<{ active?: boolean }>`
   font-weight: 400;
   background-color: transparent;
   border-color: transparent;
+  cursor: pointer;
 
   ${(props) =>
     props.active
@@ -100,6 +101,7 @@ export const FilterRow = styled.div`
   flex-direction: row;
   align-items: center;
   gap: 10px;
+  cursor: pointer;
 `;
 
 export const ApplyButton = styled.button`

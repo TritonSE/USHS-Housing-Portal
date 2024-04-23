@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 
 import { FilterParams, Unit, getUnits } from "@/api/units";
@@ -8,6 +9,10 @@ import { FitlerPanel } from "@/components/FilterPanel";
 import { NavBar } from "@/components/NavBar";
 import { Page } from "@/components/Page";
 import { UnitCardGrid } from "@/components/UnitCardGrid";
+
+export const FiltersContext = React.createContext({
+  filters: {} as FilterParams,
+});
 
 const HomePageLayout = styled.div`
   display: flex;
@@ -22,11 +27,14 @@ const FilterPadding = styled.div`
 `;
 
 export function Home() {
+  const previousFilters = useLocation().state as FilterParams;
   const [units, setUnits] = useState<Unit[]>([]);
-  const [filters, setFilters] = useState<FilterParams>({
-    availability: "Available",
-    approved: "approved",
-  });
+  const [filters, setFilters] = useState<FilterParams>(
+    previousFilters ?? {
+      availability: "Available",
+      approved: "approved",
+    },
+  );
 
   const fetchUnits = (filterParams: FilterParams) => {
     getUnits(filterParams)
@@ -51,6 +59,7 @@ export function Home() {
         <FilterPadding />
         <div>
           <FilterDropdown
+            value={filters}
             refreshUnits={(filterParams) => {
               filterParams.approved = filters.approved;
               setFilters(filterParams);

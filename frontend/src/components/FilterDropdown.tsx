@@ -89,22 +89,23 @@ const ResetFilterRow = styled.div`
 `;
 
 type FilterDropdownProps = {
+  value: FilterParams;
   refreshUnits(filterParams: FilterParams): void;
 };
 
 export const FilterDropdown = (props: FilterDropdownProps) => {
   const [bedBathState, setBedBathState] = useState({
-    beds: 1,
-    baths: 0.5,
+    beds: Number(props.value.beds ?? 1),
+    baths: Number(props.value.baths ?? 0.5),
   });
   const [searchText, setSearchText] = useState("");
   const [sortIndex, setSortIndex] = useState(0);
   const [availabilityState, setAvailabilityState] = useState({
-    dropdownText: "Available",
+    dropdownText: props.value.availability ?? "Available",
   });
   const [priceState, setPriceState] = useState({
-    minPrice: -1,
-    maxPrice: -1,
+    minPrice: String(props.value.minPrice) === "undefined" ? -1 : Number(props.value.minPrice),
+    maxPrice: String(props.value.maxPrice) === "undefined" ? -1 : Number(props.value.maxPrice),
   });
 
   const applyFilters = () => {
