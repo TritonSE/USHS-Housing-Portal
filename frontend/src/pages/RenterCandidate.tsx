@@ -9,7 +9,7 @@ import { Page } from "@/components";
 import { Button } from "@/components/Button";
 import { NavBar } from "@/components/NavBar";
 
-// import { RenterCandidateTable } from "@/components/RenterCandidateTable";
+import { RenterCandidateTable } from "@/components/RenterCandidateTable";
 
 const MainColumn = styled.div`
   display: flex;
@@ -155,7 +155,7 @@ export function RenterCandidate() {
         </InfoRow>
         <TableContainer>
           <Title>Current Referrals</Title>
-          {/* <RenterCandidateTable /> */}
+          <RenterCandidateTable />
         </TableContainer>
       </MainColumn>
     </Page>
