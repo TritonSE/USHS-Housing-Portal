@@ -50,9 +50,7 @@ const RTR_Text = styled.p`
   color: var(--Primary, #0c2b35);
   text-overflow: ellipsis;
   white-space: nowrap;
-
-  min-width: 200px;
-  max-width: 201px;
+  width: 10vw;
 
   /* Body 2 */
   font-family: Montserrat;

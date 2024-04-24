@@ -33,6 +33,7 @@ import { ThirdPartyPayment } from "@/components/ListingForm/ThirdPartyPayment";
 const ErrorMessage = styled.div`
   color: #b64201;
   max-width: 800px;
+  margin-top: 20px;
 `;
 
 type ListingFormComponentsProps = {
