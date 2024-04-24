@@ -1,14 +1,15 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { Unit, approveUnit, getUnit, updateUnit } from "@/api/units";
-import { Page } from "@/components";
-import { NavBar } from "@/components/NavBar";
-import { Button } from "@/components/Button";
+
 import { getRenterCandidate, RenterCandidate } from "@/api/renter-candidates";
-import { RenterCandidateTable } from "@/components/RenterCandidateTable";
+import { Page } from "@/components";
+import { Button } from "@/components/Button";
+import { NavBar } from "@/components/NavBar";
+
+// import { RenterCandidateTable } from "@/components/RenterCandidateTable";
 
 const MainColumn = styled.div`
   display: flex;
@@ -125,7 +126,7 @@ export function RenterCandidate() {
             Back to Listing
           </Button>
           {/* </Link> */}
-          <EditButton kind="secondary" onClick={console.log("hi")}>
+          <EditButton kind="secondary">
             <img src={"/pencil.svg"} alt="" style={{ marginRight: "12px" }} />
             Edit
           </EditButton>
@@ -154,7 +155,7 @@ export function RenterCandidate() {
         </InfoRow>
         <TableContainer>
           <Title>Current Referrals</Title>
-          <RenterCandidateTable />
+          {/* <RenterCandidateTable /> */}
         </TableContainer>
       </MainColumn>
     </Page>
