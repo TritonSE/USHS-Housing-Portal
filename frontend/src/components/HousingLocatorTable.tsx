@@ -40,18 +40,16 @@ const HLTableHeader = styled.div`
   border-weight: 10px;
 `;
 
-const DeleteButton = styled.button`
+const DeleteIcon = styled.img`
   align-items: center;
   width: 20px;
   height: 22px;
 
-  border-width: 0px;
-  background-color: none;
-
   cursor: pointer;
-  transition-duration: 300ms;
+  transition: filter 0.3s;
+
   &:hover {
-    color: pink; // fix this
+    filter: brightness(1.4);
   }
 `;
 
@@ -105,14 +103,12 @@ export const HousingLocatorTable = () => {
           .map((locator: User, index: number) => (
             <HLRow key={index}>
               {locator.firstName} {locator.lastName}
-              <DeleteButton
+              <DeleteIcon
+                src="trash-can.svg"
                 onClick={() => {
                   handleDemote(locator);
                 }}
-              >
-                {" "}
-                <img src={"/trash-can.svg"} alt="" />
-              </DeleteButton>
+              ></DeleteIcon>
             </HLRow>
           ))}
       </HLTableContainer>
