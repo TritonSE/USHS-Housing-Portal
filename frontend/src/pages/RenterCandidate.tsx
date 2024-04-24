@@ -8,6 +8,73 @@ import { Page } from "@/components";
 import { NavBar } from "@/components/NavBar";
 import { Button } from "@/components/Button";
 import { getRenterCandidate, RenterCandidate } from "@/api/renter-candidates";
+import { RenterCandidateTable } from "@/components/RenterCandidateTable";
+
+const MainColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: #fbf7f3;
+  margin: 97px;
+  gap: 35px;
+`;
+
+const TopRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  align-items: center;
+`;
+
+const InfoRow = styled(Row)`
+  gap: 150px;
+  align-items: flex-start;
+`;
+const InfoColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+`;
+
+const Title = styled.p`
+  font-size: 32px;
+  font-family: "Inter";
+  font-weight: 650;
+`;
+
+const Id = styled.p`
+  font-size: 25px;
+  font-family: "Neutraface Text";
+  font-weight: 600;
+`;
+
+const InfoHeader = styled.p`
+  font-size: 18px;
+  font-family: "Montserrat";
+  font-weight: 600;
+`;
+
+const InfoText = styled(InfoHeader)`
+  font-weight: 400;
+`;
+
+const EditButton = styled(Button)`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const TableContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
 
 export function RenterCandidate() {
   const navigate = useNavigate();
@@ -37,66 +104,6 @@ export function RenterCandidate() {
     return null;
   }
 
-  const MainColumn = styled.div`
-    display: flex;
-    flex-direction: column;
-    background-color: #fbf7f3;
-    margin: 97px;
-    gap: 35px;
-  `;
-
-  const TopRow = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  `;
-
-  const Row = styled.div`
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
-    align-items: center;
-  `;
-
-  const InfoRow = styled(Row)`
-    gap: 150px;
-    align-items: flex-start;
-  `;
-  const InfoColumn = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  `;
-
-  const Name = styled.p`
-    font-size: 40px;
-    font-family: "Neutraface Text";
-    font-weight: 700;
-  `;
-
-  const Id = styled.p`
-    font-size: 25px;
-    font-family: "Neutraface Text";
-    font-weight: 600;
-  `;
-
-  const InfoHeader = styled.p`
-    font-size: 18px;
-    font-family: "Montserrat";
-    font-weight: 600;
-  `;
-
-  const InfoText = styled(InfoHeader)`
-    font-weight: 400;
-  `;
-
-  const EditButton = styled(Button)`
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  `;
-
   return (
     <Page>
       <Helmet>
@@ -124,10 +131,10 @@ export function RenterCandidate() {
           </EditButton>
         </TopRow>
         <Row>
-          <Name>
+          <Title>
             {renterCandidate.firstName} {renterCandidate.lastName}
-          </Name>
-          <Id>#{renterCandidate._id}</Id>
+          </Title>
+          <Id>#{renterCandidate.uid}</Id>
         </Row>
         <InfoRow>
           <InfoColumn>
@@ -144,11 +151,11 @@ export function RenterCandidate() {
             <InfoHeader>Housing Program:</InfoHeader>
             <InfoText>{renterCandidate.program}</InfoText>
           </InfoColumn>
-          <InfoColumn>
-            <InfoHeader>Referring Staff:</InfoHeader>
-            <InfoText>John Doe</InfoText>
-          </InfoColumn>
         </InfoRow>
+        <TableContainer>
+          <Title>Current Referrals</Title>
+          <RenterCandidateTable />
+        </TableContainer>
       </MainColumn>
     </Page>
   );
