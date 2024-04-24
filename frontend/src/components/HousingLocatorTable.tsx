@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 
 import { ReferralTablePagination } from "./ReferralTablePagination";
@@ -85,7 +85,6 @@ export const HousingLocatorTable = () => {
     demoteUser(user)
       .then((value) => {
         if (value.success) {
-          console.log(value.data);
           dataContext.refetchData();
         }
       })
