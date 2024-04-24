@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { User, elevateUser } from "@/api/users";
 import { Page } from "@/components";
 import { Button } from "@/components/Button";
+import { HousingLocatorTable } from "@/components/HousingLocatorTable";
 import { NavBar } from "@/components/NavBar";
 import { UserDropdown } from "@/components/UserDropdown";
 import { AuthContext } from "@/contexts/AuthContext";
@@ -74,18 +75,6 @@ const AssignWrapper = styled.div`
   flex-direction: column;
   gap: 20px;
   max-width: 100%;
-`;
-
-const HLWrapper = styled.div`
-  width: 100vw;
-  display: flex;
-  flex-flow: wrap;
-  row-gap: 12px;
-`;
-
-const HLDiv = styled.div`
-  width: 27vw;
-  font-size: 16px;
 `;
 
 const SearchRow = styled.div`
@@ -189,14 +178,6 @@ export function Profile() {
         {dataContext.currentUser?.isHousingLocator && (
           <CenterDiv>
             <AssignWrapper>
-              <AssignHeader>Current Housing Locators:</AssignHeader>
-              <HLWrapper>
-                {allHousingLocators.map((HS, index) => (
-                  <HLDiv key={index}>{HS.firstName + " " + HS.lastName}</HLDiv>
-                ))}
-              </HLWrapper>
-            </AssignWrapper>
-            <AssignWrapper>
               <AssignHeader>Assign Housing Locators:</AssignHeader>
               <SearchRow>
                 <UserDropdown
@@ -228,6 +209,10 @@ export function Profile() {
                   </XButton>
                 </ElevatePopup>
               )}
+            </AssignWrapper>
+            <AssignWrapper>
+              <AssignHeader>Current Housing Locators:</AssignHeader>
+              <HousingLocatorTable />
             </AssignWrapper>
           </CenterDiv>
         )}

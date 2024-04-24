@@ -47,9 +47,9 @@ export const demoteUserHandler: RequestHandler = asyncHandler(async (req, res, _
   const id = req.params.id;
   const response = await demoteUser(id);
   if (response === null) {
-    res.status(404).json("User not found");
+    res.status(404);
   } else {
-    const newUser = await getUserByID(id);
-    res.status(200).json(newUser);
+    const demotedUser = await getUserByID(id);
+    res.status(200).json(demotedUser);
   }
 });
