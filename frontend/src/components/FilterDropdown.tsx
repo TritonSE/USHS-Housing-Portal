@@ -28,7 +28,7 @@ const FiltersFirstRow = styled.div`
   flex-wrap: wrap;
 `;
 
-const SearchBarInput = styled.input`
+export const SearchBarInput = styled.input`
   padding: 3px;
   min-width: 16rem;
   border: 0;
@@ -49,12 +49,12 @@ const SearchBarInput = styled.input`
   }
 `;
 
-const SearchIcon = styled.img`
+export const SearchIcon = styled.img`
   height: 20px;
   width: 20px;
 `;
 
-const SearchBarContainer = styled.div`
+export const SearchBarContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
