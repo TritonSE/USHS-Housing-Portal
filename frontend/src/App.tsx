@@ -13,6 +13,7 @@ import {
   Login,
   Profile,
   RenterCandidatePage,
+  Referrals,
   UnitDetails,
 } from "@/pages";
 import { GlobalStyle, StyledComponentsManager, theme } from "@/theme";
@@ -36,6 +37,7 @@ function AppRouter() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/unit/:id" element={<UnitDetails />} />
             <Route path="/candidate/:id" element={<RenterCandidatePage />} />
+            <Route path="/referrals" element={<Referrals />} />
             <Route path="*" element={<Navigate to="/" />} />
           </>
         )}
