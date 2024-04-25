@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { FullMetadata } from "firebase/storage";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import { Button } from "./Button";
@@ -9,6 +10,7 @@ import { Logo } from "./ListingForm/Logo";
 import { Thumbnail } from "./ListingForm/Thumbnail";
 import { formatDateForInput, handleCheckBoxNA } from "./ListingForm/helpers";
 
+import { uploadFiles } from "@/api/images";
 import { CreateUnitRequest, Unit, createUnit, updateUnit } from "@/api/units";
 import { AccessibilityAccess } from "@/components/ListingForm/AccessibilityAccess";
 import { Appliances } from "@/components/ListingForm/Appliances";
@@ -115,6 +117,10 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
     props.initialValues?.additionalRules ?? [],
   );
   const [errorMessage, setErrorMessage] = useState<string>("");
+
+  const [newFiles, setNewFiles] = useState<File[] | null>();
+  const [allImages, setAllImages] = useState<FullMetadata[]>();
+  const [allVideos, setAllVideos] = useState<FullMetadata[]>();
 
   const handleFirstName = (event: React.ChangeEvent<HTMLInputElement>) => {
     const hasNumber = /\d/;
@@ -327,6 +333,7 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
         .then((res) => {
           if (res.success) {
             setErrorMessage("");
+            uploadFiles(newFiles, res.data._id, allImages, allVideos);
             props.handleAfterSubmit(res.data);
           } else {
             setErrorMessage(res.error);
@@ -335,6 +342,10 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
         .catch(console.error);
     }
   };
+
+  useEffect(() => {
+    console.log(newFiles);
+  }, [newFiles]);
 
   return (
     <MainContainer>
@@ -501,7 +512,16 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
           handler={handleAdditionalCommentsLL}
         />
 
-        <ImagesVideos unit_id={props.initialValues?._id ?? ""} />
+        <ImagesVideos
+          unit_id={props.initialValues?._id ?? ""}
+          onChange={(files) => {
+            setNewFiles(files);
+          }}
+          onGetFiles={(value) => {
+            setAllImages(value[0]);
+            setAllVideos(value[1]);
+          }}
+        />
 
         <Thumbnail unit_id={props.initialValues?._id ?? ""} />
 

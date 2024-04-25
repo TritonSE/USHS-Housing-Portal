@@ -1,16 +1,10 @@
-import {
-  FullMetadata,
-  deleteObject,
-  getMetadata,
-  listAll,
-  ref,
-  uploadBytesResumable,
-} from "firebase/storage";
+import { FullMetadata, deleteObject, ref } from "firebase/storage";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import { FieldHeader, Margin32 } from "./CommonStyles";
 
+import { getFiles, uploadFiles } from "@/api/images";
 import { storage } from "@/firebase";
 
 const SubmitRow = styled.div`
@@ -75,83 +69,42 @@ const XButton = styled.img`
 
 type ImagesVideosProps = {
   unit_id: string;
+  onChange: (newFiles: File[] | null) => void;
+  onGetFiles: (currFiles: FullMetadata[][]) => void;
 };
 
-export const ImagesVideos = ({ unit_id }: ImagesVideosProps) => {
+export const ImagesVideos = ({ unit_id, onChange, onGetFiles }: ImagesVideosProps) => {
   const [allImages, setAllImages] = useState<FullMetadata[]>();
   const [allVideos, setAllVideos] = useState<FullMetadata[]>();
 
   const [uploadingState, setUploadingState] = useState<string>();
 
-  const getFiles = () => {
-    listAll(ref(storage, `${unit_id}/images/`))
-      .then(async (res) => {
-        const { items } = res;
-        const metadata = await Promise.all(items.map((item) => getMetadata(item)));
-        setAllImages(metadata);
+  const handleGetFiles = () => {
+    getFiles(unit_id)
+      .then((value) => {
+        if (value) {
+          setAllImages(value[0]);
+          setAllVideos(value[1]);
+          onGetFiles(value);
+        }
       })
-      .catch(console.error);
-
-    listAll(ref(storage, `${unit_id}/videos/`))
-      .then(async (res) => {
-        const { items } = res;
-        const metadata = await Promise.all(items.map((item) => getMetadata(item)));
-        setAllVideos(metadata);
-      })
-      .catch(console.error);
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   useEffect(() => {
-    getFiles();
+    handleGetFiles();
   }, []);
 
-  const handleRepeatName = (folder: string, fileName: string) => {
-    let count = 0;
-    let newName = fileName;
-    if (folder === "images") {
-      while (allImages?.some((e) => e.name === newName)) {
-        count++;
-        newName = `${fileName}_${count}`;
-      }
-      return count === 0 ? fileName : newName;
-    } else {
-      while (allVideos?.some((e) => e.name === newName)) {
-        count++;
-        newName = `${fileName}_${count}`;
-      }
-      return count === 0 ? fileName : newName;
-    }
-  };
-
-  const uploadFiles = (files: FileList | null) => {
-    if (files !== null) {
-      for (const file of files) {
-        const folder = file.type.includes("video") ? "videos" : "images";
-        const fileName = handleRepeatName(folder, file.name.replace(/\.[^/.]+$/, ""));
-        const storageRef = ref(storage, `${unit_id}/${folder}/${fileName}`);
-        const uploadTask = uploadBytesResumable(storageRef, file);
-        uploadTask.on(
-          "state_changed",
-          (snapshot) => {
-            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            setUploadingState(`Uploading: ${progress.toFixed(0)}% done`);
-          },
-          (error) => {
-            console.log(error);
-          },
-          () => {
-            getFiles();
-            setUploadingState("Uploaded!");
-          },
-        );
-      }
-    }
+  const handleUploadFiles = (files: FileList | null) => {
+    uploadFiles(files, unit_id, allImages, allVideos, setUploadingState, handleGetFiles);
   };
 
   const handleDelete = (file: FullMetadata) => {
     deleteObject(ref(storage, file.fullPath))
       .then(() => {
-        getFiles();
+        handleGetFiles();
       })
       .catch((error) => {
         console.log(error);
@@ -199,7 +152,8 @@ export const ImagesVideos = ({ unit_id }: ImagesVideosProps) => {
             id="formId"
             onChange={(event) => {
               const files = event.target.files;
-              uploadFiles(files);
+              handleUploadFiles(files);
+              if (files) onChange(Array.from(files));
             }}
             multiple
             hidden
