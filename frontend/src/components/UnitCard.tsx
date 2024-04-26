@@ -1,13 +1,12 @@
-import { deleteObject, getDownloadURL, listAll, ref } from "firebase/storage";
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 import { Button } from "./Button";
 
+import { deleteFolder, getFileURLS } from "@/api/images";
 import { Unit, deleteUnit } from "@/api/units";
 import { DataContext } from "@/contexts/DataContext";
-import { storage } from "@/firebase";
 import { FiltersContext } from "@/pages/Home";
 
 const UnitCardContainer = styled.div<{ pending: boolean }>`
@@ -216,24 +215,9 @@ export const UnitCard = ({ unit, refreshUnits }: CardProps) => {
   const [coverImg, setCoverImg] = useState<string>();
 
   const deleteFiles = () => {
-    listAll(ref(storage, `${unit._id}/images/`))
-      .then(async (res) => {
-        const { items } = res;
-        await Promise.all(items.map((item) => deleteObject(item)));
-      })
-      .catch(console.error);
-    listAll(ref(storage, `${unit._id}/videos/`))
-      .then(async (res) => {
-        const { items } = res;
-        await Promise.all(items.map((item) => deleteObject(item)));
-      })
-      .catch(console.error);
-    listAll(ref(storage, `${unit._id}/thumbnail/`))
-      .then(async (res) => {
-        const { items } = res;
-        await Promise.all(items.map((item) => deleteObject(item)));
-      })
-      .catch(console.error);
+    deleteFolder(unit._id, "images");
+    deleteFolder(unit._id, "videos");
+    deleteFolder(unit._id, "thumbnail");
   };
 
   const handleDelete = () => {
@@ -251,21 +235,17 @@ export const UnitCard = ({ unit, refreshUnits }: CardProps) => {
 
   //Use thumbnail if it exists, pull from images otherwise
   const getFiles = () => {
-    listAll(ref(storage, `${unit._id}/thumbnail/`))
-      .then(async (res) => {
-        const thumbnail = res.items;
-        if (thumbnail.length !== 0) {
-          const url = await getDownloadURL(thumbnail[0]);
-          setCoverImg(url);
+    getFileURLS(unit._id, "thumbnail")
+      .then((urls) => {
+        if (urls.length !== 0) {
+          setCoverImg(urls[0]);
         } else {
-          listAll(ref(storage, `${unit._id}/images/`))
-            .then(async (res2) => {
-              const { items } = res2;
-              const urls = await Promise.all(items.map((item) => getDownloadURL(item)));
-              if (urls.length === 0) {
+          getFileURLS(unit._id, "images")
+            .then((imgUrls) => {
+              if (imgUrls.length === 0) {
                 setCoverImg("USHSLogo.svg");
               } else {
-                setCoverImg(urls[0]);
+                setCoverImg(imgUrls[0]);
               }
             })
             .catch(console.error);
@@ -276,7 +256,6 @@ export const UnitCard = ({ unit, refreshUnits }: CardProps) => {
 
   useEffect(() => {
     getFiles();
-    console.log("hey");
   }, [unit]);
 
   return (

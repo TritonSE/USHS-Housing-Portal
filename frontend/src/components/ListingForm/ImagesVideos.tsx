@@ -1,11 +1,9 @@
-import { FullMetadata, deleteObject, ref } from "firebase/storage";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import { FieldHeader, Margin32 } from "./CommonStyles";
 
-import { getFiles, uploadFiles } from "@/api/images";
-import { storage } from "@/firebase";
+import { FullMetadata, deleteFile, getFileMetadata, uploadFiles } from "@/api/images";
 
 const SubmitRow = styled.div`
   display: flex;
@@ -70,27 +68,28 @@ const XButton = styled.img`
 type ImagesVideosProps = {
   unit_id: string;
   onChange: (newFiles: File[] | null) => void;
-  onGetFiles: (currFiles: FullMetadata[][]) => void;
 };
 
-export const ImagesVideos = ({ unit_id, onChange, onGetFiles }: ImagesVideosProps) => {
+export const ImagesVideos = ({ unit_id, onChange }: ImagesVideosProps) => {
   const [allImages, setAllImages] = useState<FullMetadata[]>();
   const [allVideos, setAllVideos] = useState<FullMetadata[]>();
 
   const [uploadingState, setUploadingState] = useState<string>();
 
+  const [newImages, setNewImages] = useState<File[]>([]);
+  const [newVideos, setNewVideos] = useState<File[]>([]);
+
   const handleGetFiles = () => {
-    getFiles(unit_id)
-      .then((value) => {
-        if (value) {
-          setAllImages(value[0]);
-          setAllVideos(value[1]);
-          onGetFiles(value);
-        }
+    getFileMetadata(unit_id, "images")
+      .then((data) => {
+        setAllImages(data);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch(console.error);
+    getFileMetadata(unit_id, "videos")
+      .then((data) => {
+        setAllVideos(data);
+      })
+      .catch(console.error);
   };
 
   useEffect(() => {
@@ -102,7 +101,7 @@ export const ImagesVideos = ({ unit_id, onChange, onGetFiles }: ImagesVideosProp
   };
 
   const handleDelete = (file: FullMetadata) => {
-    deleteObject(ref(storage, file.fullPath))
+    deleteFile(file)
       .then(() => {
         handleGetFiles();
       })
@@ -111,53 +110,103 @@ export const ImagesVideos = ({ unit_id, onChange, onGetFiles }: ImagesVideosProp
       });
   };
 
+  const handleFormChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (unit_id) {
+      handleUploadFiles(files);
+    } else {
+      if (files) {
+        const images = [];
+        const videos = [];
+        for (const file of files) {
+          if (file.type.includes("video")) {
+            videos.push(file);
+          } else {
+            images.push(file);
+          }
+        }
+        setNewImages(newImages.concat(images));
+        setNewVideos(newVideos.concat(videos));
+      }
+    }
+  };
+
+  useEffect(() => {
+    onChange(newImages.concat(newVideos));
+  }, [newImages, newVideos]);
+
   return (
     <Margin32>
       <FieldHeader>Add photos and videos of your listing</FieldHeader>
       <FilesWrapper>
-        {allImages?.map((file, index) => (
-          <FileCard key={index}>
-            <img src="/image_icon.svg" alt="" />
-            <div>{file.name + "." + file.contentType?.split("/")[1]}</div>
-            <XButton
-              src="/x_symbol.svg"
-              onClick={() => {
-                handleDelete(file);
-              }}
-              alt=""
-            />
-          </FileCard>
-        ))}
-        {allVideos?.map((file, index) => (
-          <FileCard key={index}>
-            <img src="/video_icon.svg" alt="" />
-            <div>{file.name + "." + file.contentType?.split("/")[1]}</div>
-            <XButton
-              src="/x_symbol.svg"
-              onClick={() => {
-                handleDelete(file);
-              }}
-              alt=""
-            />
-          </FileCard>
-        ))}
+        {unit_id &&
+          allImages?.map((file, index) => (
+            <FileCard key={index}>
+              <img src="/image_icon.svg" alt="" />
+              <div>{file.name + "." + file.contentType?.split("/")[1]}</div>
+              <XButton
+                src="/x_symbol.svg"
+                onClick={() => {
+                  handleDelete(file);
+                }}
+                alt=""
+              />
+            </FileCard>
+          ))}
+        {unit_id &&
+          allVideos?.map((file, index) => (
+            <FileCard key={index}>
+              <img src="/video_icon.svg" alt="" />
+              <div>{file.name + "." + file.contentType?.split("/")[1]}</div>
+              <XButton
+                src="/x_symbol.svg"
+                onClick={() => {
+                  handleDelete(file);
+                }}
+                alt=""
+              />
+            </FileCard>
+          ))}
+
+        {!unit_id &&
+          newImages?.map((file, index) => (
+            <FileCard key={index}>
+              <img src="/image_icon.svg" alt="" />
+              <div>{file.name}</div>
+              <XButton
+                src="/x_symbol.svg"
+                onClick={() => {
+                  const newImgs = newImages.filter((_image, i) => {
+                    return i !== index;
+                  });
+                  setNewImages(newImgs);
+                }}
+                alt=""
+              />
+            </FileCard>
+          ))}
+
+        {unit_id &&
+          newVideos?.map((file, index) => (
+            <FileCard key={index}>
+              <img src="/video_icon.svg" alt="" />
+              <div>{file.name}</div>
+              <XButton
+                src="/x_symbol.svg"
+                onClick={() => {
+                  const newVids = newVideos.filter((_video, i) => i !== index);
+                  setNewVideos(newVids);
+                }}
+                alt=""
+              />
+            </FileCard>
+          ))}
       </FilesWrapper>
       <SubmitRow>
         <SubmitButton htmlFor="formId">
           <img src="/upload.svg" alt="upload" />
           Add Files
-          <input
-            value={""}
-            type="file"
-            id="formId"
-            onChange={(event) => {
-              const files = event.target.files;
-              handleUploadFiles(files);
-              if (files) onChange(Array.from(files));
-            }}
-            multiple
-            hidden
-          />
+          <input value={""} type="file" id="formId" onChange={handleFormChange} multiple hidden />
         </SubmitButton>
         <div>{uploadingState}</div>
       </SubmitRow>

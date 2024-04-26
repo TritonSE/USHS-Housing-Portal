@@ -1,24 +1,49 @@
-import { FullMetadata, getMetadata, listAll, ref, uploadBytesResumable } from "firebase/storage";
+import {
+  FullMetadata,
+  deleteObject,
+  getDownloadURL,
+  getMetadata,
+  listAll,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
 
 import { storage } from "@/firebase";
 
-export async function getFiles(id: string) {
-  const data: FullMetadata[][] = [];
-  await listAll(ref(storage, `${id}/images/`))
+export type { FullMetadata };
+
+export async function getFileMetadata(id: string, folder: string) {
+  let metadata: FullMetadata[] = [];
+  await listAll(ref(storage, `${id}/${folder}/`))
     .then(async (res) => {
       const images = res.items;
-      const imageMetadata = await Promise.all(images.map((item) => getMetadata(item)));
-      data.push(imageMetadata);
+      metadata = await Promise.all(
+        images.map((item) =>
+          getMetadata(item).then((value) => {
+            return value;
+          }),
+        ),
+      );
     })
     .catch(console.error);
-  await listAll(ref(storage, `${id}/videos/`))
-    .then(async (res2) => {
-      const videos = res2.items;
-      const videoMetadata = await Promise.all(videos.map((item) => getMetadata(item)));
-      data.push(videoMetadata);
+  return metadata;
+}
+
+export async function getFileURLS(id: string, folder: string) {
+  let urls: string[] = [];
+  await listAll(ref(storage, `${id}/${folder}/`))
+    .then(async (res) => {
+      const images = res.items;
+      urls = await Promise.all(
+        images.map((item) =>
+          getDownloadURL(item).then((value) => {
+            return value;
+          }),
+        ),
+      );
     })
     .catch(console.error);
-  return data;
+  return urls;
 }
 
 export const handleRepeatName = (
@@ -44,17 +69,18 @@ export const handleRepeatName = (
   }
 };
 
-export function uploadFiles(
+export async function uploadFiles(
   files: FileList | File[] | null | undefined,
   id: string,
-  currImages: FullMetadata[] | undefined,
-  currVideos: FullMetadata[] | undefined,
+  currImages?: FullMetadata[] | undefined,
+  currVideos?: FullMetadata[] | undefined,
   setUploadingState?: (a: string) => void,
   onCompletion?: () => void,
+  thumbnail?: boolean,
 ) {
   if (files && id) {
     for (const file of files) {
-      const folder = file.type.includes("video") ? "videos" : "images";
+      const folder = thumbnail ? "thumbnail" : file.type.includes("video") ? "videos" : "images";
       const fileName = handleRepeatName(
         folder,
         file.name.replace(/\.[^/.]+$/, ""),
@@ -81,4 +107,28 @@ export function uploadFiles(
       }
     }
   }
+}
+
+export async function uploadThumbnail(
+  files: File[],
+  id: string,
+  setUploadingState?: (a: string) => void,
+  onCompletion?: () => void,
+) {
+  await deleteFolder(id, "thumbnail").then(() => {
+    uploadFiles(files, id, undefined, undefined, setUploadingState, onCompletion, true);
+  });
+}
+
+export async function deleteFile(file: FullMetadata) {
+  await deleteObject(ref(storage, file.fullPath));
+}
+
+export async function deleteFolder(id: string, folder: string) {
+  await listAll(ref(storage, `${id}/${folder}/`))
+    .then(async (res) => {
+      const { items } = res;
+      await Promise.all(items.map((item) => deleteObject(item)));
+    })
+    .catch(console.error);
 }

@@ -1,17 +1,9 @@
-import {
-  FullMetadata,
-  deleteObject,
-  getMetadata,
-  listAll,
-  ref,
-  uploadBytesResumable,
-} from "firebase/storage";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import { FieldHeader, Margin32 } from "./CommonStyles";
 
-import { storage } from "@/firebase";
+import { FullMetadata, deleteFile, getFileMetadata, uploadThumbnail } from "@/api/images";
 
 const SubmitRow = styled.div`
   display: flex;
@@ -75,65 +67,50 @@ const XButton = styled.img`
 
 type ImagesVideosProps = {
   unit_id: string;
+  onChange: (thumbnail: File[] | null) => void;
 };
 
-export const Thumbnail = ({ unit_id }: ImagesVideosProps) => {
+export const Thumbnail = ({ unit_id, onChange }: ImagesVideosProps) => {
   const [thumbnail, setThumbnail] = useState<FullMetadata>();
+  const [newThumbnail, setNewThumbnail] = useState<File[] | null>(null);
 
   const [uploadingState, setUploadingState] = useState<string>();
 
-  const getFiles = () => {
-    listAll(ref(storage, `${unit_id}/thumbnail/`))
-      .then(async (res) => {
-        const { items } = res;
-        const metadata = await Promise.all(items.map((item) => getMetadata(item)));
-        setThumbnail(metadata[0]);
+  const handleGetFiles = () => {
+    getFileMetadata(unit_id, "thumbnail")
+      .then((data) => {
+        setThumbnail(data[0]);
       })
       .catch(console.error);
   };
 
   useEffect(() => {
-    getFiles();
+    handleGetFiles();
   }, []);
 
+  useEffect(() => {
+    onChange(newThumbnail);
+  }, [newThumbnail]);
+
   const handleDelete = (file: FullMetadata) => {
-    deleteObject(ref(storage, file.fullPath))
+    deleteFile(file)
       .then(() => {
-        getFiles();
+        handleGetFiles();
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  const uploadFiles = (files: FileList | null) => {
-    if (files !== null && !files[0].type.includes("video")) {
-      if (thumbnail) handleDelete(thumbnail);
-      const fileName = files[0].name.replace(/\.[^/.]+$/, "");
-      const storageRef = ref(storage, `${unit_id}/thumbnail/${fileName}`);
-      const uploadTask = uploadBytesResumable(storageRef, files[0]);
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          setUploadingState(`Uploading: ${progress.toFixed(0)}% done`);
-        },
-        (error) => {
-          console.log(error);
-        },
-        () => {
-          getFiles();
-          setUploadingState("Uploaded!");
-        },
-      );
-    }
+  const handleUpload = (files: File[]) => {
+    uploadThumbnail(files, unit_id, setUploadingState, handleGetFiles);
   };
 
   return (
     <Margin32>
       <FieldHeader>Choose thumbnail (optional)</FieldHeader>
       <FilesWrapper>
-        {thumbnail && (
+        {unit_id && thumbnail && (
           <FileCard>
             <img src="/image_icon.svg" alt="" />
             <div>{thumbnail?.name + "." + thumbnail?.contentType?.split("/")[1]}</div>
@@ -141,6 +118,20 @@ export const Thumbnail = ({ unit_id }: ImagesVideosProps) => {
               src="/x_symbol.svg"
               onClick={() => {
                 handleDelete(thumbnail);
+              }}
+              alt=""
+            />
+          </FileCard>
+        )}
+
+        {!unit_id && newThumbnail && (
+          <FileCard>
+            <img src="/image_icon.svg" alt="" />
+            <div>{newThumbnail[0].name}</div>
+            <XButton
+              src="/x_symbol.svg"
+              onClick={() => {
+                setNewThumbnail(null);
               }}
               alt=""
             />
@@ -157,7 +148,13 @@ export const Thumbnail = ({ unit_id }: ImagesVideosProps) => {
             id="thumbnailId"
             onChange={(event) => {
               const files = event.target.files;
-              uploadFiles(files);
+              if (files && !files[0].type.includes("video")) {
+                if (unit_id) {
+                  handleUpload(Array.from(files));
+                } else {
+                  if (files) setNewThumbnail([...files]);
+                }
+              }
             }}
             hidden
           />

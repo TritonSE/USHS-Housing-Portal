@@ -1,5 +1,4 @@
-import { FullMetadata } from "firebase/storage";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 
 import { Button } from "./Button";
@@ -119,8 +118,7 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   const [newFiles, setNewFiles] = useState<File[] | null>();
-  const [allImages, setAllImages] = useState<FullMetadata[]>();
-  const [allVideos, setAllVideos] = useState<FullMetadata[]>();
+  const [thumbnail, setThumbnail] = useState<File[] | null>(null);
 
   const handleFirstName = (event: React.ChangeEvent<HTMLInputElement>) => {
     const hasNumber = /\d/;
@@ -333,7 +331,8 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
         .then((res) => {
           if (res.success) {
             setErrorMessage("");
-            uploadFiles(newFiles, res.data._id, allImages, allVideos);
+            uploadFiles(newFiles, res.data._id);
+            uploadFiles(thumbnail, res.data._id, undefined, undefined, undefined, undefined, true);
             props.handleAfterSubmit(res.data);
           } else {
             setErrorMessage(res.error);
@@ -343,9 +342,6 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
     }
   };
 
-  useEffect(() => {
-    console.log(newFiles);
-  }, [newFiles]);
 
   return (
     <MainContainer>
@@ -512,18 +508,9 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
           handler={handleAdditionalCommentsLL}
         />
 
-        <ImagesVideos
-          unit_id={props.initialValues?._id ?? ""}
-          onChange={(files) => {
-            setNewFiles(files);
-          }}
-          onGetFiles={(value) => {
-            setAllImages(value[0]);
-            setAllVideos(value[1]);
-          }}
-        />
+        <ImagesVideos unit_id={props.initialValues?._id ?? ""} onChange={setNewFiles} />
 
-        <Thumbnail unit_id={props.initialValues?._id ?? ""} />
+        <Thumbnail unit_id={props.initialValues?._id ?? ""} onChange={setThumbnail} />
 
         {(props.formType === "housingLocator" || props.formType === "edit") && (
           <HousingLocatorFields

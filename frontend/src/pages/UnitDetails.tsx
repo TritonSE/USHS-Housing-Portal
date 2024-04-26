@@ -1,4 +1,3 @@
-import { getDownloadURL, listAll, ref } from "firebase/storage";
 import React, { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Carousel } from "react-responsive-carousel";
@@ -8,6 +7,7 @@ import styled from "styled-components";
 
 import { Loading } from "./Loading";
 
+import { getFileURLS } from "@/api/images";
 import { FilterParams, Unit, approveUnit, getUnit, updateUnit } from "@/api/units";
 import { Page } from "@/components";
 import { Banner } from "@/components/Banner";
@@ -17,7 +17,6 @@ import { ListingFormComponents } from "@/components/ListingFormComponents";
 import { NavBar } from "@/components/NavBar";
 import { ReferralTable } from "@/components/ReferralTable";
 import { DataContext } from "@/contexts/DataContext";
-import { storage } from "@/firebase";
 
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
@@ -299,6 +298,7 @@ const CarouselImage = styled.img`
   height: 50vh;
   max-width: 40vw;
   user-select: none;
+  padding: 0px 7.5px;
 `;
 
 const CarouselVideo = styled.video`
@@ -306,6 +306,7 @@ const CarouselVideo = styled.video`
   height: 50vh;
   max-width: 40vw;
   user-select: none;
+  padding: 0px 7.5px;
 `;
 
 export function UnitDetails() {
@@ -336,41 +337,22 @@ export function UnitDetails() {
   const [imgUrls, setImgUrls] = useState<string[]>([]);
   const [vidUrls, setVidUrls] = useState<string[]>([]);
 
-  const getFiles = () => {
-    listAll(ref(storage, `${id}/images/`))
-      .then(async (res) => {
-        const { items } = res;
-        const urls = await Promise.all(
-          items.map((item) =>
-            getDownloadURL(item).then((value) => {
-              return value;
-            }),
-          ),
-        );
-        console.log(urls);
+  const handleGetFiles = () => {
+    getFileURLS(id ?? "", "images")
+      .then((urls) => {
         setImgUrls(urls);
       })
       .catch(console.error);
 
-    listAll(ref(storage, `${id}/videos/`))
-      .then(async (res) => {
-        const { items } = res;
-        const urls = await Promise.all(
-          items.map((item) =>
-            getDownloadURL(item).then((value) => {
-              return value;
-            }),
-          ),
-        );
-        console.log(urls);
-
+    getFileURLS(id ?? "", "videos")
+      .then((urls) => {
         setVidUrls(urls);
       })
       .catch(console.error);
   };
 
   useEffect(() => {
-    getFiles();
+    handleGetFiles();
   }, [isEditing]);
 
   const toggleEditing = () => {
@@ -603,7 +585,7 @@ export function UnitDetails() {
                     (1 - ((imgUrls.length + vidUrls.length) % 2)),
                 )}
                 centerMode={imgUrls.length + vidUrls.length > 1}
-                centerSlidePercentage={52}
+                centerSlidePercentage={50}
                 showStatus={false}
                 swipeable={false}
                 transitionTime={400}
