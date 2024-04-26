@@ -215,9 +215,21 @@ export const UnitCard = ({ unit, refreshUnits }: CardProps) => {
   const [coverImg, setCoverImg] = useState<string>();
 
   const deleteFiles = () => {
-    deleteFolder(unit._id, "images");
-    deleteFolder(unit._id, "videos");
-    deleteFolder(unit._id, "thumbnail");
+    deleteFolder(unit._id, "images")
+      .then(() => {
+        console.log("success");
+      })
+      .catch(console.error);
+    deleteFolder(unit._id, "videos")
+      .then(() => {
+        console.log("success");
+      })
+      .catch(console.error);
+    deleteFolder(unit._id, "thumbnail")
+      .then(() => {
+        console.log("success");
+      })
+      .catch(console.error);
   };
 
   const handleDelete = () => {

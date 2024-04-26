@@ -342,7 +342,6 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
     }
   };
 
-
   return (
     <MainContainer>
       {props.formType !== "edit" && <Logo />}

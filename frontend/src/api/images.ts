@@ -46,6 +46,19 @@ export async function getFileURLS(id: string, folder: string) {
   return urls;
 }
 
+export async function deleteFile(file: FullMetadata) {
+  await deleteObject(ref(storage, file.fullPath));
+}
+
+export async function deleteFolder(id: string, folder: string) {
+  await listAll(ref(storage, `${id}/${folder}/`))
+    .then(async (res) => {
+      const { items } = res;
+      await Promise.all(items.map((item) => deleteObject(item)));
+    })
+    .catch(console.error);
+}
+
 export const handleRepeatName = (
   folder: string,
   fileName: string,
@@ -69,7 +82,7 @@ export const handleRepeatName = (
   }
 };
 
-export async function uploadFiles(
+export function uploadFiles(
   files: FileList | File[] | null | undefined,
   id: string,
   currImages?: FullMetadata[] | undefined,
@@ -118,17 +131,4 @@ export async function uploadThumbnail(
   await deleteFolder(id, "thumbnail").then(() => {
     uploadFiles(files, id, undefined, undefined, setUploadingState, onCompletion, true);
   });
-}
-
-export async function deleteFile(file: FullMetadata) {
-  await deleteObject(ref(storage, file.fullPath));
-}
-
-export async function deleteFolder(id: string, folder: string) {
-  await listAll(ref(storage, `${id}/${folder}/`))
-    .then(async (res) => {
-      const { items } = res;
-      await Promise.all(items.map((item) => deleteObject(item)));
-    })
-    .catch(console.error);
 }

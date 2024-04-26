@@ -103,7 +103,11 @@ export const Thumbnail = ({ unit_id, onChange }: ImagesVideosProps) => {
   };
 
   const handleUpload = (files: File[]) => {
-    uploadThumbnail(files, unit_id, setUploadingState, handleGetFiles);
+    uploadThumbnail(files, unit_id, setUploadingState, handleGetFiles)
+      .then(() => {
+        console.log("success");
+      })
+      .catch(console.error);
   };
 
   return (
