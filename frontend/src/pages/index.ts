@@ -4,3 +4,4 @@ export { UnitDetails } from "./UnitDetails";
 export { Profile } from "./Profile";
 export { HousingLocatorForm } from "./HousingLocatorForm";
 export { LandlordListingForm } from "./LandlordListingForm";
+export { RenterCandidate } from "./RenterCandidate";
