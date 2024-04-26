@@ -150,6 +150,7 @@ export const Thumbnail = ({ unit_id, onChange }: ImagesVideosProps) => {
             value={""}
             type="file"
             id="thumbnailId"
+            accept="image/*, video/*"
             onChange={(event) => {
               const files = event.target.files;
               if (files && !files[0].type.includes("video")) {
