@@ -206,7 +206,15 @@ export const ImagesVideos = ({ unit_id, onChange }: ImagesVideosProps) => {
         <SubmitButton htmlFor="formId">
           <img src="/upload.svg" alt="upload" />
           Add Files
-          <input value={""} type="file" id="formId" onChange={handleFormChange} multiple hidden />
+          <input
+            value={""}
+            type="file"
+            id="formId"
+            accept="image/*, video/*"
+            onChange={handleFormChange}
+            multiple
+            hidden
+          />
         </SubmitButton>
         <div>{uploadingState}</div>
       </SubmitRow>
