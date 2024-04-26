@@ -275,7 +275,7 @@ export const UnitCard = ({ unit, refreshUnits }: CardProps) => {
       <Link to={`/unit/${unit._id}`} state={filters} style={{ textDecoration: "none" }}>
         <UnitCardContainer pending={!unit.approved}>
           <ImageWrapper>
-            <img src={coverImg} alt="" />
+            <img src={coverImg} alt="Thumbnail" />
             <AvailabilityRow>
               {unit.availableNow && unit.approved ? (
                 <AvailabilityIcon src="/green_ellipse.svg" />

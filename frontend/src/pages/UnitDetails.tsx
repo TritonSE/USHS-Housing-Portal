@@ -592,20 +592,20 @@ export function UnitDetails() {
                 renderArrowPrev={(clickHandler, hasPrev) =>
                   hasPrev && (
                     <LeftArrowWrapper onClick={clickHandler}>
-                      <img src="/left-arrow.svg" alt="" />
+                      <img src="/left-arrow.svg" alt="Arrow" />
                     </LeftArrowWrapper>
                   )
                 }
                 renderArrowNext={(clickHandler, hasNext) =>
                   hasNext && (
                     <RightArrowWrapper onClick={clickHandler}>
-                      <img src="/right-arrow.svg" alt="" />
+                      <img src="/right-arrow.svg" alt="Arrow" />
                     </RightArrowWrapper>
                   )
                 }
               >
                 {imgUrls
-                  .map((url, index) => <CarouselImage src={url} key={index} alt="" />)
+                  .map((url, index) => <CarouselImage src={url} key={index} alt="Picture" />)
                   .concat(
                     vidUrls.map((url, index) => (
                       <CarouselVideo key={index} controls>
