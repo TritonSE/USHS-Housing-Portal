@@ -125,3 +125,10 @@ export const ApplyButton = styled.button`
     border-color: #ec8537;
   }
 `;
+
+export const CheckboxRadioText = styled.label`
+  font-weight: 400;
+  font-size: 12px;
+  margin-left: 0;
+  cursor: pointer;
+`;

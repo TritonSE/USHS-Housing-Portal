@@ -1,21 +1,11 @@
 import styled from "styled-components";
 
-import { FilterContainer, FilterRow, Sort } from "./FilterCommon";
+import { CheckboxRadioText, FilterContainer, FilterRow } from "./FilterCommon";
 import { FilterHeader } from "./FilterHeader";
+import { CustomCheckboxRadio } from "./ListingForm/CommonStyles";
 
 const CheckboxFilterRow = styled(FilterRow)`
   padding-left: 20px;
-`;
-
-const FilterRadioButton = styled.img`
-  height: 20px;
-  width: 20px;
-`;
-
-const PopupBodyText = styled(Sort)`
-  font-weight: 400;
-  font-size: 12px;
-  margin-left: 0;
 `;
 
 export type CheckboxFilterProps = {
@@ -31,12 +21,12 @@ export const CheckboxFilter = (props: CheckboxFilterProps) => {
       <FilterHeader title={props.title} />
       {props.options.map((text, idx) => (
         <CheckboxFilterRow key={idx}>
-          <FilterRadioButton
-            src={
-              props.value.has(idx) ? "/filled_filter_radio_button.svg" : "/filter_radio_button.svg"
-            }
-            onClick={() => {
-              if (!props.value.has(idx)) {
+          <CustomCheckboxRadio 
+            id={`${props.title}_checkbox_${idx}`}
+            type="checkbox" 
+            checked={props.value.has(idx)}
+            onChange={e => {
+              if (e.target.checked) {
                 props.setValue(new Set(props.value).add(idx));
               } else {
                 const newSet = new Set(props.value);
@@ -45,7 +35,7 @@ export const CheckboxFilter = (props: CheckboxFilterProps) => {
               }
             }}
           />
-          <PopupBodyText>{text}</PopupBodyText>
+          <CheckboxRadioText htmlFor={`${props.title}_checkbox_${idx}`}>{text}</CheckboxRadioText>
         </CheckboxFilterRow>
       ))}
     </FilterContainer>
