@@ -9,6 +9,7 @@ import { auth } from "@/firebase";
 const NavBarContainer = styled.div`
   position: sticky;
   top: 0;
+  z-index: 5;
 `;
 
 const NavbarItems = styled.div`
