@@ -21,11 +21,11 @@ export const CheckboxFilter = (props: CheckboxFilterProps) => {
       <FilterHeader title={props.title} />
       {props.options.map((text, idx) => (
         <CheckboxFilterRow key={idx}>
-          <CustomCheckboxRadio 
+          <CustomCheckboxRadio
             id={`${props.title}_checkbox_${idx}`}
-            type="checkbox" 
+            type="checkbox"
             checked={props.value.has(idx)}
-            onChange={e => {
+            onChange={(e) => {
               if (e.target.checked) {
                 props.setValue(new Set(props.value).add(idx));
               } else {

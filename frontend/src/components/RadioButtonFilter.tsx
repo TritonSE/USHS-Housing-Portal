@@ -21,7 +21,7 @@ export const RadioButtonFilter = (props: RadioButtonFilterProps) => {
       <FilterHeader title={props.title} />
       {props.options.map((text, idx) => (
         <RadioButtonRow key={idx}>
-          <CustomCheckboxRadio 
+          <CustomCheckboxRadio
             id={`${props.title}_radiobutton_${idx}`}
             type="radio"
             checked={props.value === idx}
@@ -29,7 +29,9 @@ export const RadioButtonFilter = (props: RadioButtonFilterProps) => {
               props.setValue(idx);
             }}
           />
-          <CheckboxRadioText htmlFor={`${props.title}_radiobutton_${idx}`}>{text}</CheckboxRadioText>
+          <CheckboxRadioText htmlFor={`${props.title}_radiobutton_${idx}`}>
+            {text}
+          </CheckboxRadioText>
         </RadioButtonRow>
       ))}
     </FilterContainer>
