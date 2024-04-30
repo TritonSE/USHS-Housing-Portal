@@ -211,8 +211,10 @@ export const HousingLocatorTable = () => {
               <DeleteIcon
                 src="trash-can.svg"
                 onClick={() => {
-                  setSelectedUser(locator);
-                  setPopup(true);
+                  if (locator !== null) {
+                    setSelectedUser(locator);
+                    setPopup(true);
+                  }
                 }}
               ></DeleteIcon>
             </HLRow>
@@ -281,10 +283,7 @@ export const HousingLocatorTable = () => {
               <DoneMessageHeader>
                 <img src="dark_green_check.svg" alt="Complete" width="78px" height="78px" />
                 <WarningMessageWrapper>
-                  <b>
-                    {selectedUser.firstName} {selectedUser.lastName}
-                  </b>{" "}
-                  has been removed as a housing locator.
+                  <b></b> has been removed as a housing locator.
                 </WarningMessageWrapper>
               </DoneMessageHeader>
               <ButtonsWrapper>
