@@ -293,6 +293,14 @@ const RightArrowWrapper = styled.div`
   user-select: none;
 `;
 
+const ImageWrapper = styled.div`
+  width: 100%;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 const CarouselImage = styled.img`
   object-fit: cover;
   height: 50vh;
@@ -334,8 +342,8 @@ export function UnitDetails() {
   //checks for which view to return
   const [isEditing, setIsEditing] = useState(false);
 
-  const [imgUrls, setImgUrls] = useState<string[]>([]);
-  const [vidUrls, setVidUrls] = useState<string[]>([]);
+  const [imgUrls, setImgUrls] = useState<string[]>([""]);
+  const [vidUrls, setVidUrls] = useState<string[]>([""]);
 
   const handleGetFiles = () => {
     getFileURLS(id ?? "", "images")
@@ -577,6 +585,12 @@ export function UnitDetails() {
           ) : (
             // Viewing mode
             <>
+              {imgUrls.length === 0 && vidUrls.length === 0 && (
+                <ImageWrapper>
+                  <img src="/no_image.png" alt="" />
+                </ImageWrapper>
+              )}
+
               <Carousel
                 useKeyboardArrows={true}
                 showThumbs={false}
