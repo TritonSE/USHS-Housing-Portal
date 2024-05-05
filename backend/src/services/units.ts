@@ -51,7 +51,7 @@ export const createUnit = async (newUnit: NewUnitBody, isHl: boolean) => {
 export const updateUnit = async (id: string, unitData: EditUnitBody) => {
   const updateQuery: UpdateQuery<Unit> = {};
   if (unitData.leasedStatus === null) {
-    delete unitData.leasedStatus;
+    // delete unitData.leasedStatus;
     // unset leasedStatus if null
     updateQuery.$unset = { leasedStatus: 1 };
   }

@@ -6,6 +6,10 @@ export async function getRenterCandidates() {
   return renters;
 }
 
+export async function getRenterCandidate(id: string) {
+  return await RenterModel.findById(id);
+}
+
 export async function createRenterCandidate(
   firstName: string,
   lastName: string,
