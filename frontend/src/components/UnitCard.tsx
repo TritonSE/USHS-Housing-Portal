@@ -15,13 +15,6 @@ const UnitCardContainer = styled.div<{ pending: boolean }>`
   justify-content: flex-start;
   align-content: flex-start;
   gap: 8px;
-  gap: 8px;
-
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-top: 20px;
-  width: 318px;
-  height: 370px;
   padding-left: 20px;
   padding-right: 20px;
   padding-top: 20px;
@@ -43,18 +36,9 @@ const UnitCardText = styled.span`
 
 const AvailabilityRow = styled.div`
   position: absolute;
-  position: absolute;
   display: flex;
   justify-content: center;
-  justify-content: center;
   align-items: center;
-  gap: 11px;
-  position: absolute;
-  background-color: rgba(255, 255, 255, 0.8);
-  padding: 3px 10px 2px 11px;
-  border-radius: 10px;
-  top: 10px;
-  left: 10px;
   gap: 11px;
   position: absolute;
   background-color: rgba(255, 255, 255, 0.8);
@@ -70,7 +54,6 @@ const BedBathRow = styled.div`
   justify-content: flex-start;
   align-items: center;
   gap: 4px;
-  gap: 4px;
 `;
 
 const AddressRow = styled.div`
@@ -83,13 +66,10 @@ const AddressRow = styled.div`
 const AvailabilityIcon = styled.img`
   width: 18px;
   height: 18px;
-  width: 18px;
-  height: 18px;
 `;
 
 const AvailabilityText = styled(UnitCardText)`
   font-family: Montserrat;
-  color: #000;
   color: #000;
   font-size: 16.535px;
   font-style: normal;
@@ -100,12 +80,10 @@ const AvailabilityText = styled(UnitCardText)`
 
 const RentText = styled(UnitCardText)`
   font-size: 30px;
-  font-size: 30px;
   font-style: normal;
   font-weight: 700;
   line-height: 121%;
   letter-spacing: 0.331px;
-  font-family: Inter;
   font-family: Inter;
 `;
 
@@ -134,11 +112,7 @@ const BedBathText = styled(NumberText)`
 const DeleteIcon = styled.img`
   width: 22px;
   height: 24px;
-  width: 22px;
-  height: 24px;
   position: relative;
-  top: -32px;
-  left: 250px;
   top: -32px;
   left: 250px;
   cursor: pointer;
@@ -265,7 +239,6 @@ export const UnitCard = ({ unit, refreshUnits }: CardProps) => {
     deleteUnit(unit._id)
       .then((value) => {
         if (value.success) console.log(value.data);
-        deleteFiles();
         deleteFiles();
         setPopup(false);
         if (refreshUnits) refreshUnits();
