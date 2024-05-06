@@ -271,26 +271,42 @@ const Heading = styled.h1`
 
 const LeftArrowWrapper = styled.div`
   position: absolute;
-  top: 23vh;
-  left: 0.5vw;
   z-index: 2;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
   user-select: none;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.6) 0%,
+    rgba(0, 0, 0, 0.36) 43.86%,
+    rgba(0, 0, 0, 0) 98.57%
+  );
+  height: 99%;
+  padding-right: 0.5vw;
+  padding-left: 0.5vw;
 `;
 
 const RightArrowWrapper = styled.div`
   position: absolute;
   z-index: 2;
-  top: 23vh;
-  right: 0.5vw;
+  top: 0vh;
+  right: 0vw;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
   user-select: none;
+  background: linear-gradient(
+    270deg,
+    rgba(0, 0, 0, 0.6) 0%,
+    rgba(0, 0, 0, 0.36) 43.37%,
+    rgba(0, 0, 0, 0) 98.57%
+  );
+  height: 99%;
+  padding-right: 0.5vw;
+  padding-left: 0.5vw;
 `;
 
 const ImageWrapper = styled.div`
@@ -603,15 +619,18 @@ export function UnitDetails() {
                 showStatus={false}
                 swipeable={false}
                 transitionTime={400}
+                showIndicators={imgUrls.length + vidUrls.length > 2}
                 renderArrowPrev={(clickHandler, hasPrev) =>
-                  hasPrev && (
+                  hasPrev &&
+                  imgUrls.length + vidUrls.length > 2 && (
                     <LeftArrowWrapper onClick={clickHandler}>
                       <img src="/left-arrow.svg" alt="Arrow" />
                     </LeftArrowWrapper>
                   )
                 }
                 renderArrowNext={(clickHandler, hasNext) =>
-                  hasNext && (
+                  hasNext &&
+                  imgUrls.length + vidUrls.length > 2 && (
                     <RightArrowWrapper onClick={clickHandler}>
                       <img src="/right-arrow.svg" alt="Arrow" />
                     </RightArrowWrapper>
