@@ -26,11 +26,32 @@ const PanelBackground = styled.div`
   padding-left: 23px;
 `;
 
+const FilterHeaderContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 7px;
+`;
+
 const FiltersText = styled.span`
   font-weight: 700;
   font-size: 28px;
   padding-top: 68px;
   width: 248px;
+`;
+
+const ClearFilterText = styled.button`
+  font-family: Montserrat;
+  font-size: 14px;
+  font-weight: 500;
+  color: #b64201;
+  cursor: pointer;
+  border-radius: 12px;
+  border: 1px solid #B64201;
+  background-color: #fff;
+  width: 91px;
+  height: 25px;
 `;
 
 const ApplyButton = styled.button`
@@ -50,6 +71,13 @@ const ApplyButton = styled.button`
   font-size: 16px;
 
   cursor: pointer;
+
+  display: flex;
+  flex-direction: row;
+  gap: 7px;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 12px;
 `;
 
 const EndFilterGap = styled.div`
