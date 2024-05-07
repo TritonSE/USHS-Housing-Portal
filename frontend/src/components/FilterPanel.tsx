@@ -121,7 +121,10 @@ export const FitlerPanel = () => {
 
   return (
     <PanelBackground>
-      <FiltersText>Filters</FiltersText>
+      <FilterHeaderContainer>
+        <FiltersText>Filters</FiltersText>
+        <ClearFilterText onClick={resetFilters}>Clear All</ClearFilterText>
+      </FilterHeaderContainer>
       <RadioButtonFilter
         title="Availability"
         options={AvailabilityOptions}
@@ -159,7 +162,10 @@ export const FitlerPanel = () => {
         setValue={setAdditionalRulesState}
       />
       <EndFilterGap />
-      <ApplyButton>Apply</ApplyButton>
+      <ApplyButton onClick={applyFilters}>
+        <img src="mdi_filter.svg" />
+        Apply
+      </ApplyButton>
     </PanelBackground>
   );
 };
