@@ -163,7 +163,7 @@ export const FitlerPanel = () => {
       />
       <EndFilterGap />
       <ApplyButton>
-        <img src="mdi_filter.svg" alt="Filter Image" />
+        <img src="mdi_filter.svg" alt="Filter Icon" />
         Apply
       </ApplyButton>
     </PanelBackground>
