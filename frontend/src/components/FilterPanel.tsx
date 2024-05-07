@@ -48,7 +48,7 @@ const ClearFilterText = styled.button`
   color: #b64201;
   cursor: pointer;
   border-radius: 12px;
-  border: 1px solid #B64201;
+  border: 1px solid #b64201;
   background-color: #fff;
   width: 91px;
   height: 25px;
