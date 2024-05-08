@@ -124,7 +124,6 @@ const XButton = styled.div`
 export function Profile() {
   const [popup, setPopup] = useState<boolean>(false);
   const [allReferringStaff, setAllReferringStaff] = useState<User[]>([]);
-  const [, setAllHousingLocators] = useState<User[]>([]);
   const [currentRS, setCurrentRS] = useState<User>(); //tracks current RS selected (for assignment)
   const [assignedRS, setAssignedRS] = useState<User>(); //tracks last RS elevated (for popup)
   const [resetSelect, setResetSelect] = useState<boolean>(false); //resets select component when state changes
