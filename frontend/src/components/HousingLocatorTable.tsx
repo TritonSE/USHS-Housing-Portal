@@ -283,7 +283,10 @@ export const HousingLocatorTable = () => {
               <DoneMessageHeader>
                 <img src="dark_green_check.svg" alt="Complete" width="78px" height="78px" />
                 <WarningMessageWrapper>
-                  <b></b> has been removed as a housing locator.
+                  <b>
+                    {selectedUser?.firstName} {selectedUser?.lastName}
+                  </b>{" "}
+                  has been removed as a housing locator.
                 </WarningMessageWrapper>
               </DoneMessageHeader>
               <ButtonsWrapper>
