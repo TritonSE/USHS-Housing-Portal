@@ -49,11 +49,12 @@ export const getRenterCandidateHandler: RequestHandler = asyncHandler(async (req
   const { id } = req.params;
 
   // Fetch the renter candidate data based on the renterId
-  const renter = await getRenterCandidate(id);
+  const body = await getRenterCandidate(id);
 
-  if (renter === null) {
+  if (body === null) {
     throw createHttpError(404, "Renter not found.");
   }
 
-  res.status(200).json(renter);
+  res.status(200).json(body);
+  console.log(body);
 });

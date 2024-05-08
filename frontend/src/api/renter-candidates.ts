@@ -1,4 +1,5 @@
 import { APIResult, get, handleAPIError, post } from "./requests";
+import { Referral } from "./units";
 
 export type RenterCandidate = {
   _id: string;
@@ -35,10 +36,13 @@ export async function getRenterCandidates(): Promise<APIResult<RenterCandidate[]
   }
 }
 
-export async function getRenterCandidate(id: string): Promise<APIResult<RenterCandidate>> {
+export async function getRenterCandidate(
+  id: string,
+): Promise<APIResult<{ renter: RenterCandidate; referrals: Referral[] }>> {
   try {
     const response = await get(`/renter-candidates/${id}`);
-    const json = (await response.json()) as RenterCandidate;
+    // const json = (await response.json()) as RenterCandidate;
+    const json = await response.json();
     return { success: true, data: json };
   } catch (error) {
     return handleAPIError(error);

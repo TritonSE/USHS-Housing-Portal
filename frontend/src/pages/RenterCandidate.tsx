@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import { getRenterCandidate, RenterCandidate } from "@/api/renter-candidates";
+import { Referral } from "@api/referrals";
 import { Page } from "@/components";
 import { Button } from "@/components/Button";
 import { NavBar } from "@/components/NavBar";
@@ -80,15 +81,19 @@ const TableContainer = styled.div`
 export function RenterCandidate() {
   const navigate = useNavigate();
   const [renterCandidate, setRenterCandidate] = useState<RenterCandidate>();
+  // const [renterReferrals, setRenterReferrals] = useState<Referral>();
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
 
   const fetchRenterCandidate = () => {
     if (id !== undefined) {
       setLoading(true);
+      console.log(id);
       void getRenterCandidate(id).then((result) => {
+        // const { renter, referrals } = result;
         if (result.success) {
-          setRenterCandidate(result.data);
+          setRenterCandidate(result.data.renter);
+          console.log(renterCandidate);
         } else {
           // Go back to the home page if the renter is not found
           navigate("/");
@@ -99,6 +104,7 @@ export function RenterCandidate() {
   };
 
   React.useEffect(fetchRenterCandidate, []);
+  // React.useEffect(fetchRenterReferrals, []);
 
   if (loading || !renterCandidate) {
     // TODO: Loading state
@@ -155,7 +161,7 @@ export function RenterCandidate() {
         </InfoRow>
         <TableContainer>
           <Title>Current Referrals</Title>
-          <RenterCandidateTable />
+          <RenterCandidateTable id={id} />
         </TableContainer>
       </MainColumn>
     </Page>

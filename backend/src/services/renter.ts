@@ -1,4 +1,5 @@
 import { RenterModel } from "../models/renter";
+import { ReferralModel } from "../models/referral";
 
 //Fetch renters from DB
 export async function getRenterCandidates() {
@@ -7,7 +8,12 @@ export async function getRenterCandidates() {
 }
 
 export async function getRenterCandidate(id: string) {
-  return await RenterModel.findById(id);
+  // return await RenterModel.findById(id);
+
+  const renter = await RenterModel.findById(id);
+  const referrals = await ReferralModel.find({ renterCandidate: id });
+
+  return { renter, referrals };
 }
 
 export async function createRenterCandidate(

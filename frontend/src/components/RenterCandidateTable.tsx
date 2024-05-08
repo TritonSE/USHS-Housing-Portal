@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 import { Button } from "./Button";
 import { ReferralTablePagination } from "./ReferralTablePagination";
@@ -7,6 +8,7 @@ import { ReferralTableRow } from "./ReferralTableRow";
 
 import { updateReferral, updateReferralRequest } from "@/api/referrals";
 import { Referral, getUnitReferrals } from "@/api/units";
+import { getRenterCandidate, RenterCandidate } from "@/api/renter-candidates";
 import { User } from "@/api/users";
 import { ReferralPopup } from "@/components/ReferralPopup";
 import { AuthContext } from "@/contexts/AuthContext";
@@ -106,7 +108,8 @@ const ReferralTablePlaceholder = styled.div`
   padding: 12px 2vw;
 `;
 
-export const RenterCandidateTable = () => {
+export const RenterCandidateTable = (id: any) => {
+  const navigate = useNavigate();
   const authContext = useContext(AuthContext);
   const dataContext = useContext(DataContext);
   const [referrals, setReferrals] = useState<Referral[]>([]);
@@ -114,6 +117,8 @@ export const RenterCandidateTable = () => {
   const [housingLocators, setHousingLocators] = useState<User[]>([]);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [popup, setPopup] = useState<boolean>(false);
+  const [loading, setLoading] = useState(true);
+  const [renterReferrals, setRenterReferrals] = useState<Referral[]>([]);
 
   //   const getAllReferringStaff = (): User[] => {
   //     const users = dataContext.allUsers;
@@ -201,29 +206,29 @@ export const RenterCandidateTable = () => {
   //         console.log(error);
   //       });
   //   };
+  const fetchRenterReferrals = () => {
+    if (id !== undefined) {
+      setLoading(true);
+      console.log("id");
+      console.log(id);
+      void getRenterCandidate(id).then((result) => {
+        if (result.success) {
+          setRenterReferrals(result.data.referrals);
+          console.log("renterReferrals");
+          console.log(renterReferrals);
+        } else {
+          // Go back to the home page if the renter is not found
+          navigate("/");
+        }
+        setLoading(false);
+      });
+    }
+  };
+
+  // React.useEffect(fetchRenterReferrals, []);
 
   return (
     <ReferralTableContainer>
-      {/* <ReferralTableTitleSection>
-        <ReferralTableTitle>Referrals:</ReferralTableTitle>
-        <ReferralTableButton
-          kind="primary"
-          onClick={() => {
-            setPopup(true);
-          }}
-        >
-          <ReferralTableButtonIcon src={"/plus_sign.svg"} />
-          Add Referral
-        </ReferralTableButton>
-        <ReferralPopup
-          active={popup}
-          onClose={() => {
-            setPopup(false);
-          }}
-          //   onSubmit={getAllReferrals}
-        />
-      </ReferralTableTitleSection> */}
-
       <ReferralTableColumnHeaders>
         {TableColumnNames.map((name, idx) =>
           idx === TableColumnNames.length - 1 ? (
@@ -234,21 +239,16 @@ export const RenterCandidateTable = () => {
         )}
       </ReferralTableColumnHeaders>
 
-      {referrals && referrals.length > 0 ? (
+      {renterReferrals && renterReferrals.length > 0 ? (
         <>
-          {referrals
+          {renterReferrals
             .slice((pageNumber - 1) * ENTRIES_PER_PAGE, pageNumber * ENTRIES_PER_PAGE)
             .map((referral, idx) => (
               <ReferralTableRow
                 key={Math.random()}
                 index={idx}
-                name={referral.renterCandidate.firstName + " " + referral.renterCandidate.lastName}
-                email={referral.renterCandidate.email}
-                phone={referral.renterCandidate.phone}
-                referringStaff={getReferringStaff(referral.assignedReferringStaff)}
-                allReferringStaff={referringStaff}
-                housingLocator={getHousingLocator(referral.assignedHousingLocator)}
-                allHousingLocators={housingLocators}
+                unit={referral.unitId}
+                housingLocator={referral.assignedHousingLocator}
                 status={referral.status}
                 lastUpdate={referral.updatedAt.toString()}
                 onSelect={(value) => {
