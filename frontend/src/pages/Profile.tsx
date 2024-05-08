@@ -156,7 +156,6 @@ export function Profile() {
 
   useEffect(() => {
     setAllReferringStaff(dataContext.allReferringStaff);
-    setAllHousingLocators(dataContext.allHousingLocators);
   }, [dataContext.allReferringStaff, dataContext.allHousingLocators]);
 
   return (
