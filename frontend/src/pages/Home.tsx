@@ -39,7 +39,9 @@ export function Home() {
   const fetchUnits = (filterParams: FilterParams) => {
     getUnits(filterParams)
       .then((response) => {
-        if (response.success) setUnits(response.data);
+        if (response.success) {
+          setUnits(response.data);
+        }
       })
       .catch(console.error);
   };

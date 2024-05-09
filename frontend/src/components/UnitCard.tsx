@@ -1,9 +1,10 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 import { Button } from "./Button";
 
+import { deleteFolder, getFileURLS } from "@/api/images";
 import { Unit, deleteUnit } from "@/api/units";
 import { DataContext } from "@/contexts/DataContext";
 import { FiltersContext } from "@/pages/Home";
@@ -13,12 +14,13 @@ const UnitCardContainer = styled.div<{ pending: boolean }>`
   flex-direction: column;
   justify-content: flex-start;
   align-content: flex-start;
-  gap: 16px;
+  gap: 8px;
 
-  padding-left: 18px;
-  padding-top: 25px;
-  width: 380px;
-  height: 287px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 20px;
+  width: 318px;
+  height: 370px;
   background-color: white;
 
   border-radius: 6.5px;
@@ -34,12 +36,17 @@ const UnitCardText = styled.span`
 `;
 
 const AvailabilityRow = styled.div`
+  position: absolute;
   display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
-  gap: 16px;
-  padding-bottom: 32px;
+  gap: 11px;
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 3px 10px 2px 11px;
+  border-radius: 10px;
+  top: 10px;
+  left: 10px;
 `;
 
 const BedBathRow = styled.div`
@@ -47,7 +54,7 @@ const BedBathRow = styled.div`
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  gap: 10px;
+  gap: 4px;
 `;
 
 const AddressRow = styled.div`
@@ -57,13 +64,26 @@ const AddressRow = styled.div`
   align-items: flex-start;
 `;
 
+const ImageWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 275px;
+  height: 175px;
+  flex-shrink: 0;
+  overflow: hidden;
+  position: relative;
+  border-radius: 4px;
+  margin-bottom: 10px;
+`;
+
 const AvailabilityIcon = styled.img`
-  width: 23.621px;
-  height: 23.621px;
+  width: 18px;
+  height: 18px;
 `;
 
 const AvailabilityText = styled(UnitCardText)`
   font-family: Montserrat;
+  color: #000;
   font-size: 16.535px;
   font-style: normal;
   font-weight: 300;
@@ -72,11 +92,12 @@ const AvailabilityText = styled(UnitCardText)`
 `;
 
 const RentText = styled(UnitCardText)`
-  font-size: 33.07px;
+  font-size: 30px;
   font-style: normal;
   font-weight: 700;
   line-height: 121%;
   letter-spacing: 0.331px;
+  font-family: Inter;
 `;
 
 const AddressText = styled(UnitCardText)`
@@ -102,13 +123,11 @@ const BedBathText = styled(NumberText)`
 `;
 
 const DeleteIcon = styled.img`
-  width: 35.432px;
-  height: 35.432px;
-  border-radius: 118.107px;
-  background: #ec8537;
+  width: 22px;
+  height: 24px;
   position: relative;
-  top: -27px;
-  left: 310px;
+  top: -32px;
+  left: 250px;
   cursor: pointer;
 `;
 
@@ -193,10 +212,31 @@ export const UnitCard = ({ unit, refreshUnits }: CardProps) => {
   const [popup, setPopup] = useState<boolean>(false);
   const dataContext = useContext(DataContext);
 
+  const [coverImg, setCoverImg] = useState<string>();
+
+  const deleteFiles = () => {
+    deleteFolder(unit._id, "images")
+      .then(() => {
+        console.log("success");
+      })
+      .catch(console.error);
+    deleteFolder(unit._id, "videos")
+      .then(() => {
+        console.log("success");
+      })
+      .catch(console.error);
+    deleteFolder(unit._id, "thumbnail")
+      .then(() => {
+        console.log("success");
+      })
+      .catch(console.error);
+  };
+
   const handleDelete = () => {
     deleteUnit(unit._id)
       .then((value) => {
         if (value.success) console.log(value.data);
+        deleteFiles();
         setPopup(false);
         if (refreshUnits) refreshUnits();
       })
@@ -205,26 +245,55 @@ export const UnitCard = ({ unit, refreshUnits }: CardProps) => {
       });
   };
 
+  //Use thumbnail if it exists, pull from images otherwise
+  const getFiles = () => {
+    getFileURLS(unit._id, "thumbnail")
+      .then((urls) => {
+        if (urls.length !== 0) {
+          setCoverImg(urls[0]);
+        } else {
+          getFileURLS(unit._id, "images")
+            .then((imgUrls) => {
+              if (imgUrls.length === 0) {
+                setCoverImg("USHSLogo.svg");
+              } else {
+                setCoverImg(imgUrls[0]);
+              }
+            })
+            .catch(console.error);
+        }
+      })
+      .catch(console.error);
+  };
+
+  useEffect(() => {
+    getFiles();
+  }, [unit]);
+
   return (
     <>
       <Link to={`/unit/${unit._id}`} state={filters} style={{ textDecoration: "none" }}>
         <UnitCardContainer pending={!unit.approved}>
-          <AvailabilityRow>
-            {unit.availableNow && unit.approved ? (
-              <AvailabilityIcon src="/green_ellipse.svg" />
-            ) : (
-              <AvailabilityIcon src="/red_ellipse.svg" />
-            )}
-            {unit.availableNow && unit.approved ? (
-              <AvailabilityText>Available</AvailabilityText>
-            ) : !unit.approved ? (
-              <AvailabilityText>Pending Approval</AvailabilityText>
-            ) : unit.leasedStatus === "ushs" ? (
-              <AvailabilityText>Leased</AvailabilityText>
-            ) : (
-              <AvailabilityText>Not Available</AvailabilityText>
-            )}
-          </AvailabilityRow>
+          <ImageWrapper>
+            <img src={coverImg} alt="" />
+            <AvailabilityRow>
+              {unit.availableNow && unit.approved ? (
+                <AvailabilityIcon src="/green_ellipse.svg" />
+              ) : (
+                <AvailabilityIcon src="/red_ellipse.svg" />
+              )}
+              {unit.availableNow && unit.approved ? (
+                <AvailabilityText>Available</AvailabilityText>
+              ) : !unit.approved ? (
+                <AvailabilityText>Pending</AvailabilityText>
+              ) : unit.leasedStatus !== undefined ? (
+                <AvailabilityText>Leased</AvailabilityText>
+              ) : (
+                <AvailabilityText>Not Available</AvailabilityText>
+              )}
+            </AvailabilityRow>
+          </ImageWrapper>
+
           <RentText>{`$${unit.monthlyRent}/month`}</RentText>
           <BedBathRow>
             <NumberText>{unit.numBeds}</NumberText>
@@ -240,7 +309,7 @@ export const UnitCard = ({ unit, refreshUnits }: CardProps) => {
           </AddressRow>
           {unit.approved && dataContext.currentUser?.isHousingLocator && (
             <DeleteIcon
-              src="delete.png"
+              src="Trash_Icon.svg"
               onClick={(e) => {
                 // Stop click from propagating to parent (opening the unit page)
                 e.preventDefault();
