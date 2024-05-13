@@ -8,6 +8,7 @@ import { DropDownPopup, DropdownIcon, FilterSubContainer, Sort } from "@/compone
 const SortDropDown = styled(DropDownPopup)`
   margin-top: 30px;
   padding-right: 70px;
+  z-index: 1;
 `;
 
 const SortRow = styled.div`

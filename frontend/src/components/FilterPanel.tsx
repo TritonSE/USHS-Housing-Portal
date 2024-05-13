@@ -4,8 +4,10 @@ import styled from "styled-components";
 import { BedBathFilter } from "./BedBathFilter";
 import { CheckboxFilter } from "./CheckboxFilter";
 import { DateFilter } from "./DateFilter";
-import { MinMaxFitler } from "./MinMaxFilter";
+import { MinMaxFilter } from "./MinMaxFilter";
 import { RadioButtonFilter } from "./RadioButtonFilter";
+
+import { FilterParams } from "@/api/units";
 
 const PanelBackground = styled.div`
   min-width: 284px;
@@ -108,7 +110,11 @@ const AdditionalRulesOptions = [
   "High-management Interaction",
 ];
 
-export const FitlerPanel = () => {
+type FilterPanelProps = {
+  refreshUnits(filterParams: FilterParams): void;
+};
+
+export const FilterPanel = (props: FilterPanelProps) => {
   const [availabilityState, setAvailabilityState] = useState<number>(0);
   const [housingAuthorityState, setHousingAuthorityState] = useState<number>(0);
   const [accessibilityState, setAccessibilityState] = useState<Set<number>>(new Set());
@@ -118,12 +124,81 @@ export const FitlerPanel = () => {
     beds: 1,
     baths: 0.5,
   });
+  const [priceState, setPriceState] = useState({
+    min: 0,
+    max: 10000,
+  });
+  const [securityDepositState, setSecurityDepositState] = useState({
+    min: 0,
+    max: 10000,
+  });
+  const [applicationFeeState, setApplicationFeeState] = useState({
+    min: 0,
+    max: 10000,
+  });
+  const [sizeState, setSizeState] = useState({
+    min: 0,
+    max: 10000,
+  });
+  const [dateState, setDateState] = useState({
+    from: new Date().toISOString().split("T")[0],
+    to: "",
+  });
+
+  const applyFilters = () => {
+    const filters = {
+      availability: AvailabilityOptions[availabilityState],
+      housingAuthority: HousingAuthorityOptions[housingAuthorityState],
+      accessibility: JSON.stringify(
+        Array.from(accessibilityState).map((index) => AccessibilityOptions[index]),
+      ),
+      rentalCriteria: JSON.stringify(
+        Array.from(rentalCriteriaState).map((index) => RentalCriteriaOptions[index]),
+      ),
+      additionalRules: JSON.stringify(
+        Array.from(additionalRulesState).map((index) => AdditionalRulesOptions[index]),
+      ),
+      beds: bedBathState.beds.toString(),
+      baths: bedBathState.baths.toString(),
+      minPrice: priceState.min.toString(),
+      maxPrice: priceState.max.toString(),
+      minSecurityDeposit: securityDepositState.min.toString(),
+      maxSecurityDeposit: securityDepositState.max.toString(),
+      minApplicationFee: applicationFeeState.min.toString(),
+      maxApplicationFee: applicationFeeState.max.toString(),
+      minSize: sizeState.min.toString(),
+      maxSize: sizeState.max.toString(),
+      fromDate: dateState.from,
+      toDate: dateState.to,
+    };
+
+    props.refreshUnits(filters);
+  };
+
+  const resetFilters = () => {
+    setAvailabilityState(0);
+    setHousingAuthorityState(0);
+    setAccessibilityState(new Set());
+    setRentalCriteriaState(new Set());
+    setAdditionalRulesState(new Set());
+    setBedBathState({ beds: 1, baths: 0.5 });
+    setPriceState({ min: 0, max: 10000 });
+    setSecurityDepositState({ min: 0, max: 10000 });
+    setApplicationFeeState({ min: 0, max: 10000 });
+    setSizeState({ min: 0, max: 10000 });
+    setDateState({ from: new Date().toISOString().split("T")[0], to: "" });
+
+    props.refreshUnits({
+      availability: "Available",
+      approved: "approved",
+    });
+  };
 
   return (
     <PanelBackground>
       <FilterHeaderContainer>
         <FiltersText>Filters</FiltersText>
-        <ClearFilterText>Clear All</ClearFilterText>
+        <ClearFilterText onClick={resetFilters}>Clear All</ClearFilterText>
       </FilterHeaderContainer>
       <RadioButtonFilter
         title="Availability"
@@ -131,12 +206,40 @@ export const FitlerPanel = () => {
         value={availabilityState}
         setValue={setAvailabilityState}
       />
-      <MinMaxFitler title="Price" />
-      <MinMaxFitler title="Security Deposit" />
-      <MinMaxFitler title="Application Fee" />
-      <MinMaxFitler title="Size" />
+      <MinMaxFilter
+        title="Price"
+        min={0}
+        max={10000}
+        price="price"
+        value={priceState}
+        setValue={setPriceState}
+      />
+      <MinMaxFilter
+        title="Security Deposit"
+        min={0}
+        max={10000}
+        price="price"
+        value={securityDepositState}
+        setValue={setSecurityDepositState}
+      />
+      <MinMaxFilter
+        title="Application Fee"
+        min={0}
+        max={10000}
+        price="price"
+        value={applicationFeeState}
+        setValue={setApplicationFeeState}
+      />
+      <MinMaxFilter
+        title="Size"
+        min={0}
+        max={10000}
+        price="sqft"
+        value={sizeState}
+        setValue={setSizeState}
+      />
       <BedBathFilter value={bedBathState} setValue={setBedBathState} />
-      <DateFilter />
+      <DateFilter title="Date Available" value={dateState} setValue={setDateState} />
       <RadioButtonFilter
         title="Housing Authority"
         options={HousingAuthorityOptions}
@@ -162,7 +265,7 @@ export const FitlerPanel = () => {
         setValue={setAdditionalRulesState}
       />
       <EndFilterGap />
-      <ApplyButton>
+      <ApplyButton onClick={applyFilters}>
         <img src="mdi_filter.svg" alt="Filter Icon" />
         Apply
       </ApplyButton>

@@ -9,7 +9,6 @@ const RangeRow = styled.div`
 
 const RangeInput = styled.input.attrs({
   type: "text",
-  pattern: "[0-9]*",
 })`
   width: 98px;
   padding: 5px;
@@ -52,17 +51,27 @@ export type FilterRangeInputProps = {
   setValue(val: FilterRangeInputValue): void;
 };
 
-export const FilterRangeInput = () => {
+export const FilterRangeInput = (props: FilterRangeInputProps) => {
+  const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    if (/^\d*$/.test(newValue)) {
+      props.setValue({
+        ...props.value,
+        [e.target.name]: newValue === "" ? 0 : parseInt(newValue),
+      });
+    }
+  };
+
   return (
     <RangeRow>
       <RangeInputContainer>
         <RangeInputTitle>Min</RangeInputTitle>
-        <RangeInput />
+        <RangeInput name="min" value={props.value.min} onChange={changeHandler} />
       </RangeInputContainer>
       <RangeDivider />
       <RangeInputContainer>
         <RangeInputTitle>Max</RangeInputTitle>
-        <RangeInput />
+        <RangeInput name="max" value={props.value.max} onChange={changeHandler} />
       </RangeInputContainer>
     </RangeRow>
   );

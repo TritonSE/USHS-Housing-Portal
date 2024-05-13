@@ -5,7 +5,7 @@ import styled from "styled-components";
 
 import { FilterParams, Unit, getUnits } from "@/api/units";
 import { FilterDropdown } from "@/components/FilterDropdown";
-import { FitlerPanel } from "@/components/FilterPanel";
+import { FilterPanel } from "@/components/FilterPanel";
 import { NavBar } from "@/components/NavBar";
 import { Page } from "@/components/Page";
 import { UnitCardGrid } from "@/components/UnitCardGrid";
@@ -57,7 +57,12 @@ export function Home() {
       </Helmet>
       <NavBar page="Home" />
       <HomePageLayout>
-        <FitlerPanel></FitlerPanel>
+        <FilterPanel
+          refreshUnits={(filterParams) => {
+            filterParams.approved = filters.approved;
+            setFilters(filterParams);
+          }}
+        ></FilterPanel>
         <FilterPadding />
         <div>
           <FilterDropdown

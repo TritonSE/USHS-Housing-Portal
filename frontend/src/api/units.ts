@@ -45,8 +45,20 @@ export type Unit = {
 export type FilterParams = {
   search?: string;
   availability?: string;
+  housingAuthority?: string;
+  accessibility?: string;
+  rentalCriteria?: string;
+  additionalRules?: string;
   minPrice?: string;
   maxPrice?: string;
+  minSecurityDeposit?: string;
+  maxSecurityDeposit?: string;
+  minApplicationFee?: string;
+  maxApplicationFee?: string;
+  minSize?: string;
+  maxSize?: string;
+  fromDate?: string;
+  toDate?: string;
   beds?: string;
   baths?: string;
   sort?: string;
@@ -67,6 +79,7 @@ export async function getUnits(params: FilterParams): Promise<APIResult<Unit[]>>
   try {
     const queryParams = new URLSearchParams(params);
     const url = `/units?${queryParams.toString()}`;
+    console.log(url);
     const response = await get(url);
 
     const json = (await response.json()) as Unit[];
