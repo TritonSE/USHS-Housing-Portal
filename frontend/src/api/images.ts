@@ -20,6 +20,7 @@ export async function getFileMetadata(id: string, folder: string) {
       metadata = await Promise.all(
         images.map((item) =>
           getMetadata(item).then((value) => {
+            if (value.name.includes("600x400")) value.name = value.name.slice(0, -8);
             return value;
           }),
         ),
