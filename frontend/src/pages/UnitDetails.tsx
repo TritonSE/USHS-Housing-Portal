@@ -1,13 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Carousel } from "react-responsive-carousel";
 import { useParams } from "react-router";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import { Loading } from "./Loading";
 
-import { getFileURLS } from "@/api/images";
 import { FilterParams, Unit, approveUnit, getUnit, updateUnit } from "@/api/units";
 import { Page } from "@/components";
 import { Banner } from "@/components/Banner";
@@ -17,8 +15,6 @@ import { ListingFormComponents } from "@/components/ListingFormComponents";
 import { NavBar } from "@/components/NavBar";
 import { ReferralTable } from "@/components/ReferralTable";
 import { DataContext } from "@/contexts/DataContext";
-
-import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 const Section = styled.div`
   display: flex;
@@ -70,7 +66,7 @@ const MainColumn = styled.div`
 
 const DetailsColumn = styled(MainColumn)`
   margin: 32px 160px;
-  gap: 40px;
+  gap: 60px;
 `;
 
 const RentPerMonth = styled.h1`
@@ -269,46 +265,6 @@ const Heading = styled.h1`
   font-family: "Neutraface Text";
 `;
 
-const LeftArrowWrapper = styled.div`
-  position: absolute;
-  top: 23vh;
-  left: 0.5vw;
-  z-index: 2;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  user-select: none;
-`;
-
-const RightArrowWrapper = styled.div`
-  position: absolute;
-  z-index: 2;
-  top: 23vh;
-  right: 0.5vw;
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  user-select: none;
-`;
-
-const CarouselImage = styled.img`
-  object-fit: cover;
-  height: 50vh;
-  max-width: 40vw;
-  user-select: none;
-  padding: 0px 7.5px;
-`;
-
-const CarouselVideo = styled.video`
-  object-fit: cover;
-  height: 50vh;
-  max-width: 40vw;
-  user-select: none;
-  padding: 0px 7.5px;
-`;
-
 export function UnitDetails() {
   const filters = useLocation().state as FilterParams;
   const navigate = useNavigate();
@@ -333,27 +289,6 @@ export function UnitDetails() {
 
   //checks for which view to return
   const [isEditing, setIsEditing] = useState(false);
-
-  const [imgUrls, setImgUrls] = useState<string[]>([]);
-  const [vidUrls, setVidUrls] = useState<string[]>([]);
-
-  const handleGetFiles = () => {
-    getFileURLS(id ?? "", "images")
-      .then((urls) => {
-        setImgUrls(urls);
-      })
-      .catch(console.error);
-
-    getFileURLS(id ?? "", "videos")
-      .then((urls) => {
-        setVidUrls(urls);
-      })
-      .catch(console.error);
-  };
-
-  useEffect(() => {
-    handleGetFiles();
-  }, [isEditing]);
 
   const toggleEditing = () => {
     setIsEditing((prevState) => !prevState);
@@ -547,6 +482,7 @@ export function UnitDetails() {
               )}
             </TopRow>
           </Section>
+
           <Banner
             visible={showApprovedBanner}
             image="/check_mark.svg"
@@ -577,45 +513,6 @@ export function UnitDetails() {
           ) : (
             // Viewing mode
             <>
-              <Carousel
-                useKeyboardArrows={true}
-                showThumbs={false}
-                selectedItem={Math.floor(
-                  (imgUrls.length + vidUrls.length) / 2 -
-                    (1 - ((imgUrls.length + vidUrls.length) % 2)),
-                )}
-                centerMode={imgUrls.length + vidUrls.length > 1}
-                centerSlidePercentage={50}
-                showStatus={false}
-                swipeable={false}
-                transitionTime={400}
-                renderArrowPrev={(clickHandler, hasPrev) =>
-                  hasPrev && (
-                    <LeftArrowWrapper onClick={clickHandler}>
-                      <img src="/left-arrow.svg" alt="Arrow" />
-                    </LeftArrowWrapper>
-                  )
-                }
-                renderArrowNext={(clickHandler, hasNext) =>
-                  hasNext && (
-                    <RightArrowWrapper onClick={clickHandler}>
-                      <img src="/right-arrow.svg" alt="Arrow" />
-                    </RightArrowWrapper>
-                  )
-                }
-              >
-                {imgUrls
-                  .map((url, index) => <CarouselImage src={url} key={index} alt="Picture" />)
-                  .concat(
-                    vidUrls.map((url, index) => (
-                      <CarouselVideo key={index} controls>
-                        <source src={url} />
-                        <track src="captions_en.vtt" kind="captions" label="english_captions" />
-                      </CarouselVideo>
-                    )),
-                  )}
-              </Carousel>
-
               <Section>
                 <TopRow>
                   <Column>

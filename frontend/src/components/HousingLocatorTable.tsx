@@ -2,12 +2,12 @@ import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 
 import { Button } from "./Button";
-import { ReferralTablePagination } from "./ReferralTablePagination";
+import { Pagination } from "./Pagination";
 
 import { User, demoteUser } from "@/api/users";
 import { DataContext } from "@/contexts/DataContext";
 
-const ENTRIES_PER_PAGE = 7;
+const ENTRIES_PER_PAGE = 2;
 
 const HLTableWrapper = styled.div`
   display: flex;
@@ -68,9 +68,19 @@ const HLRow = styled.div`
   margin-bottom: 20px;
 `;
 
+const HLTableFooterWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-right: 24px;
+  margin-bottom: 20px;
+  justify-content: right;
+`;
+
 const HLTableFooter = styled.div`
-  padding-left: 85%;
-  margin: 1vh 0vw 3vh 0vw;
+  display: flex;
+  flex-direction: row;
+
+  justify-content: space-between;
 `;
 
 const Overlay = styled.div`
@@ -219,6 +229,15 @@ export const HousingLocatorTable = () => {
               ></DeleteIcon>
             </HLRow>
           ))}
+        <HLTableFooterWrapper>
+          <HLTableFooter>
+            <Pagination
+              totalPages={Math.ceil(housingLocators.length / ENTRIES_PER_PAGE)}
+              currPage={pageNumber}
+              setPageNumber={setPageNumber}
+            />
+          </HLTableFooter>
+        </HLTableFooterWrapper>
       </HLTableContainer>
       {popup && selectedUser && (
         <>
@@ -303,13 +322,6 @@ export const HousingLocatorTable = () => {
           </Modal>
         </>
       )}
-      <HLTableFooter>
-        <ReferralTablePagination
-          totalPages={Math.ceil(housingLocators.length / ENTRIES_PER_PAGE)}
-          currPage={pageNumber}
-          setPageNumber={setPageNumber}
-        />
-      </HLTableFooter>
     </HLTableWrapper>
   );
 };

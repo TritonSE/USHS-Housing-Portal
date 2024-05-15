@@ -23,6 +23,7 @@ const PropertiesRow = styled.span`
   font-size: 27px;
   font-weight: 700;
   margin-bottom: 15px;
+  justify-content: space-between;
 `;
 
 const HeaderText = styled.span`
@@ -43,7 +44,6 @@ const ButtonsWrapper = styled.div`
   display: flex;
   flex-direction: row;
   left: 74vw;
-  position: absolute;
 `;
 
 const PendingButton = styled.div<{ selected: boolean }>`

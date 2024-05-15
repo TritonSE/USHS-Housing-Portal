@@ -1,12 +1,54 @@
 import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useLocation } from "react-router-dom";
+import styled from "styled-components";
 
 import { FilterParams, Unit, getUnits } from "@/api/units";
 import { FilterDropdown } from "@/components/FilterDropdown";
 import { NavBar } from "@/components/NavBar";
 import { Page } from "@/components/Page";
 import { UnitCardGrid } from "@/components/UnitCardGrid";
+import { UnitList } from "@/components/UnitList";
+
+const ButtonsWrapper = styled.div`
+  display: flex;
+  flex: row;
+  justify-content: end;
+  margin: 0;
+  margin-right: 100px;
+`;
+
+const ToggleButtonWrapper = styled.div`
+  display: flex;
+  padding: 0;
+  width: 195px;
+  height: 140px;
+  gap: 0px;
+  border-radius: 100px 0px 0px 0px;
+  opacity: 0px;
+`;
+
+const CardViewButton = styled.img<{ selected: boolean }>`
+  width: 100px;
+  height: 50px;
+  padding: 7px 33px 8px 32px;
+  gap: 8px;
+  border-radius: 100px 0px 0px 100px;
+  opacity: 0px;
+  background: ${(props) => (props.selected ? "#ec85371a" : "#EEEEEE")};
+
+  &:hover {
+    opacity: 0px;
+    background: #ec85371a;
+    cursor: pointer;
+  }
+`;
+
+const ListViewButton = styled(CardViewButton)`
+  padding: 7px 32px 7px 32px;
+  border-radius: 0px 100px 100px 0px;
+  background: ${(props) => (props.selected ? "#ec85371a" : "#EEEEEE")};
+`;
 
 export const FiltersContext = React.createContext({
   filters: {} as FilterParams,
@@ -21,6 +63,7 @@ export function Home() {
       approved: "approved",
     },
   );
+  const [viewMode, setViewMode] = useState("card");
 
   const fetchUnits = (filterParams: FilterParams) => {
     getUnits(filterParams)
@@ -36,6 +79,14 @@ export function Home() {
     fetchUnits(filters);
   }, [filters]);
 
+  const handleCardView = () => {
+    setViewMode("card");
+  };
+
+  const handleListView = () => {
+    setViewMode("list");
+  };
+
   return (
     <FiltersContext.Provider value={{ filters }}>
       <Page>
@@ -50,15 +101,49 @@ export function Home() {
             setFilters(filterParams);
           }}
         ></FilterDropdown>
-        <UnitCardGrid
-          units={units}
-          showPendingUnits={filters.approved === "pending"}
-          refreshUnits={(approved) => {
-            const newFilters = { ...filters, approved };
-            fetchUnits(newFilters);
-            setFilters(newFilters);
-          }}
-        />
+        <ButtonsWrapper>
+          <ToggleButtonWrapper>
+            <CardViewButton
+              onClick={handleCardView}
+              selected={viewMode === "card"}
+              src={
+                viewMode === "card"
+                  ? "card_view_icon_selected.svg"
+                  : "card_view_icon_unselected.svg"
+              }
+            ></CardViewButton>
+            <ListViewButton
+              onClick={handleListView}
+              selected={viewMode === "list"}
+              src={
+                viewMode === "list"
+                  ? "list_view_icon_selected.svg"
+                  : "list_view_icon_unselected.svg"
+              }
+            ></ListViewButton>
+          </ToggleButtonWrapper>
+        </ButtonsWrapper>
+        {viewMode === "card" ? (
+          <UnitCardGrid
+            units={units}
+            showPendingUnits={filters.approved === "pending"}
+            refreshUnits={(approved) => {
+              const newFilters = { ...filters, approved };
+              fetchUnits(newFilters);
+              setFilters(newFilters);
+            }}
+          />
+        ) : (
+          <UnitList
+            units={units}
+            showPendingUnits={filters.approved === "pending"}
+            refreshUnits={(approved) => {
+              const newFilters = { ...filters, approved };
+              fetchUnits(newFilters);
+              setFilters(newFilters);
+            }}
+          />
+        )}
       </Page>
     </FiltersContext.Provider>
   );
