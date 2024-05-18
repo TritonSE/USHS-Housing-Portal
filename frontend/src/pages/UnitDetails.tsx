@@ -69,7 +69,7 @@ const MainColumn = styled.div`
 `;
 
 const DetailsColumn = styled(MainColumn)`
-  margin: 32px 160px;
+  margin: 32px 96px;
   gap: 40px;
 `;
 

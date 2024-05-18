@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
+
+import { ClickAwayListener } from "./ClickAwayListener";
 
 import { RenterCandidate } from "@/api/renter-candidates";
 import { User } from "@/api/users";
 
-const SearchContainer = styled.div<{ isRCDropdown: boolean }>`
+const SearchContainer = styled.div`
   position: relative;
 `;
 
@@ -63,7 +65,6 @@ const Option = styled.div`
   padding: 8px;
   &:hover {
     background-color: #f3f3f3;
-    // color: #b64201;
   }
 `;
 
@@ -77,18 +78,6 @@ const NoResults = styled.div`
   padding: 10px;
 `;
 
-const Overlay = styled.div`
-  width: 100vw;
-  height: 100vh;
-  top: 70px;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  position: fixed;
-  background: rgbd(0, 0, 0, 0);
-  z-index: -1;
-`;
-
 type Option = User | RenterCandidate;
 
 type SelectProps = {
@@ -96,7 +85,7 @@ type SelectProps = {
   placeholder: string;
   initialSelection?: Option;
   options: Option[];
-  onSelect?: (value: Option) => void; //callback function for parent, sends current selected user
+  onSelect: (value: Option) => void; //callback function for parent, sends current selected user
   reset?: boolean;
   isRCDropdown?: boolean;
 };
@@ -113,14 +102,36 @@ export function UserDropdown({
   const [openMenu, setOpenMenu] = useState(false);
   const [searchValue, setSearchValue] = useState(""); //current text value in select input box
   const [validOptions, setValidOptions] = useState<Option[]>(options); //all RS filtered through search
-  const [solid, setSolid] = useState(false); //search text color
   const [currentSelected, setCurrentSelected] = useState<Option>(); //current selected RS
 
   const handleSelect = (selectedValue: Option) => {
-    setSearchValue(selectedValue.firstName + " " + selectedValue.lastName);
     setCurrentSelected(selectedValue);
+    onSelect(selectedValue);
     setOpenMenu(false);
   };
+
+  const syncSearchValue = () => {
+    setSearchValue(
+      currentSelected ? currentSelected.firstName + " " + currentSelected.lastName : "",
+    );
+  };
+
+  // Update search value when selected value changes
+  useEffect(syncSearchValue, [currentSelected]);
+
+  useEffect(() => {
+    if (initialSelection && !currentSelected) {
+      setCurrentSelected(initialSelection);
+    }
+  }, [initialSelection]);
+
+  // Reset search bar after action from parent component
+  useEffect(() => {
+    if (reset !== undefined) {
+      setOpenMenu(false);
+      setCurrentSelected(undefined);
+    }
+  }, [reset]);
 
   //filters dropdown options (super messy, feedback welcome :D)
   const handleValidOptions = () => {
@@ -149,93 +160,69 @@ export function UserDropdown({
     setValidOptions(matches);
   };
 
-  // Update search value
-  useEffect(() => {
-    if (initialSelection) {
-      setSearchValue(initialSelection.firstName + " " + initialSelection.lastName);
-      if (!currentSelected) setCurrentSelected(initialSelection);
-    }
-  }, [initialSelection]);
-
-  //Reset search bar after action from parent component
-  useEffect(() => {
-    setOpenMenu(false);
-    setSearchValue("");
-    setCurrentSelected(undefined);
-  }, [reset]);
-
   //triggers everytime text in input box changes; ensures options are filtered
   useEffect(() => {
     handleValidOptions();
   }, [searchValue, currentSelected, options]);
 
-  //separated from the above useeffect so that validOptions are updated in time for these functions
-  useEffect(() => {
-    //selects user if current text exactly matches a valid user
-    const idx = validOptions.map((e) => e.firstName + " " + e.lastName).indexOf(searchValue);
-    if (idx !== -1) {
-      if (validOptions.length === 1) {
-        setCurrentSelected(validOptions[idx]);
-        setSolid(true);
-      }
-      //case for if there's more than one possible match and a certain match is selected from the dropdown
-      if (currentSelected?.firstName + " " + currentSelected?.lastName === searchValue) {
-        setSolid(true);
-      }
-    } else {
-      setSolid(false);
-    }
-
-    if (onSelect && currentSelected) onSelect(currentSelected);
-  }, [validOptions]);
+  const boldSearchText = useMemo(
+    () => currentSelected?.firstName + " " + currentSelected?.lastName === searchValue,
+    [currentSelected, searchValue],
+  );
 
   return (
-    <SearchContainer isRCDropdown={isRCDropdown ?? false}>
+    <SearchContainer>
       <SearchBar
         width={width}
         onClick={() => {
+          if (currentSelected) {
+            // reset search value if a selection already exists
+            setSearchValue("");
+          }
           setOpenMenu(true);
         }}
         placeholder={placeholder}
         open={openMenu}
-        state={solid}
+        state={boldSearchText}
         tabIndex={-1}
         value={searchValue}
         isRCDropdown={isRCDropdown ?? false}
         onInput={(e) => {
           setSearchValue((e.target as HTMLTextAreaElement).value);
-          setCurrentSelected(undefined);
         }}
       />
       {openMenu && (
-        <OptionsContainer isRCDropdown={isRCDropdown ?? false}>
-          <Overlay
-            onClick={() => {
-              setOpenMenu(false);
-            }}
-          />
-          {validOptions.length > 0 ? (
-            validOptions.map((option, index) => (
-              <Option
-                key={index}
-                onClick={() => {
-                  handleSelect(option);
-                }}
-              >
-                <div>{`${option.firstName} ${option.lastName}`}</div>
-                {isRCDropdown ? (
-                  <div>{"uid" in option && `ID: ${option.uid}`}</div>
-                ) : (
-                  <div>{`(${option.email})`}</div>
-                )}
-              </Option>
-            ))
-          ) : (
-            <NoResults>No Results</NoResults>
-          )}
-        </OptionsContainer>
+        <ClickAwayListener
+          onClickAway={() => {
+            // set search value back to original since nothing was selected
+            syncSearchValue();
+            setOpenMenu(false);
+          }}
+        >
+          <OptionsContainer isRCDropdown={isRCDropdown ?? false}>
+            {validOptions.length > 0 ? (
+              validOptions.map((option, index) => (
+                <Option
+                  key={index}
+                  onClick={() => {
+                    handleSelect(option);
+                  }}
+                >
+                  <div>{`${option.firstName} ${option.lastName}`}</div>
+                  {isRCDropdown ? (
+                    <div>{"uid" in option && `ID: ${option.uid}`}</div>
+                  ) : (
+                    <div>{`(${option.email})`}</div>
+                  )}
+                </Option>
+              ))
+            ) : (
+              <NoResults>No Results</NoResults>
+            )}
+          </OptionsContainer>
+        </ClickAwayListener>
       )}
-      <Icon src={"/SearchSymbol.svg"} alt="search" />
+      <Icon src="/SearchSymbol.svg" alt="search" />
     </SearchContainer>
   );
 }

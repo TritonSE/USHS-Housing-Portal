@@ -12,12 +12,11 @@ import { UpdateReferralRequest, updateReferral } from "@/api/referrals";
 import { REFERRAL_STATUSES, Referral, ReferralStatus, getUnitReferrals } from "@/api/units";
 import { User } from "@/api/users";
 import { ReferralPopup } from "@/components/ReferralPopup";
-import { AuthContext } from "@/contexts/AuthContext";
 import { DataContext } from "@/contexts/DataContext";
 
 const ENTRIES_PER_PAGE = 5;
 
-const TableColumnNames = [
+const TABLE_COLUMN_NAMES = [
   "Name",
   "Contact Info",
   "Referring Staff",
@@ -91,7 +90,6 @@ enum ReferralUpdateType {
 }
 
 export const ReferralTable = (props: ReferralTableProps) => {
-  const authContext = useContext(AuthContext);
   const { allHousingLocators, allReferringStaff } = useContext(DataContext);
   const [referrals, setReferrals] = useState<Referral[]>([]);
   const [popup, setPopup] = useState<boolean>(false);
@@ -108,11 +106,7 @@ export const ReferralTable = (props: ReferralTableProps) => {
       });
   };
 
-  React.useEffect(() => {
-    if (authContext.currentUser) {
-      getAllReferrals();
-    }
-  }, [authContext]);
+  React.useEffect(getAllReferrals, []);
 
   const handleUpdate = (
     referral: Referral,
@@ -149,15 +143,9 @@ export const ReferralTable = (props: ReferralTableProps) => {
         break;
     }
 
-    updateReferral(request)
-      .then((result) => {
-        if (result.success) {
-          getAllReferrals();
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    updateReferral(request).catch((error) => {
+      console.log(error);
+    });
   };
 
   return (
@@ -183,7 +171,7 @@ export const ReferralTable = (props: ReferralTableProps) => {
       </ReferralTableTitleSection>
 
       <Table
-        columns={TableColumnNames}
+        columns={TABLE_COLUMN_NAMES}
         rows={referrals.map((referral, idx) => {
           const {
             status,

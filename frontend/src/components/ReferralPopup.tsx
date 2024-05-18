@@ -197,15 +197,17 @@ export const ReferralPopup = ({ active, onClose, onSubmit }: PopupProps) => {
   }, [active]);
 
   useEffect(() => {
-    getRenterCandidates()
-      .then((value) => {
-        if (value.success) {
-          setAllRCs(value.data);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    if (popup) {
+      getRenterCandidates()
+        .then((value) => {
+          if (value.success) {
+            setAllRCs(value.data);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   }, [popup]);
 
   const handleCreateReferral = (renterCandidateId: string | undefined) => {
