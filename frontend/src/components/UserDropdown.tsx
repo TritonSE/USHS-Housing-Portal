@@ -6,7 +6,6 @@ import { User } from "@/api/users";
 
 const SearchContainer = styled.div<{ isRCDropdown: boolean }>`
   position: relative;
-  z-index: 1;
 `;
 
 const Icon = styled.img`
@@ -15,8 +14,13 @@ const Icon = styled.img`
   right: 10px;
 `;
 
-const SearchBar = styled.input<{ open: boolean; state: boolean; isRCDropdown: boolean }>`
-  width: ${(props) => (props.isRCDropdown ? "300px" : "367px")};
+const SearchBar = styled.input<{
+  width?: string;
+  open: boolean;
+  state: boolean;
+  isRCDropdown: boolean;
+}>`
+  width: ${(props) => (props.width ? props.width : props.isRCDropdown ? "300px" : "367px")};
   height: 44px;
   padding: 9px 40px 9px 12px;
   align-items: center;
@@ -34,6 +38,7 @@ const SearchBar = styled.input<{ open: boolean; state: boolean; isRCDropdown: bo
 `;
 
 const OptionsContainer = styled.div<{ isRCDropdown: boolean }>`
+  z-index: 1;
   position: absolute;
   top: 47px;
   max-height: ${(props) => (props.isRCDropdown ? "250px" : "160px")};
@@ -47,6 +52,7 @@ const OptionsContainer = styled.div<{ isRCDropdown: boolean }>`
   flex-direction: column;
   background-color: #fff;
 `;
+
 const Option = styled.div`
   font-size: 15px;
   font-weight: 400;
@@ -86,14 +92,24 @@ const Overlay = styled.div`
 type Option = User | RenterCandidate;
 
 type SelectProps = {
+  width?: string;
   placeholder: string;
+  initialSelection?: Option;
   options: Option[];
-  onSelect?: (value: Option | undefined) => void; //callback function for parent, sends current selected user
+  onSelect?: (value: Option) => void; //callback function for parent, sends current selected user
   reset?: boolean;
   isRCDropdown?: boolean;
 };
 
-export function UserDropdown({ placeholder, options, onSelect, reset, isRCDropdown }: SelectProps) {
+export function UserDropdown({
+  width,
+  placeholder,
+  initialSelection,
+  options,
+  onSelect,
+  reset,
+  isRCDropdown,
+}: SelectProps) {
   const [openMenu, setOpenMenu] = useState(false);
   const [searchValue, setSearchValue] = useState(""); //current text value in select input box
   const [validOptions, setValidOptions] = useState<Option[]>(options); //all RS filtered through search
@@ -133,6 +149,12 @@ export function UserDropdown({ placeholder, options, onSelect, reset, isRCDropdo
     setValidOptions(matches);
   };
 
+  // Update search value
+  useEffect(() => {
+    if (initialSelection)
+      setSearchValue(initialSelection.firstName + " " + initialSelection.lastName);
+  }, [initialSelection]);
+
   //Reset search bar after action from parent component
   useEffect(() => {
     setOpenMenu(false);
@@ -162,12 +184,13 @@ export function UserDropdown({ placeholder, options, onSelect, reset, isRCDropdo
       setSolid(false);
     }
 
-    if (onSelect) onSelect(currentSelected);
+    if (onSelect && currentSelected) onSelect(currentSelected);
   }, [validOptions]);
 
   return (
     <SearchContainer isRCDropdown={isRCDropdown ?? false}>
       <SearchBar
+        width={width}
         onClick={() => {
           setOpenMenu(true);
         }}

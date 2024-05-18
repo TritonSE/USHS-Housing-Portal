@@ -1,14 +1,14 @@
 import React, { useContext, useState } from "react";
-import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
 import { Button } from "./Button";
-import { ReferralTablePagination } from "./ReferralTablePagination";
-import { ReferralTableRow } from "./ReferralTableRow";
+import { referralRow } from "./ReferralTableRow";
+import { TablePagination } from "./TablePagination";
 
 import { updateReferral, updateReferralRequest } from "@/api/referrals";
+import { RenterCandidate, getRenterCandidate } from "@/api/renter-candidates";
 import { Referral, getUnitReferrals } from "@/api/units";
-import { getRenterCandidate, RenterCandidate } from "@/api/renter-candidates";
 import { User } from "@/api/users";
 import { ReferralPopup } from "@/components/ReferralPopup";
 import { AuthContext } from "@/contexts/AuthContext";
@@ -243,7 +243,7 @@ export const RenterCandidateTable = (id: any) => {
           {renterReferrals
             .slice((pageNumber - 1) * ENTRIES_PER_PAGE, pageNumber * ENTRIES_PER_PAGE)
             .map((referral, idx) => (
-              <ReferralTableRow
+              <referralTableRow
                 key={Math.random()}
                 index={idx}
                 unit={referral.unitId}
@@ -256,7 +256,7 @@ export const RenterCandidateTable = (id: any) => {
               />
             ))}
           <ReferralTableFooter>
-            <ReferralTablePagination
+            <TablePagination
               totalPages={Math.ceil(referrals.length / ENTRIES_PER_PAGE)}
               currPage={pageNumber}
               setPageNumber={setPageNumber}
