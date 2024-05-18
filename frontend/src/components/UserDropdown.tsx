@@ -151,8 +151,10 @@ export function UserDropdown({
 
   // Update search value
   useEffect(() => {
-    if (initialSelection)
+    if (initialSelection) {
       setSearchValue(initialSelection.firstName + " " + initialSelection.lastName);
+      if (!currentSelected) setCurrentSelected(initialSelection);
+    }
   }, [initialSelection]);
 
   //Reset search bar after action from parent component

@@ -17,7 +17,7 @@ const TableColumnHeader = styled.div`
   display: flex;
   flex: 1;
   padding: 12px 4px;
-  justify-content: flex-start;
+  justify-content: center;
   color: black;
 
   font-family: Montserrat;
@@ -38,6 +38,7 @@ const TableCell = styled.div`
   display: flex;
   flex: 1;
   align-items: center;
+  justify-content: center;
   padding: 22px 4px;
 `;
 
@@ -46,7 +47,7 @@ const TableFooter = styled.div`
 `;
 
 const TablePlaceholder = styled.div`
-  padding: 12px 2vw;
+  padding: 12px 4px;
 `;
 
 export type TableCellContent = string | JSX.Element;

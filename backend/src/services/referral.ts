@@ -3,7 +3,7 @@ import { ObjectId } from "mongoose";
 import { ReferralModel } from "@/models/referral";
 
 export async function getUnitReferrals(id: string) {
-  const referrals = await ReferralModel.find({ unitId: id })
+  const referrals = await ReferralModel.find({ unit: id })
     .populate("renterCandidate")
     .populate("assignedHousingLocator")
     .populate("assignedReferringStaff");
@@ -13,13 +13,13 @@ export async function getUnitReferrals(id: string) {
 
 export async function createReferral(
   renterCandidateId: string,
-  unitId: string,
+  unit: string,
   referringStaff: ObjectId,
   isHL: boolean,
 ) {
   const referral = await ReferralModel.create({
     renterCandidate: renterCandidateId,
-    unitId,
+    unit,
     assignedReferringStaff: referringStaff,
     assignedHousingLocator: isHL ? referringStaff : undefined,
   });

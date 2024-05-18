@@ -1,12 +1,14 @@
 import React, { useContext, useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 import { Button } from "./Button";
 import { ReferralTableDropDown } from "./ReferralTableDropDown";
 import { Table } from "./Table";
 import { UserDropdown } from "./UserDropdown";
+import { formatDate } from "./helpers";
 
-import { updateReferral, updateReferralRequest } from "@/api/referrals";
+import { UpdateReferralRequest, updateReferral } from "@/api/referrals";
 import { REFERRAL_STATUSES, Referral, ReferralStatus, getUnitReferrals } from "@/api/units";
 import { User } from "@/api/users";
 import { ReferralPopup } from "@/components/ReferralPopup";
@@ -68,10 +70,15 @@ const ReferralTableButtonIcon = styled.img`
   height: 19px;
 `;
 
-const formatDate = (date: string): string => {
-  const dateObj = new Date(date);
-  return dateObj.toLocaleDateString("en-US");
-};
+const RenterCandidateLink = styled(Link)`
+  text-align: center;
+  text-decoration: underline;
+  color: black;
+
+  &:hover {
+    color: #4248d4;
+  }
+`;
 
 type ReferralTableProps = {
   id: string;
@@ -113,7 +120,7 @@ export const ReferralTable = (props: ReferralTableProps) => {
     updateType: ReferralUpdateType,
   ) => {
     const id = referral._id;
-    let request = {} as updateReferralRequest;
+    let request = {} as UpdateReferralRequest;
 
     switch (updateType) {
       case ReferralUpdateType.ReferringStaff:
@@ -185,8 +192,14 @@ export const ReferralTable = (props: ReferralTableProps) => {
             assignedHousingLocator,
             updatedAt,
           } = referral;
+          // Generate a list of cells for each row
           return [
-            renterCandidate.firstName + " " + renterCandidate.lastName,
+            <RenterCandidateLink
+              key={`renter-link-${idx}`}
+              to={`/candidate/${renterCandidate._id}`}
+            >
+              {renterCandidate.firstName + " " + renterCandidate.lastName}
+            </RenterCandidateLink>,
             <>
               {renterCandidate.email} <br /> {renterCandidate.phone}
             </>,

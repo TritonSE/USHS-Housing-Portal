@@ -55,5 +55,4 @@ export const getRenterCandidateHandler: RequestHandler = asyncHandler(async (req
   }
 
   res.status(200).json(body);
-  console.log(body);
 });

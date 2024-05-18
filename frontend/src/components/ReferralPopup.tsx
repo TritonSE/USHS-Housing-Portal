@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { Button } from "./Button";
 import { UserDropdown } from "./UserDropdown";
 
-import { createReferral, createReferralRequest } from "@/api/referrals";
+import { CreateReferralRequest, createReferral } from "@/api/referrals";
 import {
   CreateRenterCandidateRequest,
   RenterCandidate,
@@ -210,7 +210,7 @@ export const ReferralPopup = ({ active, onClose, onSubmit }: PopupProps) => {
 
   const handleCreateReferral = (renterCandidateId: string | undefined) => {
     if (renterCandidateId !== undefined) {
-      createReferral({ renterCandidateId, unitId: id } as createReferralRequest)
+      createReferral({ renterCandidateId, unit: id } as CreateReferralRequest)
         .then((value) => {
           if (value.success) {
             console.log(value.data);
