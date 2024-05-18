@@ -27,7 +27,6 @@ const ReferralTableContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   border-radius: 10px;
-  //   margin-top: 44px;
 `;
 
 const ReferralTableTitleSection = styled.div`

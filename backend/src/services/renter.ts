@@ -8,8 +8,6 @@ export async function getRenterCandidates() {
 }
 
 export async function getRenterCandidate(id: string) {
-  // return await RenterModel.findById(id);
-
   const renter = await RenterModel.findById(id);
   const referrals = await ReferralModel.find({ renterCandidate: id });
 

@@ -3,7 +3,6 @@ import createHttpError from "http-errors";
 
 import { asyncHandler } from "./wrappers";
 
-// import { RenterModel } from "@/models/renter";
 import { createRenterCandidate, getRenterCandidate, getRenterCandidates } from "@/services/renter";
 
 export const getRenterCandidatesHandler: RequestHandler = asyncHandler(async (_req, res, _next) => {

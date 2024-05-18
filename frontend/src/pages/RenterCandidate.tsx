@@ -1,15 +1,14 @@
+import { Referral } from "@api/referrals";
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-import { getRenterCandidate, RenterCandidate } from "@/api/renter-candidates";
-import { Referral } from "@api/referrals";
+import { RenterCandidate, getRenterCandidate } from "@/api/renter-candidates";
 import { Page } from "@/components";
 import { Button } from "@/components/Button";
 import { NavBar } from "@/components/NavBar";
-
 import { RenterCandidateTable } from "@/components/RenterCandidateTable";
 
 const MainColumn = styled.div`
@@ -46,13 +45,13 @@ const InfoColumn = styled.div`
 
 const Title = styled.p`
   font-size: 32px;
-  font-family: "Inter";
+  font-family: "Neutraface Text";
   font-weight: 650;
 `;
 
 const Id = styled.p`
   font-size: 25px;
-  font-family: "Neutraface Text";
+  font-family: "Montserrat";
   font-weight: 600;
 `;
 
@@ -121,17 +120,17 @@ export function RenterCandidate() {
       <NavBar />
       <MainColumn>
         <TopRow>
-          {/* <Link to="/"> */}
-          <Button kind="secondary">
-            <img
-              className="back-arrow"
-              src="/back_arrow.svg"
-              alt={"Back arrow"}
-              style={{ marginRight: "12px" }}
-            />
-            Back to Listing
-          </Button>
-          {/* </Link> */}
+          <Link to="/referrals">
+            <Button kind="secondary">
+              <img
+                className="back-arrow"
+                src="/back_arrow.svg"
+                alt={"Back arrow"}
+                style={{ marginRight: "12px" }}
+              />
+              Back to Referrals
+            </Button>
+          </Link>
           <EditButton kind="secondary">
             <img src={"/pencil.svg"} alt="" style={{ marginRight: "12px" }} />
             Edit
