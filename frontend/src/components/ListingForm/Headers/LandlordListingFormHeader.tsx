@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import { HeaderMain, HeaderRequired } from "./HeaderStyles";
+import { ClearAllFields, HeaderMain, HeaderRequired } from "./HeaderStyles";
 
 import { Header, Required } from "@/components/ListingForm/CommonStyles";
 
@@ -36,6 +36,10 @@ export const LandlordListingFormHeader = () => {
       <HeaderRequired>
         The <Required>*</Required> next to the question indicates that it is required.
       </HeaderRequired>
+      <ClearAllFields>
+        The information below is prepopulated from the previously suubmitted form. Press &quot;clear
+        all fields&quot; to have a blank form.
+      </ClearAllFields>
     </Header>
   );
 };

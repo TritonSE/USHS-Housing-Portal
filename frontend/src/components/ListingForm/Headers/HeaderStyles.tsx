@@ -23,6 +23,19 @@ export const HeaderRequired = styled.em`
   letter-spacing: 0.4px;
 `;
 
+export const ClearAllFields = styled.h2`
+  margin-bottom: 32px;
+  font-size: 32px;
+  text-align: left;
+  line-height: 150%;
+  font-family: "Neutraface Text", sans-serif;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 150%;
+  letter-spacing: 0.64px;
+`;
+
 export const MidSectionHeader = styled.h2`
   margin-bottom: 32px;
   font-size: 32px;

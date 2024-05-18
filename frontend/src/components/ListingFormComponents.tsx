@@ -34,6 +34,8 @@ import { Textbox } from "@/components/ListingForm/Textbox";
 import { ThirdPartyPayment } from "@/components/ListingForm/ThirdPartyPayment";
 import { Utilities } from "@/components/ListingForm/Utilities";
 
+import { ClearAllPopup } from "@/components/ClearAllPopup";
+
 const ErrorMessage = styled.div`
   color: #b64201;
   max-width: 800px;
@@ -71,6 +73,8 @@ const bedroomOptions = [0, 1, 2, 3, 4];
 const housingAuthorityOptions = ["HACLA", "LACDA"];
 
 export function ListingFormComponents(props: ListingFormComponentsProps) {
+  const [popup, setPopup] = useState<boolean>(false);
+
   const [firstName, setFirstName] = useState<string>(props.initialValues?.landlordFirstName ?? "");
   const [lastName, setLastName] = useState<string>(props.initialValues?.landlordLastName ?? "");
   const [email, setEmail] = useState<string>(props.initialValues?.landlordEmail ?? "");
@@ -415,12 +419,65 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
     }
   };
 
+  const handleClearAll = () => {
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setPhone("");
+    setStreetAddress("");
+    setAptNum("");
+    setCity("");
+    setState("");
+    setAreaCode("");
+    setSqFootage("");
+    setRentPerMonth("");
+    setSecurityDeposit("");
+    setThirdPartyPayment(undefined);
+    setHousingAuthority("");
+    setApplicationFeeCost("");
+    setDateAvailable("");
+    setNumberOfBedrooms(undefined);
+    setNumberOfBedroomsOther(undefined);
+    setNumberOfBaths(undefined);
+    setNumberOfBathsOther(undefined);
+    setAppliances([]);
+    setCommunityAndNeighborInfo([]);
+    setCommunityAndNeighborInfoOther([]);
+    setParking([]);
+    setAccessibility([]);
+    setPets([]);
+    setSharingHousing("");
+    setAdditionalCommentsLL("");
+
+    if (props.formType === "housingLocator" || props.formType === "edit") {
+      setWhereFindUnit("");
+      setPaymentRentingCriteria([]);
+      setAdditionalRulesRegulations([]);
+      setAdditionalCommentsHL("");
+    }
+  };
+
   return (
     <MainContainer>
       {props.formType !== "edit" && <Logo />}
       {props.formType === "landlord" && <LandlordListingFormHeader />}
       {props.formType === "housingLocator" && <HousingLocatorHeader />}
       <ContentContainer>
+        <Button
+          kind="primary"
+          onClick={() => {
+            setPopup(true);
+          }}
+        >
+          {"Clear all fields"}
+        </Button>
+        <ClearAllPopup
+          active={popup}
+          onClose={() => {
+            setPopup(false);
+          }}
+          onSubmit={handleClearAll}
+        />
         <TextContainer>
           <Textbox
             elementName="Name"
