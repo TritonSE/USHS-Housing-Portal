@@ -86,7 +86,7 @@ const createUnitSchema = [
     .exists()
     .withMessage("is required")
     .isISO8601()
-    .withMessage("must be a ISO8601 date"),
+    .withMessage("is an invalid date format"),
   body("numBeds").exists().withMessage("is required").isNumeric().withMessage("must be a number"),
   body("numBaths").exists().withMessage("is required").isNumeric().withMessage("must be a number"),
   body("appliances").exists().withMessage("is required").isArray().withMessage("must be an array"),

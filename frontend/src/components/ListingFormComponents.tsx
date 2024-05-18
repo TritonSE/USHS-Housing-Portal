@@ -4,9 +4,12 @@ import styled from "styled-components";
 import { Button } from "./Button";
 import { MidSectionHeader } from "./ListingForm/Headers/HeaderStyles";
 import { HousingLocatorFields } from "./ListingForm/HousingLocatorFields";
+import { ImagesVideos } from "./ListingForm/ImagesVideos";
 import { Logo } from "./ListingForm/Logo";
+import { Thumbnail } from "./ListingForm/Thumbnail";
 import { formatDateForInput, handleCheckBoxNA } from "./ListingForm/helpers";
 
+import { uploadFiles } from "@/api/images";
 import { CreateUnitRequest, Unit, createUnit, updateUnit } from "@/api/units";
 import { AccessibilityAccess } from "@/components/ListingForm/AccessibilityAccess";
 import { Appliances } from "@/components/ListingForm/Appliances";
@@ -33,6 +36,7 @@ import { ThirdPartyPayment } from "@/components/ListingForm/ThirdPartyPayment";
 const ErrorMessage = styled.div`
   color: #b64201;
   max-width: 800px;
+  margin-top: 20px;
 `;
 
 type ListingFormComponentsProps = {
@@ -103,6 +107,7 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
   const [additionalCommentsHL, setAdditionalCommentsHL] = useState<string>(
     props.initialValues?.internalComments ?? "",
   );
+
   const [whereFindUnit, setWhereFindUnit] = useState<string>(props.initialValues?.whereFound ?? "");
   const [paymentRentingCriteria, setPaymentRentingCriteria] = useState<string[]>(
     props.initialValues?.paymentRentingCriteria ?? [],
@@ -111,6 +116,9 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
     props.initialValues?.additionalRules ?? [],
   );
   const [errorMessage, setErrorMessage] = useState<string>("");
+
+  const [newFiles, setNewFiles] = useState<File[] | null>();
+  const [thumbnail, setThumbnail] = useState<File[] | null>(null);
 
   const handleFirstName = (event: React.ChangeEvent<HTMLInputElement>) => {
     const hasNumber = /\d/;
@@ -323,6 +331,8 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
         .then((res) => {
           if (res.success) {
             setErrorMessage("");
+            uploadFiles(newFiles, res.data._id);
+            uploadFiles(thumbnail, res.data._id, undefined, undefined, undefined, undefined, true);
             props.handleAfterSubmit(res.data);
           } else {
             setErrorMessage(res.error);
@@ -496,6 +506,10 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
           value={additionalCommentsLL}
           handler={handleAdditionalCommentsLL}
         />
+
+        <ImagesVideos unit_id={props.initialValues?._id ?? ""} onChange={setNewFiles} />
+
+        <Thumbnail unit_id={props.initialValues?._id ?? ""} onChange={setThumbnail} />
 
         {(props.formType === "housingLocator" || props.formType === "edit") && (
           <HousingLocatorFields

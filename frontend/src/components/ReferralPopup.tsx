@@ -8,9 +8,9 @@ import { UserDropdown } from "./UserDropdown";
 
 import { createReferral, createReferralRequest } from "@/api/referrals";
 import {
+  CreateRenterCandidateRequest,
   RenterCandidate,
   createRenterCandidate,
-  createRenterCandidateRequest,
   getRenterCandidates,
 } from "@/api/renter-candidates";
 
@@ -227,7 +227,7 @@ export const ReferralPopup = ({ active, onClose, onSubmit }: PopupProps) => {
   const handleCreateRC = (data: FieldValues) => {
     if (data.email === "") delete data.email;
     if (data.phone === "") delete data.phone;
-    createRenterCandidate(data as createRenterCandidateRequest)
+    createRenterCandidate(data as CreateRenterCandidateRequest)
       .then((value) => {
         if (value.success) {
           handleCreateReferral(value.data._id);

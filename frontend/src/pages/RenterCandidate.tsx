@@ -5,7 +5,7 @@ import { useParams } from "react-router";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-import { RenterCandidate, getRenterCandidate } from "@/api/renter-candidates";
+import { getRenterCandidate } from "@/api/renter-candidates";
 import { Page } from "@/components";
 import { Button } from "@/components/Button";
 import { NavBar } from "@/components/NavBar";
