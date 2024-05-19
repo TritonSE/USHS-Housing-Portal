@@ -21,6 +21,10 @@ const RT_Row_DD_Container = styled(FilterSubContainer)`
   position: relative;
 `;
 
+const RT_DD = styled(Dropdown)`
+  border: 1.5px solid #cdcaca;
+`;
+
 const RT_DD_Popup = styled(DropDownPopup)`
   max-height: 150px;
   overflow-y: auto;
@@ -29,6 +33,7 @@ const RT_DD_Popup = styled(DropDownPopup)`
   z-index: 1;
   padding: 0;
   gap: 0;
+  border: 1.5px solid #cdcaca;
 `;
 
 const RT_Row_DD_Row = styled(FilterRow)`
@@ -84,7 +89,7 @@ export const ReferralTableDropDown = (props: ReferralTableDropDownProps) => {
       }}
     >
       <RT_Row_DD_Container>
-        <Dropdown
+        <RT_DD
           onClick={() => {
             setIsActive(!isActive);
           }}
@@ -94,7 +99,7 @@ export const ReferralTableDropDown = (props: ReferralTableDropDownProps) => {
             <RT_Row_DD_Display_Text title={displayedValue}>{displayedValue}</RT_Row_DD_Display_Text>
             <DropdownIcon src={isActive ? "/up_arrow.svg" : "/dropdown.svg"} />
           </RT_Row_DD_Display>
-        </Dropdown>
+        </RT_DD>
         {isActive && (
           <RT_DD_Popup>
             {props.values.map((value, idx) => (

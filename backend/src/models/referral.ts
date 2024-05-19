@@ -9,8 +9,9 @@ const referralSchema = new Schema(
       default: "Referred",
     },
     renterCandidate: { type: Schema.Types.ObjectId, ref: "Renter" },
-    unitId: {
+    unit: {
       type: Schema.Types.ObjectId,
+      ref: "Unit",
       required: true,
     },
     // Will be set later on in the flow

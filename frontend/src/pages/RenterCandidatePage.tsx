@@ -1,21 +1,24 @@
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
+import { Loading } from "./Loading";
+
 import { RenterCandidate, getRenterCandidate } from "@/api/renter-candidates";
+import { Referral } from "@/api/units";
 import { Page } from "@/components";
 import { Button } from "@/components/Button";
 import { NavBar } from "@/components/NavBar";
-
-// import { RenterCandidateTable } from "@/components/RenterCandidateTable";
+import { Table, TableCellContent } from "@/components/Table";
+import { formatDate } from "@/components/helpers";
 
 const MainColumn = styled.div`
   display: flex;
   flex-direction: column;
   background-color: #fbf7f3;
-  margin: 97px;
+  margin: 28px 96px;
   gap: 35px;
 `;
 
@@ -45,13 +48,13 @@ const InfoColumn = styled.div`
 
 const Title = styled.p`
   font-size: 32px;
-  font-family: "Inter";
+  font-family: "Neutraface Text";
   font-weight: 650;
 `;
 
 const Id = styled.p`
   font-size: 25px;
-  font-family: "Neutraface Text";
+  font-family: "Montserrat";
   font-weight: 600;
 `;
 
@@ -77,9 +80,33 @@ const TableContainer = styled.div`
   gap: 10px;
 `;
 
-export function RenterCandidate() {
+const ListingAddressLink = styled(Link)`
+  text-align: center;
+  text-decoration: underline;
+  color: black;
+
+  &:hover {
+    color: #4248d4;
+  }
+`;
+
+const DeleteIcon = styled.img`
+  align-items: center;
+  width: 20px;
+  height: 22px;
+
+  cursor: pointer;
+  transition: filter 0.3s;
+
+  &:hover {
+    filter: brightness(1.4);
+  }
+`;
+
+export function RenterCandidatePage() {
   const navigate = useNavigate();
   const [renterCandidate, setRenterCandidate] = useState<RenterCandidate>();
+  const [renterReferrals, setRenterReferrals] = useState<Referral[]>();
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
 
@@ -88,10 +115,12 @@ export function RenterCandidate() {
       setLoading(true);
       void getRenterCandidate(id).then((result) => {
         if (result.success) {
-          setRenterCandidate(result.data);
+          const { renter, referrals } = result.data;
+          setRenterCandidate(renter);
+          setRenterReferrals(referrals);
         } else {
-          // Go back to the home page if the renter is not found
-          navigate("/");
+          // Go back to the referrals page if the renter is not found
+          navigate("/referrals");
         }
         setLoading(false);
       });
@@ -101,8 +130,7 @@ export function RenterCandidate() {
   React.useEffect(fetchRenterCandidate, []);
 
   if (loading || !renterCandidate) {
-    // TODO: Loading state
-    return null;
+    return <Loading />;
   }
 
   return (
@@ -115,17 +143,24 @@ export function RenterCandidate() {
       <NavBar />
       <MainColumn>
         <TopRow>
-          {/* <Link to="/"> */}
-          <Button kind="secondary">
-            <img
-              className="back-arrow"
-              src="/back_arrow.svg"
-              alt={"Back arrow"}
-              style={{ marginRight: "12px" }}
-            />
-            Back to Listing
-          </Button>
-          {/* </Link> */}
+          <Link
+            to={".."}
+            onClick={(e) => {
+              e.preventDefault();
+              // go back relative to navigation history
+              navigate(-1);
+            }}
+          >
+            <Button kind="secondary">
+              <img
+                className="back-arrow"
+                src="/back_arrow.svg"
+                alt={"Back arrow"}
+                style={{ marginRight: "12px" }}
+              />
+              Back
+            </Button>
+          </Link>
           <EditButton kind="secondary">
             <img src={"/pencil.svg"} alt="" style={{ marginRight: "12px" }} />
             Edit
@@ -155,7 +190,33 @@ export function RenterCandidate() {
         </InfoRow>
         <TableContainer>
           <Title>Current Referrals</Title>
-          {/* <RenterCandidateTable /> */}
+          <Table
+            columns={["Unit", "Housing Locator", "Status", "Last Updated", "Delete"]}
+            rows={
+              renterReferrals
+                ? renterReferrals.map((referral, idx) => {
+                    const { unit, assignedHousingLocator, status, updatedAt } = referral;
+                    // return list of cells for each row
+                    return [
+                      <ListingAddressLink key={`listing-address-${idx}`} to={`/unit/${unit._id}`}>
+                        {unit.listingAddress}
+                      </ListingAddressLink>,
+                      assignedHousingLocator.firstName + " " + assignedHousingLocator.lastName,
+                      status,
+                      formatDate(updatedAt.toString()),
+                      <DeleteIcon
+                        key={`delete-${idx}`}
+                        src="/trash-can.svg"
+                        onClick={() => {
+                          // TODO
+                        }}
+                      ></DeleteIcon>,
+                    ] as TableCellContent[];
+                  })
+                : []
+            }
+            rowsPerPage={5}
+          />
         </TableContainer>
       </MainColumn>
     </Page>

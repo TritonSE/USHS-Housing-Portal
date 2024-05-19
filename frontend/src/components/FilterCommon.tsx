@@ -54,6 +54,7 @@ export const Dropdown = styled.button<{ active: boolean }>`
   background-color: #fff;
   box-shadow: 1px 1px 2px 0px rgba(188, 186, 183, 0.4);
   width: 100%;
+  cursor: pointer;
 `;
 
 export const FilterText = styled.p`
