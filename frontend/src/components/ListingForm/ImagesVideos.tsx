@@ -3,13 +3,20 @@ import styled from "styled-components";
 
 import { FieldHeader, Margin32 } from "./CommonStyles";
 
-import { FullMetadata, deleteFile, getFileMetadata, uploadFiles } from "@/api/images";
+import {
+  FullMetadata,
+  MAX_VIDEO_SIZE,
+  deleteFile,
+  getFileMetadata,
+  uploadFiles,
+} from "@/api/images";
 
 const SubmitRow = styled.div`
   display: flex;
   flex-direction: row;
   gap: 30px;
   align-items: center;
+  margin-bottom: 10px;
 `;
 
 const SubmitButton = styled.label`
@@ -65,6 +72,10 @@ const XButton = styled.img`
   cursor: pointer;
 `;
 
+const Error = styled.div`
+  color: red;
+`;
+
 type ImagesVideosProps = {
   unit_id: string;
   onChange: (newFiles: File[] | null) => void;
@@ -75,6 +86,7 @@ export const ImagesVideos = ({ unit_id, onChange }: ImagesVideosProps) => {
   const [allVideos, setAllVideos] = useState<FullMetadata[]>();
 
   const [uploadingState, setUploadingState] = useState<string>();
+  const [uploadError, setUploadError] = useState<string>();
 
   const [newImages, setNewImages] = useState<File[]>([]);
   const [newVideos, setNewVideos] = useState<File[]>([]);
@@ -88,6 +100,7 @@ export const ImagesVideos = ({ unit_id, onChange }: ImagesVideosProps) => {
     getFileMetadata(unit_id, "videos")
       .then((data) => {
         setAllVideos(data);
+        console.log(data);
       })
       .catch(console.error);
   };
@@ -97,7 +110,44 @@ export const ImagesVideos = ({ unit_id, onChange }: ImagesVideosProps) => {
   }, []);
 
   const handleUploadFiles = (files: FileList | null) => {
-    uploadFiles(files, unit_id, allImages, allVideos, setUploadingState, handleGetFiles);
+    uploadFiles(
+      files,
+      unit_id,
+      allImages,
+      allVideos,
+      setUploadingState,
+      setUploadError,
+      handleGetFiles,
+    );
+  };
+
+  const handleNewUnitUpload = (files: FileList | null) => {
+    if (files) {
+      setUploadError("");
+      const images = [];
+      const videos = [];
+      for (const file of files) {
+        if (file.type.includes("video")) {
+          if (newVideos.length + videos.length < 2) {
+            if (file.size < MAX_VIDEO_SIZE) {
+              videos.push(file);
+            } else {
+              setUploadError("Videos must be smaller than 200MB!");
+            }
+          } else {
+            setUploadError("A maximum of 2 videos can be uploaded!");
+          }
+        } else {
+          if (newImages.length + images.length < 10) {
+            images.push(file);
+          } else {
+            setUploadError("A maximum of 10 photos can be uploaded!");
+          }
+        }
+      }
+      setNewImages(newImages.concat(images));
+      setNewVideos(newVideos.concat(videos));
+    }
   };
 
   const handleDelete = (file: FullMetadata) => {
@@ -115,19 +165,7 @@ export const ImagesVideos = ({ unit_id, onChange }: ImagesVideosProps) => {
     if (unit_id) {
       handleUploadFiles(files);
     } else {
-      if (files) {
-        const images = [];
-        const videos = [];
-        for (const file of files) {
-          if (file.type.includes("video")) {
-            videos.push(file);
-          } else {
-            images.push(file);
-          }
-        }
-        setNewImages(newImages.concat(images));
-        setNewVideos(newVideos.concat(videos));
-      }
+      handleNewUnitUpload(files);
     }
   };
 
@@ -186,7 +224,7 @@ export const ImagesVideos = ({ unit_id, onChange }: ImagesVideosProps) => {
             </FileCard>
           ))}
 
-        {unit_id &&
+        {!unit_id &&
           newVideos?.map((file, index) => (
             <FileCard key={index}>
               <img src="/video_icon.svg" alt="" />
@@ -218,6 +256,7 @@ export const ImagesVideos = ({ unit_id, onChange }: ImagesVideosProps) => {
         </SubmitButton>
         <div>{uploadingState}</div>
       </SubmitRow>
+      <Error>{uploadError}</Error>
     </Margin32>
   );
 };
