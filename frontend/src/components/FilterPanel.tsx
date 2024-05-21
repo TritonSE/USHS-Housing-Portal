@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import styled from "styled-components";
 
 import { BedBathFilter } from "./BedBathFilter";
@@ -7,7 +7,7 @@ import { DateFilter } from "./DateFilter";
 import { MinMaxFilter } from "./MinMaxFilter";
 import { RadioButtonFilter } from "./RadioButtonFilter";
 
-import { FilterParams } from "@/api/units";
+import { FiltersContext } from "@/pages/Home";
 
 const PanelBackground = styled.div`
   min-width: 284px;
@@ -110,11 +110,9 @@ const AdditionalRulesOptions = [
   "High-management Interaction",
 ];
 
-type FilterPanelProps = {
-  refreshUnits(filterParams: FilterParams): void;
-};
+export const FilterPanel = () => {
+  const { filters, setFilters } = useContext(FiltersContext);
 
-export const FilterPanel = (props: FilterPanelProps) => {
   const [availabilityState, setAvailabilityState] = useState<number>(0);
   const [housingAuthorityState, setHousingAuthorityState] = useState<number>(0);
   const [accessibilityState, setAccessibilityState] = useState<Set<number>>(new Set());
@@ -141,12 +139,12 @@ export const FilterPanel = (props: FilterPanelProps) => {
     max: 10000,
   });
   const [dateState, setDateState] = useState({
-    from: new Date().toISOString().split("T")[0],
+    from: "",
     to: "",
   });
 
   const applyFilters = () => {
-    const filters = {
+    const newFilters = {
       availability: AvailabilityOptions[availabilityState],
       housingAuthority: HousingAuthorityOptions[housingAuthorityState],
       accessibility: JSON.stringify(
@@ -172,7 +170,12 @@ export const FilterPanel = (props: FilterPanelProps) => {
       toDate: dateState.to,
     };
 
-    props.refreshUnits(filters);
+    setFilters({
+      ...newFilters,
+      approved: filters.approved,
+      sort: filters.sort ?? "",
+      search: filters.search ?? "0",
+    });
   };
 
   const resetFilters = () => {
@@ -186,9 +189,9 @@ export const FilterPanel = (props: FilterPanelProps) => {
     setSecurityDepositState({ min: 0, max: 10000 });
     setApplicationFeeState({ min: 0, max: 10000 });
     setSizeState({ min: 0, max: 10000 });
-    setDateState({ from: new Date().toISOString().split("T")[0], to: "" });
+    setDateState({ from: "", to: "" });
 
-    props.refreshUnits({
+    setFilters({
       availability: "Available",
       approved: "approved",
     });

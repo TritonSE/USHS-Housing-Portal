@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { FilterParams } from "@/api/units";
 import { SortDropDownComp } from "@/components/SortDropDown";
+import { FiltersContext } from "@/pages/Home";
 
 const AllFiltersContainer = styled.div`
   display: flex;
@@ -62,22 +62,14 @@ const SearchBarContainer = styled.div`
   box-shadow: 1px 1px 2px 0px rgba(188, 186, 183, 0.4);
 `;
 
-type FilterDropdownProps = {
-  value: FilterParams;
-  refreshUnits(filterParams: FilterParams): void;
-};
+export const FilterDropdown = () => {
+  const { filters, setFilters } = useContext(FiltersContext);
 
-export const FilterDropdown = (props: FilterDropdownProps) => {
   const [searchText, setSearchText] = useState("");
   const [sortIndex, setSortIndex] = useState(0);
 
   const applyFilters = () => {
-    const filters = {
-      search: searchText ?? "undefined",
-      sort: String(sortIndex),
-    };
-
-    props.refreshUnits(filters);
+    setFilters({ ...filters, search: searchText ?? "undefined", sort: String(sortIndex) });
   };
 
   useEffect(() => {

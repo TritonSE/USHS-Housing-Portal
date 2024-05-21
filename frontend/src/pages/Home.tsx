@@ -10,9 +10,12 @@ import { NavBar } from "@/components/NavBar";
 import { Page } from "@/components/Page";
 import { UnitCardGrid } from "@/components/UnitCardGrid";
 
-export const FiltersContext = React.createContext({
-  filters: {} as FilterParams,
-});
+export type FilterContextType = {
+  filters: FilterParams;
+  setFilters: (filters: FilterParams) => void;
+};
+
+export const FiltersContext = React.createContext({} as FilterContextType);
 
 const HomePageLayout = styled.div`
   display: flex;
@@ -51,37 +54,27 @@ export function Home() {
   }, [filters]);
 
   return (
-    <Page>
-      <Helmet>
-        <title>Home | USHS Housing Portal</title>
-      </Helmet>
-      <NavBar page="Home" />
-      <HomePageLayout>
-        <FilterPanel
-          refreshUnits={(filterParams) => {
-            filterParams.approved = filters.approved;
-            setFilters(filterParams);
-          }}
-        ></FilterPanel>
-        <FilterPadding />
-        <div>
-          <FilterDropdown
-            value={filters}
-            refreshUnits={(filterParams) => {
-              filterParams.approved = filters.approved;
-              setFilters(filterParams);
-            }}
-          ></FilterDropdown>
-          <UnitCardGrid
-            units={units}
-            refreshUnits={(approved) => {
-              const newFilters = { ...filters, approved };
-              fetchUnits(newFilters);
-              setFilters(newFilters);
-            }}
-          />
-        </div>
-      </HomePageLayout>
-    </Page>
+    <FiltersContext.Provider value={{ filters, setFilters }}>
+      <Page>
+        <Helmet>
+          <title>Home | USHS Housing Portal</title>
+        </Helmet>
+        <NavBar page="Home" />
+        <HomePageLayout>
+          <FilterPanel />
+          <FilterPadding />
+          <div>
+            <FilterDropdown />
+            <UnitCardGrid
+              units={units}
+              refreshUnits={(approved) => {
+                const newFilters = { ...filters, approved };
+                setFilters(newFilters);
+              }}
+            />
+          </div>
+        </HomePageLayout>
+      </Page>
+    </FiltersContext.Provider>
   );
 }

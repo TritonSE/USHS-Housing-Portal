@@ -116,9 +116,7 @@ export const getUnits = async (filters: FilterParams) => {
   const maxSize = filters.maxSize === "undefined" ? 100000 : +(filters.maxSize ?? 100000);
 
   const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-  const fromDate = dateRegex.test(filters.fromDate ?? "")
-    ? filters.fromDate
-    : new Date(0).toISOString().split("T")[0];
+  const fromDate = dateRegex.test(filters.fromDate ?? "") ? filters.fromDate : "1900-01-01";
   const toDate = dateRegex.test(filters.toDate ?? "") ? filters.toDate : "2100-01-01";
 
   const avail = filters.availability ? (filters.availability === "Available" ? true : false) : true;
