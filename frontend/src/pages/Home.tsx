@@ -64,7 +64,10 @@ export function Home() {
           <FilterPanel />
           <FilterPadding />
           <div>
-            <FilterDropdown />
+            <FilterDropdown
+              searchText={filters.search ?? ""}
+              sortIndex={Number(filters.sort ?? 0)}
+            />
             <UnitCardGrid
               units={units}
               refreshUnits={(approved) => {

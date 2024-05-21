@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import styled from "styled-components";
 
 import { SortDropDownComp } from "@/components/SortDropDown";
@@ -62,19 +62,13 @@ const SearchBarContainer = styled.div`
   box-shadow: 1px 1px 2px 0px rgba(188, 186, 183, 0.4);
 `;
 
-export const FilterDropdown = () => {
+export type FilterDropdownProps = {
+  searchText: string;
+  sortIndex: number;
+};
+
+export const FilterDropdown = (props: FilterDropdownProps) => {
   const { filters, setFilters } = useContext(FiltersContext);
-
-  const [searchText, setSearchText] = useState("");
-  const [sortIndex, setSortIndex] = useState(0);
-
-  const applyFilters = () => {
-    setFilters({ ...filters, search: searchText ?? "undefined", sort: String(sortIndex) });
-  };
-
-  useEffect(() => {
-    applyFilters();
-  }, [sortIndex, searchText]);
 
   return (
     <AllFiltersContainer>
@@ -82,16 +76,21 @@ export const FilterDropdown = () => {
         <SearchBarContainer>
           <SearchBarInput
             placeholder="Search Property"
-            value={searchText}
+            value={props.searchText}
             onChange={(event) => {
-              setSearchText(event.target.value);
+              setFilters({ ...filters, search: event.target.value });
             }}
           />
-          <SearchIcon src="/search.svg" onClick={applyFilters} />
+          <SearchIcon src="/search.svg" />
         </SearchBarContainer>
       </FiltersFirstRow>
 
-      <SortDropDownComp value={sortIndex} setValue={setSortIndex} />
+      <SortDropDownComp
+        value={props.sortIndex}
+        setValue={(val: number) => {
+          setFilters({ ...filters, sort: String(val) });
+        }}
+      />
     </AllFiltersContainer>
   );
 };
