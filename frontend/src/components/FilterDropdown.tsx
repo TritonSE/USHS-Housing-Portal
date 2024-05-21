@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import { FilterParams } from "@/api/units";
-import { FilterText } from "@/components/FilterCommon";
 import { SortDropDownComp } from "@/components/SortDropDown";
 
 const AllFiltersContainer = styled.div`
@@ -63,60 +62,19 @@ const SearchBarContainer = styled.div`
   box-shadow: 1px 1px 2px 0px rgba(188, 186, 183, 0.4);
 `;
 
-const ResetIcon = styled.img`
-  height: 25px;
-  width: 25px;
-`;
-
-const ResetFilterButton = styled.button`
-  background-color: transparent;
-  border-color: transparent;
-  cursor: pointer;
-`;
-
-const ResetFilterText = styled(FilterText)`
-  color: #b64201;
-  font-weight: 500;
-  padding-top: 2px;
-`;
-
-const ResetFilterRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: flex-center;
-  gap: 8px;
-`;
-
 type FilterDropdownProps = {
   value: FilterParams;
   refreshUnits(filterParams: FilterParams): void;
 };
 
 export const FilterDropdown = (props: FilterDropdownProps) => {
-  const [bedBathState, setBedBathState] = useState({
-    beds: Number(props.value.beds ?? 1),
-    baths: Number(props.value.baths ?? 0.5),
-  });
   const [searchText, setSearchText] = useState("");
   const [sortIndex, setSortIndex] = useState(0);
-  const [availabilityState, setAvailabilityState] = useState({
-    dropdownText: props.value.availability ?? "Available",
-  });
-  const [priceState, setPriceState] = useState({
-    minPrice: String(props.value.minPrice) === "undefined" ? -1 : Number(props.value.minPrice),
-    maxPrice: String(props.value.maxPrice) === "undefined" ? -1 : Number(props.value.maxPrice),
-  });
 
   const applyFilters = () => {
     const filters = {
       search: searchText ?? "undefined",
-      beds: String(bedBathState.beds),
-      baths: String(bedBathState.baths),
       sort: String(sortIndex),
-      availability: availabilityState.dropdownText,
-      minPrice: priceState.minPrice === -1 ? "undefined" : String(priceState.minPrice),
-      maxPrice: priceState.maxPrice === -1 ? "undefined" : String(priceState.maxPrice),
     };
 
     props.refreshUnits(filters);
@@ -124,18 +82,7 @@ export const FilterDropdown = (props: FilterDropdownProps) => {
 
   useEffect(() => {
     applyFilters();
-  }, [sortIndex, searchText, priceState, bedBathState, availabilityState]);
-
-  const resetFilters = () => {
-    setBedBathState({ beds: 1, baths: 0.5 });
-    setSearchText("");
-    setSortIndex(0);
-    setAvailabilityState({ dropdownText: "Available" });
-    setPriceState({
-      minPrice: -1,
-      maxPrice: -1,
-    });
-  };
+  }, [sortIndex, searchText]);
 
   return (
     <AllFiltersContainer>
@@ -150,13 +97,6 @@ export const FilterDropdown = (props: FilterDropdownProps) => {
           />
           <SearchIcon src="/search.svg" onClick={applyFilters} />
         </SearchBarContainer>
-
-        <ResetFilterButton onClick={resetFilters}>
-          <ResetFilterRow>
-            <ResetIcon src="/refresh.svg" />
-            <ResetFilterText> Reset filters</ResetFilterText>
-          </ResetFilterRow>
-        </ResetFilterButton>
       </FiltersFirstRow>
 
       <SortDropDownComp value={sortIndex} setValue={setSortIndex} />
