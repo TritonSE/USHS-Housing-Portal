@@ -48,3 +48,7 @@ export async function getUserByID(id: string) {
 export async function elevateUser(id: string) {
   return await UserModel.findByIdAndUpdate(id, { isHousingLocator: true });
 }
+
+export async function demoteUser(id: string) {
+  return await UserModel.findByIdAndUpdate(id, { isHousingLocator: false });
+}

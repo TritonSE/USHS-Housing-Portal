@@ -1,8 +1,9 @@
 import { RequestHandler } from "express";
+import createHttpError from "http-errors";
 
 import { asyncHandler } from "./wrappers";
 
-import { createRenterCandidate, getRenterCandidates } from "@/services/renter";
+import { createRenterCandidate, getRenterCandidate, getRenterCandidates } from "@/services/renter";
 
 export const getRenterCandidatesHandler: RequestHandler = asyncHandler(async (_req, res, _next) => {
   const renters = await getRenterCandidates();
@@ -41,4 +42,17 @@ export const createRenterCandidateHandler: RequestHandler = asyncHandler(async (
   } else {
     res.status(400).send("Renter Already Exists");
   }
+});
+
+export const getRenterCandidateHandler: RequestHandler = asyncHandler(async (req, res, _) => {
+  const { id } = req.params;
+
+  // Fetch the renter candidate data based on the renterId
+  const body = await getRenterCandidate(id);
+
+  if (body === null) {
+    throw createHttpError(404, "Renter not found.");
+  }
+
+  res.status(200).json(body);
 });

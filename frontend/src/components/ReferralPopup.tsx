@@ -6,11 +6,11 @@ import styled from "styled-components";
 import { Button } from "./Button";
 import { UserDropdown } from "./UserDropdown";
 
-import { createReferral, createReferralRequest } from "@/api/referrals";
+import { CreateReferralRequest, createReferral } from "@/api/referrals";
 import {
+  CreateRenterCandidateRequest,
   RenterCandidate,
   createRenterCandidate,
-  createRenterCandidateRequest,
   getRenterCandidates,
 } from "@/api/renter-candidates";
 
@@ -197,20 +197,22 @@ export const ReferralPopup = ({ active, onClose, onSubmit }: PopupProps) => {
   }, [active]);
 
   useEffect(() => {
-    getRenterCandidates()
-      .then((value) => {
-        if (value.success) {
-          setAllRCs(value.data);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    if (popup) {
+      getRenterCandidates()
+        .then((value) => {
+          if (value.success) {
+            setAllRCs(value.data);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   }, [popup]);
 
   const handleCreateReferral = (renterCandidateId: string | undefined) => {
     if (renterCandidateId !== undefined) {
-      createReferral({ renterCandidateId, unitId: id } as createReferralRequest)
+      createReferral({ renterCandidateId, unit: id } as CreateReferralRequest)
         .then((value) => {
           if (value.success) {
             console.log(value.data);
@@ -227,7 +229,7 @@ export const ReferralPopup = ({ active, onClose, onSubmit }: PopupProps) => {
   const handleCreateRC = (data: FieldValues) => {
     if (data.email === "") delete data.email;
     if (data.phone === "") delete data.phone;
-    createRenterCandidate(data as createRenterCandidateRequest)
+    createRenterCandidate(data as CreateRenterCandidateRequest)
       .then((value) => {
         if (value.success) {
           handleCreateReferral(value.data._id);

@@ -69,7 +69,7 @@ const MainColumn = styled.div`
 `;
 
 const DetailsColumn = styled(MainColumn)`
-  margin: 32px 160px;
+  margin: 32px 96px;
   gap: 40px;
 `;
 
@@ -555,11 +555,19 @@ export function UnitDetails() {
         <DetailsColumn>
           <Section>
             <TopRow>
-              <Link to="/" state={filters}>
+              <Link
+                to={".."}
+                onClick={(e) => {
+                  e.preventDefault();
+                  // go back relative to navigation history
+                  navigate(-1);
+                }}
+                state={filters}
+              >
                 <Button kind="secondary">
                   <PaddingInButton>
                     <img className="back-arrow" src="/back_arrow.svg" alt={"Back arrow"} />
-                    Back to Listing
+                    Back
                   </PaddingInButton>
                 </Button>
               </Link>
