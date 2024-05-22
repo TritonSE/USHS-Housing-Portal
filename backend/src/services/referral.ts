@@ -1,5 +1,8 @@
 import { ObjectId } from "mongoose";
 
+import { sendEmail } from "./email";
+import { getUserByID } from "./user";
+
 import { ReferralModel } from "@/models/referral";
 
 export async function getUnitReferrals(id: string) {
@@ -33,11 +36,39 @@ export async function editReferral(
   assignedReferringStaffId: string,
   status: string,
 ) {
+  const Ref = await ReferralModel.findById(id);
+  const updateHL = Ref?.assignedHousingLocator?.toString() !== assignedHousingLocatorId;
+  const setLeased =
+    status === "leased" &&
+    Ref?.status !== "Leased" &&
+    Ref?.status !== "Denied" &&
+    Ref?.status !== "Canceled";
   await ReferralModel.findByIdAndUpdate(id, {
     assignedHousingLocator: assignedHousingLocatorId,
     assignedReferringStaff: assignedReferringStaffId,
     status,
   });
   const referral = await ReferralModel.findById(id);
+  const HL = await getUserByID(referral?.assignedHousingLocator?.toString() ?? "");
+
+  if (updateHL) {
+    if (HL !== null) {
+      await sendEmail(
+        HL.email,
+        "Referral Update",
+        `You have been assigned a new referral. Please login to the portal to view the update.`,
+      );
+    }
+  }
+  if (setLeased) {
+    if (HL !== null) {
+      await sendEmail(
+        HL?.email,
+        "Referral Update",
+        `Your referral has been marked as leased. Please login to the portal to view the update.`,
+      );
+    }
+  }
+
   return referral;
 }
