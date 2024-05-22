@@ -134,11 +134,23 @@ export async function deleteUnit(id: string): Promise<APIResult<Unit>> {
 
 // REFERRALS
 
+export const REFERRAL_STATUSES = [
+  "Referred",
+  "Viewing",
+  "Pending",
+  "Approved",
+  "Denied",
+  "Leased",
+  "Canceled",
+];
+
+export type ReferralStatus = (typeof REFERRAL_STATUSES)[number];
+
 export type Referral = {
   _id: string;
-  status: string;
+  status: ReferralStatus;
   renterCandidate: RenterCandidate;
-  unitId: string;
+  unit: Unit;
   assignedHousingLocator: User;
   assignedReferringStaff: User;
   updatedAt: string;

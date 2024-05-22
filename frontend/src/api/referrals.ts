@@ -1,12 +1,12 @@
 import { APIResult, handleAPIError, post, put } from "./requests";
 import { Referral } from "./units";
 
-export type createReferralRequest = {
+export type CreateReferralRequest = {
   renterCandidateId: string;
-  unitId: string;
+  unit: string;
 };
 
-export type updateReferralRequest = {
+export type UpdateReferralRequest = {
   id: string;
   housingLocator: string;
   referringStaff: string;
@@ -14,7 +14,7 @@ export type updateReferralRequest = {
 };
 
 export async function createReferral(
-  referral: createReferralRequest,
+  referral: CreateReferralRequest,
 ): Promise<APIResult<Referral>> {
   try {
     const response = await post("/referrals", referral);
@@ -25,7 +25,7 @@ export async function createReferral(
   }
 }
 
-export async function updateReferral(request: updateReferralRequest): Promise<APIResult<Referral>> {
+export async function updateReferral(request: UpdateReferralRequest): Promise<APIResult<Referral>> {
   try {
     const response = await put(`/referrals/${request.id}`, request);
     const json = (await response.json()) as Referral;
