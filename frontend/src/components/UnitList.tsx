@@ -7,14 +7,14 @@ import { Pagination } from "./Pagination";
 import { Unit } from "@/api/units";
 import { DataContext } from "@/contexts/DataContext";
 
-const ENTRIES_PER_PAGE = 1;
+const ENTRIES_PER_PAGE = 6;
 
 const UnitTableWrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin: 95px;
   margin-top: 39px;
-  margin-right: 1%;
+  margin-right: 7.5%;
   gap: 30px;
 `;
 
