@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import styled from "styled-components";
 
 import { Button } from "./Button";
-import { ReferralTablePagination } from "./ReferralTablePagination";
+import { Pagination } from "./Pagination";
 import { ReferralTableRow } from "./ReferralTableRow";
 
 import { updateReferral, updateReferralRequest } from "@/api/referrals";
@@ -16,7 +16,7 @@ type ReferralTableProps = {
   id: string;
 };
 
-const ENTRIES_PER_PAGE = 5;
+const ENTRIES_PER_PAGE = 3;
 
 const TableColumnNames = [
   "Name",
@@ -104,8 +104,14 @@ const ReferralTableColumnHeaderEnd = styled(ReferralTableColumnHeader)`
 `;
 
 const ReferralTableFooter = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
   padding-left: 85%;
-  margin: 1vh 0vw 3vh 0vw;
+  background: white;
+  padding-top: 17px;
+  padding-bottom: 17px;
+  padding-right: 2vw;
 `;
 
 const ReferralTablePlaceholder = styled.div`
@@ -263,7 +269,7 @@ export const ReferralTable = (props: ReferralTableProps) => {
               />
             ))}
           <ReferralTableFooter>
-            <ReferralTablePagination
+            <Pagination
               totalPages={Math.ceil(referrals.length / ENTRIES_PER_PAGE)}
               currPage={pageNumber}
               setPageNumber={setPageNumber}
