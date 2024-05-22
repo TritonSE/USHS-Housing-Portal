@@ -7,7 +7,7 @@ import { Pagination } from "./Pagination";
 import { User, demoteUser } from "@/api/users";
 import { DataContext } from "@/contexts/DataContext";
 
-const ENTRIES_PER_PAGE = 2;
+const ENTRIES_PER_PAGE = 7;
 
 const HLTableWrapper = styled.div`
   display: flex;

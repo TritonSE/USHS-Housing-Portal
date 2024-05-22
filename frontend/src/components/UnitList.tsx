@@ -2,16 +2,19 @@ import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
+import { Pagination } from "./Pagination";
+
 import { Unit } from "@/api/units";
 import { DataContext } from "@/contexts/DataContext";
+
+const ENTRIES_PER_PAGE = 6;
 
 const UnitTableWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   margin: 95px;
-  margin-top: 50px;
-  margin-right: 5%;
+  margin-top: 39px;
+  margin-right: 1%;
   gap: 30px;
 `;
 
@@ -26,9 +29,11 @@ const UnitTable = styled.div`
 const UnitTableHeaderRow = styled.div`
   display: flex;
   flex-direction: row;
-  margin: 44px;
+  margin-left: 44px;
+  margin-right: 44px;
   margin-top: 32px;
-  margin-bottom: 17px;
+
+  padding-bottom: 17px;
   justify-content: space-between;
   gap: 20px; //causes problems when shrinking, status overflows out of table
   border-bottom: 0.4px solid #cdcacacc;
@@ -40,16 +45,18 @@ const UnitTableRow = styled.div`
   justify-content: space-between;
   font-family: Montserrat;
   color: black;
-  margin: 44px;
-  margin-bottom: 17px;
-  margin-top: 0px;
-  padding-top: 17px;
+  margin-left: 44px;
+  margin-right: 44px;
+  height: 90px;
+
   padding-bottom: 17px;
+  padding-top: 17px;
 
   border-bottom: 0.4px solid #cdcacacc;
   gap: 20px;
   &:hover {
     background-color: #ec85371a;
+    border: 0.4px solid #b64201;
   }
 `;
 
@@ -94,13 +101,14 @@ const PropertiesRow = styled.span`
   font-family: "Montserrat";
   font-size: 27px;
   font-weight: 700;
+  margin: 0;
   margin-bottom: 15px;
 `;
 
 const ButtonsWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  left: 72vw;
+  left: 77vw;
 `;
 
 const PendingButton = styled.div<{ selected: boolean }>`
@@ -133,6 +141,23 @@ const HeaderText = styled.span`
   font-size: 32px;
 `;
 
+const UnitListFooterWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+  margin-left: 44px;
+  margin-right: 44px;
+  padding-top: 17px;
+  height: 90px;
+`;
+
+const UnitListFooter = styled.div`
+  display: flex;
+  flex-direction: row;
+
+  justify-content: space-between;
+`;
+
 export type UnitListProps = {
   units: Unit[];
   showPendingUnits?: boolean;
@@ -141,6 +166,7 @@ export type UnitListProps = {
 
 export const UnitList = ({ units, refreshUnits, showPendingUnits = false }: UnitListProps) => {
   const [pendingSelected, setPendingSelected] = useState<boolean>(showPendingUnits);
+  const [pageNumber, setPageNumber] = useState<number>(1);
 
   const dataContext = useContext(DataContext);
 
@@ -186,31 +212,42 @@ export const UnitList = ({ units, refreshUnits, showPendingUnits = false }: Unit
         </UnitTableHeaderRow>
         <>
           {units.length > 0 &&
-            units.map((unit: Unit, index) => (
-              <Link to={`/unit/${unit._id}`} style={{ textDecoration: "none" }} key={index}>
-                <UnitTableRow>
-                  <ListingAddressWrapper>{unit.listingAddress}</ListingAddressWrapper>
-                  <UnitItemWrapper>${unit.monthlyRent}</UnitItemWrapper>
-                  <UnitItemWrapper>{unit.numBeds}</UnitItemWrapper>
-                  <UnitItemWrapper>{unit.numBaths}</UnitItemWrapper>
-                  <UnitItemWrapper>{unit.sqft}</UnitItemWrapper>
-                  <UnitItemWrapper>
-                    {" "}
-                    {unit.availableNow && unit.approved ? (
-                      <UnitItemWrapper>Available</UnitItemWrapper>
-                    ) : !unit.approved ? (
-                      <UnitItemWrapper>Pending</UnitItemWrapper>
-                    ) : unit.leasedStatus !== undefined ? (
-                      <UnitItemWrapper>Leased</UnitItemWrapper>
-                    ) : (
-                      <UnitItemWrapper>Not Available</UnitItemWrapper>
-                    )}
-                  </UnitItemWrapper>
-                </UnitTableRow>
-              </Link>
-            ))}
+            units
+              .slice((pageNumber - 1) * ENTRIES_PER_PAGE, pageNumber * ENTRIES_PER_PAGE)
+              .map((unit: Unit, index) => (
+                <Link to={`/unit/${unit._id}`} style={{ textDecoration: "none" }} key={index}>
+                  <UnitTableRow>
+                    <ListingAddressWrapper>{unit.listingAddress}</ListingAddressWrapper>
+                    <UnitItemWrapper>${unit.monthlyRent}</UnitItemWrapper>
+                    <UnitItemWrapper>{unit.numBeds}</UnitItemWrapper>
+                    <UnitItemWrapper>{unit.numBaths}</UnitItemWrapper>
+                    <UnitItemWrapper>{unit.sqft}</UnitItemWrapper>
+                    <UnitItemWrapper>
+                      {" "}
+                      {unit.availableNow && unit.approved ? (
+                        <UnitItemWrapper>Available</UnitItemWrapper>
+                      ) : !unit.approved ? (
+                        <UnitItemWrapper>Pending</UnitItemWrapper>
+                      ) : unit.leasedStatus !== undefined ? (
+                        <UnitItemWrapper>Leased</UnitItemWrapper>
+                      ) : (
+                        <UnitItemWrapper>Not Available</UnitItemWrapper>
+                      )}
+                    </UnitItemWrapper>
+                  </UnitTableRow>
+                </Link>
+              ))}
           {units.length === 0 && <HeaderText>No matching units found</HeaderText>}
         </>
+        <UnitListFooterWrapper>
+          <UnitListFooter>
+            <Pagination
+              totalPages={Math.ceil(units.length / ENTRIES_PER_PAGE)}
+              currPage={pageNumber}
+              setPageNumber={setPageNumber}
+            />
+          </UnitListFooter>
+        </UnitListFooterWrapper>
       </UnitTable>
     </UnitTableWrapper>
   );

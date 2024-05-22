@@ -7,7 +7,6 @@ import { UnitCard } from "@/components/UnitCard";
 import { DataContext } from "@/contexts/DataContext";
 
 const UnitCardLayout = styled.div`
-  // margin: 95px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -23,7 +22,6 @@ const PropertiesRow = styled.span`
   font-size: 27px;
   font-weight: 700;
   margin-bottom: 15px;
-  justify-content: space-between;
 `;
 
 const HeaderText = styled.span`
@@ -43,7 +41,8 @@ const GridContainer = styled.div`
 const ButtonsWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  left: 74vw;
+  position: absolute;
+  left: 69vw;
 `;
 
 const PendingButton = styled.div<{ selected: boolean }>`

@@ -16,7 +16,9 @@ const ButtonsWrapper = styled.div`
   flex: row;
   justify-content: end;
   margin: 0;
+  margin-top: 55px;
   margin-right: 100px;
+  margin-left: 310px;
 `;
 
 const ToggleButtonWrapper = styled.div`
@@ -49,6 +51,11 @@ const ListViewButton = styled(CardViewButton)`
   padding: 7px 32px 7px 32px;
   border-radius: 0px 100px 100px 0px;
   background: ${(props) => (props.selected ? "#ec85371a" : "#EEEEEE")};
+`;
+
+const SearchStateWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
 `;
 
 export const FiltersContext = React.createContext({
@@ -111,35 +118,37 @@ export function Home() {
           <FitlerPanel></FitlerPanel>
           <FilterPadding />
           <div>
-            <FilterDropdown
-              value={filters}
-              refreshUnits={(filterParams) => {
-                filterParams.approved = filters.approved;
-                setFilters(filterParams);
-              }}
-            ></FilterDropdown>
-            <ButtonsWrapper>
-              <ToggleButtonWrapper>
-                <CardViewButton
-                  onClick={handleCardView}
-                  selected={viewMode === "card"}
-                  src={
-                    viewMode === "card"
-                      ? "card_view_icon_selected.svg"
-                      : "card_view_icon_unselected.svg"
-                  }
-                ></CardViewButton>
-                <ListViewButton
-                  onClick={handleListView}
-                  selected={viewMode === "list"}
-                  src={
-                    viewMode === "list"
-                      ? "list_view_icon_selected.svg"
-                      : "list_view_icon_unselected.svg"
-                  }
-                ></ListViewButton>
-              </ToggleButtonWrapper>
-            </ButtonsWrapper>
+            <SearchStateWrapper>
+              <FilterDropdown
+                value={filters}
+                refreshUnits={(filterParams) => {
+                  filterParams.approved = filters.approved;
+                  setFilters(filterParams);
+                }}
+              ></FilterDropdown>
+              <ButtonsWrapper>
+                <ToggleButtonWrapper>
+                  <CardViewButton
+                    onClick={handleCardView}
+                    selected={viewMode === "card"}
+                    src={
+                      viewMode === "card"
+                        ? "card_view_icon_selected.svg"
+                        : "card_view_icon_unselected.svg"
+                    }
+                  ></CardViewButton>
+                  <ListViewButton
+                    onClick={handleListView}
+                    selected={viewMode === "list"}
+                    src={
+                      viewMode === "list"
+                        ? "list_view_icon_selected.svg"
+                        : "list_view_icon_unselected.svg"
+                    }
+                  ></ListViewButton>
+                </ToggleButtonWrapper>
+              </ButtonsWrapper>
+            </SearchStateWrapper>
             {viewMode === "card" ? (
               <UnitCardGrid
                 units={units}
