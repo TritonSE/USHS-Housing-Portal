@@ -7,7 +7,7 @@ import { Pagination } from "./Pagination";
 import { Unit } from "@/api/units";
 import { DataContext } from "@/contexts/DataContext";
 
-const ENTRIES_PER_PAGE = 6;
+const ENTRIES_PER_PAGE = 1;
 
 const UnitTableWrapper = styled.div`
   display: flex;
