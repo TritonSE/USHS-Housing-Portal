@@ -158,6 +158,31 @@ const UnitListFooter = styled.div`
   justify-content: space-between;
 `;
 
+const AvailableWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 85.45px;
+  height: 29px;
+  padding: 4px 12px 4px 12px;
+  gap: 10px;
+  border-radius: 4px;
+  background: #7a923a33;
+  border: 1px solid #7a923a;
+  color: #7a923a;
+  font-family: Poppins;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  letter-spacing: -0.01em;
+  justify-content: center;
+`;
+
+const PendingWrapper = styled(AvailableWrapper)`
+  background: #b6420133;
+  border: 1px solid #b64201;
+  color: #b64201;
+`;
+
 export type UnitListProps = {
   units: Unit[];
   showPendingUnits?: boolean;
@@ -225,9 +250,13 @@ export const UnitList = ({ units, refreshUnits, showPendingUnits = false }: Unit
                     <UnitItemWrapper>
                       {" "}
                       {unit.availableNow && unit.approved ? (
-                        <UnitItemWrapper>Available</UnitItemWrapper>
+                        <UnitItemWrapper>
+                          <AvailableWrapper>Available</AvailableWrapper>
+                        </UnitItemWrapper>
                       ) : !unit.approved ? (
-                        <UnitItemWrapper>Pending</UnitItemWrapper>
+                        <UnitItemWrapper>
+                          <PendingWrapper>Pending</PendingWrapper>
+                        </UnitItemWrapper>
                       ) : unit.leasedStatus !== undefined ? (
                         <UnitItemWrapper>Leased</UnitItemWrapper>
                       ) : (
