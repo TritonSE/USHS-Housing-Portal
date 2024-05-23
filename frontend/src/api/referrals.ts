@@ -25,7 +25,9 @@ export async function createReferral(
   }
 }
 
-export async function updateReferral(request: UpdateReferralRequest): Promise<APIResult<Referral>> {
+export async function updateReferral(
+  request: Partial<UpdateReferralRequest>,
+): Promise<APIResult<Referral>> {
   try {
     const response = await put(`/referrals/${request.id}`, request);
     const json = (await response.json()) as Referral;
