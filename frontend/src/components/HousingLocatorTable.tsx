@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 
 import { Button } from "./Button";
-import { TablePagination } from "./TablePagination";
+import { ReferralTablePagination } from "./ReferralTablePagination";
 
 import { User, demoteUser } from "@/api/users";
 import { DataContext } from "@/contexts/DataContext";
@@ -304,7 +304,7 @@ export const HousingLocatorTable = () => {
         </>
       )}
       <HLTableFooter>
-        <TablePagination
+        <ReferralTablePagination
           totalPages={Math.ceil(housingLocators.length / ENTRIES_PER_PAGE)}
           currPage={pageNumber}
           setPageNumber={setPageNumber}

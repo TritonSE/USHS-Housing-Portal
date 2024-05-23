@@ -12,7 +12,7 @@ import {
   LandlordListingForm,
   Login,
   Profile,
-  RenterCandidatePage,
+  RenterCandidate,
   UnitDetails,
 } from "@/pages";
 import { GlobalStyle, StyledComponentsManager, theme } from "@/theme";
@@ -35,7 +35,7 @@ function AppRouter() {
             <Route path="/new-listing" element={<HousingLocatorForm />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/unit/:id" element={<UnitDetails />} />
-            <Route path="/candidate/:id" element={<RenterCandidatePage />} />
+            <Route path="/candidate/:id" element={<RenterCandidate />} />
             <Route path="*" element={<Navigate to="/" />} />
           </>
         )}

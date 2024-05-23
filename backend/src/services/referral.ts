@@ -6,7 +6,7 @@ import { getUserByID } from "./user";
 import { ReferralModel } from "@/models/referral";
 
 export async function getUnitReferrals(id: string) {
-  const referrals = await ReferralModel.find({ unit: id })
+  const referrals = await ReferralModel.find({ unitId: id })
     .populate("renterCandidate")
     .populate("assignedHousingLocator")
     .populate("assignedReferringStaff");
@@ -16,13 +16,13 @@ export async function getUnitReferrals(id: string) {
 
 export async function createReferral(
   renterCandidateId: string,
-  unit: string,
+  unitId: string,
   referringStaff: ObjectId,
   isHL: boolean,
 ) {
   const referral = await ReferralModel.create({
     renterCandidate: renterCandidateId,
-    unit,
+    unitId,
     assignedReferringStaff: referringStaff,
     assignedHousingLocator: isHL ? referringStaff : undefined,
   });

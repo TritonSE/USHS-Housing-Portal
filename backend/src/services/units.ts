@@ -74,7 +74,6 @@ export const approveUnit = async (unitId: string) => {
 
 export const deleteUnit = async (id: string) => {
   const unit = await UnitModel.deleteOne({ _id: id });
-  // TODO delete all references (ie. referrals)
   return unit;
 };
 
