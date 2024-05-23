@@ -19,6 +19,4 @@ router.post("/", validateWith(UserValidator.createUser), UserController.createUs
 
 router.put("/:id/elevate", requireHousingLocator, UserController.elevateUserHandler);
 
-router.put("/:id/demote", requireHousingLocator, UserController.demoteUserHandler);
-
 export default router;
