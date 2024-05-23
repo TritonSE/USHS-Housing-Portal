@@ -58,7 +58,6 @@ export async function elevateUser(id: string) {
   }
   return await UserModel.findByIdAndUpdate(id, { isHousingLocator: true });
 }
-<<<<<<< HEAD
 
 export async function demoteUser(id: string) {
   const RS = await getUserByID(id);
@@ -71,5 +70,3 @@ export async function demoteUser(id: string) {
   }
   return await UserModel.findByIdAndUpdate(id, { isHousingLocator: false });
 }
-=======
->>>>>>> parent of a805420 (Profile Page: Manage Permissions (#91))
