@@ -60,5 +60,13 @@ export async function elevateUser(id: string) {
 }
 
 export async function demoteUser(id: string) {
+  const RS = await getUserByID(id);
+  if (RS !== null) {
+    await sendEmail(
+      RS.email,
+      "Housing Locator Demotion",
+      "You have been demoted from a Housing Locator",
+    );
+  }
   return await UserModel.findByIdAndUpdate(id, { isHousingLocator: false });
 }
