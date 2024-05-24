@@ -271,7 +271,7 @@ const Heading = styled.h1`
 
 const LeftArrowWrapper = styled.div`
   position: absolute;
-  z-index: 2;
+  z-index: 1;
   cursor: pointer;
   display: flex;
   justify-content: center;
@@ -290,7 +290,7 @@ const LeftArrowWrapper = styled.div`
 
 const RightArrowWrapper = styled.div`
   position: absolute;
-  z-index: 2;
+  z-index: 1;
   top: 0vh;
   right: 0vw;
   cursor: pointer;
