@@ -6,7 +6,7 @@ import styled from "styled-components";
 
 import { Loading } from "./Loading";
 
-import { UpdateReferralRequest, updateReferral } from "@/api/referrals";
+import { UpdateReferralRequest, deleteReferral, updateReferral } from "@/api/referrals";
 import { RenterCandidate, editRenterCandidate, getRenterCandidate } from "@/api/renter-candidates";
 import { Referral } from "@/api/units";
 import { Page } from "@/components";
@@ -155,6 +155,83 @@ const InputSection = styled.div`
   align-items: center;
 `;
 
+const Overlay = styled.div`
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: fixed;
+  background: rgba(0, 0, 0, 0.25);
+  z-index: 2;
+`;
+
+const Modal = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 736px;
+  height: 447px;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 50px;
+  z-index: 2;
+`;
+
+const PopupWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  margin-top: 90px;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ConfirmPopupWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  margin-top: 90px;
+  align-items: center;
+  justify-content: center;
+`;
+
+const PopupHeader = styled.div`
+  color: var(--Text, #111010);
+  font-family: Montserrat;
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 150%;
+  letter-spacing: 0.4px;
+`;
+
+const PopupText = styled.div`
+  color: #000;
+  text-align: center;
+  font-family: Montserrat;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+  letter-spacing: 0.32px;
+  width: 500px;
+`;
+
+const ButtonsRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 200px;
+  align-items: center;
+`;
+
 type ReferralQuery = Record<string, Partial<UpdateReferralRequest>>;
 
 export function RenterCandidatePage() {
@@ -169,6 +246,9 @@ export function RenterCandidatePage() {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
+  const [popup, setPopup] = useState(false);
+  const [confirmPopup, setConfirmPopup] = useState(false);
+  const [currReferral, setCurrReferral] = useState<string>("");
 
   const HousingAuthorityOptions = ["LACDA", "HACLA"];
 
@@ -213,7 +293,6 @@ export function RenterCandidatePage() {
 
   const handleUpdateReferrals = () => {
     for (const referralId in editReferralQuery) {
-      console.log({ ...editReferralQuery[referralId], id: referralId });
       updateReferral({ ...editReferralQuery[referralId], id: referralId })
         .then((value) => {
           if (value.success) {
@@ -224,11 +303,18 @@ export function RenterCandidatePage() {
     }
   };
 
-  useEffect(fetchRenterCandidate, []);
+  const handleDeleteReferral = () => {
+    deleteReferral(currReferral)
+      .then((value) => {
+        if (value.success) {
+          setConfirmPopup(true);
+          fetchRenterCandidate();
+        }
+      })
+      .catch(console.error);
+  };
 
-  useEffect(() => {
-    console.log(editReferralQuery);
-  }, [editReferralQuery]);
+  useEffect(fetchRenterCandidate, []);
 
   if (loading || !renterCandidate) {
     return <Loading />;
@@ -374,7 +460,7 @@ export function RenterCandidatePage() {
                     <InfoHeader>Housing Program:</InfoHeader>
                     <ReferralTableDropDown
                       values={HousingAuthorityOptions}
-                      defaultValue="LACDA"
+                      defaultValue={renterCandidate.program}
                       onSelect={(program) => {
                         setEditRenterQuery({
                           ...editRenterQuery,
@@ -437,7 +523,8 @@ export function RenterCandidatePage() {
                             key={`delete-${idx}`}
                             src="/trash-can.svg"
                             onClick={() => {
-                              // TODO
+                              setPopup(true);
+                              setCurrReferral(referral._id);
                             }}
                           ></DeleteIcon>,
                         ] as TableCellContent[];
@@ -480,7 +567,6 @@ export function RenterCandidatePage() {
                   renterReferrals
                     ? renterReferrals.map((referral, idx) => {
                         const { unit, assignedHousingLocator, status, updatedAt } = referral;
-                        console.log(referral);
                         // return list of cells for each row
                         return [
                           <ListingAddressLink
@@ -496,7 +582,8 @@ export function RenterCandidatePage() {
                             key={`delete-${idx}`}
                             src="/trash-can.svg"
                             onClick={() => {
-                              // TODO
+                              setPopup(true);
+                              setCurrReferral(referral._id);
                             }}
                           ></DeleteIcon>,
                         ] as TableCellContent[];
@@ -506,6 +593,48 @@ export function RenterCandidatePage() {
                 rowsPerPage={5}
               />
             </TableContainer>
+          </>
+        )}
+        {popup && (
+          <>
+            <Overlay />
+            <Modal>
+              {!confirmPopup ? (
+                <PopupWrapper>
+                  <PopupHeader>Remove Referral</PopupHeader>
+                  <PopupText>{`Are you sure you want to remove this referral for client ${renterCandidate.firstName} ${renterCandidate.lastName}?`}</PopupText>
+                  <ButtonsRow>
+                    <Button
+                      kind="secondary"
+                      onClick={() => {
+                        setPopup(false);
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                    <Button kind="primary" onClick={handleDeleteReferral}>
+                      Remove
+                    </Button>
+                  </ButtonsRow>
+                </PopupWrapper>
+              ) : (
+                <ConfirmPopupWrapper>
+                  <img src="/large_check.svg" alt="" />
+                  <PopupText>
+                    {`${renterCandidate.firstName} ${renterCandidate.lastName} has been removed from this unit’s referral list.`}{" "}
+                  </PopupText>
+                  <Button
+                    kind="primary"
+                    onClick={() => {
+                      setPopup(false);
+                      setConfirmPopup(false);
+                    }}
+                  >
+                    Done
+                  </Button>
+                </ConfirmPopupWrapper>
+              )}
+            </Modal>
           </>
         )}
       </MainColumn>
