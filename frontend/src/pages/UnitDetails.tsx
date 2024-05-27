@@ -540,11 +540,9 @@ export function UnitDetails() {
     return (
       <Column>
         <StrongText>Landlord: {unit.landlordFirstName + " " + unit.landlordLastName}</StrongText>
-        {phone && (
-          <Text>{`(${phone?.substring(0, 3)}) ${phone?.substring(3, 6)}-${phone?.substring(
-            6,
-          )}`}</Text>
-        )}
+        <Text>{`(${phone?.substring(0, 3)}) ${phone?.substring(3, 6)}-${phone?.substring(
+          6,
+        )}`}</Text>
         <Text>{unit.landlordEmail}</Text>
       </Column>
     );
