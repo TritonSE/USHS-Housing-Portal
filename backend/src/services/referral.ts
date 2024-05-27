@@ -41,3 +41,7 @@ export async function editReferral(
   const referral = await ReferralModel.findById(id);
   return referral;
 }
+
+export async function deleteUnitReferrals(unitId: string) {
+  return await ReferralModel.deleteMany({ unit: unitId });
+}

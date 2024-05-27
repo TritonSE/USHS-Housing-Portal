@@ -46,7 +46,7 @@ const Column = styled.div`
   flex-direction: column;
   background-color: #fbf7f3;
   justify-content: evenly-spaced;
-  gap: 16px;
+  gap: 8px;
 `;
 
 const HLActions = styled(Column)`
@@ -59,7 +59,7 @@ const DetailsRow = styled(Row)`
 
 const SectionColumn = styled(Column)`
   width: 50%;
-  gap: 25px;
+  gap: 10px;
 `;
 
 const MainColumn = styled.div`
@@ -69,7 +69,7 @@ const MainColumn = styled.div`
 `;
 
 const DetailsColumn = styled(MainColumn)`
-  margin: 32px 96px;
+  margin: 32px 150px;
   gap: 40px;
 `;
 
@@ -90,7 +90,6 @@ const Header = styled.div`
   font-family: "Neutraface Text";
   line-height: 150%;
   line-spacing: 0.64px;
-  margin-top: 32px;
 `;
 
 const Text = styled.div`
@@ -101,13 +100,8 @@ const Text = styled.div`
     letter-spacing: 0.4px;
   `;
 
-const List = styled.ul`
-  margin-top: 0;
-  margin-bottom: 0;
-  padding: 0, 0, 0, 10%;
-`;
-
 const StrongText = styled(Text)`
+  margin-top: 15px;
   font-weight: 600;
   line-height: 30px;
   letter-spacing: 0.4px;
@@ -116,17 +110,24 @@ const StrongText = styled(Text)`
 const ListText = styled.li`
     font-family: "Montserrat";
     font-weight: 400;
-    font-size: 20px;
+    font-size: 18px;
     line-height: 150%
-    letter-spacing: 0.4px;
-    margin-left: 6%;
+    letter-spacing: 0.32px;
+    margin-left: 3%;
     flex-wrap: wrap;
     margin-right: 10px;
   `;
 
-const Address = styled(Header)`
+const Address = styled.a`
+  font-size: 32px;
+  font-weight: 700;
+  font-family: "Neutraface Text";
+  line-height: 150%;
+  line-spacing: 0.64px;
   padding: 0;
   margin: 0 0 5px 0;
+  // text-decoration: none;
+  color: black;
 `;
 
 const Availability = styled(Header)`
@@ -333,6 +334,12 @@ const CarouselVideo = styled.video`
   padding: 0px 7.5px;
 `;
 
+const SectionBreak = styled.hr`
+  background-color: #cdcaca;
+  height: 1px;
+  border: none;
+`;
+
 export function UnitDetails() {
   const filters = useLocation().state as FilterParams;
   const navigate = useNavigate();
@@ -527,11 +534,17 @@ export function UnitDetails() {
     <ListText key={rule + i}>{rule}</ListText>
   ));
 
+  const phone = unit.landlordPhone.match(/\d+/g)?.join("");
+
   const HousingLocatorComponent = () => {
     return (
       <Column>
         <StrongText>Landlord: {unit.landlordFirstName + " " + unit.landlordLastName}</StrongText>
-        <Text>{unit.landlordPhone}</Text>
+        {phone && (
+          <Text>{`(${phone?.substring(0, 3)}) ${phone?.substring(3, 6)}-${phone?.substring(
+            6,
+          )}`}</Text>
+        )}
         <Text>{unit.landlordEmail}</Text>
       </Column>
     );
@@ -661,7 +674,12 @@ export function UnitDetails() {
                 <TopRow>
                   <Column>
                     <RentPerMonth>${unit.monthlyRent}/month</RentPerMonth>
-                    <Address>{unit.listingAddress}</Address>
+                    <Address
+                      target="_blank"
+                      href={`https://www.google.com/maps?q=${unit.listingAddress}`}
+                    >
+                      {unit.listingAddress}
+                    </Address>
                   </Column>
                   {currentUser?.isHousingLocator && (
                     <HLActions>
@@ -704,21 +722,17 @@ export function UnitDetails() {
                 <Row>
                   <SectionColumn>
                     <StrongText>Security Deposit: </StrongText>
-                    <List>
-                      <ListText> ${unit.securityDeposit}</ListText>
-                    </List>
+                    <ListText> ${unit.securityDeposit}</ListText>
                     <StrongText>Payment/Renting Criteria: </StrongText>
                     {rentingCriteria}
                   </SectionColumn>
                   <SectionColumn>
                     <StrongText>Application Fee: </StrongText>
-                    <List>
-                      <ListText>${unit.applicationFeeCost}</ListText>
-                    </List>
+                    <ListText>${unit.applicationFeeCost}</ListText>
                   </SectionColumn>
                 </Row>
               </Section>
-
+              <SectionBreak />
               <Section>
                 <Row>
                   <Header>Housing Specifications</Header>
@@ -733,7 +747,7 @@ export function UnitDetails() {
                     {appliances}
                     <StrongText>Housing Authority: </StrongText>
                     <ListText> {unit.housingAuthority}</ListText>
-                    <StrongText>Additional Comments from Landlord: </StrongText>
+                    <StrongText>Comments from Landlord: </StrongText>
                     <ListText> {unit.landlordComments}</ListText>
                   </SectionColumn>
                   <SectionColumn>
@@ -749,6 +763,7 @@ export function UnitDetails() {
 
               {unit.approved && (
                 <>
+                  <SectionBreak />
                   <Section>
                     <Row>
                       <Header>Additional Information</Header>
@@ -766,12 +781,14 @@ export function UnitDetails() {
                       </SectionColumn>
                     </Row>
                   </Section>
+                  <SectionBreak />
                   <ReferralTable id={id ?? ""} />{" "}
                 </>
               )}
 
               {!unit.approved && (
                 <>
+                  <SectionBreak />
                   <HousingLocatorFields
                     whereFindUnit={whereFound}
                     handleWhereFindUnit={(e) => {

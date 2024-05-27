@@ -24,7 +24,9 @@ const createUnitSchema = [
     .exists()
     .withMessage("is required")
     .isString()
-    .withMessage("must be a string"),
+    .withMessage("must be a string")
+    .notEmpty()
+    .withMessage("cannot be empty"),
   body("streetAddress")
     .exists()
     .withMessage("is required")

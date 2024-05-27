@@ -1,9 +1,13 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
+import { Button } from "./Button";
+
 import { FilterParams } from "@/api/units";
-import { FilterText } from "@/components/FilterCommon";
+// import { FilterText } from "@/components/FilterCommon";
 import { SortDropDownComp } from "@/components/SortDropDown";
+import { DataContext } from "@/contexts/DataContext";
 
 const AllFiltersContainer = styled.div`
   display: flex;
@@ -12,7 +16,7 @@ const AllFiltersContainer = styled.div`
   align-items: flex-start;
   margin-left: 95px;
   margin-right: 95px;
-  margin-top: 55px;
+  margin-top: 70px;
   gap: 16px;
 `;
 
@@ -21,7 +25,7 @@ const FiltersFirstRow = styled.div`
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  gap: 28px;
+  gap: 33px;
   flex-wrap: wrap;
 `;
 
@@ -63,10 +67,10 @@ const SearchBarContainer = styled.div`
   box-shadow: 1px 1px 2px 0px rgba(188, 186, 183, 0.4);
 `;
 
-const ResetIcon = styled.img`
-  height: 25px;
-  width: 25px;
-`;
+// const ResetIcon = styled.img`
+//   height: 25px;
+//   width: 25px;
+// `;
 
 const ResetFilterButton = styled.button`
   background-color: transparent;
@@ -74,11 +78,11 @@ const ResetFilterButton = styled.button`
   cursor: pointer;
 `;
 
-const ResetFilterText = styled(FilterText)`
-  color: #b64201;
-  font-weight: 500;
-  padding-top: 2px;
-`;
+// const ResetFilterText = styled(FilterText)`
+//   color: #b64201;
+//   font-weight: 500;
+//   padding-top: 2px;
+// `;
 
 const ResetFilterRow = styled.div`
   display: flex;
@@ -86,6 +90,20 @@ const ResetFilterRow = styled.div`
   justify-content: flex-start;
   align-items: flex-center;
   gap: 8px;
+`;
+
+const AddListings = styled(Button)`
+  height: 44px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%;
+  letter-spacing: 0.32px;
+  padding: 8px 20px;
 `;
 
 type FilterDropdownProps = {
@@ -107,6 +125,9 @@ export const FilterDropdown = (props: FilterDropdownProps) => {
     minPrice: String(props.value.minPrice) === "undefined" ? -1 : Number(props.value.minPrice),
     maxPrice: String(props.value.maxPrice) === "undefined" ? -1 : Number(props.value.maxPrice),
   });
+
+  const navigate = useNavigate();
+  const dataContext = useContext(DataContext);
 
   const applyFilters = () => {
     const filters = {
@@ -150,11 +171,23 @@ export const FilterDropdown = (props: FilterDropdownProps) => {
           />
           <SearchIcon src="/search.svg" onClick={applyFilters} />
         </SearchBarContainer>
+        {dataContext.currentUser?.isHousingLocator && (
+          <AddListings
+            kind="primary"
+            onClick={() => {
+              navigate("/new-listing");
+            }}
+          >
+            <img src="/plus_sign.svg" alt="" />
+            <span>Listing</span>
+          </AddListings>
+        )}
 
         <ResetFilterButton onClick={resetFilters}>
           <ResetFilterRow>
+            {/* Commented out for now since I'm not sure if we're still using this
             <ResetIcon src="/refresh.svg" />
-            <ResetFilterText> Reset filters</ResetFilterText>
+            <ResetFilterText> Reset filters</ResetFilterText> */}
           </ResetFilterRow>
         </ResetFilterButton>
       </FiltersFirstRow>
