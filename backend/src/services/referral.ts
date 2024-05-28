@@ -66,7 +66,7 @@ export async function editReferral(
     const emailPromises = [];
     for (const ref of refs) {
       if (ref.status !== "Leased") {
-        userPromises.push(getUserByID(ref.renterCandidate?.toString() ?? ""));
+        userPromises.push(getUserByID(ref.assignedHousingLocator?.toString() ?? ""));
       }
     }
     const users = await Promise.all(userPromises);
