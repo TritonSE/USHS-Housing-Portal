@@ -14,7 +14,7 @@ export async function sendEmail(recipient: string, subjectString: string, body: 
   });
 
   const mailData = {
-    from: "dummyushsacc@gmail.com", // sender address
+    from: process.env.GMAILUSER, // sender address
     to: recipient, // list of receivers
     subject: subjectString,
     text: body,

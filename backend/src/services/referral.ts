@@ -39,7 +39,7 @@ export async function editReferral(
   const Ref = await ReferralModel.findById(id);
   const updateHL = Ref?.assignedHousingLocator?.toString() !== assignedHousingLocatorId;
   const setLeased =
-    status === "leased" &&
+    status === "Leased" &&
     Ref?.status !== "Leased" &&
     Ref?.status !== "Denied" &&
     Ref?.status !== "Canceled";
@@ -61,13 +61,23 @@ export async function editReferral(
     }
   }
   if (setLeased) {
-    if (HL !== null) {
-      await sendEmail(
-        HL?.email,
-        "Referral Update",
-        `Your referral has been marked as leased. Please login to the portal to view the update.`,
-      );
+    const refs = await getUnitReferrals(referral?.unitId.toString() ?? "");
+    const userPromises = [];
+    const emailPromises = [];
+    for (const ref of refs) {
+      if (ref.status !== "Leased") {
+        userPromises.push(getUserByID(ref.renterCandidate?.toString() ?? ""));
+      }
     }
+    const users = await Promise.all(userPromises);
+    for (const user of users) {
+      if (user?.email) {
+        emailPromises.push(
+          sendEmail(user.email, "Referral Update", "One of your referrals has been leased."),
+        );
+      }
+    }
+    await Promise.all(emailPromises);
   }
 
   return referral;
