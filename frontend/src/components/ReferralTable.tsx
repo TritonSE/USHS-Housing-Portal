@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-// import { Pagination } from "./Pagination";
 
 import { Button } from "./Button";
 import { ReferralTableDropDown } from "./ReferralTableDropDown";
