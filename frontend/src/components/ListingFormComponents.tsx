@@ -32,6 +32,7 @@ import { Pets } from "@/components/ListingForm/Pets";
 import { SharingHousing } from "@/components/ListingForm/SharingHousing";
 import { Textbox } from "@/components/ListingForm/Textbox";
 import { ThirdPartyPayment } from "@/components/ListingForm/ThirdPartyPayment";
+import { Utilities } from "@/components/ListingForm/Utilities";
 
 const ErrorMessage = styled.div`
   color: #b64201;
@@ -89,6 +90,7 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
   );
   const [numberOfBathsOther, setNumberOfBathsOther] = useState<string | undefined>();
   const [appliances, setAppliances] = useState<string[]>(props.initialValues?.appliances ?? []);
+  const [utilities, setUtilities] = useState<string[]>(props.initialValues?.utilities ?? []);
   const [communityAndNeighborInfo, setCommunityAndNeighborInfo] = useState<string[]>(
     props.initialValues?.communityFeatures ?? [],
   );
@@ -296,6 +298,7 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
       numBeds: numberOfBedrooms ?? parseInt(numberOfBedroomsOther ?? ""),
       numBaths: numberOfBaths ?? parseFloat(numberOfBathsOther ?? ""),
       appliances,
+      utilities,
       communityFeatures:
         communityAndNeighborInfo[0] === ""
           ? [communityAndNeighborInfoOther]
@@ -480,6 +483,7 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
           setAppliances={setAppliances}
           handleCheckBoxNA={handleCheckBoxNA}
         />
+        <Utilities utilities={utilities} setUtilities={setUtilities} handleCheckBoxNA={handleCheckBoxNA} />
         <CommunityInfo
           communityAndNeighborInfo={communityAndNeighborInfo}
           handleCommunityAndNeighborInfo={handleCommunityAndNeighborInfo}

@@ -27,6 +27,7 @@ export type Unit = {
   numBeds: number;
   numBaths: number;
   appliances: string[];
+  utilities: string[];
   communityFeatures: string[];
   parking: string[];
   accessibility: string[];

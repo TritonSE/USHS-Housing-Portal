@@ -22,6 +22,7 @@ const unitSchema = new Schema(
     numBeds: { type: Number, required: true },
     numBaths: { type: Number, required: true },
     appliances: { type: [String], required: true },
+    utilities: { type: [String], required: true },
     communityFeatures: { type: [String], required: true },
     parking: { type: [String], required: true },
     accessibility: { type: [String], required: true },
