@@ -1,4 +1,4 @@
-import { UpdateQuery } from "mongoose";
+import { FilterQuery, UpdateQuery } from "mongoose";
 
 import { Unit, UnitModel } from "@/models/units";
 
@@ -149,14 +149,14 @@ export const getUnits = async (filters: FilterParams) => {
     ["> Second Floor", "2nd floor and above"],
     ["Ramps", "Ramps up to unit"],
     ["Stairs Only", "Stairs only"],
-    ["Elevators", "Elevators to unit"]
+    ["Elevators", "Elevators to unit"],
   ]);
 
   const rentalCriteriaCheckboxMap = new Map<string, string>([
     ["3rd Party Payment", "3rd party payment accepting"],
     ["Credit Check Required", "Credit check required"],
     ["Background Check Required", "Background check required"],
-    ["Program Letter Required", "Program letter required"]
+    ["Program Letter Required", "Program letter required"],
   ]);
 
   const additionalRulesCheckboxMap = new Map<string, string>([
@@ -166,7 +166,7 @@ export const getUnits = async (filters: FilterParams) => {
     ["Visitor Policies", "Visitor Policies"],
     ["Kid Friendly", "Kid friendly"],
     ["Min-management Interaction", "Minimal-management interaction"],
-    ["High-management Interaction", "High-management interaction"]
+    ["High-management Interaction", "High-management interaction"],
   ]);
 
   const hasAccessibility = !(filters.accessibility === undefined || filters.accessibility === "[]");
@@ -175,7 +175,7 @@ export const getUnits = async (filters: FilterParams) => {
     filters.additionalRules === undefined || filters.additionalRules === "[]"
   );
 
-  let query: Partial<Record<keyof Unit, any>> = {
+  const query: FilterQuery<Unit> = {
     numBeds: { $gte: filters.beds ?? 1 },
     numBaths: { $gte: filters.baths ?? 0.5 },
     monthlyRent: { $gte: minPrice, $lte: maxPrice },
@@ -189,19 +189,25 @@ export const getUnits = async (filters: FilterParams) => {
 
   if (hasAccessibility) {
     query.accessibility = {
-      $in: JSON.parse(filters.accessibility ?? "[]").map((str: string) => accessibilityCheckboxMap.get(str)),
+      $in: (JSON.parse(filters.accessibility ?? "[]") as string[]).map((str: string) =>
+        accessibilityCheckboxMap.get(str),
+      ) as string[],
     };
   }
 
   if (rentalCriteria) {
     query.paymentRentingCriteria = {
-      $in: JSON.parse(filters.rentalCriteria ?? "[]").map((str: string) => rentalCriteriaCheckboxMap.get(str)),
+      $in: (JSON.parse(filters.rentalCriteria ?? "[]") as string[]).map((str: string) =>
+        rentalCriteriaCheckboxMap.get(str),
+      ) as string[],
     };
   }
 
   if (additionalRules) {
     query.additionalRules = {
-      $in: JSON.parse(filters.additionalRules ?? "[]").map((str: string) => additionalRulesCheckboxMap.get(str)),
+      $in: (JSON.parse(filters.additionalRules ?? "[]") as string[]).map((str: string) =>
+        additionalRulesCheckboxMap.get(str),
+      ) as string[],
     };
   }
 
