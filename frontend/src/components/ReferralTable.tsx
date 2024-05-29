@@ -90,7 +90,7 @@ enum ReferralUpdateType {
 }
 
 export const ReferralTable = (props: ReferralTableProps) => {
-  const { allHousingLocators, allReferringStaff } = useContext(DataContext);
+  const { currentUser, allReferringStaff } = useContext(DataContext);
   const [referrals, setReferrals] = useState<Referral[]>([]);
   const [popup, setPopup] = useState<boolean>(false);
 
@@ -148,6 +148,27 @@ export const ReferralTable = (props: ReferralTableProps) => {
     });
   };
 
+  const HLSection = (referral: Referral) => {
+    if (currentUser?.isHousingLocator) {
+      return (
+        <UserDropdown
+          width="100%"
+          placeholder="Search"
+          onSelect={(value) => {
+            handleUpdate(referral, value as User, ReferralUpdateType.ReferringStaff);
+          }}
+          initialSelection={referral.assignedHousingLocator}
+          options={allReferringStaff}
+        />
+      );
+    }
+    return (
+      <>
+        {referral.assignedHousingLocator.firstName + " " + referral.assignedHousingLocator.lastName}
+      </>
+    );
+  };
+
   return (
     <ReferralTableContainer>
       <ReferralTableTitleSection>
@@ -177,7 +198,6 @@ export const ReferralTable = (props: ReferralTableProps) => {
             status,
             renterCandidate,
             assignedReferringStaff,
-            assignedHousingLocator,
             updatedAt,
           } = referral;
           // Generate a list of cells for each row
@@ -201,16 +221,7 @@ export const ReferralTable = (props: ReferralTableProps) => {
               initialSelection={assignedReferringStaff}
               options={allReferringStaff}
             />,
-            <UserDropdown
-              key={`hl-select-${idx}`}
-              width="100%"
-              placeholder="Search"
-              onSelect={(value) => {
-                handleUpdate(referral, value as User, ReferralUpdateType.HousingLocator);
-              }}
-              initialSelection={assignedHousingLocator}
-              options={allHousingLocators}
-            />,
+            HLSection(referral),
             <ReferralTableDropDown
               key={`status-select-${idx}`}
               onSelect={(value) => {
