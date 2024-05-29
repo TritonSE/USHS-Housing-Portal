@@ -1,18 +1,8 @@
 import { useEffect, useState } from "react";
-import { FieldValues, useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import styled from "styled-components";
 
 import { Button } from "./Button";
-import { UserDropdown } from "./UserDropdown";
-
-import { createReferral, createReferralRequest } from "@/api/referrals";
-import {
-  RenterCandidate,
-  createRenterCandidate,
-  createRenterCandidateRequest,
-  getRenterCandidates,
-} from "@/api/renter-candidates";
 
 const Overlay = styled.div`
   width: 100vw;
@@ -67,113 +57,11 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-const ContentWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-  align-items: center;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 150%; /* 24px */
-  letter-spacing: 0.32px;
-  padding-top: 100px;
-`;
-
-const DropdownWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 80px;
-  align-items: center;
-`;
-
-const Or = styled.div`
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 150%; /* 30px */
-  letter-spacing: 0.4px;
-`;
-
-const Header = styled.div`
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 150%; /* 24px */
-  letter-spacing: 0.32px;
-  position: relative;
-  right: 195px;
-  padding-top: 50px;
-  padding-bottom: 15px;
-`;
-
-const FormWrapper = styled.form`
-  width: 700px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-flow: wrap;
-  column-gap: 100px;
-  row-gap: 10px;
-`;
-
-const InputSection = styled.div`
-  width: 260px;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  font-family: Montserrat;
-  font-size: 15px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 150%; /* 24px */
-  letter-spacing: 0.32px;
-`;
-
-const InputBox = styled.input`
-  display: flex;
-  padding: 6px 12px;
-  align-items: flex-start;
-  gap: 10px;
-  align-self: stretch;
-  border-radius: 4px;
-  border: 1px solid var(--Neutral-Gray2, #d8d8d8);
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 150%; /* 24px */
-  letter-spacing: 0.32px;
-  color: var(--Neutral-Gray6, #484848);
-`;
-
 const ButtonsWrapper = styled.div`
   padding-top: 25px;
   display: flex;
   flex-direction: row;
   gap: 400px;
-`;
-
-const SubmitButton = styled.input`
-  padding: 12px 28px;
-  background-color: #b64201;
-  color: #ffffff;
-  border: 1px solid #b64201;
-  border-radius: 14px;
-  font-weight: 500;
-  font-size: 18px;
-  letter-spacing: 0.32px;
-  cursor: pointer;
-  white-space: nowrap;
-  transition-duration: 300ms;
-  &:hover {
-    background-color: #ec8537;
-    border-color: #ec8537;
-  }
-`;
-
-const Error = styled.div`
-  color: red;
-  padding-top: 10px;
 `;
 
 type PopupProps = {
@@ -184,7 +72,7 @@ type PopupProps = {
 
 export const ClearAllPopup = ({ active, onClose, onSubmit }: PopupProps) => {
   const [popup, setPopup] = useState<boolean>(false);
-  const { register, handleSubmit, reset } = useForm();
+  const { handleSubmit, reset } = useForm();
 
   useEffect(() => {
     setPopup(active);

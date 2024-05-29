@@ -451,8 +451,8 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
 
     if (props.formType === "housingLocator" || props.formType === "edit") {
       setWhereFindUnit("");
-      setPaymentRentingCriteria([]);
-      setAdditionalRulesRegulations([]);
+      setPaymentRentingCriteria([""]);
+      setAdditionalRulesRegulations([""]);
       setAdditionalCommentsHL("");
     }
   };
