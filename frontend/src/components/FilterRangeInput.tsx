@@ -19,7 +19,6 @@ const RangeInput = styled.input.attrs({
   }
 `;
 
-
 const RangeInputTitle = styled.span`
   color: #b4b4b4;
   font-size: 13px;
@@ -51,7 +50,7 @@ const TextBoxContainer = styled.div`
   padding-right: 5px;
 
   border-radius: 1.861px;
-  border: 0.465px solid #B4B4B4;
+  border: 0.465px solid #b4b4b4;
 `;
 
 const TextboxPrefix = styled.span`
@@ -105,7 +104,7 @@ export const FilterRangeInput = (props: FilterRangeInputProps) => {
       <RangeInputContainer>
         <RangeInputTitle>Min</RangeInputTitle>
         <TextBoxContainer>
-          {props.price === "price" && <TextboxPrefix>$</TextboxPrefix>}  
+          {props.price === "price" && <TextboxPrefix>$</TextboxPrefix>}
           <RangeInput name="min" value={props.value.min} onChange={changeHandler} />
           {props.price === "sqft" && <TextboxSuffix>sqft</TextboxSuffix>}
         </TextBoxContainer>
@@ -114,7 +113,7 @@ export const FilterRangeInput = (props: FilterRangeInputProps) => {
       <RangeInputContainer>
         <RangeInputTitle>Max</RangeInputTitle>
         <TextBoxContainer>
-          {props.price === "price" && <TextboxPrefix>$</TextboxPrefix>}  
+          {props.price === "price" && <TextboxPrefix>$</TextboxPrefix>}
           <RangeInput name="max" value={props.value.max} onChange={changeHandler} />
           {props.price === "sqft" && <TextboxSuffix>sqft</TextboxSuffix>}
         </TextBoxContainer>
