@@ -174,7 +174,7 @@ export const FilterPanel = () => {
       ...newFilters,
       approved: filters.approved,
       sort: filters.sort ?? "",
-      search: filters.search ?? "0",
+      search: filters.search ?? "",
     });
   };
 
