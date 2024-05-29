@@ -30,6 +30,8 @@ export async function createReferral(
   return referral;
 }
 
+const INACTIVE_REFERRAL_STATUSES = ["Leased", "Denied", "Canceled"];
+
 export async function editReferral(
   id: string,
   assignedHousingLocatorId: string,
@@ -65,7 +67,7 @@ export async function editReferral(
     const userPromises = [];
     const emailPromises = [];
     for (const ref of refs) {
-      if (ref.status !== "Leased") {
+      if (!INACTIVE_REFERRAL_STATUSES.includes(ref.status)) {
         userPromises.push(getUserByID(ref.assignedHousingLocator?.toString() ?? ""));
       }
     }
