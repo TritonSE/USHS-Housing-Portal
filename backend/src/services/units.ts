@@ -144,13 +144,38 @@ export const getUnits = async (filters: FilterParams) => {
       break;
   }
 
-  //const hasAccessibility = !(filters.accessibility === undefined || filters.accessibility === "[]");
-  //const rentalCriteria = !(filters.rentalCriteria === undefined || filters.rentalCriteria === "[]");
-  // const additionalRules = !(
-  //   filters.additionalRules === undefined || filters.additionalRules === "[]"
-  // );
+  const accessibilityCheckboxMap = new Map<string, string>([
+    ["First Floor", "1st floor"],
+    ["> Second Floor", "2nd floor and above"],
+    ["Ramps", "Ramps up to unit"],
+    ["Stairs Only", "Stairs only"],
+    ["Elevators", "Elevators to unit"]
+  ]);
 
-  const units = await UnitModel.find({
+  const rentalCriteriaCheckboxMap = new Map<string, string>([
+    ["3rd Party Payment", "3rd party payment accepting"],
+    ["Credit Check Required", "Credit check required"],
+    ["Background Check Required", "Background check required"],
+    ["Program Letter Required", "Program letter required"]
+  ]);
+
+  const additionalRulesCheckboxMap = new Map<string, string>([
+    ["Pets Allowed", "Pets allowed"],
+    ["Manager On Site", "Manager on site"],
+    ["Quiet Building", "Quiet Building"],
+    ["Visitor Policies", "Visitor Policies"],
+    ["Kid Friendly", "Kid friendly"],
+    ["Min-management Interaction", "Minimal-management interaction"],
+    ["High-management Interaction", "High-management interaction"]
+  ]);
+
+  const hasAccessibility = !(filters.accessibility === undefined || filters.accessibility === "[]");
+  const rentalCriteria = !(filters.rentalCriteria === undefined || filters.rentalCriteria === "[]");
+  const additionalRules = !(
+    filters.additionalRules === undefined || filters.additionalRules === "[]"
+  );
+
+  let query: Partial<Record<keyof Unit, any>> = {
     numBeds: { $gte: filters.beds ?? 1 },
     numBaths: { $gte: filters.baths ?? 0.5 },
     monthlyRent: { $gte: minPrice, $lte: maxPrice },
@@ -160,10 +185,27 @@ export const getUnits = async (filters: FilterParams) => {
     dateAvailable: { $gte: fromDate, $lte: toDate },
     housingAuthority: filters.housingAuthority ?? { $exists: true },
     approved,
-    // accessibility: hasAccessibility
-    //   ? { $in: JSON.parse(filters.accessibility ?? "[]") }
-    //   : { $exists: true },
-  }).sort(sortingCriteria);
+  };
+
+  if (hasAccessibility) {
+    query.accessibility = {
+      $in: JSON.parse(filters.accessibility ?? "[]").map((str: string) => accessibilityCheckboxMap.get(str)),
+    };
+  }
+
+  if (rentalCriteria) {
+    query.paymentRentingCriteria = {
+      $in: JSON.parse(filters.rentalCriteria ?? "[]").map((str: string) => rentalCriteriaCheckboxMap.get(str)),
+    };
+  }
+
+  if (additionalRules) {
+    query.additionalRules = {
+      $in: JSON.parse(filters.additionalRules ?? "[]").map((str: string) => additionalRulesCheckboxMap.get(str)),
+    };
+  }
+
+  const units = await UnitModel.find(query).sort(sortingCriteria);
 
   const filteredUnits = units.filter((unit: Unit) => {
     return addressRegex.test(unit.listingAddress) && unit.availableNow === avail;
