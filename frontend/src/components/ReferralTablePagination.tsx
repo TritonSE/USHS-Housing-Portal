@@ -54,7 +54,7 @@ type ReferralTablePaginationProps = {
   setPageNumber: (newPageNumber: number) => void;
 };
 
-export const TablePagination = (props: ReferralTablePaginationProps) => {
+export const ReferralTablePagination = (props: ReferralTablePaginationProps) => {
   const [activePageNumber, setActivePageNumber] = useState(props.currPage);
   const handleClick = (increase: boolean): void => {
     if (increase && props.currPage !== props.totalPages) {

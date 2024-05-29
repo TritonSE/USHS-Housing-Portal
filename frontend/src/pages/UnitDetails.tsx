@@ -69,7 +69,7 @@ const MainColumn = styled.div`
 `;
 
 const DetailsColumn = styled(MainColumn)`
-  margin: 32px 96px;
+  margin: 32px 160px;
   gap: 40px;
 `;
 
@@ -271,50 +271,26 @@ const Heading = styled.h1`
 
 const LeftArrowWrapper = styled.div`
   position: absolute;
+  top: 23vh;
+  left: 0.5vw;
   z-index: 2;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
   user-select: none;
-  background: linear-gradient(
-    90deg,
-    rgba(0, 0, 0, 0.6) 0%,
-    rgba(0, 0, 0, 0.36) 43.86%,
-    rgba(0, 0, 0, 0) 98.57%
-  );
-  height: 99%;
-  padding-right: 0.5vw;
-  padding-left: 0.5vw;
 `;
 
 const RightArrowWrapper = styled.div`
   position: absolute;
   z-index: 2;
-  top: 0vh;
-  right: 0vw;
+  top: 23vh;
+  right: 0.5vw;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
   user-select: none;
-  background: linear-gradient(
-    270deg,
-    rgba(0, 0, 0, 0.6) 0%,
-    rgba(0, 0, 0, 0.36) 43.37%,
-    rgba(0, 0, 0, 0) 98.57%
-  );
-  height: 99%;
-  padding-right: 0.5vw;
-  padding-left: 0.5vw;
-`;
-
-const ImageWrapper = styled.div`
-  width: 100%;
-  background-color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 `;
 
 const CarouselImage = styled.img`
@@ -358,8 +334,8 @@ export function UnitDetails() {
   //checks for which view to return
   const [isEditing, setIsEditing] = useState(false);
 
-  const [imgUrls, setImgUrls] = useState<string[]>([""]);
-  const [vidUrls, setVidUrls] = useState<string[]>([""]);
+  const [imgUrls, setImgUrls] = useState<string[]>([]);
+  const [vidUrls, setVidUrls] = useState<string[]>([]);
 
   const handleGetFiles = () => {
     getFileURLS(id ?? "", "images")
@@ -555,19 +531,11 @@ export function UnitDetails() {
         <DetailsColumn>
           <Section>
             <TopRow>
-              <Link
-                to={".."}
-                onClick={(e) => {
-                  e.preventDefault();
-                  // go back relative to navigation history
-                  navigate(-1);
-                }}
-                state={filters}
-              >
+              <Link to="/" state={filters}>
                 <Button kind="secondary">
                   <PaddingInButton>
                     <img className="back-arrow" src="/back_arrow.svg" alt={"Back arrow"} />
-                    Back
+                    Back to Listing
                   </PaddingInButton>
                 </Button>
               </Link>
@@ -609,12 +577,6 @@ export function UnitDetails() {
           ) : (
             // Viewing mode
             <>
-              {imgUrls.length === 0 && vidUrls.length === 0 && (
-                <ImageWrapper>
-                  <img src="/no_image.png" alt="" />
-                </ImageWrapper>
-              )}
-
               <Carousel
                 useKeyboardArrows={true}
                 showThumbs={false}
@@ -627,18 +589,15 @@ export function UnitDetails() {
                 showStatus={false}
                 swipeable={false}
                 transitionTime={400}
-                showIndicators={imgUrls.length + vidUrls.length > 2}
                 renderArrowPrev={(clickHandler, hasPrev) =>
-                  hasPrev &&
-                  imgUrls.length + vidUrls.length > 2 && (
+                  hasPrev && (
                     <LeftArrowWrapper onClick={clickHandler}>
                       <img src="/left-arrow.svg" alt="Arrow" />
                     </LeftArrowWrapper>
                   )
                 }
                 renderArrowNext={(clickHandler, hasNext) =>
-                  hasNext &&
-                  imgUrls.length + vidUrls.length > 2 && (
+                  hasNext && (
                     <RightArrowWrapper onClick={clickHandler}>
                       <img src="/right-arrow.svg" alt="Arrow" />
                     </RightArrowWrapper>

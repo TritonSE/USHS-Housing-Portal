@@ -8,7 +8,6 @@ import { IStyleSheetContext, StyleSheetManager, createGlobalStyle } from "styled
 export const theme = {
   colors: {
     primary: "#B64201",
-    neutralGray0: "#F3F3F3",
     // background: "",
     // ...etc
     text: "black",

@@ -1,15 +1,5 @@
 import styled, { css } from "styled-components";
 
-export const FilterContainer = styled.div`
-  width: 248px;
-  background-color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  gap: 15px;
-`;
-
 export const DropDownPopup = styled.div`
   position: absolute;
   margin-top: 45px;
@@ -54,7 +44,6 @@ export const Dropdown = styled.button<{ active: boolean }>`
   background-color: #fff;
   box-shadow: 1px 1px 2px 0px rgba(188, 186, 183, 0.4);
   width: 100%;
-  cursor: pointer;
 `;
 
 export const FilterText = styled.p`
@@ -125,11 +114,4 @@ export const ApplyButton = styled.button`
     background-color: #ec8537;
     border-color: #ec8537;
   }
-`;
-
-export const CheckboxRadioText = styled.label`
-  font-weight: 400;
-  font-size: 12px;
-  margin-left: 0;
-  cursor: pointer;
 `;

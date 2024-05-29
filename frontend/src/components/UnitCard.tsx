@@ -15,6 +15,7 @@ const UnitCardContainer = styled.div<{ pending: boolean }>`
   justify-content: flex-start;
   align-content: flex-start;
   gap: 8px;
+
   padding-left: 20px;
   padding-right: 20px;
   padding-top: 20px;
@@ -61,6 +62,18 @@ const AddressRow = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+`;
+
+const ImageWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 275px;
+  height: 175px;
+  flex-shrink: 0;
+  overflow: hidden;
+  position: relative;
+  border-radius: 4px;
+  margin-bottom: 10px;
 `;
 
 const AvailabilityIcon = styled.img`
@@ -189,22 +202,6 @@ const ButtonsWrapper = styled.div`
   gap: 15px;
 `;
 
-const ImageWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-shrink: 0;
-  overflow: hidden;
-  position: relative;
-  border-radius: 4px;
-  margin-bottom: 10px;
-`;
-
-const Thumbnail = styled.img`
-  object-fit: cover;
-  width: 275px;
-  height: 175px;
-`;
-
 type CardProps = {
   unit: Unit;
   refreshUnits?: () => void;
@@ -258,7 +255,7 @@ export const UnitCard = ({ unit, refreshUnits }: CardProps) => {
           getFileURLS(unit._id, "images")
             .then((imgUrls) => {
               if (imgUrls.length === 0) {
-                setCoverImg("no_image.png");
+                setCoverImg("USHSLogo.svg");
               } else {
                 setCoverImg(imgUrls[0]);
               }
@@ -278,7 +275,7 @@ export const UnitCard = ({ unit, refreshUnits }: CardProps) => {
       <Link to={`/unit/${unit._id}`} state={filters} style={{ textDecoration: "none" }}>
         <UnitCardContainer pending={!unit.approved}>
           <ImageWrapper>
-            <Thumbnail src={coverImg} alt="" />
+            <img src={coverImg} alt="" />
             <AvailabilityRow>
               {unit.availableNow && unit.approved ? (
                 <AvailabilityIcon src="/green_ellipse.svg" />
