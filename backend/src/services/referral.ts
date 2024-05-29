@@ -92,3 +92,18 @@ export async function deleteUnitReferrals(unitId: string) {
 export async function deleteReferral(id: string) {
   return await ReferralModel.deleteOne({ _id: id });
 }
+
+export async function getHousingLocatorReferrals(id: string) {
+  // If FilterParams is empty return all available units
+  if (id === "") {
+    const referral = await UnitModel.find({ dateAvailable: { $lte: new Date() }, approved: true });
+    return units;
+  }
+
+  const referrals = await ReferralModel.find({ unit: id })
+    .populate("renterCandidate")
+    .populate("assignedHousingLocator")
+    .populate("assignedReferringStaff");
+
+  return referrals;
+}

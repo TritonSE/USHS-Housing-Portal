@@ -1,9 +1,16 @@
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 
+import { Referral, getUnitReferrals } from "@/api/units";
 import { Button } from "@/components/Button";
 import { NavBar } from "@/components/NavBar";
 import { Page } from "@/components/Page";
 import ReferralFilter from "@/components/ReferralFilter";
+import { Table } from "@/components/Table";
+import { DataContext } from "@/contexts/DataContext";
+
+const columns = ["Name", "Email", "Phone Number", "ID", "Referring Staff", "View", "Delete"];
+const rowsPerPage = 6;
 
 const HeaderText = styled.h1`
   color: black;
@@ -34,7 +41,16 @@ const FilterContainer = styled.div`
   gap: 27px;
 `;
 
+const TableWrapper = styled.div`
+  margin: 40px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+`;
+
 export function Referrals() {
+  // const dataContext = useContext(DataContext);
+  // const [referrals, setReferrals] = useState<Referral[]>([]);
+
   return (
     <Page>
       <NavBar page="Referrals" />
@@ -48,6 +64,9 @@ export function Referrals() {
           </AddButton>
         </FilterContainer>
       </TopRow>
+      <TableWrapper>
+        <Table columns={columns} rows={referrals} rowsPerPage={rowsPerPage}></Table>
+      </TableWrapper>
     </Page>
   );
 }

@@ -236,3 +236,13 @@ export async function getUnitReferrals(id: string): Promise<APIResult<Referral[]
     return handleAPIError(error);
   }
 }
+
+export async function getHousingLocatorReferrals(id: string): Promise<APIResult<Referral[]>> {
+  try {
+    const response = await get(`/units/referrals/${id}`);
+    const json = (await response.json()) as Referral[];
+    return { success: true, data: json };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+}
