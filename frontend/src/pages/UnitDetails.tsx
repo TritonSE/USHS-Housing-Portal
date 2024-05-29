@@ -513,7 +513,9 @@ export function UnitDetails() {
   const appliances = unit.appliances.map((appliance, i) => (
     <ListText key={appliance + i}>{appliance}</ListText>
   ));
-  const utilities = unit.utilities.map((utility, i) => <ListText key={utility + i}>{utility}</ListText>);
+  const utilities = unit.utilities.map((utility, i) => (
+    <ListText key={utility + i}>{utility}</ListText>
+  ));
   const parkingRequirements = unit.parking.map((parking, i) => (
     <ListText key={parking + i}>{parking}</ListText>
   ));

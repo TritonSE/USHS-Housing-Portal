@@ -483,7 +483,11 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
           setAppliances={setAppliances}
           handleCheckBoxNA={handleCheckBoxNA}
         />
-        <Utilities utilities={utilities} setUtilities={setUtilities} handleCheckBoxNA={handleCheckBoxNA} />
+        <Utilities
+          utilities={utilities}
+          setUtilities={setUtilities}
+          handleCheckBoxNA={handleCheckBoxNA}
+        />
         <CommunityInfo
           communityAndNeighborInfo={communityAndNeighborInfo}
           handleCommunityAndNeighborInfo={handleCommunityAndNeighborInfo}

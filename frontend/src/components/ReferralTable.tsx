@@ -194,12 +194,7 @@ export const ReferralTable = (props: ReferralTableProps) => {
       <Table
         columns={TABLE_COLUMN_NAMES}
         rows={referrals.map((referral, idx) => {
-          const {
-            status,
-            renterCandidate,
-            assignedReferringStaff,
-            updatedAt,
-          } = referral;
+          const { status, renterCandidate, assignedReferringStaff, updatedAt } = referral;
           // Generate a list of cells for each row
           return [
             <RenterCandidateLink
