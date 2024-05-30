@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import { Loading } from "./Loading";
@@ -104,6 +104,7 @@ const DeleteIcon = styled.img`
 `;
 
 export function RenterCandidatePage() {
+  const { pathname } = useLocation();
   const navigate = useNavigate();
   const [renterCandidate, setRenterCandidate] = useState<RenterCandidate>();
   const [renterReferrals, setRenterReferrals] = useState<Referral[]>();
@@ -198,7 +199,11 @@ export function RenterCandidatePage() {
                     const { unit, assignedHousingLocator, status, updatedAt } = referral;
                     // return list of cells for each row
                     return [
-                      <ListingAddressLink key={`listing-address-${idx}`} to={`/unit/${unit._id}`}>
+                      <ListingAddressLink
+                        key={`listing-address-${idx}`}
+                        to={`/unit/${unit._id}`}
+                        state={{ prevPage: pathname }}
+                      >
                         {unit.listingAddress}
                       </ListingAddressLink>,
                       assignedHousingLocator.firstName + " " + assignedHousingLocator.lastName,

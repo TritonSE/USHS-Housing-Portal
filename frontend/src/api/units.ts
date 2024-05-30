@@ -42,7 +42,64 @@ export type Unit = {
   updatedAt: string;
 };
 
+export const AVAILABILITY_OPTIONS = ["Available", "Leased"];
+export type AvailableOptions = (typeof AVAILABILITY_OPTIONS)[number];
+
+export const HOUSING_AUTHORITY_OPTIONS = ["LACDA", "HACLA"];
+export type HousingAuthorityOptions = (typeof HOUSING_AUTHORITY_OPTIONS)[number];
+
+export const ACCESSIBILITY_OPTIONS = [
+  "First Floor",
+  "> Second Floor",
+  "Stairs Only",
+  "Ramps",
+  "Elevators",
+];
+export type AccessibilityOptions = (typeof ACCESSIBILITY_OPTIONS)[number];
+
+export const RENTAL_CRITERIA_OPTIONS = [
+  "3rd Party Payment",
+  "Credit Check Required",
+  "Background Check Required",
+  "Program Letter Required",
+];
+export type RentalCriteriaOptions = (typeof RENTAL_CRITERIA_OPTIONS)[number];
+
+export const ADDITIONAL_RULES_OPTIONS = [
+  "Pets Allowed",
+  "Manager On Site",
+  "Quiet Building",
+  "Visitor Policies",
+  "Kid Friendly",
+  "Min-management Interaction",
+  "High-management Interaction",
+];
+export type AdditionalRulesOptions = (typeof ADDITIONAL_RULES_OPTIONS)[number];
+
 export type FilterParams = {
+  search?: string;
+  availability?: AvailableOptions;
+  housingAuthority?: HousingAuthorityOptions;
+  accessibility?: AccessibilityOptions[];
+  rentalCriteria?: RentalCriteriaOptions[];
+  additionalRules?: AdditionalRulesOptions[];
+  minPrice?: number;
+  maxPrice?: number;
+  minSecurityDeposit?: number;
+  maxSecurityDeposit?: number;
+  minApplicationFee?: number;
+  maxApplicationFee?: number;
+  minSize?: number;
+  maxSize?: number;
+  fromDate?: string;
+  toDate?: string;
+  beds?: number;
+  baths?: number;
+  sort?: string;
+  approved?: "pending" | "approved";
+};
+
+export type GetUnitsParams = {
   search?: string;
   availability?: string;
   housingAuthority?: string;
@@ -75,7 +132,7 @@ export async function getUnit(id: string): Promise<APIResult<Unit>> {
   }
 }
 
-export async function getUnits(params: FilterParams): Promise<APIResult<Unit[]>> {
+export async function getUnits(params: GetUnitsParams): Promise<APIResult<Unit[]>> {
   try {
     const queryParams = new URLSearchParams(params);
     const url = `/units?${queryParams.toString()}`;

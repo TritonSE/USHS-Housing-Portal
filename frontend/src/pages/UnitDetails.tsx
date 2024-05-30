@@ -333,8 +333,10 @@ const CarouselVideo = styled.video`
   padding: 0px 7.5px;
 `;
 
+type UnitDetailsLocationState = { filters: FilterParams; prevPage: string };
+
 export function UnitDetails() {
-  const filters = useLocation().state as FilterParams;
+  const { filters, prevPage } = useLocation().state as UnitDetailsLocationState;
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [unit, setUnit] = useState<Unit>();
@@ -555,15 +557,7 @@ export function UnitDetails() {
         <DetailsColumn>
           <Section>
             <TopRow>
-              <Link
-                to={".."}
-                onClick={(e) => {
-                  e.preventDefault();
-                  // go back relative to navigation history
-                  navigate(-1);
-                }}
-                state={filters}
-              >
+              <Link to={prevPage} state={filters}>
                 <Button kind="secondary">
                   <PaddingInButton>
                     <img className="back-arrow" src="/back_arrow.svg" alt={"Back arrow"} />

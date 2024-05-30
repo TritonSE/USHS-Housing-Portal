@@ -7,6 +7,13 @@ import { DateFilter } from "./DateFilter";
 import { MinMaxFilter } from "./MinMaxFilter";
 import { RadioButtonFilter } from "./RadioButtonFilter";
 
+import {
+  ACCESSIBILITY_OPTIONS,
+  ADDITIONAL_RULES_OPTIONS,
+  AVAILABILITY_OPTIONS,
+  HOUSING_AUTHORITY_OPTIONS,
+  RENTAL_CRITERIA_OPTIONS,
+} from "@/api/units";
 import { FiltersContext } from "@/pages/Home";
 
 const PanelBackground = styled.div`
@@ -87,85 +94,84 @@ const EndFilterGap = styled.div`
   min-height: 50px;
 `;
 
-const AvailabilityOptions = ["Available", "Leased"];
-
-const HousingAuthorityOptions = ["LACDA", "HACLA"];
-
-const AccessibilityOptions = ["First Floor", "> Second Floor", "Stairs Only", "Ramps", "Elevators"];
-
-const RentalCriteriaOptions = [
-  "3rd Party Payment",
-  "Credit Check Required",
-  "Background Check Required",
-  "Program Letter Required",
-];
-
-const AdditionalRulesOptions = [
-  "Pets Allowed",
-  "Manager On Site",
-  "Quiet Building",
-  "Visitor Policies",
-  "Kid Friendly",
-  "Min-management Interaction",
-  "High-management Interaction",
-];
-
 export const FilterPanel = () => {
   const { filters, setFilters } = useContext(FiltersContext);
 
-  const [availabilityState, setAvailabilityState] = useState<number>(0);
-  const [housingAuthorityState, setHousingAuthorityState] = useState<number>(0);
-  const [accessibilityState, setAccessibilityState] = useState<Set<number>>(new Set());
-  const [rentalCriteriaState, setRentalCriteriaState] = useState<Set<number>>(new Set());
-  const [additionalRulesState, setAdditionalRulesState] = useState<Set<number>>(new Set());
+  const [availabilityState, setAvailabilityState] = useState<number>(
+    filters.availability ? AVAILABILITY_OPTIONS.indexOf(filters.availability) : 0,
+  );
+  const [housingAuthorityState, setHousingAuthorityState] = useState<number>(
+    filters.housingAuthority ? HOUSING_AUTHORITY_OPTIONS.indexOf(filters.housingAuthority) : 0,
+  );
+  const [accessibilityState, setAccessibilityState] = useState<Set<number>>(
+    new Set(
+      filters.accessibility
+        ? filters.accessibility.map((option) => ACCESSIBILITY_OPTIONS.indexOf(option))
+        : [],
+    ),
+  );
+  const [rentalCriteriaState, setRentalCriteriaState] = useState<Set<number>>(
+    new Set(
+      filters.rentalCriteria
+        ? filters.rentalCriteria.map((option) => RENTAL_CRITERIA_OPTIONS.indexOf(option))
+        : [],
+    ),
+  );
+  const [additionalRulesState, setAdditionalRulesState] = useState<Set<number>>(
+    new Set(
+      filters.additionalRules
+        ? filters.additionalRules.map((option) => ADDITIONAL_RULES_OPTIONS.indexOf(option))
+        : [],
+    ),
+  );
   const [bedBathState, setBedBathState] = useState({
-    beds: 1,
-    baths: 0.5,
+    beds: filters.beds ?? 1,
+    baths: filters.baths ?? 0.5,
   });
   const [priceState, setPriceState] = useState({
-    min: 0,
-    max: 10000,
+    min: filters.minPrice ?? 0,
+    max: filters.maxPrice ?? 10000,
   });
   const [securityDepositState, setSecurityDepositState] = useState({
-    min: 0,
-    max: 10000,
+    min: filters.minSecurityDeposit ?? 0,
+    max: filters.maxSecurityDeposit ?? 10000,
   });
   const [applicationFeeState, setApplicationFeeState] = useState({
-    min: 0,
-    max: 10000,
+    min: filters.minApplicationFee ?? 0,
+    max: filters.maxApplicationFee ?? 10000,
   });
   const [sizeState, setSizeState] = useState({
-    min: 0,
-    max: 10000,
+    min: filters.minSize ?? 0,
+    max: filters.maxSize ?? 10000,
   });
   const [dateState, setDateState] = useState({
-    from: "",
-    to: "",
+    from: filters.fromDate ?? "",
+    to: filters.toDate ?? "",
   });
 
   const applyFilters = () => {
     const newFilters = {
-      availability: AvailabilityOptions[availabilityState],
-      housingAuthority: HousingAuthorityOptions[housingAuthorityState],
-      accessibility: JSON.stringify(
-        Array.from(accessibilityState).map((index) => AccessibilityOptions[index]),
+      availability: AVAILABILITY_OPTIONS[availabilityState],
+      housingAuthority: HOUSING_AUTHORITY_OPTIONS[housingAuthorityState],
+      accessibility: Array.from(accessibilityState).map((index) => ACCESSIBILITY_OPTIONS[index]),
+
+      rentalCriteria: Array.from(rentalCriteriaState).map(
+        (index) => RENTAL_CRITERIA_OPTIONS[index],
       ),
-      rentalCriteria: JSON.stringify(
-        Array.from(rentalCriteriaState).map((index) => RentalCriteriaOptions[index]),
+
+      additionalRules: Array.from(additionalRulesState).map(
+        (index) => ADDITIONAL_RULES_OPTIONS[index],
       ),
-      additionalRules: JSON.stringify(
-        Array.from(additionalRulesState).map((index) => AdditionalRulesOptions[index]),
-      ),
-      beds: bedBathState.beds.toString(),
-      baths: bedBathState.baths.toString(),
-      minPrice: priceState.min.toString(),
-      maxPrice: priceState.max.toString(),
-      minSecurityDeposit: securityDepositState.min.toString(),
-      maxSecurityDeposit: securityDepositState.max.toString(),
-      minApplicationFee: applicationFeeState.min.toString(),
-      maxApplicationFee: applicationFeeState.max.toString(),
-      minSize: sizeState.min.toString(),
-      maxSize: sizeState.max.toString(),
+      beds: bedBathState.beds,
+      baths: bedBathState.baths,
+      minPrice: priceState.min,
+      maxPrice: priceState.max,
+      minSecurityDeposit: securityDepositState.min,
+      maxSecurityDeposit: securityDepositState.max,
+      minApplicationFee: applicationFeeState.min,
+      maxApplicationFee: applicationFeeState.max,
+      minSize: sizeState.min,
+      maxSize: sizeState.max,
       fromDate: dateState.from,
       toDate: dateState.to,
     };
@@ -205,7 +211,7 @@ export const FilterPanel = () => {
       </FilterHeaderContainer>
       <RadioButtonFilter
         title="Availability"
-        options={AvailabilityOptions}
+        options={AVAILABILITY_OPTIONS}
         value={availabilityState}
         setValue={setAvailabilityState}
       />
@@ -245,25 +251,25 @@ export const FilterPanel = () => {
       <DateFilter title="Date Available" value={dateState} setValue={setDateState} />
       <RadioButtonFilter
         title="Housing Authority"
-        options={HousingAuthorityOptions}
+        options={HOUSING_AUTHORITY_OPTIONS}
         value={housingAuthorityState}
         setValue={setHousingAuthorityState}
       />
       <CheckboxFilter
         title="Accessibility"
-        options={AccessibilityOptions}
+        options={ACCESSIBILITY_OPTIONS}
         value={accessibilityState}
         setValue={setAccessibilityState}
       />
       <CheckboxFilter
         title="Rental Criteria"
-        options={RentalCriteriaOptions}
+        options={RENTAL_CRITERIA_OPTIONS}
         value={rentalCriteriaState}
         setValue={setRentalCriteriaState}
       />
       <CheckboxFilter
         title="Additional Rules"
-        options={AdditionalRulesOptions}
+        options={ADDITIONAL_RULES_OPTIONS}
         value={additionalRulesState}
         setValue={setAdditionalRulesState}
       />
