@@ -53,3 +53,13 @@ export async function elevateUser(user: User): Promise<APIResult<User>> {
     return handleAPIError(error);
   }
 }
+
+export async function demoteUser(user: User): Promise<APIResult<User>> {
+  try {
+    const response = await put(`/users/${user._id}/demote`, user);
+    const json = (await response.json()) as User;
+    return { success: true, data: json };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+}

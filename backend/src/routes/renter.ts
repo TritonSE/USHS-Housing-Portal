@@ -15,6 +15,8 @@ const router = express.Router();
 
 router.get("/", requireUser, RenterController.getRenterCandidatesHandler);
 
+router.get("/:id", RenterController.getRenterCandidateHandler);
+
 router.post(
   "/",
   requireUser,

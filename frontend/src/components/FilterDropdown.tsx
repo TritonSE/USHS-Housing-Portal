@@ -2,10 +2,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import { FilterParams } from "@/api/units";
-import { AvailabilityDropDown } from "@/components/AvailabilityDropDown";
-import { BedBathDropDown } from "@/components/BedBathDropDown";
 import { FilterText } from "@/components/FilterCommon";
-import { PriceDropDown } from "@/components/PriceDropDown";
 import { SortDropDownComp } from "@/components/SortDropDown";
 
 const AllFiltersContainer = styled.div`
@@ -101,31 +98,14 @@ export const FilterDropdown = (props: FilterDropdownProps) => {
     beds: Number(props.value.beds ?? 1),
     baths: Number(props.value.baths ?? 0.5),
   });
-  const [bedBathDisplayState, setBedBathDisplayState] = useState({
-    bedsDisplay: Number(props.value.beds ?? 1),
-    bathsDisplay: Number(props.value.baths ?? 0.5),
-    notApplied: props.value.beds === undefined && props.value.baths === undefined,
-  });
-  const [searchText, setSearchText] = useState(props.value.search ?? "");
-  const [sortIndex, setSortIndex] = useState(Number(props.value.sort ?? 0));
+  const [searchText, setSearchText] = useState("");
+  const [sortIndex, setSortIndex] = useState(0);
   const [availabilityState, setAvailabilityState] = useState({
     dropdownText: props.value.availability ?? "Available",
-  });
-  const [AvailabilityDisplayState, setAvailabilityDisplayState] = useState({
-    selectedIdx: props.value.availability === "Leased" ? 1 : 0,
   });
   const [priceState, setPriceState] = useState({
     minPrice: String(props.value.minPrice) === "undefined" ? -1 : Number(props.value.minPrice),
     maxPrice: String(props.value.maxPrice) === "undefined" ? -1 : Number(props.value.maxPrice),
-  });
-
-  const [priceDisplayState, setPriceDisplayState] = useState({
-    minPriceDisplay:
-      String(props.value.minPrice) === "undefined" ? -1 : Number(props.value.minPrice),
-    maxPriceDisplay:
-      String(props.value.maxPrice) === "undefined" ? -1 : Number(props.value.maxPrice),
-    notApplied:
-      String(props.value.minPrice) === "undefined" && String(props.value.maxPrice) === "undefined",
   });
 
   const applyFilters = () => {
@@ -148,19 +128,12 @@ export const FilterDropdown = (props: FilterDropdownProps) => {
 
   const resetFilters = () => {
     setBedBathState({ beds: 1, baths: 0.5 });
-    setBedBathDisplayState({ bedsDisplay: 1, bathsDisplay: 0.5, notApplied: true });
     setSearchText("");
     setSortIndex(0);
     setAvailabilityState({ dropdownText: "Available" });
-    setAvailabilityDisplayState({ selectedIdx: 0 });
     setPriceState({
       minPrice: -1,
       maxPrice: -1,
-    });
-    setPriceDisplayState({
-      minPriceDisplay: -1,
-      maxPriceDisplay: -1,
-      notApplied: true,
     });
   };
 
@@ -177,30 +150,6 @@ export const FilterDropdown = (props: FilterDropdownProps) => {
           />
           <SearchIcon src="/search.svg" onClick={applyFilters} />
         </SearchBarContainer>
-
-        {/* AVAILABILITY FILTER */}
-        <AvailabilityDropDown
-          value={availabilityState}
-          setValue={setAvailabilityState}
-          displayValue={AvailabilityDisplayState}
-          setDisplayValue={setAvailabilityDisplayState}
-        />
-
-        {/* PRICE FILTER */}
-        <PriceDropDown
-          value={priceState}
-          setValue={setPriceState}
-          displayValue={priceDisplayState}
-          setDisplayValue={setPriceDisplayState}
-        />
-
-        {/* BED AND BATH FILTER */}
-        <BedBathDropDown
-          value={bedBathState}
-          setValue={setBedBathState}
-          displayValue={bedBathDisplayState}
-          setDisplayValue={setBedBathDisplayState}
-        />
 
         <ResetFilterButton onClick={resetFilters}>
           <ResetFilterRow>

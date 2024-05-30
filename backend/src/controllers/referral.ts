@@ -7,7 +7,7 @@ import { createReferral, editReferral } from "@/services/referral";
 
 type CreateReferralRequestBody = {
   renterCandidateId: string;
-  unitId: string;
+  unit: string;
 };
 
 type EditReferralRequestBody = {
@@ -18,13 +18,13 @@ type EditReferralRequestBody = {
 };
 
 export const createReferralHandler: RequestHandler = asyncHandler(async (req, res, _) => {
-  const { renterCandidateId, unitId } = req.body as CreateReferralRequestBody;
+  const { renterCandidateId, unit } = req.body as CreateReferralRequestBody;
 
   const referringStaff = req.currentUser;
   const referringStaffID = referringStaff?._id as ObjectId;
   const isHL = referringStaff?.isHousingLocator ?? false;
 
-  const referral = await createReferral(renterCandidateId, unitId, referringStaffID, isHL);
+  const referral = await createReferral(renterCandidateId, unit, referringStaffID, isHL);
 
   if (referral !== null) {
     res.status(201).json(referral);
