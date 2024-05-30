@@ -63,7 +63,7 @@ export async function editReferral(
     }
   }
   if (setLeased) {
-    const refs = await getUnitReferrals(referral?.unitId.toString() ?? "");
+    const refs = await getUnitReferrals(referral?.unit.toString() ?? "");
     const userPromises = [];
     const emailPromises = [];
     for (const ref of refs) {
