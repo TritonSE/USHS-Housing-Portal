@@ -4,8 +4,6 @@
 
 import { UserModel } from "../models/user";
 
-import { sendEmail } from "./email";
-
 // Fetch users from the database
 export async function getUsers() {
   const users = await UserModel.find({});
@@ -48,25 +46,9 @@ export async function getUserByID(id: string) {
 }
 
 export async function elevateUser(id: string) {
-  const RS = await getUserByID(id);
-  if (RS !== null) {
-    await sendEmail(
-      RS.email,
-      "Elevation to Housing Locator",
-      "You have been elevated to a Housing Locator",
-    );
-  }
   return await UserModel.findByIdAndUpdate(id, { isHousingLocator: true });
 }
 
 export async function demoteUser(id: string) {
-  const RS = await getUserByID(id);
-  if (RS !== null) {
-    await sendEmail(
-      RS.email,
-      "Housing Locator Demotion",
-      "You have been demoted from a Housing Locator",
-    );
-  }
   return await UserModel.findByIdAndUpdate(id, { isHousingLocator: false });
 }
