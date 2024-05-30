@@ -169,6 +169,7 @@ export const getUnits = async (filters: FilterParams) => {
     ["High-management Interaction", "High-management interaction"],
   ]);
 
+  const hasHousingAuthority = filters.housingAuthority !== "Any";
   const hasAccessibility = !(filters.accessibility === undefined || filters.accessibility === "[]");
   const rentalCriteria = !(filters.rentalCriteria === undefined || filters.rentalCriteria === "[]");
   const additionalRules = !(
@@ -183,9 +184,12 @@ export const getUnits = async (filters: FilterParams) => {
     applicationFeeCost: { $gte: minApplicationFee, $lte: maxApplicationFee },
     sqft: { $gte: minSize, $lte: maxSize },
     dateAvailable: { $gte: fromDate, $lte: toDate },
-    housingAuthority: filters.housingAuthority ?? { $exists: true },
     approved,
   };
+
+  if (hasHousingAuthority) {
+    query.housingAuthority = filters.housingAuthority ?? { $exists: true };
+  }
 
   if (hasAccessibility) {
     query.accessibility = {

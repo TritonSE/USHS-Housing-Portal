@@ -45,7 +45,7 @@ export type Unit = {
 export const AVAILABILITY_OPTIONS = ["Available", "Leased"];
 export type AvailableOptions = (typeof AVAILABILITY_OPTIONS)[number];
 
-export const HOUSING_AUTHORITY_OPTIONS = ["LACDA", "HACLA"];
+export const HOUSING_AUTHORITY_OPTIONS = ["Any", "LACDA", "HACLA"];
 export type HousingAuthorityOptions = (typeof HOUSING_AUTHORITY_OPTIONS)[number];
 
 export const ACCESSIBILITY_OPTIONS = [
