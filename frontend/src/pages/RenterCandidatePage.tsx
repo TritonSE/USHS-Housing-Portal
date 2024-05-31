@@ -11,6 +11,7 @@ import { RenterCandidate, editRenterCandidate, getRenterCandidate } from "@/api/
 import { Referral } from "@/api/units";
 import { Page } from "@/components";
 import { Button } from "@/components/Button";
+import { CustomCheckboxRadio, OptionLabel } from "@/components/ListingForm/CommonStyles";
 import { NavBar } from "@/components/NavBar";
 import { ReferralTableDropDown } from "@/components/ReferralTableDropDown";
 import { Table, TableCellContent } from "@/components/Table";
@@ -285,7 +286,8 @@ export function RenterCandidatePage() {
 
   const [currReferral, setCurrReferral] = useState<string>("");
 
-  const HousingAuthorityOptions = ["LACDA", "HACLA"];
+  const [currAuthority, setCurrAuthority] = useState<string>("");
+  const [customAuthority, setCustomAuthority] = useState<string | undefined>(undefined);
 
   const REFERRAL_STATUSES = [
     "Referred",
@@ -305,6 +307,10 @@ export function RenterCandidatePage() {
           const { renter, referrals } = result.data;
           setRenterCandidate(renter);
           setRenterReferrals(referrals);
+          setCurrAuthority(renter.program);
+          if (renter.program !== "HACLA" && renter.program !== "LACDA") {
+            setCustomAuthority(renter.program);
+          }
         } else {
           // Go back to the referrals page if the renter is not found
           navigate("/referrals");
@@ -320,6 +326,7 @@ export function RenterCandidatePage() {
         .then((value) => {
           if (value.success) {
             fetchRenterCandidate();
+            setEditRenterQuery({});
           }
         })
         .catch(console.error);
@@ -332,6 +339,7 @@ export function RenterCandidatePage() {
         .then((value) => {
           if (value.success) {
             fetchRenterCandidate();
+            setEditReferralQuery({});
           }
         })
         .catch(console.error);
@@ -420,12 +428,10 @@ export function RenterCandidatePage() {
           <EditButton
             kind="secondary"
             onClick={() => {
-              if (!isEditing) {
-                setEditRenterQuery({});
-                setEditReferralQuery({});
-              } else {
+              if (isEditing) {
                 handleUpdateRenter();
                 handleUpdateReferrals();
+                setCustomAuthority("");
               }
               setIsEditing(!isEditing);
             }}
@@ -527,16 +533,80 @@ export function RenterCandidatePage() {
                   </EditColumn>
                   <EditColumn>
                     <InfoHeader>Housing Program:</InfoHeader>
-                    <ReferralTableDropDown
-                      values={HousingAuthorityOptions}
-                      defaultValue={renterCandidate.program}
-                      onSelect={(program) => {
-                        setEditRenterQuery({
-                          ...editRenterQuery,
-                          program,
-                        });
-                      }}
-                    />
+                    <div>
+                      <OptionLabel>
+                        <CustomCheckboxRadio
+                          type="radio"
+                          name="LACDA"
+                          value="LACDA"
+                          checked={currAuthority === "LACDA"}
+                          onChange={() => {
+                            setEditRenterQuery({
+                              ...editRenterQuery,
+                              program: "LACDA",
+                            });
+                            setCurrAuthority("LACDA");
+                          }}
+                        />
+                        LACDA
+                      </OptionLabel>
+
+                      <OptionLabel>
+                        <CustomCheckboxRadio
+                          type="radio"
+                          name="HACLA"
+                          value="HACLA"
+                          checked={currAuthority === "HACLA"}
+                          onChange={() => {
+                            setEditRenterQuery({
+                              ...editRenterQuery,
+                              program: "HACLA",
+                            });
+                            setCurrAuthority("HACLA");
+                          }}
+                        />
+                        HACLA
+                      </OptionLabel>
+
+                      <OptionLabel>
+                        <CustomCheckboxRadio
+                          type="radio"
+                          name="Other"
+                          value="Other"
+                          checked={
+                            currAuthority !== "HACLA" &&
+                            currAuthority !== "LACDA" &&
+                            customAuthority !== undefined
+                          }
+                          onChange={() => {
+                            setEditRenterQuery({
+                              ...editRenterQuery,
+                              program: customAuthority ?? "",
+                            });
+                            setCurrAuthority(customAuthority ?? "");
+                            setCustomAuthority(customAuthority ?? "");
+                          }}
+                        />
+                        Other
+                        <input
+                          onInput={(e) => {
+                            const customInput = (e.target as HTMLTextAreaElement).value;
+                            setEditRenterQuery({
+                              ...editRenterQuery,
+                              program: customInput,
+                            });
+                            setCurrAuthority(customInput);
+                            setCustomAuthority(customInput);
+                          }}
+                          defaultValue={
+                            renterCandidate.program !== "HACLA" &&
+                            renterCandidate.program !== "LACDA"
+                              ? renterCandidate.program
+                              : ""
+                          }
+                        />
+                      </OptionLabel>
+                    </div>
                   </EditColumn>
                 </EditSection>
               </EditColumn>
