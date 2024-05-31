@@ -266,6 +266,12 @@ const XButton = styled.div`
   width: 10px;
 `;
 
+const CustomAuthorityInput = styled.input`
+  font-size: 15px;
+  padding: 2px 5px;
+  margin-top: 2px;
+`;
+
 type ReferralQuery = Record<string, Partial<UpdateReferralRequest>>;
 
 export function RenterCandidatePage() {
@@ -587,8 +593,8 @@ export function RenterCandidatePage() {
                             setCustomAuthority(customAuthority ?? "");
                           }}
                         />
-                        Other
-                        <input
+                        Other:
+                        <CustomAuthorityInput
                           onInput={(e) => {
                             const customInput = (e.target as HTMLTextAreaElement).value;
                             setEditRenterQuery({
