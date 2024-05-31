@@ -100,7 +100,6 @@ export const ImagesVideos = ({ unit_id, onChange }: ImagesVideosProps) => {
     getFileMetadata(unit_id, "videos")
       .then((data) => {
         setAllVideos(data);
-        console.log(data);
       })
       .catch(console.error);
   };

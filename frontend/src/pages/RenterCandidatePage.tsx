@@ -194,6 +194,15 @@ const PopupWrapper = styled.div`
   justify-content: center;
 `;
 
+const BackPopupWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  margin-top: 10px;
+  align-items: center;
+  justify-content: center;
+`;
+
 const ConfirmPopupWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -232,13 +241,37 @@ const ButtonsRow = styled.div`
   align-items: center;
 `;
 
+const BackButtonsRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 80px;
+  align-items: center;
+`;
+
+const XWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding: 10px 27px;
+  font-size: 30px;
+`;
+
+const XButton = styled.div`
+  &:hover {
+    cursor: pointer;
+  }
+  height: 10px;
+  width: 10px;
+`;
+
 type ReferralQuery = Record<string, Partial<UpdateReferralRequest>>;
 
 export function RenterCandidatePage() {
   const navigate = useNavigate();
   const [renterCandidate, setRenterCandidate] = useState<RenterCandidate>();
   const [renterReferrals, setRenterReferrals] = useState<Referral[]>();
-  const { allHousingLocators } = useContext(DataContext);
+  const { allReferringStaff, allHousingLocators, currentUser } = useContext(DataContext);
 
   const [editRenterQuery, setEditRenterQuery] = useState<Partial<RenterCandidate>>({});
   const [editReferralQuery, setEditReferralQuery] = useState<ReferralQuery>({});
@@ -248,6 +281,8 @@ export function RenterCandidatePage() {
   const [isEditing, setIsEditing] = useState(false);
   const [popup, setPopup] = useState(false);
   const [confirmPopup, setConfirmPopup] = useState(false);
+  const [backPopup, setBackPopup] = useState(false);
+
   const [currReferral, setCurrReferral] = useState<string>("");
 
   const HousingAuthorityOptions = ["LACDA", "HACLA"];
@@ -320,6 +355,33 @@ export function RenterCandidatePage() {
     return <Loading />;
   }
 
+  const HLSection = (referral: Referral) => {
+    if (currentUser?.isHousingLocator) {
+      return (
+        <UserDropdown
+          width="200px"
+          placeholder="Search"
+          initialSelection={referral.assignedHousingLocator}
+          options={allHousingLocators}
+          onSelect={(housingLocator) => {
+            setEditReferralQuery({
+              ...editReferralQuery,
+              [referral._id]: {
+                ...editReferralQuery[referral._id],
+                housingLocator: housingLocator._id,
+              },
+            });
+          }}
+        />
+      );
+    }
+    return (
+      <>
+        {referral.assignedHousingLocator.firstName + " " + referral.assignedHousingLocator.lastName}
+      </>
+    );
+  };
+
   return (
     <Page>
       <Helmet>
@@ -334,8 +396,15 @@ export function RenterCandidatePage() {
             to={".."}
             onClick={(e) => {
               e.preventDefault();
+              if (
+                Object.keys(editRenterQuery).length !== 0 ||
+                Object.keys(editReferralQuery).length !== 0
+              ) {
+                setBackPopup(true);
+              } else {
+                navigate(-1);
+              }
               // go back relative to navigation history
-              navigate(-1);
             }}
           >
             <Button kind="secondary">
@@ -345,7 +414,7 @@ export function RenterCandidatePage() {
                 alt={"Back arrow"}
                 style={{ marginRight: "12px" }}
               />
-              Back to Listing
+              Back
             </Button>
           </Link>
           <EditButton
@@ -475,11 +544,18 @@ export function RenterCandidatePage() {
             <TableContainer>
               <Title>Current Referrals</Title>
               <Table
-                columns={["Unit", "Housing Locator", "Status", "Last Updated", "Delete"]}
+                columns={[
+                  "Unit",
+                  "Referring Staff",
+                  "Housing Locator",
+                  "Status",
+                  "Last Updated",
+                  "Delete",
+                ]}
                 rows={
                   renterReferrals
                     ? renterReferrals.map((referral, idx) => {
-                        const { unit, assignedHousingLocator, status, updatedAt } = referral;
+                        const { unit, assignedReferringStaff, status, updatedAt } = referral;
                         // return list of cells for each row
                         return [
                           <ListingAddressLink
@@ -492,18 +568,20 @@ export function RenterCandidatePage() {
                             key={idx}
                             width="200px"
                             placeholder="Search"
-                            initialSelection={assignedHousingLocator}
-                            options={allHousingLocators}
-                            onSelect={(housingLocator) => {
+                            initialSelection={assignedReferringStaff}
+                            options={allReferringStaff}
+                            onSelect={(referringStaff) => {
                               setEditReferralQuery({
                                 ...editReferralQuery,
                                 [referral._id]: {
                                   ...editReferralQuery[referral._id],
-                                  housingLocator: housingLocator._id,
+                                  referringStaff: referringStaff._id,
                                 },
                               });
                             }}
                           />,
+                          HLSection(referral),
+
                           <ReferralTableDropDown
                             key={idx}
                             values={REFERRAL_STATUSES}
@@ -562,11 +640,24 @@ export function RenterCandidatePage() {
             <TableContainer>
               <Title>Current Referrals</Title>
               <Table
-                columns={["Unit", "Housing Locator", "Status", "Last Updated", "Delete"]}
+                columns={[
+                  "Unit",
+                  "Referring Staff",
+                  "Housing Locator",
+                  "Status",
+                  "Last Updated",
+                  "Delete",
+                ]}
                 rows={
                   renterReferrals
                     ? renterReferrals.map((referral, idx) => {
-                        const { unit, assignedHousingLocator, status, updatedAt } = referral;
+                        const {
+                          unit,
+                          assignedReferringStaff,
+                          assignedHousingLocator,
+                          status,
+                          updatedAt,
+                        } = referral;
                         // return list of cells for each row
                         return [
                           <ListingAddressLink
@@ -575,6 +666,7 @@ export function RenterCandidatePage() {
                           >
                             {unit.listingAddress}
                           </ListingAddressLink>,
+                          assignedReferringStaff.firstName + " " + assignedReferringStaff.lastName,
                           assignedHousingLocator.firstName + " " + assignedHousingLocator.lastName,
                           status,
                           formatDate(updatedAt.toString()),
@@ -634,6 +726,50 @@ export function RenterCandidatePage() {
                   </Button>
                 </ConfirmPopupWrapper>
               )}
+            </Modal>
+          </>
+        )}
+
+        {backPopup && (
+          <>
+            <Overlay />
+            <Modal>
+              <XWrapper>
+                <XButton
+                  onClick={() => {
+                    setBackPopup(false);
+                  }}
+                >
+                  &times;
+                </XButton>
+              </XWrapper>
+              <BackPopupWrapper>
+                <PopupHeader>Leaving?</PopupHeader>
+                <PopupText>
+                  Changes on this page are not saved. Do you want to save your changes before
+                  leaving?{" "}
+                </PopupText>
+                <BackButtonsRow>
+                  <Button
+                    kind="secondary"
+                    onClick={() => {
+                      navigate(-1);
+                    }}
+                  >
+                    Leave without saving
+                  </Button>
+                  <Button
+                    kind="primary"
+                    onClick={() => {
+                      handleUpdateReferrals();
+                      handleUpdateRenter();
+                      navigate(-1);
+                    }}
+                  >
+                    Save changes and leave
+                  </Button>
+                </BackButtonsRow>
+              </BackPopupWrapper>
             </Modal>
           </>
         )}
