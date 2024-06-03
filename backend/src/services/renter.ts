@@ -1,5 +1,7 @@
 import { ReferralModel } from "../models/referral";
-import { RenterModel } from "../models/renter";
+import { Renter, RenterModel } from "../models/renter";
+
+export type EditRenterCandidateBody = Partial<Renter>;
 
 //Fetch renters from DB
 export async function getRenterCandidates() {
@@ -35,4 +37,8 @@ export async function createRenterCandidate(
   } else {
     return null;
   }
+}
+
+export async function editRenterCandidate(id: string, editQuery: EditRenterCandidateBody) {
+  return await RenterModel.findByIdAndUpdate(id, editQuery, { new: true });
 }
