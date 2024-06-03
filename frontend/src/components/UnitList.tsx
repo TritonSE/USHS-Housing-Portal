@@ -43,11 +43,12 @@ const UnitTableRow = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
   font-family: Montserrat;
   color: black;
   margin-left: 44px;
   margin-right: 44px;
-  height: 90px;
+  height: 100px;
 
   padding-bottom: 17px;
   padding-top: 17px;
@@ -65,7 +66,6 @@ const UnitItemWrapper = styled.div`
   flex-direction: column;
   font-size: 16px;
   font-family: "Montserrat";
-  line-height: 18.4px;
   align-items: center;
   width: 150px;
 `;
@@ -76,7 +76,8 @@ const ListingAddressWrapper = styled.div`
   font-size: 16px;
   font-family: "Montserrat";
   line-height: 18.4px;
-  width: 150px;
+  width: 200px;
+  height: 73px;
   align-items: center;
 `;
 
@@ -183,6 +184,11 @@ const PendingWrapper = styled(AvailableWrapper)`
   color: #b64201;
 `;
 
+const UnitNotFoundWrapper = styled.div`
+  margin-top: 40px;
+  align-self: center;
+`;
+
 export type UnitListProps = {
   units: Unit[];
   showPendingUnits?: boolean;
@@ -266,7 +272,7 @@ export const UnitList = ({ units, refreshUnits, showPendingUnits = false }: Unit
                   </UnitTableRow>
                 </Link>
               ))}
-          {units.length === 0 && <HeaderText>No matching units found</HeaderText>}
+          {units.length === 0 && <UnitNotFoundWrapper>No matching units found</UnitNotFoundWrapper>}
         </>
         <UnitListFooterWrapper>
           <UnitListFooter>
