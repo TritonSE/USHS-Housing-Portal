@@ -4,8 +4,6 @@ import { User, getUsers } from "../api/users.ts";
 
 import { AuthContext } from "./AuthContext.tsx";
 
-import { Referral } from "@/api/units.ts";
-
 type ProviderProps = {
   children: ReactNode;
 };

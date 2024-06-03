@@ -229,8 +229,12 @@ export type Referral = {
 
 export async function getUnitReferrals(id: string): Promise<APIResult<Referral[]>> {
   try {
-    const response = await get(`/units/${id}/referrals`);
-    const json = (await response.json()) as Referral[];
+    let json: Referral[];
+    if (id === undefined) {
+      json = (await get(`/units/referrals`)).json() as unknown as Referral[];
+    } else {
+      json = (await get(`/units/${id}/referrals`)).json() as unknown as Referral[];
+    }
     return { success: true, data: json };
   } catch (error) {
     return handleAPIError(error);

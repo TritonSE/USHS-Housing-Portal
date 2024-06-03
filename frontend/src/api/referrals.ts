@@ -1,4 +1,4 @@
-import { APIResult, deleteRequest, handleAPIError, post, put } from "./requests";
+import { APIResult, deleteRequest, get, handleAPIError, post, put } from "./requests";
 import { Referral } from "./units";
 
 export type CreateReferralRequest = {
@@ -41,6 +41,16 @@ export async function deleteReferral(id: string): Promise<APIResult<Referral>> {
   try {
     const response = await deleteRequest(`/referrals/${id}`);
     const json = (await response.json()) as Referral;
+    return { success: true, data: json };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+}
+
+export async function getReferrals(): Promise<APIResult<Referral[]>> {
+  try {
+    const response = await get("/referrals");
+    const json = (await response.json()) as Referral[];
     return { success: true, data: json };
   } catch (error) {
     return handleAPIError(error);

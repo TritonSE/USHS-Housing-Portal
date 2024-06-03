@@ -4,9 +4,9 @@
 
 import { RequestHandler } from "express";
 
-import { asyncHandler } from "./wrappers";
+import { createUser, demoteUser, elevateUser, getUserByID, getUsers } from "../services/user";
 
-import { createUser, demoteUser, elevateUser, getUserByID, getUsers } from "@/services/user";
+import { asyncHandler } from "./wrappers";
 
 export const getUsersHandler: RequestHandler = asyncHandler(async (_req, res, _next) => {
   const users = await getUsers();

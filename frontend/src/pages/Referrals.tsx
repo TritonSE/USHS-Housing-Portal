@@ -1,15 +1,25 @@
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { Referral, getUnitReferrals } from "@/api/units";
+import { getReferrals } from "@/api/referrals";
+import { Referral } from "@/api/units";
 import { Button } from "@/components/Button";
 import { NavBar } from "@/components/NavBar";
 import { Page } from "@/components/Page";
 import ReferralFilter from "@/components/ReferralFilter";
+import { ReferralTable } from "@/components/ReferralTable";
 import { Table } from "@/components/Table";
 import { DataContext } from "@/contexts/DataContext";
 
-const columns = ["Name", "Email", "Phone Number", "ID", "Referring Staff", "View", "Delete"];
+const TABLE_COLUMN_NAMES = [
+  "Name",
+  "Email",
+  "Phone Number",
+  "ID",
+  "Referring Staff",
+  "View",
+  "Delete",
+];
 const rowsPerPage = 6;
 
 const HeaderText = styled.h1`
@@ -48,8 +58,21 @@ const TableWrapper = styled.div`
 `;
 
 export function Referrals() {
-  // const dataContext = useContext(DataContext);
-  // const [referrals, setReferrals] = useState<Referral[]>([]);
+  const [referrals, setReferrals] = useState<Referral[]>([]);
+
+  const getAllReferrals = () => {
+    getReferrals()
+      .then((res) => {
+        if (res.success) {
+          setReferrals(res.data);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  React.useEffect(getAllReferrals, []);
 
   return (
     <Page>
@@ -65,7 +88,8 @@ export function Referrals() {
         </FilterContainer>
       </TopRow>
       <TableWrapper>
-        <Table columns={columns} rows={referrals} rowsPerPage={rowsPerPage}></Table>
+        <ReferralTable id={""}></ReferralTable>
+        {/* <Table columns={columns} rows={referrals} rowsPerPage={rowsPerPage}></Table> */}
       </TableWrapper>
     </Page>
   );

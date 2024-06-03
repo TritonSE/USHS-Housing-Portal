@@ -1,9 +1,9 @@
 import { ObjectId } from "mongoose";
 
+import { ReferralModel } from "../models/referral";
+
 import { sendEmail } from "./email";
 import { getUserByID } from "./user";
-
-import { ReferralModel } from "@/models/referral";
 
 export async function getUnitReferrals(id: string) {
   const referrals = await ReferralModel.find({ unit: id })
@@ -94,16 +94,15 @@ export async function deleteReferral(id: string) {
 }
 
 export async function getHousingLocatorReferrals(id: string) {
-  // If FilterParams is empty return all available units
-  if (id === "") {
-    const referral = await UnitModel.find({ dateAvailable: { $lte: new Date() }, approved: true });
-    return units;
-  }
-
   const referrals = await ReferralModel.find({ unit: id })
     .populate("renterCandidate")
     .populate("assignedHousingLocator")
     .populate("assignedReferringStaff");
 
+  return referrals;
+}
+
+export async function getAllReferrals() {
+  const referrals = await ReferralModel.find({});
   return referrals;
 }
