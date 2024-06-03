@@ -90,6 +90,7 @@ const createUnitSchema = [
   body("numBeds").exists().withMessage("is required").isNumeric().withMessage("must be a number"),
   body("numBaths").exists().withMessage("is required").isNumeric().withMessage("must be a number"),
   body("appliances").exists().withMessage("is required").isArray().withMessage("must be an array"),
+  body("utilities").exists().withMessage("is required").isArray().withMessage("must be an array"),
   body("communityFeatures")
     .exists()
     .withMessage("is required")
