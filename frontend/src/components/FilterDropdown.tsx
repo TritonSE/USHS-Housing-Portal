@@ -8,6 +8,7 @@ import { FilterParams } from "@/api/units";
 // import { FilterText } from "@/components/FilterCommon";
 import { SortDropDownComp } from "@/components/SortDropDown";
 import { DataContext } from "@/contexts/DataContext";
+import { FilterText } from "./FilterCommon";
 
 const AllFiltersContainer = styled.div`
   display: flex;
@@ -67,10 +68,10 @@ const SearchBarContainer = styled.div`
   box-shadow: 1px 1px 2px 0px rgba(188, 186, 183, 0.4);
 `;
 
-// const ResetIcon = styled.img`
-//   height: 25px;
-//   width: 25px;
-// `;
+const ResetIcon = styled.img`
+  height: 25px;
+  width: 25px;
+`;
 
 const ResetFilterButton = styled.button`
   background-color: transparent;
@@ -78,11 +79,11 @@ const ResetFilterButton = styled.button`
   cursor: pointer;
 `;
 
-// const ResetFilterText = styled(FilterText)`
-//   color: #b64201;
-//   font-weight: 500;
-//   padding-top: 2px;
-// `;
+const ResetFilterText = styled(FilterText)`
+  color: #b64201;
+  font-weight: 500;
+  padding-top: 2px;
+`;
 
 const ResetFilterRow = styled.div`
   display: flex;
@@ -185,9 +186,8 @@ export const FilterDropdown = (props: FilterDropdownProps) => {
 
         <ResetFilterButton onClick={resetFilters}>
           <ResetFilterRow>
-            {/* Commented out for now since I'm not sure if we're still using this
             <ResetIcon src="/refresh.svg" />
-            <ResetFilterText> Reset filters</ResetFilterText> */}
+            <ResetFilterText> Reset filters</ResetFilterText>
           </ResetFilterRow>
         </ResetFilterButton>
       </FiltersFirstRow>

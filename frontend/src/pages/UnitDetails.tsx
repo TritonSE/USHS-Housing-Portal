@@ -126,7 +126,6 @@ const Address = styled.a`
   line-spacing: 0.64px;
   padding: 0;
   margin: 0 0 5px 0;
-  // text-decoration: none;
   color: black;
 `;
 
