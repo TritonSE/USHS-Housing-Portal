@@ -272,7 +272,7 @@ const Heading = styled.h1`
 
 const LeftArrowWrapper = styled.div`
   position: absolute;
-  z-index: 2;
+  z-index: 1;
   cursor: pointer;
   display: flex;
   justify-content: center;
@@ -291,7 +291,7 @@ const LeftArrowWrapper = styled.div`
 
 const RightArrowWrapper = styled.div`
   position: absolute;
-  z-index: 2;
+  z-index: 1;
   top: 0vh;
   right: 0vw;
   cursor: pointer;
@@ -520,6 +520,9 @@ export function UnitDetails() {
   const appliances = unit.appliances.map((appliance, i) => (
     <ListText key={appliance + i}>{appliance}</ListText>
   ));
+  const utilities = unit.utilities.map((utility, i) => (
+    <ListText key={utility + i}>{utility}</ListText>
+  ));
   const parkingRequirements = unit.parking.map((parking, i) => (
     <ListText key={parking + i}>{parking}</ListText>
   ));
@@ -743,6 +746,8 @@ export function UnitDetails() {
                     {pets}
                     <StrongText>Appliances: </StrongText>
                     {appliances}
+                    <StrongText>Utilities: </StrongText>
+                    {utilities}
                     <StrongText>Housing Authority: </StrongText>
                     <ListText> {unit.housingAuthority}</ListText>
                     <StrongText>Comments from Landlord: </StrongText>
