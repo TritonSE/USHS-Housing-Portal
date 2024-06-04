@@ -335,7 +335,16 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
           if (res.success) {
             setErrorMessage("");
             uploadFiles(newFiles, res.data._id);
-            uploadFiles(thumbnail, res.data._id, undefined, undefined, undefined, undefined, true);
+            uploadFiles(
+              thumbnail,
+              res.data._id,
+              undefined,
+              undefined,
+              undefined,
+              undefined,
+              undefined,
+              true,
+            );
             props.handleAfterSubmit(res.data);
           } else {
             setErrorMessage(res.error);

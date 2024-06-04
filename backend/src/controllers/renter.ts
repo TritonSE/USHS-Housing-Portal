@@ -3,7 +3,12 @@ import createHttpError from "http-errors";
 
 import { asyncHandler } from "./wrappers";
 
-import { createRenterCandidate, getRenterCandidate, getRenterCandidates } from "@/services/renter";
+import {
+  createRenterCandidate,
+  editRenterCandidate,
+  getRenterCandidate,
+  getRenterCandidates,
+} from "@/services/renter";
 
 export const getRenterCandidatesHandler: RequestHandler = asyncHandler(async (_req, res, _next) => {
   const renters = await getRenterCandidates();
@@ -21,6 +26,8 @@ type CreateRenterCandidateRequestBody = {
   phone?: string;
   email?: string;
 };
+
+type EditRenterCandidateRequestBody = Partial<CreateRenterCandidateRequestBody>;
 
 export const createRenterCandidateHandler: RequestHandler = asyncHandler(async (req, res, _) => {
   const { firstName, lastName, uid, program, adults, children, phone, email } =
@@ -55,4 +62,17 @@ export const getRenterCandidateHandler: RequestHandler = asyncHandler(async (req
   }
 
   res.status(200).json(body);
+});
+
+export const editRenterCandidateHandler: RequestHandler = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const editQuery = req.body as EditRenterCandidateRequestBody;
+
+  const result = await editRenterCandidate(id, editQuery);
+
+  if (result === null) {
+    res.status(404);
+  } else {
+    res.status(200).json(result);
+  }
 });
