@@ -1,22 +1,12 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 import { Pagination } from "./Pagination";
 
 import { Unit } from "@/api/units";
-import { DataContext } from "@/contexts/DataContext";
 
 const ENTRIES_PER_PAGE = 6;
-
-const UnitTableWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin: 95px;
-  margin-top: 39px;
-  margin-right: 7.5%;
-  gap: 30px;
-`;
 
 const UnitTable = styled.div`
   display: flex;
@@ -92,56 +82,6 @@ const UnitHeaderItemWrapper = styled.div`
   width: 150px;
 `;
 
-// problem when shrinking screen
-const PropertiesRow = styled.span`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  color: black;
-  font-family: "Montserrat";
-  font-size: 27px;
-  font-weight: 700;
-  margin: 0;
-  margin-bottom: 15px;
-`;
-
-const ButtonsWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  left: 77vw;
-`;
-
-const PendingButton = styled.div<{ selected: boolean }>`
-  display: flex;
-  width: 164px;
-  height: 55px;
-  align-items: center;
-  justify-content: center;
-  border-radius: ${(props) => (props.selected ? "12px" : "12px 0px 0px 12px")};
-  border: 1px solid ${(props) => (props.selected ? "rgba(162, 61, 4, 0.80)" : "#EEE")};
-  background: ${(props) => (props.selected ? "#B64201" : "#EEE")};
-  color: ${(props) => (props.selected ? "#EEE" : "#2E2E2E")};
-  font-family: Poppins;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
-  z-index: ${(props) => (props.selected ? 1 : 0)};
-  cursor: pointer;
-`;
-
-const ListingsButton = styled(PendingButton)`
-  border-radius: ${(props) => (props.selected ? "12px" : "0px 12px 12px 0px")};
-  position: relative;
-  left: -10px;
-`;
-
-const HeaderText = styled.span`
-  font-family: "Neutraface Text";
-  font-size: 32px;
-`;
-
 const UnitListFooterWrapper = styled.div`
   display: flex;
   flex-direction: row;
@@ -191,99 +131,63 @@ const UnitNotFoundWrapper = styled.div`
 
 export type UnitListProps = {
   units: Unit[];
-  showPendingUnits?: boolean;
-  refreshUnits: (approved: "pending" | "approved") => void;
 };
 
-export const UnitList = ({ units, refreshUnits, showPendingUnits = false }: UnitListProps) => {
-  const [pendingSelected, setPendingSelected] = useState<boolean>(showPendingUnits);
+export const UnitList = ({ units }: UnitListProps) => {
   const [pageNumber, setPageNumber] = useState<number>(1);
 
-  const dataContext = useContext(DataContext);
-
   return (
-    <UnitTableWrapper>
-      <PropertiesRow>
-        {pendingSelected ? (
-          <HeaderText>Pending Approval</HeaderText>
-        ) : (
-          <HeaderText>Available Properties</HeaderText>
-        )}
-        {dataContext.currentUser?.isHousingLocator && (
-          <ButtonsWrapper>
-            <PendingButton
-              onClick={() => {
-                setPendingSelected(true);
-                refreshUnits("pending");
-              }}
-              selected={pendingSelected}
-            >
-              Pending Listings
-            </PendingButton>
-            <ListingsButton
-              onClick={() => {
-                setPendingSelected(false);
-                refreshUnits("approved");
-              }}
-              selected={!pendingSelected}
-            >
-              All Listings
-            </ListingsButton>
-          </ButtonsWrapper>
-        )}
-      </PropertiesRow>
-      <UnitTable>
-        <UnitTableHeaderRow>
-          <UnitHeaderItemWrapper>Listing Address</UnitHeaderItemWrapper>
-          <UnitHeaderItemWrapper>Price</UnitHeaderItemWrapper>
-          <UnitHeaderItemWrapper>Beds</UnitHeaderItemWrapper>
-          <UnitHeaderItemWrapper>Baths</UnitHeaderItemWrapper>
-          <UnitHeaderItemWrapper>Sqft</UnitHeaderItemWrapper>
-          <UnitHeaderItemWrapper>Status</UnitHeaderItemWrapper>
-        </UnitTableHeaderRow>
-        <>
-          {units.length > 0 &&
-            units
-              .slice((pageNumber - 1) * ENTRIES_PER_PAGE, pageNumber * ENTRIES_PER_PAGE)
-              .map((unit: Unit, index) => (
-                <Link to={`/unit/${unit._id}`} style={{ textDecoration: "none" }} key={index}>
-                  <UnitTableRow>
-                    <ListingAddressWrapper>{unit.listingAddress}</ListingAddressWrapper>
-                    <UnitItemWrapper>${unit.monthlyRent}</UnitItemWrapper>
-                    <UnitItemWrapper>{unit.numBeds}</UnitItemWrapper>
-                    <UnitItemWrapper>{unit.numBaths}</UnitItemWrapper>
-                    <UnitItemWrapper>{unit.sqft}</UnitItemWrapper>
-                    <UnitItemWrapper>
-                      {" "}
-                      {unit.availableNow && unit.approved ? (
-                        <UnitItemWrapper>
-                          <AvailableWrapper>Available</AvailableWrapper>
-                        </UnitItemWrapper>
-                      ) : !unit.approved ? (
-                        <UnitItemWrapper>
-                          <PendingWrapper>Pending</PendingWrapper>
-                        </UnitItemWrapper>
-                      ) : unit.leasedStatus !== undefined ? (
-                        <UnitItemWrapper>Leased</UnitItemWrapper>
-                      ) : (
-                        <UnitItemWrapper>Not Available</UnitItemWrapper>
-                      )}
-                    </UnitItemWrapper>
-                  </UnitTableRow>
-                </Link>
-              ))}
-          {units.length === 0 && <UnitNotFoundWrapper>No matching units found</UnitNotFoundWrapper>}
-        </>
-        <UnitListFooterWrapper>
-          <UnitListFooter>
-            <Pagination
-              totalPages={Math.ceil(units.length / ENTRIES_PER_PAGE)}
-              currPage={pageNumber}
-              setPageNumber={setPageNumber}
-            />
-          </UnitListFooter>
-        </UnitListFooterWrapper>
-      </UnitTable>
-    </UnitTableWrapper>
+    <UnitTable>
+      <UnitTableHeaderRow>
+        <UnitHeaderItemWrapper>Listing Address</UnitHeaderItemWrapper>
+        <UnitHeaderItemWrapper>Price</UnitHeaderItemWrapper>
+        <UnitHeaderItemWrapper>Beds</UnitHeaderItemWrapper>
+        <UnitHeaderItemWrapper>Baths</UnitHeaderItemWrapper>
+        <UnitHeaderItemWrapper>Sqft</UnitHeaderItemWrapper>
+        <UnitHeaderItemWrapper>Status</UnitHeaderItemWrapper>
+      </UnitTableHeaderRow>
+      <>
+        {units.length > 0 &&
+          units
+            .slice((pageNumber - 1) * ENTRIES_PER_PAGE, pageNumber * ENTRIES_PER_PAGE)
+            .map((unit: Unit, index) => (
+              <Link to={`/unit/${unit._id}`} style={{ textDecoration: "none" }} key={index}>
+                <UnitTableRow>
+                  <ListingAddressWrapper>{unit.listingAddress}</ListingAddressWrapper>
+                  <UnitItemWrapper>${unit.monthlyRent}</UnitItemWrapper>
+                  <UnitItemWrapper>{unit.numBeds}</UnitItemWrapper>
+                  <UnitItemWrapper>{unit.numBaths}</UnitItemWrapper>
+                  <UnitItemWrapper>{unit.sqft}</UnitItemWrapper>
+                  <UnitItemWrapper>
+                    {" "}
+                    {unit.availableNow && unit.approved ? (
+                      <UnitItemWrapper>
+                        <AvailableWrapper>Available</AvailableWrapper>
+                      </UnitItemWrapper>
+                    ) : !unit.approved ? (
+                      <UnitItemWrapper>
+                        <PendingWrapper>Pending</PendingWrapper>
+                      </UnitItemWrapper>
+                    ) : unit.leasedStatus !== undefined ? (
+                      <UnitItemWrapper>Leased</UnitItemWrapper>
+                    ) : (
+                      <UnitItemWrapper>Not Available</UnitItemWrapper>
+                    )}
+                  </UnitItemWrapper>
+                </UnitTableRow>
+              </Link>
+            ))}
+        {units.length === 0 && <UnitNotFoundWrapper>No matching units found</UnitNotFoundWrapper>}
+      </>
+      <UnitListFooterWrapper>
+        <UnitListFooter>
+          <Pagination
+            totalPages={Math.ceil(units.length / ENTRIES_PER_PAGE)}
+            currPage={pageNumber}
+            setPageNumber={setPageNumber}
+          />
+        </UnitListFooter>
+      </UnitListFooterWrapper>
+    </UnitTable>
   );
 };
