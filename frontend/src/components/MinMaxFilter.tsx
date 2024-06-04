@@ -1,16 +1,16 @@
 import { FilterContainer } from "./FilterCommon";
 import { FilterHeader } from "./FilterHeader";
-import { FilterRangeInput } from "./FilterRangeInput";
+import { FilterRangeInput, FilterRangeInputProps } from "./FilterRangeInput";
 
-export type MinMaxFilterProps = {
+export type MinMaxFilterProps = FilterRangeInputProps & {
   title: string;
 };
 
-export const MinMaxFitler = (props: MinMaxFilterProps) => {
+export const MinMaxFilter = (props: MinMaxFilterProps) => {
   return (
     <FilterContainer>
       <FilterHeader title={props.title} />
-      <FilterRangeInput />
+      <FilterRangeInput {...props} />
     </FilterContainer>
   );
 };
