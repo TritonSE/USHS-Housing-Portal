@@ -47,6 +47,8 @@ jobs:
           echo MONGODB_URI=${{ secrets.MONGODB_URI }} >> .env
           echo FRONTEND_ORIGIN=${{ vars.FRONTEND_ORIGIN }} >> .env
           echo FIREBASE=${{ secrets.FIREBASE }} >> .env
+          echo GMAILUSER=${{ secrets.GMAILUSER }} >> .env
+          echo GMAILPASS=${{ secrets.GMAILPASS }} >> .env
       - name: Deploy to Firebase
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
