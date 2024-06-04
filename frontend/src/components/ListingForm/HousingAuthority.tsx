@@ -3,12 +3,15 @@ import {
   FieldHeader,
   Margin32,
   OptionLabel,
+  OtherText,
   Required,
 } from "@/components/ListingForm/CommonStyles";
 
 type HousingAuthorityProps = {
-  housingAuthority: string;
+  housingAuthority: string | undefined;
   handleHousingAuthority: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  housingAuthorityOther: string | undefined;
+  handleHousingAuthorityOther: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 export const HousingAuthority = (props: HousingAuthorityProps) => {
@@ -23,7 +26,9 @@ export const HousingAuthority = (props: HousingAuthorityProps) => {
             type="radio"
             name="LACDA"
             value="LACDA"
-            checked={props.housingAuthority === "LACDA"}
+            checked={
+              props.housingAuthority === "LACDA" && props.housingAuthorityOther === undefined
+            }
             onChange={props.handleHousingAuthority}
           />
           LACDA
@@ -34,7 +39,9 @@ export const HousingAuthority = (props: HousingAuthorityProps) => {
             type="radio"
             name="HACLA"
             value="HACLA"
-            checked={props.housingAuthority === "HACLA"}
+            checked={
+              props.housingAuthority === "HACLA" && props.housingAuthorityOther === undefined
+            }
             onChange={props.handleHousingAuthority}
           />
           HACLA
@@ -43,12 +50,17 @@ export const HousingAuthority = (props: HousingAuthorityProps) => {
         <OptionLabel>
           <CustomCheckboxRadio
             type="radio"
-            name="Other"
-            value="Other"
-            checked={props.housingAuthority === "Other"}
-            onChange={props.handleHousingAuthority}
+            value=""
+            checked={props.housingAuthorityOther !== undefined}
+            onChange={props.handleHousingAuthorityOther}
           />
-          Other
+          Other:
+          <OtherText
+            type="text"
+            name="Authority_other_text"
+            value={props.housingAuthorityOther ?? ""}
+            onChange={props.handleHousingAuthorityOther}
+          />
         </OptionLabel>
       </div>
     </Margin32>

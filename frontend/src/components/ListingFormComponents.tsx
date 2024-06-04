@@ -66,7 +66,9 @@ const communityOptions = [
 
 const bathOptions = [1, 1.5, 2, 2.5, 3];
 
-const bedroomOptions = [1, 2, 3, 4];
+const bedroomOptions = [0, 1, 2, 3, 4];
+
+const housingAuthorityOptions = ["HACLA", "LACDA"];
 
 export function ListingFormComponents(props: ListingFormComponentsProps) {
   const [firstName, setFirstName] = useState<string>(props.initialValues?.landlordFirstName ?? "");
@@ -90,8 +92,15 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
   const [thirdPartyPayment, setThirdPartyPayment] = useState<boolean | undefined>(
     props.initialValues?.acceptThirdParty,
   );
-  const [housingAuthority, setHousingAuthority] = useState<string>(
-    props.initialValues?.housingAuthority ?? "",
+  const [housingAuthority, setHousingAuthority] = useState<string | undefined>(
+    housingAuthorityOptions.includes(props.initialValues?.housingAuthority ?? "")
+      ? props.initialValues?.housingAuthority
+      : undefined,
+  );
+  const [housingAuthorityOther, setHousingAuthorityOther] = useState<string | undefined>(
+    !housingAuthorityOptions.includes(props.initialValues?.housingAuthority ?? "")
+      ? props.initialValues?.housingAuthority
+      : undefined,
   );
   const [applicationFeeCost, setApplicationFeeCost] = useState<string>(
     String(props.initialValues?.applicationFeeCost ?? ""),
@@ -235,6 +244,12 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
 
   const handleHousingAuthority = (event: React.ChangeEvent<HTMLInputElement>) => {
     setHousingAuthority(event.target.value);
+    setHousingAuthorityOther(undefined);
+  };
+
+  const handleHousingAuthorityOther = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setHousingAuthorityOther(event.target.value);
+    setHousingAuthority(undefined);
   };
 
   const handleApplicationFeeCost = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -339,7 +354,7 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
       monthlyRent: parseInt(rentPerMonth ?? ""),
       securityDeposit: parseInt(securityDeposit ?? ""),
       acceptThirdParty: thirdPartyPayment ?? false,
-      housingAuthority,
+      housingAuthority: housingAuthority ?? housingAuthorityOther,
       applicationFeeCost: parseInt(applicationFeeCost ?? ""),
       dateAvailable: dateAvailable ? new Date(dateAvailable).toISOString() : "",
       numBeds: numberOfBedrooms ?? parseInt(numberOfBedroomsOther ?? "0"),
@@ -460,7 +475,7 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
             handler={handleStreetAddress}
           />
           <Textbox
-            elementName="Apartment/Suite etc"
+            elementName="Apartment # / Suite # (etc.)"
             requiredField={false}
             name="aptNum"
             value={aptNum}
@@ -508,6 +523,8 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
         <HousingAuthority
           housingAuthority={housingAuthority}
           handleHousingAuthority={handleHousingAuthority}
+          housingAuthorityOther={housingAuthorityOther}
+          handleHousingAuthorityOther={handleHousingAuthorityOther}
         />
         <ApplicationFeeCost
           applicationFeeCost={applicationFeeCost}
