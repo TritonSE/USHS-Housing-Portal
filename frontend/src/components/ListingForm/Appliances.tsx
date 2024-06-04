@@ -81,6 +81,19 @@ export const Appliances = (props: ApplicancesProps) => {
           <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
+              name="Stove/Oven"
+              value="Stove/Oven"
+              checked={props.appliances.includes("Stove/Oven")}
+              onChange={() => {
+                props.handleCheckBoxNA("Stove/Oven", props.appliances, props.setAppliances);
+              }}
+            />
+            Stove/Oven
+          </OptionLabel>
+
+          <OptionLabel>
+            <CustomCheckboxRadio
+              type="checkbox"
               name="Central AC/Heat"
               value="Central AC/Heat"
               checked={props.appliances.includes("Central AC/Heat")}
@@ -107,18 +120,18 @@ export const Appliances = (props: ApplicancesProps) => {
           <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
-              name="Wall unit header - gas"
-              value="Wall unit header - gas"
-              checked={props.appliances.includes("Wall unit header - gas")}
+              name="Wall unit heater - gas"
+              value="Wall unit heater - gas"
+              checked={props.appliances.includes("Wall unit heater - gas")}
               onChange={() => {
                 props.handleCheckBoxNA(
-                  "Wall unit header - gas",
+                  "Wall unit heater - gas",
                   props.appliances,
                   props.setAppliances,
                 );
               }}
             />
-            Wall unit header - gas
+            Wall unit heater - gas
           </OptionLabel>
 
           <OptionLabel>
@@ -139,23 +152,6 @@ export const Appliances = (props: ApplicancesProps) => {
           </OptionLabel>
         </RadioCheckboxCol>
         <div>
-          <OptionLabel>
-            <CustomCheckboxRadio
-              type="checkbox"
-              name="Landry hookups in unit"
-              value="Landry hookups in unit"
-              checked={props.appliances.includes("Landry hookups in unit")}
-              onChange={() => {
-                props.handleCheckBoxNA(
-                  "Landry hookups in unit",
-                  props.appliances,
-                  props.setAppliances,
-                );
-              }}
-            />
-            Landry hookups in unit
-          </OptionLabel>
-
           <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
@@ -189,23 +185,6 @@ export const Appliances = (props: ApplicancesProps) => {
           <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
-              name="Laundry facilities on site"
-              value="Laundry facilities on site"
-              checked={props.appliances.includes("Laundry facilities on site")}
-              onChange={() => {
-                props.handleCheckBoxNA(
-                  "Laundry facilities on site",
-                  props.appliances,
-                  props.setAppliances,
-                );
-              }}
-            />
-            Laundry facilities on site
-          </OptionLabel>
-
-          <OptionLabel>
-            <CustomCheckboxRadio
-              type="checkbox"
               name="Laundry appliances in unit"
               value="Laundry appliances in unit"
               checked={props.appliances.includes("Laundry appliances in unit")}
@@ -223,27 +202,18 @@ export const Appliances = (props: ApplicancesProps) => {
           <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
-              name="Stove/oven"
-              value="Stove/oven"
-              checked={props.appliances.includes("Stove/oven")}
+              name="Laundry facilities on site"
+              value="Laundry facilities on site"
+              checked={props.appliances.includes("Laundry facilities on site")}
               onChange={() => {
-                props.handleCheckBoxNA("Stove/oven", props.appliances, props.setAppliances);
+                props.handleCheckBoxNA(
+                  "Laundry facilities on site",
+                  props.appliances,
+                  props.setAppliances,
+                );
               }}
             />
-            Stove/oven
-          </OptionLabel>
-
-          <OptionLabel>
-            <CustomCheckboxRadio
-              type="radio"
-              name="applianceN/A"
-              value="N/A"
-              checked={props.appliances.includes("N/A")}
-              onChange={() => {
-                props.handleCheckBoxNA("N/A", props.appliances, props.setAppliances);
-              }}
-            />
-            N/A
+            Laundry facilities on site
           </OptionLabel>
         </div>
       </RadioCheckBoxContainer>

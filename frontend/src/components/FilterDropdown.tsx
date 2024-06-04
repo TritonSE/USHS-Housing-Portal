@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import { Button } from "./Button";
+import { FilterText } from "./FilterCommon";
 
 import { FilterParams } from "@/api/units";
 // import { FilterText } from "@/components/FilterCommon";
 import { SortDropDownComp } from "@/components/SortDropDown";
 import { DataContext } from "@/contexts/DataContext";
-import { FilterText } from "./FilterCommon";
 
 const AllFiltersContainer = styled.div`
   display: flex;

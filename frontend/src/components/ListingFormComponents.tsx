@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import { Button } from "./Button";
@@ -50,6 +50,24 @@ type ListingFormComponentsProps = {
 
 const isNumber = /^\d*$/;
 
+const communityOptions = [
+  "Automatic gate",
+  "Gated community",
+  "Pool",
+  "Clubhouse",
+  "Near public transport",
+  "Near grocery stores",
+  "Near schools",
+  "BBQ",
+  "Playground nearby",
+  "Park nearby",
+  "Smoke area",
+];
+
+const bathOptions = [1, 1.5, 2, 2.5, 3];
+
+const bedroomOptions = [1, 2, 3, 4];
+
 export function ListingFormComponents(props: ListingFormComponentsProps) {
   const [firstName, setFirstName] = useState<string>(props.initialValues?.landlordFirstName ?? "");
   const [lastName, setLastName] = useState<string>(props.initialValues?.landlordLastName ?? "");
@@ -82,19 +100,35 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
     formatDateForInput(props.initialValues?.dateAvailable) ?? "",
   );
   const [numberOfBedrooms, setNumberOfBedrooms] = useState<number | undefined>(
-    props.initialValues?.numBeds,
+    bedroomOptions.includes(props.initialValues?.numBeds ?? 0)
+      ? props.initialValues?.numBeds
+      : undefined,
   );
-  const [numberOfBedroomsOther, setNumberOfBedroomsOther] = useState<string | undefined>();
+  const [numberOfBedroomsOther, setNumberOfBedroomsOther] = useState<string | undefined>(
+    !bedroomOptions.includes(props.initialValues?.numBeds ?? 0)
+      ? props.initialValues?.numBeds.toString()
+      : undefined,
+  );
   const [numberOfBaths, setNumberOfBaths] = useState<number | undefined>(
-    props.initialValues?.numBaths,
+    bathOptions.includes(props.initialValues?.numBaths ?? 0)
+      ? props.initialValues?.numBaths
+      : undefined,
   );
-  const [numberOfBathsOther, setNumberOfBathsOther] = useState<string | undefined>();
+  const [numberOfBathsOther, setNumberOfBathsOther] = useState<string | undefined>(
+    !bathOptions.includes(props.initialValues?.numBaths ?? 0)
+      ? props.initialValues?.numBaths.toString()
+      : undefined,
+  );
+
   const [appliances, setAppliances] = useState<string[]>(props.initialValues?.appliances ?? []);
   const [utilities, setUtilities] = useState<string[]>(props.initialValues?.utilities ?? []);
   const [communityAndNeighborInfo, setCommunityAndNeighborInfo] = useState<string[]>(
-    props.initialValues?.communityFeatures ?? [],
+    props.initialValues?.communityFeatures.filter((e) => communityOptions.includes(e)) ?? [],
   );
-  const [communityAndNeighborInfoOther, setCommunityAndNeighborInfoOther] = useState<string>("");
+
+  const [communityAndNeighborInfoOther, setCommunityAndNeighborInfoOther] = useState<
+    string | undefined
+  >(props.initialValues?.communityFeatures.find((e) => !communityOptions.includes(e)));
   const [parking, setParking] = useState<string[]>(props.initialValues?.parking ?? []);
   const [accessibility, setAccessibility] = useState<string[]>(
     props.initialValues?.accessibility ?? [],
@@ -244,10 +278,6 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
     const target = event.target;
     const value = target.value;
 
-    if (value === "Other") {
-      setCommunityAndNeighborInfoOther("");
-    }
-
     // If checkbox is checked, add the value to the array
     if (target.checked) {
       setCommunityAndNeighborInfo([...communityAndNeighborInfo, value]);
@@ -257,8 +287,12 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
     }
   };
 
-  const handleCommunityAndNeighborInfoOther = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCommunityAndNeighborInfoOther(event.target.value);
+  const handleOtherText = (text: string, checked: boolean) => {
+    if (checked) {
+      setCommunityAndNeighborInfoOther(text);
+    } else {
+      setCommunityAndNeighborInfoOther(undefined);
+    }
   };
 
   const handleSharingHousing = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -276,6 +310,19 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
   const handleWhereFindUnit = (event: React.ChangeEvent<HTMLInputElement>) => {
     setWhereFindUnit(event.target.value);
   };
+
+  useEffect(() => {
+    console.log(communityAndNeighborInfoOther);
+    console.log(communityAndNeighborInfo);
+    console.log(
+      communityAndNeighborInfoOther
+        ? [
+            ...communityAndNeighborInfo.filter((e) => communityAndNeighborInfo.includes(e)),
+            communityAndNeighborInfoOther,
+          ]
+        : communityAndNeighborInfo,
+    );
+  }, [communityAndNeighborInfoOther]);
 
   const handleSubmit = () => {
     const newUnit = {
@@ -295,14 +342,13 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
       housingAuthority,
       applicationFeeCost: parseInt(applicationFeeCost ?? ""),
       dateAvailable: dateAvailable ? new Date(dateAvailable).toISOString() : "",
-      numBeds: numberOfBedrooms ?? parseInt(numberOfBedroomsOther ?? ""),
-      numBaths: numberOfBaths ?? parseFloat(numberOfBathsOther ?? ""),
+      numBeds: numberOfBedrooms ?? parseInt(numberOfBedroomsOther ?? "0"),
+      numBaths: numberOfBaths ?? parseInt(numberOfBathsOther ?? "0"),
       appliances,
       utilities,
-      communityFeatures:
-        communityAndNeighborInfo[0] === ""
-          ? [communityAndNeighborInfoOther]
-          : communityAndNeighborInfo,
+      communityFeatures: communityAndNeighborInfoOther
+        ? [...communityAndNeighborInfo, communityAndNeighborInfoOther]
+        : communityAndNeighborInfo,
       parking,
       accessibility,
       pets,
@@ -500,8 +546,8 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
         <CommunityInfo
           communityAndNeighborInfo={communityAndNeighborInfo}
           handleCommunityAndNeighborInfo={handleCommunityAndNeighborInfo}
-          communityAndNeighborInfoOther={communityAndNeighborInfoOther}
-          handleCommunityAndNeighborInfoOther={handleCommunityAndNeighborInfoOther}
+          otherText={communityAndNeighborInfoOther}
+          handleOtherText={handleOtherText}
         />
 
         <Parking parking={parking} setParking={setParking} handleCheckBoxNA={handleCheckBoxNA} />
