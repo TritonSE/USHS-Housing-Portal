@@ -3,7 +3,7 @@ import { ObjectId } from "mongoose";
 
 import { asyncHandler } from "./wrappers";
 
-import { createReferral, editReferral } from "@/services/referral";
+import { createReferral, deleteReferral, editReferral } from "@/services/referral";
 
 type CreateReferralRequestBody = {
   renterCandidateId: string;
@@ -41,5 +41,15 @@ export const editReferralHandler: RequestHandler = asyncHandler(async (req, res,
     res.status(200).json(response);
   } else {
     res.status(400);
+  }
+});
+
+export const deleteReferralHandler: RequestHandler = asyncHandler(async (req, res, _) => {
+  const id = req.params.id;
+  const response = await deleteReferral(id);
+  if (response === null) {
+    res.status(400);
+  } else {
+    res.status(200).json(response);
   }
 });

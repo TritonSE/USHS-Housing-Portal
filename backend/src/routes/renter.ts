@@ -24,4 +24,6 @@ router.post(
   RenterController.createRenterCandidateHandler,
 );
 
+router.put("/:id", requireUser, RenterController.editRenterCandidateHandler);
+
 export default router;

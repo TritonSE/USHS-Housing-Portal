@@ -29,15 +29,42 @@ const FilterHeaderSpan = styled.span`
   font-size: 14px;
 `;
 
-export const DateFilter = () => {
+export type DateFilterValueType = {
+  from: string;
+  to: string;
+};
+
+export type DateFilterProps = {
+  title: string;
+  value: DateFilterValueType;
+  setValue(value: DateFilterValueType): void;
+};
+
+export const DateFilter = (props: DateFilterProps) => {
   return (
     <FilterContainer>
-      <FilterHeader title="Date Available" />
+      <FilterHeader title={props.title} />
       <DateFilterContainer>
         <FilterHeaderSpan>From</FilterHeaderSpan>
-        <CustomInputDate />
+        <CustomInputDate
+          value={props.value.from}
+          onChange={(e) => {
+            props.setValue({
+              from: e.target.value,
+              to: props.value.to,
+            });
+          }}
+        />
         <FilterHeaderSpan>To</FilterHeaderSpan>
-        <CustomInputDate />
+        <CustomInputDate
+          value={props.value.to}
+          onChange={(e) => {
+            props.setValue({
+              from: props.value.from,
+              to: e.target.value,
+            });
+          }}
+        />
       </DateFilterContainer>
     </FilterContainer>
   );

@@ -271,7 +271,7 @@ const Heading = styled.h1`
 
 const LeftArrowWrapper = styled.div`
   position: absolute;
-  z-index: 2;
+  z-index: 1;
   cursor: pointer;
   display: flex;
   justify-content: center;
@@ -290,7 +290,7 @@ const LeftArrowWrapper = styled.div`
 
 const RightArrowWrapper = styled.div`
   position: absolute;
-  z-index: 2;
+  z-index: 1;
   top: 0vh;
   right: 0vw;
   cursor: pointer;
@@ -333,8 +333,10 @@ const CarouselVideo = styled.video`
   padding: 0px 7.5px;
 `;
 
+type UnitDetailsLocationState = { filters: FilterParams; prevPage: string };
+
 export function UnitDetails() {
-  const filters = useLocation().state as FilterParams;
+  const { filters, prevPage } = useLocation().state as UnitDetailsLocationState;
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [unit, setUnit] = useState<Unit>();
@@ -513,6 +515,9 @@ export function UnitDetails() {
   const appliances = unit.appliances.map((appliance, i) => (
     <ListText key={appliance + i}>{appliance}</ListText>
   ));
+  const utilities = unit.utilities.map((utility, i) => (
+    <ListText key={utility + i}>{utility}</ListText>
+  ));
   const parkingRequirements = unit.parking.map((parking, i) => (
     <ListText key={parking + i}>{parking}</ListText>
   ));
@@ -555,15 +560,7 @@ export function UnitDetails() {
         <DetailsColumn>
           <Section>
             <TopRow>
-              <Link
-                to={".."}
-                onClick={(e) => {
-                  e.preventDefault();
-                  // go back relative to navigation history
-                  navigate(-1);
-                }}
-                state={filters}
-              >
+              <Link to={prevPage} state={filters}>
                 <Button kind="secondary">
                   <PaddingInButton>
                     <img className="back-arrow" src="/back_arrow.svg" alt={"Back arrow"} />
@@ -731,6 +728,8 @@ export function UnitDetails() {
                     {pets}
                     <StrongText>Appliances: </StrongText>
                     {appliances}
+                    <StrongText>Utilities: </StrongText>
+                    {utilities}
                     <StrongText>Housing Authority: </StrongText>
                     <ListText> {unit.housingAuthority}</ListText>
                     <StrongText>Additional Comments from Landlord: </StrongText>

@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 
 import { Button } from "./Button";
@@ -211,6 +211,7 @@ type CardProps = {
 };
 
 export const UnitCard = ({ unit, refreshUnits }: CardProps) => {
+  const { pathname } = useLocation();
   const { filters } = useContext(FiltersContext);
   const [popup, setPopup] = useState<boolean>(false);
   const dataContext = useContext(DataContext);
@@ -275,7 +276,11 @@ export const UnitCard = ({ unit, refreshUnits }: CardProps) => {
 
   return (
     <>
-      <Link to={`/unit/${unit._id}`} state={filters} style={{ textDecoration: "none" }}>
+      <Link
+        to={`/unit/${unit._id}`}
+        state={{ filters, prevPage: pathname }}
+        style={{ textDecoration: "none" }}
+      >
         <UnitCardContainer pending={!unit.approved}>
           <ImageWrapper>
             <Thumbnail src={coverImg} alt="" />

@@ -12,6 +12,8 @@ import { storage } from "@/firebase";
 
 export type { FullMetadata };
 
+export const MAX_VIDEO_SIZE = 209715200;
+
 export async function getFileMetadata(id: string, folder: string) {
   let metadata: FullMetadata[] = [];
   await listAll(ref(storage, `${id}/${folder}/`))
@@ -89,12 +91,40 @@ export function uploadFiles(
   currImages?: FullMetadata[] | undefined,
   currVideos?: FullMetadata[] | undefined,
   setUploadingState?: (a: string) => void,
+  setUploadError?: (a: string) => void,
   onCompletion?: () => void,
   thumbnail?: boolean,
 ) {
   if (files && id) {
+    if (setUploadError) setUploadError("");
+    let newVids = 0;
+    let newImgs = 0;
     for (const file of files) {
       const folder = thumbnail ? "thumbnail" : file.type.includes("video") ? "videos" : "images";
+
+      switch (folder) {
+        case "videos":
+          if ((currVideos?.length ?? 0) + newVids >= 2) {
+            if (setUploadError) setUploadError("A maximum of 2 videos can be uploaded!");
+            continue;
+          }
+          if (file.size > MAX_VIDEO_SIZE) {
+            if (setUploadError) setUploadError("Videos must be smaller than 200MB!");
+            continue;
+          }
+          newVids++;
+          break;
+        case "images":
+          if ((currImages?.length ?? 0) + newImgs >= 10) {
+            if (setUploadError) setUploadError("A maximum of 10 images can be uploaded!");
+            continue;
+          }
+          newImgs++;
+          break;
+        default:
+          break;
+      }
+
       const fileName = handleRepeatName(
         folder,
         file.name.replace(/\.[^/.]+$/, ""),
@@ -130,6 +160,6 @@ export async function uploadThumbnail(
   onCompletion?: () => void,
 ) {
   await deleteFolder(id, "thumbnail").then(() => {
-    uploadFiles(files, id, undefined, undefined, setUploadingState, onCompletion, true);
+    uploadFiles(files, id, undefined, undefined, setUploadingState, undefined, onCompletion, true);
   });
 }

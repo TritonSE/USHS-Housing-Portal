@@ -3,7 +3,7 @@
  */
 import { RequestHandler } from "express";
 import { ContextRunner, ValidationChain, validationResult } from "express-validator";
-import { Middleware } from "express-validator/src/base";
+import { Middleware } from "express-validator/lib/base";
 import createHttpError from "http-errors";
 
 /**
