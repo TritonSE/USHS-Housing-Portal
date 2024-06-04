@@ -3,16 +3,19 @@ import { Helmet } from "react-helmet-async";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 
-import { FilterParams, Unit, getUnits } from "@/api/units";
+import { FilterParams, GetUnitsParams, Unit, getUnits } from "@/api/units";
 import { FilterDropdown } from "@/components/FilterDropdown";
-import { FitlerPanel } from "@/components/FilterPanel";
+import { FilterPanel } from "@/components/FilterPanel";
 import { NavBar } from "@/components/NavBar";
 import { Page } from "@/components/Page";
 import { UnitCardGrid } from "@/components/UnitCardGrid";
 
-export const FiltersContext = React.createContext({
-  filters: {} as FilterParams,
-});
+export type FilterContextType = {
+  filters: FilterParams;
+  setFilters: (filters: FilterParams) => void;
+};
+
+export const FiltersContext = React.createContext({} as FilterContextType);
 
 const HomePageLayout = styled.div`
   display: flex;
@@ -37,7 +40,39 @@ export function Home() {
   );
 
   const fetchUnits = (filterParams: FilterParams) => {
-    getUnits(filterParams)
+    let query: GetUnitsParams = {
+      sort: filterParams.sort,
+      approved: filterParams.approved,
+      search: filterParams.search,
+      // Filter Panel Filters
+      availability: filterParams.availability,
+      housingAuthority: filterParams.housingAuthority,
+      accessibility: filterParams.accessibility
+        ? JSON.stringify(Array.from(filterParams.accessibility))
+        : undefined,
+      rentalCriteria: filterParams.rentalCriteria
+        ? JSON.stringify(Array.from(filterParams.rentalCriteria))
+        : undefined,
+      additionalRules: filterParams.additionalRules
+        ? JSON.stringify(Array.from(filterParams.additionalRules))
+        : undefined,
+      beds: filterParams.beds?.toString(),
+      baths: filterParams.baths?.toString(),
+      minPrice: filterParams.minPrice?.toString(),
+      maxPrice: filterParams.maxPrice?.toString(),
+      minSecurityDeposit: filterParams.minSecurityDeposit?.toString(),
+      maxSecurityDeposit: filterParams.maxSecurityDeposit?.toString(),
+      minApplicationFee: filterParams.minApplicationFee?.toString(),
+      maxApplicationFee: filterParams.maxApplicationFee?.toString(),
+      minSize: filterParams.minSize?.toString(),
+      maxSize: filterParams.maxSize?.toString(),
+      fromDate: filterParams.fromDate,
+      toDate: filterParams.toDate,
+    };
+
+    query = Object.fromEntries(Object.entries(query).filter(([_, value]) => value !== undefined));
+
+    getUnits(query)
       .then((response) => {
         if (response.success) {
           setUnits(response.data);
@@ -51,32 +86,30 @@ export function Home() {
   }, [filters]);
 
   return (
-    <Page>
-      <Helmet>
-        <title>Home | USHS Housing Portal</title>
-      </Helmet>
-      <NavBar page="Home" />
-      <HomePageLayout>
-        <FitlerPanel></FitlerPanel>
-        <FilterPadding />
-        <div>
-          <FilterDropdown
-            value={filters}
-            refreshUnits={(filterParams) => {
-              filterParams.approved = filters.approved;
-              setFilters(filterParams);
-            }}
-          ></FilterDropdown>
-          <UnitCardGrid
-            units={units}
-            refreshUnits={(approved) => {
-              const newFilters = { ...filters, approved };
-              fetchUnits(newFilters);
-              setFilters(newFilters);
-            }}
-          />
-        </div>
-      </HomePageLayout>
-    </Page>
+    <FiltersContext.Provider value={{ filters, setFilters }}>
+      <Page>
+        <Helmet>
+          <title>Home | USHS Housing Portal</title>
+        </Helmet>
+        <NavBar page="Home" />
+        <HomePageLayout>
+          <FilterPanel />
+          <FilterPadding />
+          <div>
+            <FilterDropdown
+              searchText={filters.search ?? ""}
+              sortIndex={Number(filters.sort ?? 0)}
+            />
+            <UnitCardGrid
+              units={units}
+              refreshUnits={(approved) => {
+                const newFilters = { ...filters, approved };
+                setFilters(newFilters);
+              }}
+            />
+          </div>
+        </HomePageLayout>
+      </Page>
+    </FiltersContext.Provider>
   );
 }
