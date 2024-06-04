@@ -128,7 +128,6 @@ export function Home() {
     },
   );
   const [viewMode, setViewMode] = useState("card");
-  const [pendingSelected, setPendingSelected] = useState<boolean>(filters.approved === "pending");
 
   const fetchUnits = (filterParams: FilterParams) => {
     let query: GetUnitsParams = {
@@ -228,7 +227,7 @@ export function Home() {
               </ButtonsWrapper>
             </SearchStateWrapper>
             <PropertiesRow>
-              {pendingSelected ? (
+              {filters.approved === "pending" ? (
                 <HeaderText>Pending Approval</HeaderText>
               ) : (
                 <HeaderText>Available Properties</HeaderText>
@@ -237,19 +236,17 @@ export function Home() {
                 <ButtonsWrapper>
                   <PendingButton
                     onClick={() => {
-                      setPendingSelected(true);
                       refreshUnits("pending");
                     }}
-                    selected={pendingSelected}
+                    selected={filters.approved === "pending"}
                   >
                     Pending Listings
                   </PendingButton>
                   <ListingsButton
                     onClick={() => {
-                      setPendingSelected(false);
                       refreshUnits("approved");
                     }}
-                    selected={!pendingSelected}
+                    selected={filters.approved === "approved"}
                   >
                     All Listings
                   </ListingsButton>
