@@ -1,10 +1,11 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useContext, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 
 import { Pagination } from "./Pagination";
 
 import { Unit } from "@/api/units";
+import { FiltersContext } from "@/pages/Home";
 
 const ENTRIES_PER_PAGE = 6;
 
@@ -65,9 +66,7 @@ const ListingAddressWrapper = styled.div`
   flex-direction: column;
   font-size: 16px;
   font-family: "Montserrat";
-  line-height: 18.4px;
   width: 200px;
-  height: 73px;
   align-items: center;
 `;
 
@@ -134,6 +133,8 @@ export type UnitListProps = {
 };
 
 export const UnitList = ({ units }: UnitListProps) => {
+  const { pathname } = useLocation();
+  const { filters } = useContext(FiltersContext);
   const [pageNumber, setPageNumber] = useState<number>(1);
 
   return (
@@ -151,7 +152,12 @@ export const UnitList = ({ units }: UnitListProps) => {
           units
             .slice((pageNumber - 1) * ENTRIES_PER_PAGE, pageNumber * ENTRIES_PER_PAGE)
             .map((unit: Unit, index) => (
-              <Link to={`/unit/${unit._id}`} style={{ textDecoration: "none" }} key={index}>
+              <Link
+                to={`/unit/${unit._id}`}
+                state={{ filters, prevPage: pathname }}
+                style={{ textDecoration: "none" }}
+                key={index}
+              >
                 <UnitTableRow>
                   <ListingAddressWrapper>{unit.listingAddress}</ListingAddressWrapper>
                   <UnitItemWrapper>${unit.monthlyRent}</UnitItemWrapper>
