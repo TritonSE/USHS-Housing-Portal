@@ -1,23 +1,18 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import { Button } from "./Button";
-import { FilterText } from "./FilterCommon";
 
-import { FilterParams } from "@/api/units";
-// import { FilterText } from "@/components/FilterCommon";
 import { SortDropDownComp } from "@/components/SortDropDown";
 import { DataContext } from "@/contexts/DataContext";
+import { FiltersContext } from "@/pages/Home";
 
 const AllFiltersContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  margin-left: 95px;
-  margin-right: 95px;
-  margin-top: 70px;
   gap: 16px;
 `;
 
@@ -68,31 +63,6 @@ const SearchBarContainer = styled.div`
   box-shadow: 1px 1px 2px 0px rgba(188, 186, 183, 0.4);
 `;
 
-const ResetIcon = styled.img`
-  height: 25px;
-  width: 25px;
-`;
-
-const ResetFilterButton = styled.button`
-  background-color: transparent;
-  border-color: transparent;
-  cursor: pointer;
-`;
-
-const ResetFilterText = styled(FilterText)`
-  color: #b64201;
-  font-weight: 500;
-  padding-top: 2px;
-`;
-
-const ResetFilterRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: flex-center;
-  gap: 8px;
-`;
-
 const AddListings = styled(Button)`
   height: 44px;
   display: flex;
@@ -107,57 +77,15 @@ const AddListings = styled(Button)`
   padding: 8px 20px;
 `;
 
-type FilterDropdownProps = {
-  value: FilterParams;
-  refreshUnits(filterParams: FilterParams): void;
+export type FilterDropdownProps = {
+  searchText: string;
+  sortIndex: number;
 };
 
 export const FilterDropdown = (props: FilterDropdownProps) => {
-  const [bedBathState, setBedBathState] = useState({
-    beds: Number(props.value.beds ?? 1),
-    baths: Number(props.value.baths ?? 0.5),
-  });
-  const [searchText, setSearchText] = useState("");
-  const [sortIndex, setSortIndex] = useState(0);
-  const [availabilityState, setAvailabilityState] = useState({
-    dropdownText: props.value.availability ?? "Available",
-  });
-  const [priceState, setPriceState] = useState({
-    minPrice: String(props.value.minPrice) === "undefined" ? -1 : Number(props.value.minPrice),
-    maxPrice: String(props.value.maxPrice) === "undefined" ? -1 : Number(props.value.maxPrice),
-  });
-
+  const { filters, setFilters } = useContext(FiltersContext);
   const navigate = useNavigate();
   const dataContext = useContext(DataContext);
-
-  const applyFilters = () => {
-    const filters = {
-      search: searchText ?? "undefined",
-      beds: String(bedBathState.beds),
-      baths: String(bedBathState.baths),
-      sort: String(sortIndex),
-      availability: availabilityState.dropdownText,
-      minPrice: priceState.minPrice === -1 ? "undefined" : String(priceState.minPrice),
-      maxPrice: priceState.maxPrice === -1 ? "undefined" : String(priceState.maxPrice),
-    };
-
-    props.refreshUnits(filters);
-  };
-
-  useEffect(() => {
-    applyFilters();
-  }, [sortIndex, searchText, priceState, bedBathState, availabilityState]);
-
-  const resetFilters = () => {
-    setBedBathState({ beds: 1, baths: 0.5 });
-    setSearchText("");
-    setSortIndex(0);
-    setAvailabilityState({ dropdownText: "Available" });
-    setPriceState({
-      minPrice: -1,
-      maxPrice: -1,
-    });
-  };
 
   return (
     <AllFiltersContainer>
@@ -165,12 +93,12 @@ export const FilterDropdown = (props: FilterDropdownProps) => {
         <SearchBarContainer>
           <SearchBarInput
             placeholder="Search Property"
-            value={searchText}
+            value={props.searchText}
             onChange={(event) => {
-              setSearchText(event.target.value);
+              setFilters({ ...filters, search: event.target.value });
             }}
           />
-          <SearchIcon src="/search.svg" onClick={applyFilters} />
+          <SearchIcon src="/search.svg" />
         </SearchBarContainer>
         {dataContext.currentUser?.isHousingLocator && (
           <AddListings
@@ -183,16 +111,14 @@ export const FilterDropdown = (props: FilterDropdownProps) => {
             <span>Listing</span>
           </AddListings>
         )}
-
-        <ResetFilterButton onClick={resetFilters}>
-          <ResetFilterRow>
-            <ResetIcon src="/refresh.svg" />
-            <ResetFilterText> Reset filters</ResetFilterText>
-          </ResetFilterRow>
-        </ResetFilterButton>
       </FiltersFirstRow>
 
-      <SortDropDownComp value={sortIndex} setValue={setSortIndex} />
+      <SortDropDownComp
+        value={props.sortIndex}
+        setValue={(val: number) => {
+          setFilters({ ...filters, sort: String(val) });
+        }}
+      />
     </AllFiltersContainer>
   );
 };

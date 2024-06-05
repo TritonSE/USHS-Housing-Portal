@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useParams } from "react-router";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import { Loading } from "./Loading";
@@ -275,6 +275,7 @@ const CustomAuthorityInput = styled.input`
 type ReferralQuery = Record<string, Partial<UpdateReferralRequest>>;
 
 export function RenterCandidatePage() {
+  const { pathname } = useLocation();
   const navigate = useNavigate();
   const [renterCandidate, setRenterCandidate] = useState<RenterCandidate>();
   const [renterReferrals, setRenterReferrals] = useState<Referral[]>();
@@ -638,6 +639,7 @@ export function RenterCandidatePage() {
                           <ListingAddressLink
                             key={`listing-address-${idx}`}
                             to={`/unit/${unit._id}`}
+                            state={{ prevPage: pathname }}
                           >
                             {unit.listingAddress}
                           </ListingAddressLink>,
@@ -741,6 +743,7 @@ export function RenterCandidatePage() {
                           <ListingAddressLink
                             key={`listing-address-${idx}`}
                             to={`/unit/${unit._id}`}
+                            state={{ prevPage: pathname }}
                           >
                             {unit.listingAddress}
                           </ListingAddressLink>,
