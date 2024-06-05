@@ -103,6 +103,9 @@ export async function getHousingLocatorReferrals(id: string) {
 }
 
 export async function getAllReferrals() {
-  const referrals = await ReferralModel.find({});
+  const referrals = await ReferralModel.find({})
+    .populate("renterCandidate")
+    .populate("assignedHousingLocator")
+    .populate("assignedReferringStaff");
   return referrals;
 }

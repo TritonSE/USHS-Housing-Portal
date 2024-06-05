@@ -47,9 +47,19 @@ export async function deleteReferral(id: string): Promise<APIResult<Referral>> {
   }
 }
 
-export async function getReferrals(): Promise<APIResult<Referral[]>> {
+export async function getAllReferrals(): Promise<APIResult<Referral[]>> {
   try {
-    const response = await get("/referrals");
+    const response = await get(`/referrals`);
+    const json = (await response.json()) as Referral[];
+    return { success: true, data: json };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+}
+
+export async function getHousingLocatorReferrals(id: string): Promise<APIResult<Referral[]>> {
+  try {
+    const response = await get(`/referrals/${id}`);
     const json = (await response.json()) as Referral[];
     return { success: true, data: json };
   } catch (error) {
