@@ -84,7 +84,7 @@ const RentText = styled(UnitCardText)`
   font-weight: 700;
   line-height: 121%;
   letter-spacing: 0.331px;
-  font-family: Inter;
+  font-family: "Neutraface Text";
 `;
 
 const AddressText = styled(UnitCardText)`

@@ -18,11 +18,8 @@ import { FiltersContext } from "@/pages/Home";
 
 const PanelBackground = styled.div`
   min-width: 284px;
+  max-height: calc(100vh - 70px);
   background-color: #fff;
-
-  position: fixed;
-  top: 70px;
-  bottom: 0;
 
   overflow-y: scroll;
   overflow-x: hidden;

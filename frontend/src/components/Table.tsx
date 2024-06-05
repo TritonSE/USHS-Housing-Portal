@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 
-import { TablePagination } from "./TablePagination";
+import { Pagination } from "./Pagination";
 
 const TableContainer = styled.div`
   display: flex;
@@ -43,6 +43,9 @@ const TableCell = styled.div`
 `;
 
 const TableFooter = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
   padding-top: 20px;
 `;
 
@@ -82,7 +85,7 @@ export const Table = (props: TableProps) => {
             ))}
           <TableFooter>
             {/* TODO: Replace this with new pagination when it is implemented */}
-            <TablePagination
+            <Pagination
               totalPages={Math.ceil(rows.length / rowsPerPage)}
               currPage={pageNumber}
               setPageNumber={setPageNumber}
