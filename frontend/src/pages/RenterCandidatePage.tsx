@@ -387,6 +387,7 @@ export function RenterCandidatePage() {
               },
             });
           }}
+          isTableDropdown={true}
         />
       );
     }
@@ -657,6 +658,7 @@ export function RenterCandidatePage() {
                                 },
                               });
                             }}
+                            isTableDropdown={true}
                           />,
                           HLSection(referral),
 

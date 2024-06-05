@@ -1,7 +1,11 @@
 import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
+import { Button } from "./Button";
+
 import { SortDropDownComp } from "@/components/SortDropDown";
+import { DataContext } from "@/contexts/DataContext";
 import { FiltersContext } from "@/pages/Home";
 
 const AllFiltersContainer = styled.div`
@@ -17,7 +21,7 @@ const FiltersFirstRow = styled.div`
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  gap: 28px;
+  gap: 33px;
   flex-wrap: wrap;
 `;
 
@@ -59,6 +63,20 @@ const SearchBarContainer = styled.div`
   box-shadow: 1px 1px 2px 0px rgba(188, 186, 183, 0.4);
 `;
 
+const AddListings = styled(Button)`
+  height: 44px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%;
+  letter-spacing: 0.32px;
+  padding: 8px 20px;
+`;
+
 export type FilterDropdownProps = {
   searchText: string;
   sortIndex: number;
@@ -66,6 +84,8 @@ export type FilterDropdownProps = {
 
 export const FilterDropdown = (props: FilterDropdownProps) => {
   const { filters, setFilters } = useContext(FiltersContext);
+  const navigate = useNavigate();
+  const dataContext = useContext(DataContext);
 
   return (
     <AllFiltersContainer>
@@ -80,6 +100,17 @@ export const FilterDropdown = (props: FilterDropdownProps) => {
           />
           <SearchIcon src="/search.svg" />
         </SearchBarContainer>
+        {dataContext.currentUser?.isHousingLocator && (
+          <AddListings
+            kind="primary"
+            onClick={() => {
+              navigate("/new-listing");
+            }}
+          >
+            <img src="/plus_sign.svg" alt="" />
+            <span>Listing</span>
+          </AddListings>
+        )}
       </FiltersFirstRow>
 
       <SortDropDownComp

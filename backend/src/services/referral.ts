@@ -85,6 +85,10 @@ export async function editReferral(
   return referral;
 }
 
+export async function deleteUnitReferrals(unitId: string) {
+  return await ReferralModel.deleteMany({ unit: unitId });
+}
+
 export async function deleteReferral(id: string) {
   return await ReferralModel.deleteOne({ _id: id });
 }

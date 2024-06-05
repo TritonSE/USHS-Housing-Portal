@@ -4,7 +4,7 @@ import createHttpError from "http-errors";
 import { asyncHandler } from "./wrappers";
 
 import { UnitModel } from "@/models/units";
-import { getUnitReferrals } from "@/services/referral";
+import { deleteUnitReferrals, getUnitReferrals } from "@/services/referral";
 import {
   EditUnitBody,
   FilterParams,
@@ -34,9 +34,13 @@ export const deleteUnitsHandler: RequestHandler = asyncHandler(async (req, res, 
   const response = await deleteUnit(id);
   if (response === null) {
     res.status(400);
-  } else {
-    res.status(200).json(response);
   }
+  const referral = await deleteUnitReferrals(id);
+  if (referral === null) {
+    res.status(400);
+  }
+
+  res.status(200).json(response);
 });
 
 export const getUnitsHandler: RequestHandler = asyncHandler(async (req, res, _) => {

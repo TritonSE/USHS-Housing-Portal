@@ -26,7 +26,7 @@ const TABLE_COLUMN_NAMES = [
 ];
 
 const ReferralTableContainer = styled.div`
-  margin-top: 40px;
+  margin-top: 0px;
 `;
 
 const ReferralTableTitleSection = styled.div`
@@ -159,6 +159,7 @@ export const ReferralTable = (props: ReferralTableProps) => {
           }}
           initialSelection={referral.assignedHousingLocator}
           options={allReferringStaff}
+          isTableDropdown={true}
         />
       );
     }
@@ -215,6 +216,7 @@ export const ReferralTable = (props: ReferralTableProps) => {
               }}
               initialSelection={assignedReferringStaff}
               options={allReferringStaff}
+              isTableDropdown={true}
             />,
             HLSection(referral),
             <ReferralTableDropDown

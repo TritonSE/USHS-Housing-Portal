@@ -10,9 +10,9 @@ const SearchContainer = styled.div`
   position: relative;
 `;
 
-const Icon = styled.img`
+const Icon = styled.img<{ isTableDropdown?: boolean }>`
   position: absolute;
-  top: 10px;
+  top: ${(props) => (props.isTableDropdown ? "12px" : "10px")};
   right: 10px;
 `;
 
@@ -88,6 +88,7 @@ type SelectProps = {
   onSelect: (value: Option) => void; //callback function for parent, sends current selected user
   reset?: boolean;
   isRCDropdown?: boolean;
+  isTableDropdown?: boolean;
 };
 
 export function UserDropdown({
@@ -98,6 +99,7 @@ export function UserDropdown({
   onSelect,
   reset,
   isRCDropdown,
+  isTableDropdown,
 }: SelectProps) {
   const [openMenu, setOpenMenu] = useState(false);
   const [searchValue, setSearchValue] = useState(""); //current text value in select input box
@@ -222,7 +224,11 @@ export function UserDropdown({
           </OptionsContainer>
         </ClickAwayListener>
       )}
-      <Icon src="/SearchSymbol.svg" alt="search" />
+      {isTableDropdown ? (
+        <Icon isTableDropdown={true} src={openMenu ? "/up_arrow.svg" : "/dropdown.svg"} />
+      ) : (
+        <Icon src="/SearchSymbol.svg" alt="search" />
+      )}
     </SearchContainer>
   );
 }
