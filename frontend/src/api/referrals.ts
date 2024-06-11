@@ -66,3 +66,13 @@ export async function getHousingLocatorReferrals(id: string): Promise<APIResult<
     return handleAPIError(error);
   }
 }
+
+export async function deleteReferral(referral: Referral): Promise<APIResult<Referral>> {
+  try {
+    const response = await deleteRequest(`/referrals/${referral._id}`);
+    const json = (await response.json()) as Referral;
+    return { success: true, data: json };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+}

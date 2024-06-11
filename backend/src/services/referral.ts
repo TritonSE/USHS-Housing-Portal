@@ -93,8 +93,8 @@ export async function deleteReferral(id: string) {
   return await ReferralModel.deleteOne({ _id: id });
 }
 
-export async function getHousingLocatorReferrals(id: string) {
-  const referrals = await ReferralModel.find({ unit: id })
+export async function getHousingLocatorReferrals(assignedHousingLocatorId: string) {
+  const referrals = await ReferralModel.find({ assignedHousingLocator: assignedHousingLocatorId })
     .populate("renterCandidate")
     .populate("assignedHousingLocator")
     .populate("assignedReferringStaff");

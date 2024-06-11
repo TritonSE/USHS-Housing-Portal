@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-import { getAllReferrals } from "@/api/referrals";
+import { deleteReferral, getAllReferrals, getHousingLocatorReferrals } from "@/api/referrals";
 import { Referral } from "@/api/units";
 import { Button } from "@/components/Button";
 import { NavBar } from "@/components/NavBar";
@@ -93,12 +93,117 @@ const ViewButton = styled(Link)`
   }
 `;
 
+const Overlay = styled.div`
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: fixed;
+  background: rgba(0, 0, 0, 0.25);
+  z-index: 2;
+`;
+
+const Modal = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 612px;
+  height: 360px;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 50px;
+  z-index: 2;
+`;
+
+const HeadingWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 25px;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 30px;
+`;
+
+const WarningMessageWrapper = styled.div`
+  display: inline;
+  align-items: center;
+  margin-left: 15%;
+  margin-right: 15%;
+  text-align: center;
+  margin-bottom: 0;
+`;
+
+const ConfirmDelete = styled(Button)`
+  border-radius: 8px;
+  padding: 10px 24px;
+  font-size: 16px;
+  width: 117px;
+  height: 40px;
+  border-radius: 12px;
+`;
+
+const ButtonsWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-left: 15%;
+  margin-right: 15%;
+  gap: 240px;
+`;
+
+const XWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding: 10px 27px;
+  font-size: 30px;
+`;
+
+const XButton = styled.div`
+  &:hover {
+    cursor: pointer;
+  }
+  height: 10px;
+  width: 10px;
+`;
+
+const DoneMessageHeader = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  font-size: 20px;
+  line-height: 30px;
+`;
+
+const DoneMessageHeaderWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 25px;
+`;
+
 export function Referrals() {
-  //const dataContext = useContext(DataContext);
+  const dataContext = useContext(DataContext);
 
   const [referrals, setReferrals] = useState<Referral[]>([]);
+  const [myReferrals, setMyReferrals] = useState<Referral[]>([]);
   const [viewMode, setViewMode] = useState("My Clients");
+  const [selectedReferral, setSelectedReferral] = useState<Referral | null>(null);
+  const [popup, setPopup] = useState<boolean>(false);
+  const [sucessfulDeletionPopup, setSucessfulDeletionPopup] = useState<boolean>(false);
 
+  // this is not working
   const getReferrals = () => {
     getAllReferrals()
       .then((res) => {
@@ -111,22 +216,44 @@ export function Referrals() {
       });
   };
 
-  useEffect(() => {
-    getReferrals();
-  }, []);
-
-  const handleViewModeChange = (mode: string) => {
-    setViewMode(mode);
+  const getMyReferrals = () => {
+    if (dataContext.currentUser !== null && dataContext.currentUser.isHousingLocator) {
+      getHousingLocatorReferrals(dataContext.currentUser._id)
+        .then((res) => {
+          if (res.success) {
+            setMyReferrals(res.data);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
-  // const filteredReferrals = referrals.filter((referral) => {
-  //   if (viewMode === "My Clients") {
-  //     // Filter logic for "My Clients" view mode
-  //     return referral.assignedReferringStaff === dataContext.currentUser;
-  //   } else {
-  //     return true;
-  //   }
-  // });
+  const handleFilterChange = (filter: string) => {
+    setViewMode(filter); // Update the view mode based on the filter selection
+  };
+
+  const handleDelete = (referral: Referral) => {
+    setSelectedReferral(referral);
+    deleteReferral(referral)
+      .then((value) => {
+        if (value.success) {
+          dataContext.refetchData();
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    getReferrals();
+  }, [referrals]);
+
+  useEffect(() => {
+    getMyReferrals();
+  }, [myReferrals]);
 
   return (
     <Page>
@@ -134,11 +261,7 @@ export function Referrals() {
       <TopRow>
         <HeaderText>Referrals</HeaderText>
         <FilterContainer>
-          <ReferralFilter
-            option1="My Clients"
-            option2="All Clients"
-            //onViewModeChange={handleViewModeChange}
-          ></ReferralFilter>
+          <ReferralFilter option1="My Clients" option2="All Clients"></ReferralFilter>
           <AddButton kind="primary">
             <img src={"/plus_sign.svg"} alt="" style={{ marginRight: "8px" }} />
             Add Client
@@ -146,36 +269,163 @@ export function Referrals() {
         </FilterContainer>
       </TopRow>
       <TableWrapper>
-        <Table
-          columns={TABLE_COLUMN_NAMES}
-          rows={
-            referrals
-              ? referrals.map((referral, idx) => {
-                  const { renterCandidate, assignedReferringStaff } = referral;
+        {viewMode === "My Clients" ? (
+          <Table
+            columns={TABLE_COLUMN_NAMES}
+            rows={
+              myReferrals
+                ? myReferrals
+                    .sort((a, b) =>
+                      a.renterCandidate.firstName.localeCompare(b.renterCandidate.firstName),
+                    )
+                    .map((referral, idx) => {
+                      const { renterCandidate, assignedReferringStaff } = referral;
 
-                  return [
-                    renterCandidate.firstName + " " + renterCandidate.lastName,
-                    renterCandidate.email,
-                    renterCandidate.phone,
-                    renterCandidate._id,
-                    assignedReferringStaff.firstName + " " + assignedReferringStaff.lastName,
-                    <ViewButton key={`view-${idx}`} to={`/candidate/${renterCandidate._id}`}>
-                      View
-                    </ViewButton>,
-                    <DeleteIcon
-                      key={`delete-${idx}`}
-                      src="/trash-can.svg"
-                      onClick={() => {
-                        // TODO
-                      }}
-                    />,
-                  ] as TableCellContent[];
-                })
-              : []
-          }
-          rowsPerPage={ENTRIES_PER_PAGE}
-        />
+                      return [
+                        renterCandidate.firstName + " " + renterCandidate.lastName,
+                        renterCandidate.email,
+                        renterCandidate.phone,
+                        renterCandidate._id,
+                        assignedReferringStaff.firstName + " " + assignedReferringStaff.lastName,
+                        <ViewButton key={`view-${idx}`} to={`/candidate/${renterCandidate._id}`}>
+                          View
+                        </ViewButton>,
+                        <DeleteIcon
+                          key={`delete-${idx}`}
+                          src="/trash-can.svg"
+                          onClick={() => {
+                            if (referral !== null) {
+                              setSelectedReferral(referral);
+                              setPopup(true);
+                            }
+                          }}
+                        />,
+                      ] as TableCellContent[];
+                    })
+                : []
+            }
+            rowsPerPage={ENTRIES_PER_PAGE}
+          />
+        ) : (
+          <Table
+            columns={TABLE_COLUMN_NAMES}
+            rows={
+              referrals
+                ? referrals
+                    .sort((a, b) =>
+                      a.renterCandidate.firstName.localeCompare(b.renterCandidate.firstName),
+                    )
+                    .map((referral, idx) => {
+                      const { renterCandidate, assignedReferringStaff } = referral;
+
+                      return [
+                        renterCandidate.firstName + " " + renterCandidate.lastName,
+                        renterCandidate.email,
+                        renterCandidate.phone,
+                        renterCandidate._id,
+                        assignedReferringStaff.firstName + " " + assignedReferringStaff.lastName,
+                        <ViewButton key={`view-${idx}`} to={`/candidate/${renterCandidate._id}`}>
+                          View
+                        </ViewButton>,
+                        <DeleteIcon
+                          key={`delete-${idx}`}
+                          src="/trash-can.svg"
+                          onClick={() => {
+                            if (referral !== null) {
+                              setSelectedReferral(referral);
+                              setPopup(true);
+                            }
+                          }}
+                        />,
+                      ] as TableCellContent[];
+                    })
+                : []
+            }
+            rowsPerPage={ENTRIES_PER_PAGE}
+          />
+        )}
       </TableWrapper>
+      {popup && selectedReferral && (
+        <>
+          <Overlay />
+          <Modal>
+            <XWrapper>
+              <XButton
+                onClick={() => {
+                  setPopup(false);
+                }}
+              >
+                &times;
+              </XButton>
+            </XWrapper>
+            <HeadingWrapper>Remove Housing Locator</HeadingWrapper>
+            <WarningMessageWrapper>
+              Are you sure you want to remove{" "}
+              <b>
+                {selectedReferral.renterCandidate.firstName}{" "}
+                {selectedReferral.renterCandidate.lastName}
+              </b>{" "}
+              as a client?
+            </WarningMessageWrapper>
+            <ButtonsWrapper>
+              <ConfirmDelete
+                kind="secondary"
+                onClick={() => {
+                  setPopup(false);
+                }}
+              >
+                Cancel
+              </ConfirmDelete>
+
+              <ConfirmDelete
+                kind="primary"
+                onClick={() => {
+                  handleDelete(selectedReferral);
+                  setPopup(false);
+                  setSucessfulDeletionPopup(true);
+                }}
+              >
+                Demote
+              </ConfirmDelete>
+            </ButtonsWrapper>
+          </Modal>
+        </>
+      )}
+      {sucessfulDeletionPopup && (
+        <>
+          <Overlay />
+          <Modal>
+            <XWrapper>
+              <XButton
+                onClick={() => {
+                  setSucessfulDeletionPopup(false);
+                }}
+              >
+                &times;
+              </XButton>
+            </XWrapper>
+            <DoneMessageHeaderWrapper>
+              <DoneMessageHeader>
+                <img src="dark_green_check.svg" alt="Complete" width="78px" height="78px" />
+                <WarningMessageWrapper>
+                  {selectedReferral?.renterCandidate.firstName}{" "}
+                  {selectedReferral?.renterCandidate.lastName} has been <b>removed</b> as a client.
+                </WarningMessageWrapper>
+              </DoneMessageHeader>
+              <ButtonsWrapper>
+                <ConfirmDelete
+                  kind="primary"
+                  onClick={() => {
+                    setSucessfulDeletionPopup(false);
+                  }}
+                >
+                  Done
+                </ConfirmDelete>
+              </ButtonsWrapper>
+            </DoneMessageHeaderWrapper>
+          </Modal>
+        </>
+      )}
     </Page>
   );
 }
