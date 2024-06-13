@@ -59,15 +59,3 @@ export const getReferralsHandler: RequestHandler = asyncHandler(async (req, res,
 
   res.status(200).json(referrals);
 });
-
-export const deleteHousingLocatorReferralHandler: RequestHandler = asyncHandler(
-  async (req, res, _) => {
-    const id = req.params.id;
-    const response = await deleteReferral(id);
-    if (response === null) {
-      res.status(400);
-    } else {
-      res.status(200).json(response);
-    }
-  },
-);
