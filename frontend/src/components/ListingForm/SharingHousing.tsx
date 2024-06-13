@@ -15,7 +15,7 @@ export const SharingHousing = (props: SharingHousingProps) => {
   return (
     <Margin32>
       <FieldHeader>
-        Sharing house acceptable? <Required>*</Required>
+        Is this property shared housing? <Required>*</Required>
       </FieldHeader>
       <div>
         <OptionLabel>

@@ -29,6 +29,16 @@ export const NumberBedrooms = (props: NumberBedroomsProps) => {
         <OptionLabel>
           <CustomCheckboxRadio
             type="radio"
+            name="Bedroom_0"
+            value="0"
+            checked={props.numberOfBedrooms === 0 && props.numberOfBedroomsOther === undefined}
+            onChange={props.handleNumberOfBedrooms}
+          />
+          0
+        </OptionLabel>
+        <OptionLabel>
+          <CustomCheckboxRadio
+            type="radio"
             name="Bedroom_1"
             value="1"
             checked={props.numberOfBedrooms === 1 && props.numberOfBedroomsOther === undefined}

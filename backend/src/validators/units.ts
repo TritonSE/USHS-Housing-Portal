@@ -71,7 +71,9 @@ const createUnitSchema = [
     .exists()
     .withMessage("is required")
     .isBoolean()
-    .withMessage("must be a boolean"),
+    .withMessage("must be a boolean")
+    .notEmpty()
+    .withMessage("cannot be empty"),
   body("housingAuthority")
     .exists()
     .withMessage("is required")
@@ -91,20 +93,36 @@ const createUnitSchema = [
     .withMessage("is an invalid date format"),
   body("numBeds").exists().withMessage("is required").isNumeric().withMessage("must be a number"),
   body("numBaths").exists().withMessage("is required").isNumeric().withMessage("must be a number"),
-  body("appliances").exists().withMessage("is required").isArray().withMessage("must be an array"),
-  body("utilities").exists().withMessage("is required").isArray().withMessage("must be an array"),
+  body("appliances")
+    .exists()
+    .withMessage("is required")
+    .isArray({ min: 1 })
+    .withMessage("cannot be empty"),
+  body("utilities")
+    .exists()
+    .withMessage("is required")
+    .isArray({ min: 1 })
+    .withMessage("cannot be empty"),
   body("communityFeatures")
     .exists()
     .withMessage("is required")
-    .isArray()
-    .withMessage("must be an array"),
-  body("parking").exists().withMessage("is required").isArray().withMessage("must be an array"),
+    .isArray({ min: 1 })
+    .withMessage("cannot be empty"),
+  body("parking")
+    .exists()
+    .withMessage("is required")
+    .isArray({ min: 1 })
+    .withMessage("cannot be empty"),
   body("accessibility")
     .exists()
     .withMessage("is required")
-    .isArray()
-    .withMessage("must be an array"),
-  body("pets").exists().withMessage("is required").isArray().withMessage("must be an array"),
+    .isArray({ min: 1 })
+    .withMessage("cannot be empty"),
+  body("pets")
+    .exists()
+    .withMessage("is required")
+    .isArray({ min: 1 })
+    .withMessage("cannot be empty"),
   body("sharingAcceptable")
     .exists()
     .withMessage("is required")
@@ -117,9 +135,13 @@ const createUnitSchema = [
 
 const housingLocatorFields = [
   body("leasedStatus").optional(),
-  body("whereFound").optional().isString().withMessage("must be a string"),
+  body("whereFound")
+    .isString()
+    .withMessage("must be a string")
+    .notEmpty()
+    .withMessage("cannot be empty"),
   body("paymentRentingCriteria").optional().isArray().withMessage("must be an array"),
-  body("additionalRules").optional().isArray().withMessage("must be an array"),
+  body("additionalRules").isArray({ min: 1 }).withMessage("cannot be empty"),
   body("internalComments").optional().isString().withMessage("must be a string"),
 ];
 

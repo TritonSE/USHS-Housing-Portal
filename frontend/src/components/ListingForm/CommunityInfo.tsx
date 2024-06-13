@@ -1,3 +1,5 @@
+import { useRef, useState } from "react";
+
 import {
   CustomCheckboxRadio,
   FieldHeader,
@@ -12,11 +14,14 @@ import {
 type CommunityInfoProps = {
   communityAndNeighborInfo: string[];
   handleCommunityAndNeighborInfo: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  communityAndNeighborInfoOther: string;
-  handleCommunityAndNeighborInfoOther: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  otherText: string | undefined;
+  handleOtherText: (text: string, checked: boolean) => void;
 };
 
 export const CommunityInfo = (props: CommunityInfoProps) => {
+  const [otherText, setOtherText] = useState<string | undefined>(props.otherText);
+  const otherCheckbox = useRef<HTMLInputElement>(null);
+
   return (
     <Margin32>
       <FieldHeader>
@@ -67,6 +72,39 @@ export const CommunityInfo = (props: CommunityInfoProps) => {
             />
             Clubhouse
           </OptionLabel>
+
+          <OptionLabel>
+            <CustomCheckboxRadio
+              type="checkbox"
+              name="Near public transport"
+              value="Near public transport"
+              checked={props.communityAndNeighborInfo.includes("Near public transport")}
+              onChange={props.handleCommunityAndNeighborInfo}
+            />
+            Near public transport
+          </OptionLabel>
+
+          <OptionLabel>
+            <CustomCheckboxRadio
+              type="checkbox"
+              name="Near grocery stores"
+              value="Near grocery stores"
+              checked={props.communityAndNeighborInfo.includes("Near grocery stores")}
+              onChange={props.handleCommunityAndNeighborInfo}
+            />
+            Near grocery stores
+          </OptionLabel>
+
+          <OptionLabel>
+            <CustomCheckboxRadio
+              type="checkbox"
+              name="Near schools"
+              value="Near schools"
+              checked={props.communityAndNeighborInfo.includes("Near schools")}
+              onChange={props.handleCommunityAndNeighborInfo}
+            />
+            Near schools
+          </OptionLabel>
         </RadioCheckboxCol>
         <div>
           <OptionLabel>
@@ -78,6 +116,28 @@ export const CommunityInfo = (props: CommunityInfoProps) => {
               onChange={props.handleCommunityAndNeighborInfo}
             />
             BBQ
+          </OptionLabel>
+
+          <OptionLabel>
+            <CustomCheckboxRadio
+              type="checkbox"
+              name="Playground nearby"
+              value="Playground nearby"
+              checked={props.communityAndNeighborInfo.includes("Playground nearby")}
+              onChange={props.handleCommunityAndNeighborInfo}
+            />
+            Playground nearby
+          </OptionLabel>
+
+          <OptionLabel>
+            <CustomCheckboxRadio
+              type="checkbox"
+              name="Park nearby"
+              value="Park nearby"
+              checked={props.communityAndNeighborInfo.includes("Park nearby")}
+              onChange={props.handleCommunityAndNeighborInfo}
+            />
+            Park nearby
           </OptionLabel>
 
           <OptionLabel>
@@ -95,20 +155,23 @@ export const CommunityInfo = (props: CommunityInfoProps) => {
             <CustomCheckboxRadio
               type="checkbox"
               name="Other"
-              value="Other"
-              checked={props.communityAndNeighborInfo.includes("Other")}
-              onChange={props.handleCommunityAndNeighborInfo}
+              value={otherText}
+              defaultChecked={otherText !== undefined}
+              onChange={(e) => {
+                props.handleOtherText(otherText ?? "", e.target.checked);
+              }}
+              ref={otherCheckbox}
             />
             Other:{" "}
             <OtherText
               type="text"
               name="communityOtherText"
-              value={
-                props.communityAndNeighborInfo.includes("Other")
-                  ? props.communityAndNeighborInfoOther
-                  : ""
-              }
-              onChange={props.handleCommunityAndNeighborInfoOther}
+              value={otherText}
+              onChange={(e) => {
+                setOtherText(e.target.value);
+                if (otherCheckbox.current) otherCheckbox.current.checked = true;
+                props.handleOtherText(e.target.value, true);
+              }}
             />
           </OptionLabel>
         </div>
