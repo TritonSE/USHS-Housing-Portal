@@ -198,7 +198,7 @@ export function Referrals() {
 
   const [referrals, setReferrals] = useState<Referral[]>([]);
   const [myReferrals, setMyReferrals] = useState<Referral[]>([]);
-  const [viewMode, setViewMode] = useState("My Clients");
+  //const [setViewMode] = useState("My Clients");
   const [selectedReferral, setSelectedReferral] = useState<Referral | null>(null);
   const [popup, setPopup] = useState<boolean>(false);
   const [sucessfulDeletionPopup, setSucessfulDeletionPopup] = useState<boolean>(false);
@@ -230,9 +230,10 @@ export function Referrals() {
     }
   };
 
-  const handleFilterChange = (filter: string) => {
-    setViewMode(filter); // Update the view mode based on the filter selection
-  };
+  // i think this might be covered by the ReferralFilter component
+  // const handleFilterChange = (filter: string) => {
+  //   setViewMode(filter); // Update the view mode based on the filter selection
+  // };
 
   const handleDelete = (referral: Referral) => {
     setSelectedReferral(referral);
@@ -269,7 +270,7 @@ export function Referrals() {
         </FilterContainer>
       </TopRow>
       <TableWrapper>
-        {viewMode === "My Clients" ? (
+        {/* {viewMode === "My Clients" ? (
           <Table
             columns={TABLE_COLUMN_NAMES}
             rows={
@@ -306,44 +307,44 @@ export function Referrals() {
             }
             rowsPerPage={ENTRIES_PER_PAGE}
           />
-        ) : (
-          <Table
-            columns={TABLE_COLUMN_NAMES}
-            rows={
-              referrals
-                ? referrals
-                    .sort((a, b) =>
-                      a.renterCandidate.firstName.localeCompare(b.renterCandidate.firstName),
-                    )
-                    .map((referral, idx) => {
-                      const { renterCandidate, assignedReferringStaff } = referral;
+        ) : ( */}
+        <Table
+          columns={TABLE_COLUMN_NAMES}
+          rows={
+            referrals
+              ? referrals
+                  .sort((a, b) =>
+                    a.renterCandidate.firstName.localeCompare(b.renterCandidate.firstName),
+                  )
+                  .map((referral, idx) => {
+                    const { renterCandidate, assignedReferringStaff } = referral;
 
-                      return [
-                        renterCandidate.firstName + " " + renterCandidate.lastName,
-                        renterCandidate.email,
-                        renterCandidate.phone,
-                        renterCandidate._id,
-                        assignedReferringStaff.firstName + " " + assignedReferringStaff.lastName,
-                        <ViewButton key={`view-${idx}`} to={`/candidate/${renterCandidate._id}`}>
-                          View
-                        </ViewButton>,
-                        <DeleteIcon
-                          key={`delete-${idx}`}
-                          src="/trash-can.svg"
-                          onClick={() => {
-                            if (referral !== null) {
-                              setSelectedReferral(referral);
-                              setPopup(true);
-                            }
-                          }}
-                        />,
-                      ] as TableCellContent[];
-                    })
-                : []
-            }
-            rowsPerPage={ENTRIES_PER_PAGE}
-          />
-        )}
+                    return [
+                      renterCandidate.firstName + " " + renterCandidate.lastName,
+                      renterCandidate.email,
+                      renterCandidate.phone,
+                      renterCandidate._id,
+                      assignedReferringStaff.firstName + " " + assignedReferringStaff.lastName,
+                      <ViewButton key={`view-${idx}`} to={`/candidate/${renterCandidate._id}`}>
+                        View
+                      </ViewButton>,
+                      <DeleteIcon
+                        key={`delete-${idx}`}
+                        src="/trash-can.svg"
+                        onClick={() => {
+                          if (referral !== null) {
+                            setSelectedReferral(referral);
+                            setPopup(true);
+                          }
+                        }}
+                      />,
+                    ] as TableCellContent[];
+                  })
+              : []
+          }
+          rowsPerPage={ENTRIES_PER_PAGE}
+        />
+        {/* )} */}
       </TableWrapper>
       {popup && selectedReferral && (
         <>
