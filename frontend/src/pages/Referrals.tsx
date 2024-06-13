@@ -11,6 +11,7 @@ import { SearchBarContainer, SearchBarInput, SearchIcon } from "@/components/Fil
 import { CustomCheckboxRadio } from "@/components/ListingForm/CommonStyles";
 import { NavBar } from "@/components/NavBar";
 import { Page } from "@/components/Page";
+import { ReferralPopup } from "@/components/ReferralPopup";
 import { Table, TableCellContent } from "@/components/Table";
 import { formatPhoneNumber } from "@/components/helpers";
 import { DataContext } from "@/contexts/DataContext";
@@ -227,6 +228,7 @@ export function Referrals() {
   const [searchValue, setSearchValue] = useState<string>("");
   const [selectedReferral, setSelectedReferral] = useState<Referral | null>(null);
   const [popup, setPopup] = useState<boolean>(false);
+  const [showNewClientPopup, setShowNewClientPopup] = useState<boolean>(false);
   const [successfulRemovalPopup, setSuccessfulRemovalPopup] = useState<boolean>(false);
 
   const fetchReferrals = () => {
@@ -264,7 +266,7 @@ export function Referrals() {
     );
   }, [referrals, searchValue]);
 
-  useEffect(fetchReferrals, [filterMode]);
+  useEffect(fetchReferrals, [filterMode, dataContext.currentUser]);
 
   const handleDelete = (referral: Referral) => {
     deleteReferral(referral._id)
@@ -319,7 +321,12 @@ export function Referrals() {
               />
               <SearchIcon src="/search.svg" />
             </SearchBarContainer>
-            <AddButton kind="primary">
+            <AddButton
+              kind="primary"
+              onClick={() => {
+                setShowNewClientPopup(true);
+              }}
+            >
               <img src={"/plus_sign.svg"} alt="" style={{ marginRight: "8px" }} />
               Add Client
             </AddButton>
@@ -357,6 +364,16 @@ export function Referrals() {
               : []
           }
           rowsPerPage={ENTRIES_PER_PAGE}
+        />
+        <ReferralPopup
+          active={showNewClientPopup}
+          onClose={() => {
+            setShowNewClientPopup(false);
+          }}
+          onSubmit={() => {
+            //
+          }}
+          newCandidateOnly
         />
         {popup && selectedReferral && (
           <>
