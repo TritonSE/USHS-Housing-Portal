@@ -8,7 +8,7 @@ import {
   Required,
 } from "@/components/ListingForm/CommonStyles";
 
-type ApplicancesProps = {
+type AppliancesProps = {
   appliances: string[];
   setAppliances: React.Dispatch<React.SetStateAction<string[]>>;
   handleCheckBoxNA: (
@@ -18,7 +18,7 @@ type ApplicancesProps = {
   ) => void;
 };
 
-export const Appliances = (props: ApplicancesProps) => {
+export const Appliances = (props: AppliancesProps) => {
   return (
     <Margin32>
       <FieldHeader>
@@ -155,14 +155,14 @@ export const Appliances = (props: ApplicancesProps) => {
           <OptionLabel>
             <CustomCheckboxRadio
               type="checkbox"
-              name="Water header - gas"
-              value="Water header - gas"
-              checked={props.appliances.includes("Water header - gas")}
+              name="Water heater - gas"
+              value="Water heater - gas"
+              checked={props.appliances.includes("Water heater - gas")}
               onChange={() => {
-                props.handleCheckBoxNA("Water header - gas", props.appliances, props.setAppliances);
+                props.handleCheckBoxNA("Water heater - gas", props.appliances, props.setAppliances);
               }}
             />
-            Water header - gas
+            Water heater - gas
           </OptionLabel>
 
           <OptionLabel>
