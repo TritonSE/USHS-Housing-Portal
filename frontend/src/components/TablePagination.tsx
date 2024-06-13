@@ -53,7 +53,7 @@ type ReferralTablePaginationProps = {
   currPage: number;
   setPageNumber: (newPageNumber: number) => void;
 };
-
+// TODO: Delete this file
 export const TablePagination = (props: ReferralTablePaginationProps) => {
   const [activePageNumber, setActivePageNumber] = useState(props.currPage);
   const handleClick = (increase: boolean): void => {

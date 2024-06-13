@@ -12,8 +12,8 @@ import {
   LandlordListingForm,
   Login,
   Profile,
-  RenterCandidatePage,
   Referrals,
+  RenterCandidatePage,
   UnitDetails,
 } from "@/pages";
 import { GlobalStyle, StyledComponentsManager, theme } from "@/theme";

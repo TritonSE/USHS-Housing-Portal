@@ -2,13 +2,17 @@ import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-import { deleteReferral, getAllReferrals, getHousingLocatorReferrals } from "@/api/referrals";
+import { deleteReferral, getAllReferrals } from "@/api/referrals";
 import { Referral } from "@/api/units";
+import { getReferralsForUser } from "@/api/users";
 import { Button } from "@/components/Button";
+import { CheckboxRadioText } from "@/components/FilterCommon";
+import { SearchBarContainer, SearchBarInput, SearchIcon } from "@/components/FilterDropdown";
+import { CustomCheckboxRadio } from "@/components/ListingForm/CommonStyles";
 import { NavBar } from "@/components/NavBar";
 import { Page } from "@/components/Page";
-import ReferralFilter from "@/components/ReferralFilter";
 import { Table, TableCellContent } from "@/components/Table";
+import { formatPhoneNumber } from "@/components/helpers";
 import { DataContext } from "@/contexts/DataContext";
 
 const TABLE_COLUMN_NAMES = [
@@ -17,10 +21,18 @@ const TABLE_COLUMN_NAMES = [
   "Phone Number",
   "ID",
   "Referring Staff",
+  "Status",
   "View",
   "Delete",
 ];
 const ENTRIES_PER_PAGE = 6;
+
+const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 70px;
+  padding: 50px 96px;
+`;
 
 const HeaderText = styled.h1`
   color: black;
@@ -35,7 +47,6 @@ const TopRow = styled.div`
   display: flex;
   flex-direction: row;
   gap: 16px;
-  padding: 50px 96px 50px 96px;
   justify-content: space-between;
 `;
 
@@ -51,10 +62,19 @@ const FilterContainer = styled.div`
   gap: 27px;
 `;
 
-const TableWrapper = styled.div`
-  margin: 40px;
-  margin-top: 30px;
-  margin-bottom: 30px;
+const RadioGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+`;
+
+const Radio = styled(CustomCheckboxRadio)`
+  width: 32px;
+  height: 32px;
+`;
+
+const RadioLabel = styled(CheckboxRadioText)`
+  font-size: 20px;
 `;
 
 const DeleteIcon = styled.img`
@@ -193,240 +213,231 @@ const DoneMessageHeaderWrapper = styled.div`
   gap: 25px;
 `;
 
+enum ReferralFilterOption {
+  MY_REFERRALS = "My Referrals",
+  ALL_REFERRALS = "All Referrals",
+}
+
 export function Referrals() {
   const dataContext = useContext(DataContext);
 
   const [referrals, setReferrals] = useState<Referral[]>([]);
-  const [myReferrals, setMyReferrals] = useState<Referral[]>([]);
-  //const [setViewMode] = useState("My Clients");
+  const [filteredReferrals, setFilteredReferrals] = useState<Referral[]>([]);
+  const [filterMode, setFilterMode] = useState(ReferralFilterOption.MY_REFERRALS);
+  const [searchValue, setSearchValue] = useState<string>("");
   const [selectedReferral, setSelectedReferral] = useState<Referral | null>(null);
   const [popup, setPopup] = useState<boolean>(false);
-  const [sucessfulDeletionPopup, setSucessfulDeletionPopup] = useState<boolean>(false);
+  const [successfulRemovalPopup, setSuccessfulRemovalPopup] = useState<boolean>(false);
 
-  // this is not working
-  const getReferrals = () => {
-    getAllReferrals()
-      .then((res) => {
-        if (res.success) {
-          setReferrals(res.data);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const getMyReferrals = () => {
-    if (dataContext.currentUser !== null && dataContext.currentUser.isHousingLocator) {
-      getHousingLocatorReferrals(dataContext.currentUser._id)
+  const fetchReferrals = () => {
+    if (filterMode === ReferralFilterOption.MY_REFERRALS) {
+      if (dataContext.currentUser) {
+        getReferralsForUser(dataContext.currentUser)
+          .then((res) => {
+            if (res.success) {
+              setReferrals(res.data);
+            }
+          })
+          .catch(console.log);
+      }
+    } else {
+      getAllReferrals()
         .then((res) => {
           if (res.success) {
-            setMyReferrals(res.data);
+            setReferrals(res.data);
           }
         })
-        .catch((error) => {
-          console.log(error);
-        });
+        .catch(console.log);
     }
   };
 
-  // i think this might be covered by the ReferralFilter component
-  // const handleFilterChange = (filter: string) => {
-  //   setViewMode(filter); // Update the view mode based on the filter selection
-  // };
+  useEffect(() => {
+    setFilteredReferrals(
+      referrals
+        .filter((referral) => {
+          return (
+            referral.renterCandidate.firstName.toLowerCase().includes(searchValue.toLowerCase()) ||
+            referral.renterCandidate.lastName.toLowerCase().includes(searchValue.toLowerCase())
+          );
+        })
+        .sort((a, b) => a.renterCandidate.firstName.localeCompare(b.renterCandidate.firstName)),
+    );
+  }, [referrals, searchValue]);
+
+  useEffect(fetchReferrals, [filterMode]);
 
   const handleDelete = (referral: Referral) => {
-    setSelectedReferral(referral);
-    deleteReferral(referral)
-      .then((value) => {
-        if (value.success) {
-          dataContext.refetchData();
+    deleteReferral(referral._id)
+      .then((response) => {
+        if (response.success) {
+          fetchReferrals();
+          setPopup(false);
+          setSuccessfulRemovalPopup(true);
         }
       })
       .catch((error) => {
         console.log(error);
       });
   };
-
-  useEffect(() => {
-    getReferrals();
-  }, [referrals]);
-
-  useEffect(() => {
-    getMyReferrals();
-  }, [myReferrals]);
 
   return (
     <Page>
       <NavBar page="Referrals" />
-      <TopRow>
-        <HeaderText>Referrals</HeaderText>
-        <FilterContainer>
-          <ReferralFilter option1="My Clients" option2="All Clients"></ReferralFilter>
-          <AddButton kind="primary">
-            <img src={"/plus_sign.svg"} alt="" style={{ marginRight: "8px" }} />
-            Add Client
-          </AddButton>
-        </FilterContainer>
-      </TopRow>
-      <TableWrapper>
-        {/* {viewMode === "My Clients" ? (
-          <Table
-            columns={TABLE_COLUMN_NAMES}
-            rows={
-              myReferrals
-                ? myReferrals
-                    .sort((a, b) =>
-                      a.renterCandidate.firstName.localeCompare(b.renterCandidate.firstName),
-                    )
-                    .map((referral, idx) => {
-                      const { renterCandidate, assignedReferringStaff } = referral;
-
-                      return [
-                        renterCandidate.firstName + " " + renterCandidate.lastName,
-                        renterCandidate.email,
-                        renterCandidate.phone,
-                        renterCandidate._id,
-                        assignedReferringStaff.firstName + " " + assignedReferringStaff.lastName,
-                        <ViewButton key={`view-${idx}`} to={`/candidate/${renterCandidate._id}`}>
-                          View
-                        </ViewButton>,
-                        <DeleteIcon
-                          key={`delete-${idx}`}
-                          src="/trash-can.svg"
-                          onClick={() => {
-                            if (referral !== null) {
-                              setSelectedReferral(referral);
-                              setPopup(true);
-                            }
-                          }}
-                        />,
-                      ] as TableCellContent[];
-                    })
-                : []
-            }
-            rowsPerPage={ENTRIES_PER_PAGE}
-          />
-        ) : ( */}
+      <Content>
+        <TopRow>
+          <HeaderText>Referrals</HeaderText>
+          <FilterContainer>
+            <RadioGroup>
+              <Radio
+                id="my-referrals"
+                type="radio"
+                checked={filterMode === ReferralFilterOption.MY_REFERRALS}
+                onChange={() => {
+                  setFilterMode(ReferralFilterOption.MY_REFERRALS);
+                }}
+              />
+              <RadioLabel htmlFor="my-referrals">My Referrals</RadioLabel>
+            </RadioGroup>
+            <RadioGroup>
+              <Radio
+                id="all-referrals"
+                type="radio"
+                checked={filterMode === ReferralFilterOption.ALL_REFERRALS}
+                onChange={() => {
+                  setFilterMode(ReferralFilterOption.ALL_REFERRALS);
+                }}
+              />
+              <RadioLabel htmlFor="all-referrals">All Referrals</RadioLabel>
+            </RadioGroup>
+            <SearchBarContainer>
+              <SearchBarInput
+                placeholder="Search Client"
+                value={searchValue}
+                onChange={(e) => {
+                  setSearchValue(e.target.value);
+                }}
+              />
+              <SearchIcon src="/search.svg" />
+            </SearchBarContainer>
+            <AddButton kind="primary">
+              <img src={"/plus_sign.svg"} alt="" style={{ marginRight: "8px" }} />
+              Add Client
+            </AddButton>
+          </FilterContainer>
+        </TopRow>
         <Table
           columns={TABLE_COLUMN_NAMES}
           rows={
-            referrals
-              ? referrals
-                  .sort((a, b) =>
-                    a.renterCandidate.firstName.localeCompare(b.renterCandidate.firstName),
-                  )
-                  .map((referral, idx) => {
-                    const { renterCandidate, assignedReferringStaff } = referral;
+            filteredReferrals
+              ? filteredReferrals.map((referral, idx) => {
+                  const { renterCandidate, assignedReferringStaff, status } = referral;
 
-                    return [
-                      renterCandidate.firstName + " " + renterCandidate.lastName,
-                      renterCandidate.email,
-                      renterCandidate.phone,
-                      renterCandidate._id,
-                      assignedReferringStaff.firstName + " " + assignedReferringStaff.lastName,
-                      <ViewButton key={`view-${idx}`} to={`/candidate/${renterCandidate._id}`}>
-                        View
-                      </ViewButton>,
-                      <DeleteIcon
-                        key={`delete-${idx}`}
-                        src="/trash-can.svg"
-                        onClick={() => {
-                          if (referral !== null) {
-                            setSelectedReferral(referral);
-                            setPopup(true);
-                          }
-                        }}
-                      />,
-                    ] as TableCellContent[];
-                  })
+                  return [
+                    renterCandidate.firstName + " " + renterCandidate.lastName,
+                    renterCandidate.email,
+                    formatPhoneNumber(renterCandidate.phone),
+                    renterCandidate.uid,
+                    assignedReferringStaff.firstName + " " + assignedReferringStaff.lastName,
+                    status,
+                    <ViewButton key={`view-${idx}`} to={`/candidate/${renterCandidate._id}`}>
+                      View
+                    </ViewButton>,
+                    <DeleteIcon
+                      key={`delete-${idx}`}
+                      src="/trash-can.svg"
+                      onClick={() => {
+                        if (referral !== null) {
+                          setSelectedReferral(referral);
+                          setPopup(true);
+                        }
+                      }}
+                    />,
+                  ] as TableCellContent[];
+                })
               : []
           }
           rowsPerPage={ENTRIES_PER_PAGE}
         />
-        {/* )} */}
-      </TableWrapper>
-      {popup && selectedReferral && (
-        <>
-          <Overlay />
-          <Modal>
-            <XWrapper>
-              <XButton
-                onClick={() => {
-                  setPopup(false);
-                }}
-              >
-                &times;
-              </XButton>
-            </XWrapper>
-            <HeadingWrapper>Remove Housing Locator</HeadingWrapper>
-            <WarningMessageWrapper>
-              Are you sure you want to remove{" "}
-              <b>
-                {selectedReferral.renterCandidate.firstName}{" "}
-                {selectedReferral.renterCandidate.lastName}
-              </b>{" "}
-              as a client?
-            </WarningMessageWrapper>
-            <ButtonsWrapper>
-              <ConfirmDelete
-                kind="secondary"
-                onClick={() => {
-                  setPopup(false);
-                }}
-              >
-                Cancel
-              </ConfirmDelete>
-
-              <ConfirmDelete
-                kind="primary"
-                onClick={() => {
-                  handleDelete(selectedReferral);
-                  setPopup(false);
-                  setSucessfulDeletionPopup(true);
-                }}
-              >
-                Demote
-              </ConfirmDelete>
-            </ButtonsWrapper>
-          </Modal>
-        </>
-      )}
-      {sucessfulDeletionPopup && (
-        <>
-          <Overlay />
-          <Modal>
-            <XWrapper>
-              <XButton
-                onClick={() => {
-                  setSucessfulDeletionPopup(false);
-                }}
-              >
-                &times;
-              </XButton>
-            </XWrapper>
-            <DoneMessageHeaderWrapper>
-              <DoneMessageHeader>
-                <img src="dark_green_check.svg" alt="Complete" width="78px" height="78px" />
-                <WarningMessageWrapper>
-                  {selectedReferral?.renterCandidate.firstName}{" "}
-                  {selectedReferral?.renterCandidate.lastName} has been <b>removed</b> as a client.
-                </WarningMessageWrapper>
-              </DoneMessageHeader>
+        {popup && selectedReferral && (
+          <>
+            <Overlay />
+            <Modal>
+              <XWrapper>
+                <XButton
+                  onClick={() => {
+                    setPopup(false);
+                  }}
+                >
+                  &times;
+                </XButton>
+              </XWrapper>
+              <HeadingWrapper>Remove Referral</HeadingWrapper>
+              <WarningMessageWrapper>
+                Are you sure you want to remove this referral for{" "}
+                <b>
+                  {selectedReferral.renterCandidate.firstName}{" "}
+                  {selectedReferral.renterCandidate.lastName}
+                </b>
+                ?
+              </WarningMessageWrapper>
               <ButtonsWrapper>
+                <ConfirmDelete
+                  kind="secondary"
+                  onClick={() => {
+                    setPopup(false);
+                  }}
+                >
+                  Cancel
+                </ConfirmDelete>
+
                 <ConfirmDelete
                   kind="primary"
                   onClick={() => {
-                    setSucessfulDeletionPopup(false);
+                    handleDelete(selectedReferral);
                   }}
                 >
-                  Done
+                  Remove
                 </ConfirmDelete>
               </ButtonsWrapper>
-            </DoneMessageHeaderWrapper>
-          </Modal>
-        </>
-      )}
+            </Modal>
+          </>
+        )}
+        {successfulRemovalPopup && (
+          <>
+            <Overlay />
+            <Modal>
+              <XWrapper>
+                <XButton
+                  onClick={() => {
+                    setSuccessfulRemovalPopup(false);
+                  }}
+                >
+                  &times;
+                </XButton>
+              </XWrapper>
+              <DoneMessageHeaderWrapper>
+                <DoneMessageHeader>
+                  <img src="dark_green_check.svg" alt="Complete" width="78px" height="78px" />
+                  <WarningMessageWrapper>
+                    The referral for {selectedReferral?.renterCandidate.firstName}{" "}
+                    {selectedReferral?.renterCandidate.lastName} has been <b>removed</b>.
+                  </WarningMessageWrapper>
+                </DoneMessageHeader>
+                <ButtonsWrapper>
+                  <ConfirmDelete
+                    kind="primary"
+                    onClick={() => {
+                      setSuccessfulRemovalPopup(false);
+                    }}
+                  >
+                    Done
+                  </ConfirmDelete>
+                </ButtonsWrapper>
+              </DoneMessageHeaderWrapper>
+            </Modal>
+          </>
+        )}
+      </Content>
     </Page>
   );
 }

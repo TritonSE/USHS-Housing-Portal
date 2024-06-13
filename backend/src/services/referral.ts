@@ -1,3 +1,4 @@
+import createHttpError from "http-errors";
 import { ObjectId } from "mongoose";
 
 import { ReferralModel } from "../models/referral";
@@ -93,8 +94,23 @@ export async function deleteReferral(id: string) {
   return await ReferralModel.deleteOne({ _id: id });
 }
 
-export async function getHousingLocatorReferrals(assignedHousingLocatorId: string) {
-  const referrals = await ReferralModel.find({ assignedHousingLocator: assignedHousingLocatorId })
+export async function getReferralsForUser(id: string) {
+  const user = await getUserByID(id);
+
+  if (!user) {
+    throw createHttpError(404, "User notfound.");
+  }
+
+  let query;
+  const { isHousingLocator } = user;
+
+  if (isHousingLocator) {
+    query = { assignedHousingLocator: id };
+  } else {
+    query = { assignedReferringStaff: id };
+  }
+
+  const referrals = await ReferralModel.find(query)
     .populate("renterCandidate")
     .populate("assignedHousingLocator")
     .populate("assignedReferringStaff");

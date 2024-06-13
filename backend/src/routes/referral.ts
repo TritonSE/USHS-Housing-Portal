@@ -9,8 +9,6 @@ router.post("/", requireUser, ReferralController.createReferralHandler);
 
 router.get("/", requireUser, ReferralController.getReferralsHandler);
 
-router.get("/:id", requireUser, ReferralController.getHousingLocatorReferralsHandler);
-
 router.put("/:id", requireUser, ReferralController.editReferralHandler);
 
 router.delete("/:id", requireUser, ReferralController.deleteReferralHandler);
