@@ -180,11 +180,13 @@ type PopupProps = {
   active: boolean;
   onClose: () => void;
   onSubmit: () => void;
+  newCandidateOnly?: boolean; // only add a new renter candidate
 };
 
-export const ReferralPopup = ({ active, onClose, onSubmit }: PopupProps) => {
+export const ReferralPopup = ({ active, onClose, onSubmit, newCandidateOnly }: PopupProps) => {
   const [popup, setPopup] = useState<boolean>(false);
-  const [addRC, setAddRC] = useState<boolean>(false);
+  console.log(newCandidateOnly);
+  const [addRC, setAddRC] = useState<boolean>(newCandidateOnly ?? false);
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [currentRC, setCurrentRC] = useState<RenterCandidate>();
   const [allRCs, setAllRCs] = useState<RenterCandidate[]>([]);
@@ -232,9 +234,13 @@ export const ReferralPopup = ({ active, onClose, onSubmit }: PopupProps) => {
     createRenterCandidate(data as CreateRenterCandidateRequest)
       .then((value) => {
         if (value.success) {
-          handleCreateReferral(value.data._id);
           reset();
-          setAddRC(false);
+          if (newCandidateOnly) {
+            onClose();
+          } else {
+            handleCreateReferral(value.data._id);
+            setAddRC(false);
+          }
           setErrorMsg("");
         } else {
           if (value.error.includes("email")) {
@@ -267,7 +273,7 @@ export const ReferralPopup = ({ active, onClose, onSubmit }: PopupProps) => {
               </XButton>
             </XWrapper>
             <Wrapper>
-              <h1>Add Referral</h1>
+              {newCandidateOnly ? <h1>Add New Renter Candidate</h1> : <h1>Add Referral</h1>}
               {!addRC ? (
                 <ContentWrapper>
                   <div>Choose existing renter candidate:</div>
@@ -364,16 +370,26 @@ export const ReferralPopup = ({ active, onClose, onSubmit }: PopupProps) => {
                       />
                     </InputSection>
                     <ButtonsWrapper>
-                      <Button
-                        onClick={() => {
-                          setAddRC(false);
-                          setErrorMsg("");
-                        }}
-                        kind="secondary"
-                      >
-                        Back
-                      </Button>
-                      <SubmitButton type="submit" value="Add Referral"></SubmitButton>
+                      {newCandidateOnly ? (
+                        <Button onClick={onClose} kind="secondary">
+                          Cancel
+                        </Button>
+                      ) : (
+                        <Button
+                          onClick={() => {
+                            setAddRC(false);
+                            setErrorMsg("");
+                          }}
+                          kind="secondary"
+                        >
+                          Back
+                        </Button>
+                      )}
+
+                      <SubmitButton
+                        type="submit"
+                        value={newCandidateOnly ? "Add Client" : "Add Referral"}
+                      ></SubmitButton>
                     </ButtonsWrapper>
                   </FormWrapper>
                   <Error>{errorMsg}</Error>

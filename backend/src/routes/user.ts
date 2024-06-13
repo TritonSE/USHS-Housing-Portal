@@ -21,4 +21,6 @@ router.put("/:id/elevate", requireHousingLocator, UserController.elevateUserHand
 
 router.put("/:id/demote", requireHousingLocator, UserController.demoteUserHandler);
 
+router.get("/:id/referrals", requireUser, UserController.getUserReferrals);
+
 export default router;

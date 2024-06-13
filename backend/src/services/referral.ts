@@ -1,9 +1,10 @@
+import createHttpError from "http-errors";
 import { ObjectId } from "mongoose";
+
+import { ReferralModel } from "../models/referral";
 
 import { sendEmail } from "./email";
 import { getUserByID } from "./user";
-
-import { ReferralModel } from "@/models/referral";
 
 export async function getUnitReferrals(id: string) {
   const referrals = await ReferralModel.find({ unit: id })
@@ -91,4 +92,36 @@ export async function deleteUnitReferrals(unitId: string) {
 
 export async function deleteReferral(id: string) {
   return await ReferralModel.deleteOne({ _id: id });
+}
+
+export async function getReferralsForUser(id: string) {
+  const user = await getUserByID(id);
+
+  if (!user) {
+    throw createHttpError(404, "User notfound.");
+  }
+
+  let query;
+  const { isHousingLocator } = user;
+
+  if (isHousingLocator) {
+    query = { assignedHousingLocator: id };
+  } else {
+    query = { assignedReferringStaff: id };
+  }
+
+  const referrals = await ReferralModel.find(query)
+    .populate("renterCandidate")
+    .populate("assignedHousingLocator")
+    .populate("assignedReferringStaff");
+
+  return referrals;
+}
+
+export async function getAllReferrals() {
+  const referrals = await ReferralModel.find({})
+    .populate("renterCandidate")
+    .populate("assignedHousingLocator")
+    .populate("assignedReferringStaff");
+  return referrals;
 }

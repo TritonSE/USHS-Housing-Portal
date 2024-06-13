@@ -132,7 +132,7 @@ const ButtonsWrapper = styled.div`
 `;
 
 type NavBarProps = {
-  page?: "Home" | "Profile";
+  page?: "Home" | "Profile" | "Referrals";
 };
 
 export function NavBar({ page }: NavBarProps) {
@@ -162,6 +162,9 @@ export function NavBar({ page }: NavBarProps) {
           <Icon src="/USHSLogo.svg" />
           <NavItem to="/" $active={page === "Home"}>
             Home
+          </NavItem>
+          <NavItem to="/referrals" $active={page === "Referrals"}>
+            Referrals
           </NavItem>
           <NavItem to="/profile" $active={page === "Profile"}>
             Profile

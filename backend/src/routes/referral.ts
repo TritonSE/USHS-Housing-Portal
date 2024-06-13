@@ -1,18 +1,16 @@
 import express from "express";
 
-import {
-  createReferralHandler,
-  deleteReferralHandler,
-  editReferralHandler,
-} from "@/controllers/referral";
-import { requireUser } from "@/middleware/auth";
+import * as ReferralController from "../controllers/referral";
+import { requireUser } from "../middleware/auth";
 
 const router = express.Router();
 
-router.post("/", requireUser, createReferralHandler);
+router.post("/", requireUser, ReferralController.createReferralHandler);
 
-router.put("/:id", requireUser, editReferralHandler);
+router.get("/", requireUser, ReferralController.getReferralsHandler);
 
-router.delete("/:id", requireUser, deleteReferralHandler);
+router.put("/:id", requireUser, ReferralController.editReferralHandler);
+
+router.delete("/:id", requireUser, ReferralController.deleteReferralHandler);
 
 export default router;

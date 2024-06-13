@@ -7,6 +7,7 @@
  */
 
 import { APIResult, get, handleAPIError, post, put } from "./requests";
+import { Referral } from "./units";
 
 export type User = {
   _id: string;
@@ -58,6 +59,16 @@ export async function demoteUser(user: User): Promise<APIResult<User>> {
   try {
     const response = await put(`/users/${user._id}/demote`, user);
     const json = (await response.json()) as User;
+    return { success: true, data: json };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+}
+
+export async function getReferralsForUser(user: User): Promise<APIResult<Referral[]>> {
+  try {
+    const response = await get(`/users/${user._id}/referrals`);
+    const json = (await response.json()) as Referral[];
     return { success: true, data: json };
   } catch (error) {
     return handleAPIError(error);

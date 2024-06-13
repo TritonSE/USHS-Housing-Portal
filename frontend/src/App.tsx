@@ -12,6 +12,7 @@ import {
   LandlordListingForm,
   Login,
   Profile,
+  Referrals,
   RenterCandidatePage,
   UnitDetails,
 } from "@/pages";
@@ -36,6 +37,7 @@ function AppRouter() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/unit/:id" element={<UnitDetails />} />
             <Route path="/candidate/:id" element={<RenterCandidatePage />} />
+            <Route path="/referrals" element={<Referrals />} />
             <Route path="*" element={<Navigate to="/" />} />
           </>
         )}

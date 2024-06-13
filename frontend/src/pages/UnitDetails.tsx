@@ -16,6 +16,7 @@ import { HousingLocatorFields } from "@/components/ListingForm/HousingLocatorFie
 import { ListingFormComponents } from "@/components/ListingFormComponents";
 import { NavBar } from "@/components/NavBar";
 import { ReferralTable } from "@/components/ReferralTable";
+import { formatPhoneNumber } from "@/components/helpers";
 import { DataContext } from "@/contexts/DataContext";
 
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -537,15 +538,11 @@ export function UnitDetails() {
     <ListText key={rule + i}>{rule}</ListText>
   ));
 
-  const phone = unit.landlordPhone.match(/\d+/g)?.join("");
-
   const HousingLocatorComponent = () => {
     return (
       <Column>
         <StrongText>Landlord: {unit.landlordFirstName + " " + unit.landlordLastName}</StrongText>
-        <Text>{`(${phone?.substring(0, 3)}) ${phone?.substring(3, 6)}-${phone?.substring(
-          6,
-        )}`}</Text>
+        <Text>{formatPhoneNumber(unit.landlordPhone)}</Text>
         <Text>{unit.landlordEmail}</Text>
       </Column>
     );
