@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "ushs-housing-portal-staging"
+    "default": "ushs-housing-portal-staging",
+    "production": "ushs-housing-portal"
   }
 }

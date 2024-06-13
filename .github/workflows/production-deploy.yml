@@ -1,0 +1,15 @@
+name: Deploy to Production
+"on":
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  deploy_production:
+    name: Deploy to Production
+    uses: ./.github/workflows/build-and-deploy.yml
+    with:
+      environment: Production
+      firebaseProjectId: ushs-housing-portal
+      firebaseHostingChannelId: live
+    secrets: inherit
