@@ -12,21 +12,19 @@ import { FiltersContext } from "@/pages/Home";
 const UnitCardContainer = styled.div<{ pending: boolean }>`
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-content: flex-start;
-  gap: 8px;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-top: 20px;
-  width: 318px;
+  padding: 20px;
   height: 370px;
+  width: 330px;
   background-color: white;
 
   border-radius: 6.5px;
   border: 1.3px solid ${(props) => (props.pending ? "rgba(230, 159, 28, 0.50)" : "#cdcaca")};
   box-shadow: 1.181px 1.181px 2.362px 0px rgba(188, 186, 183, 0.4);
-
-  // position: absolute;
+  &:hover {
+    box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.15);
+  }
 `;
 
 const UnitCardText = styled.span`
@@ -56,11 +54,16 @@ const BedBathRow = styled.div`
   gap: 4px;
 `;
 
-const AddressRow = styled.div`
+const Address = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+`;
+
+const BottomRow = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
 
 const AvailabilityIcon = styled.img`
@@ -112,10 +115,8 @@ const BedBathText = styled(NumberText)`
 const DeleteIcon = styled.img`
   width: 22px;
   height: 24px;
-  position: relative;
-  top: -32px;
-  left: 250px;
   cursor: pointer;
+  align-self: flex-end;
 `;
 
 const Overlay = styled.div`
@@ -311,21 +312,23 @@ export const UnitCard = ({ unit, refreshUnits }: CardProps) => {
             <NumberText>{unit.sqft}</NumberText>
             <BedBathText>sqft</BedBathText>
           </BedBathRow>
-          <AddressRow>
-            <AddressText>{unit.streetAddress}</AddressText>
-            <AddressText>{`${unit.city}, ${unit.state} ${unit.areaCode}`}</AddressText>
-          </AddressRow>
-          {unit.approved && dataContext.currentUser?.isHousingLocator && (
-            <DeleteIcon
-              src="Trash_Icon.svg"
-              onClick={(e) => {
-                // Stop click from propagating to parent (opening the unit page)
-                e.preventDefault();
-                e.stopPropagation();
-                setPopup(true);
-              }}
-            />
-          )}
+          <BottomRow>
+            <Address>
+              <AddressText>{unit.streetAddress}</AddressText>
+              <AddressText>{`${unit.city}, ${unit.state} ${unit.areaCode}`}</AddressText>
+            </Address>
+            {unit.approved && dataContext.currentUser?.isHousingLocator && (
+              <DeleteIcon
+                src="Trash_Icon.svg"
+                onClick={(e) => {
+                  // Stop click from propagating to parent (opening the unit page)
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setPopup(true);
+                }}
+              />
+            )}
+          </BottomRow>
         </UnitCardContainer>
       </Link>
       {popup && (
