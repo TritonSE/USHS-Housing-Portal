@@ -135,13 +135,9 @@ const createUnitSchema = [
 
 const housingLocatorFields = [
   body("leasedStatus").optional(),
-  body("whereFound")
-    .isString()
-    .withMessage("must be a string")
-    .notEmpty()
-    .withMessage("cannot be empty"),
+  body("whereFound").optional().isString().withMessage("must be a string"),
   body("paymentRentingCriteria").optional().isArray().withMessage("must be an array"),
-  body("additionalRules").isArray({ min: 1 }).withMessage("cannot be empty"),
+  body("additionalRules").optional().isArray().withMessage("must be an array"),
   body("internalComments").optional().isString().withMessage("must be a string"),
 ];
 

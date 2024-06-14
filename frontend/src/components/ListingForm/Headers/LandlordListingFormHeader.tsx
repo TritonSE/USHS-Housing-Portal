@@ -17,7 +17,12 @@ export const HeaderSubtext = styled.p`
   letter-spacing: 0.4px;
 `;
 
-export const LandlordListingFormHeader = () => {
+type LandlordListingFormHeaderProps = {
+  // whether to show the "clear all fields" text
+  showClearAllText: boolean;
+};
+
+export const LandlordListingFormHeader = ({ showClearAllText }: LandlordListingFormHeaderProps) => {
   return (
     <Header>
       <HeaderMain>
@@ -32,14 +37,15 @@ export const LandlordListingFormHeader = () => {
         your listing to be properly added, please complete each field thoroughly and include as much
         information as possible. Thank you for your time!
       </HeaderSubtext>
-      <br />
       <HeaderRequired>
         The <Required>*</Required> next to the question indicates that it is required.
       </HeaderRequired>
-      <ClearAllFields>
-        The information below is prepopulated from the previously suubmitted form. Press &quot;clear
-        all fields&quot; to have a blank form.
-      </ClearAllFields>
+      {showClearAllText && (
+        <ClearAllFields>
+          The information below is prepopulated from the previously submitted form. Press “clear all
+          fields” to have a blank form.
+        </ClearAllFields>
+      )}
     </Header>
   );
 };

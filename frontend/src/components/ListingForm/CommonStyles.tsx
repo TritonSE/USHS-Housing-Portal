@@ -63,6 +63,9 @@ export const Header = styled.div`
   margin: auto 150px;
   text-align: center;
   margin-bottom: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 `;
 
 export const CustomCheckboxRadio = styled.input`

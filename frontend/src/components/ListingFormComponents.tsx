@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 
 import { Button } from "./Button";
@@ -11,6 +11,7 @@ import { formatDateForInput, handleCheckBoxNA } from "./ListingForm/helpers";
 
 import { uploadFiles } from "@/api/images";
 import { CreateUnitRequest, Unit, createUnit, updateUnit } from "@/api/units";
+import { ClearAllPopup } from "@/components/ClearAllPopup";
 import { AccessibilityAccess } from "@/components/ListingForm/AccessibilityAccess";
 import { Appliances } from "@/components/ListingForm/Appliances";
 import { ApplicationFeeCost } from "@/components/ListingForm/ApplicationFeeCost";
@@ -34,7 +35,9 @@ import { Textbox } from "@/components/ListingForm/Textbox";
 import { ThirdPartyPayment } from "@/components/ListingForm/ThirdPartyPayment";
 import { Utilities } from "@/components/ListingForm/Utilities";
 
-import { ClearAllPopup } from "@/components/ClearAllPopup";
+const ClearAllButton = styled(Button)`
+  margin-bottom: 32px;
+`;
 
 const ErrorMessage = styled.div`
   color: #b64201;
@@ -330,19 +333,6 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
     setWhereFindUnit(event.target.value);
   };
 
-  useEffect(() => {
-    console.log(communityAndNeighborInfoOther);
-    console.log(communityAndNeighborInfo);
-    console.log(
-      communityAndNeighborInfoOther
-        ? [
-            ...communityAndNeighborInfo.filter((e) => communityAndNeighborInfo.includes(e)),
-            communityAndNeighborInfoOther,
-          ]
-        : communityAndNeighborInfo,
-    );
-  }, [communityAndNeighborInfoOther]);
-
   const handleSubmit = () => {
     const newUnit = {
       landlordFirstName: firstName,
@@ -433,7 +423,8 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
     setRentPerMonth("");
     setSecurityDeposit("");
     setThirdPartyPayment(undefined);
-    setHousingAuthority("");
+    setHousingAuthority("LACDA");
+    setHousingAuthorityOther(undefined);
     setApplicationFeeCost("");
     setDateAvailable("");
     setNumberOfBedrooms(undefined);
@@ -441,8 +432,9 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
     setNumberOfBaths(undefined);
     setNumberOfBathsOther(undefined);
     setAppliances([]);
+    setUtilities([]);
     setCommunityAndNeighborInfo([]);
-    setCommunityAndNeighborInfoOther([]);
+    setCommunityAndNeighborInfoOther("");
     setParking([]);
     setAccessibility([]);
     setPets([]);
@@ -455,28 +447,32 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
       setAdditionalRulesRegulations([""]);
       setAdditionalCommentsHL("");
     }
+
+    setPopup(false);
   };
 
   return (
     <MainContainer>
       {props.formType !== "edit" && <Logo />}
-      {props.formType === "landlord" && <LandlordListingFormHeader />}
+      {props.formType === "landlord" && (
+        <LandlordListingFormHeader showClearAllText={!!props.initialValues} />
+      )}
       {props.formType === "housingLocator" && <HousingLocatorHeader />}
       <ContentContainer>
-        <Button
+        <ClearAllButton
           kind="primary"
           onClick={() => {
             setPopup(true);
           }}
         >
-          {"Clear all fields"}
-        </Button>
+          Clear all fields
+        </ClearAllButton>
         <ClearAllPopup
           active={popup}
           onClose={() => {
             setPopup(false);
           }}
-          onSubmit={handleClearAll}
+          onConfirm={handleClearAll}
         />
         <TextContainer>
           <Textbox
