@@ -17,8 +17,8 @@ export function LandlordListingForm() {
     setState("form");
   };
 
-  const goToDone = (initialvalues: Unit) => {
-    setInitialValues(initialvalues);
+  const goToDone = (unitData: Unit) => {
+    setInitialValues(unitData);
     setState("done");
   };
 
