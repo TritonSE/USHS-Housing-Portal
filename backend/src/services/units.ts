@@ -1,5 +1,9 @@
-import { FilterQuery, UpdateQuery } from "mongoose";
+import { ObjectId } from "mongodb";
+import { Document, FilterQuery, UpdateQuery } from "mongoose";
+import * as XLSX from "xlsx";
 
+import { ReferralModel } from "@/models/referral";
+import { RenterModel } from "@/models/renter";
 import { Unit, UnitModel } from "@/models/units";
 
 type UserReadOnlyFields = "approved" | "createdAt" | "updatedAt";
@@ -222,4 +226,52 @@ export const getUnits = async (filters: FilterParams) => {
   });
 
   return filteredUnits;
+};
+
+const sheetFromData = (data: Document[]) => {
+  const sanitizedData = data.map((doc) => {
+    // remove unneeded keys and convert all values to strings
+    const { _id, __v, ...rest } = doc.toJSON() as Record<string, string>;
+    const sanitizedRest = Object.keys(rest).reduce<Record<string, string>>((acc, key) => {
+      const value = rest[key];
+      if ((value as unknown) instanceof ObjectId) {
+        acc[key] = value.toString();
+      } else if (Array.isArray(value)) {
+        acc[key] = JSON.stringify(value);
+      } else {
+        acc[key] = value;
+      }
+      return acc;
+    }, {});
+
+    return {
+      id: _id.toString(),
+      ...sanitizedRest,
+    };
+  });
+  return XLSX.utils.json_to_sheet(sanitizedData);
+};
+
+export const exportUnits = async (filters: FilterParams) => {
+  const unitsData = await getUnits(filters);
+
+  const referralPromises = unitsData.map((unit) => ReferralModel.find({ unit: unit._id }));
+  const referralsData = (await Promise.all(referralPromises)).flat();
+
+  const renterCandidatePromises = referralsData.map((referral) =>
+    RenterModel.find({ _id: referral.renterCandidate }),
+  );
+  const renterCandidates = (await Promise.all(renterCandidatePromises)).flat();
+
+  // Generate Excel workbook
+  const unitsSheet = sheetFromData(unitsData);
+  const referralsSheet = sheetFromData(referralsData);
+  const renterCandidatesSheet = sheetFromData(renterCandidates);
+
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, unitsSheet, "Units");
+  XLSX.utils.book_append_sheet(workbook, referralsSheet, "Referrals");
+  XLSX.utils.book_append_sheet(workbook, renterCandidatesSheet, "Renter Candidates");
+
+  return XLSX.write(workbook, { type: "buffer", bookType: "xlsx" }) as Buffer;
 };

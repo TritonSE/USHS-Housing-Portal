@@ -146,6 +146,19 @@ export async function getUnits(params: GetUnitsParams): Promise<APIResult<Unit[]
   }
 }
 
+export async function exportUnits(params: GetUnitsParams): Promise<APIResult<Blob>> {
+  try {
+    const queryParams = new URLSearchParams(params);
+    const url = `/units/export?${queryParams.toString()}`;
+    const response = await get(url);
+
+    const data = await response.blob();
+    return { success: true, data };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+}
+
 type HousingLocatorFields =
   | "leasedStatus"
   | "whereFound"

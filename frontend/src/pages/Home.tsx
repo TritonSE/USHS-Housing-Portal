@@ -3,7 +3,8 @@ import { Helmet } from "react-helmet-async";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 
-import { FilterParams, GetUnitsParams, Unit, getUnits } from "@/api/units";
+import { FilterParams, GetUnitsParams, Unit, exportUnits, getUnits } from "@/api/units";
+import { ExportPopup } from "@/components/ExportPopup";
 import { FilterDropdown } from "@/components/FilterDropdown";
 import { FilterPanel } from "@/components/FilterPanel";
 import { NavBar } from "@/components/NavBar";
@@ -15,6 +16,7 @@ import { DataContext } from "@/contexts/DataContext";
 const ButtonsWrapper = styled.div`
   display: flex;
   justify-content: end;
+  align-items: center;
 `;
 
 const HeaderText = styled.span`
@@ -25,8 +27,6 @@ const HeaderText = styled.span`
 const ToggleButtonWrapper = styled.div`
   display: flex;
   padding: 0;
-  width: 195px;
-  height: 140px;
   gap: 0px;
   border-radius: 100px 0px 0px 0px;
   opacity: 0px;
@@ -54,10 +54,18 @@ const ListViewButton = styled(CardViewButton)`
   background: ${(props) => (props.selected ? "#ec85371a" : "#EEEEEE")};
 `;
 
+const ExportButton = styled.img`
+  cursor: pointer;
+  width: 43px;
+  height: 43px;
+  margin-left: 24px;
+`;
+
 const SearchStateWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  margin-bottom: 52px;
 `;
 
 export type FilterContextType = {
@@ -117,9 +125,11 @@ const UnitContent = styled.div`
   overflow-y: scroll;
   padding: 70px 60px;
 `;
+
 export function Home() {
   const dataContext = useContext(DataContext);
   const previousFilters = useLocation().state as FilterParams;
+  const [showExportPopup, setShowExportPopup] = useState(false);
   const [units, setUnits] = useState<Unit[]>([]);
   const [filters, setFilters] = useState<FilterParams>(
     previousFilters ?? {
@@ -129,8 +139,8 @@ export function Home() {
   );
   const [viewMode, setViewMode] = useState("card");
 
-  const fetchUnits = (filterParams: FilterParams) => {
-    let query: GetUnitsParams = {
+  const filterQuery = (filterParams: FilterParams) => {
+    const query: GetUnitsParams = {
       sort: filterParams.sort,
       approved: filterParams.approved,
       search: filterParams.search,
@@ -160,8 +170,11 @@ export function Home() {
       toDate: filterParams.toDate,
     };
 
-    query = Object.fromEntries(Object.entries(query).filter(([_, value]) => value !== undefined));
+    return Object.fromEntries(Object.entries(query).filter(([_, value]) => value !== undefined));
+  };
 
+  const fetchUnits = (filterParams: FilterParams) => {
+    const query = filterQuery(filterParams);
     getUnits(query)
       .then((response) => {
         if (response.success) {
@@ -186,6 +199,24 @@ export function Home() {
 
   const handleListView = () => {
     setViewMode("list");
+  };
+
+  const handleExportUnitData = () => {
+    setShowExportPopup(true);
+    const query = filterQuery(filters);
+    exportUnits(query)
+      .then((response) => {
+        if (response.success) {
+          const url = window.URL.createObjectURL(response.data);
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", "ushs-data-export.xlsx");
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+        }
+      })
+      .catch(console.error);
   };
 
   return (
@@ -224,6 +255,11 @@ export function Home() {
                     }
                   ></ListViewButton>
                 </ToggleButtonWrapper>
+                <ExportButton
+                  src="/export-icon.svg"
+                  alt="Export Icon"
+                  onClick={handleExportUnitData}
+                />
               </ButtonsWrapper>
             </SearchStateWrapper>
             <PropertiesRow>
@@ -265,6 +301,12 @@ export function Home() {
           </UnitContent>
         </HomePageLayout>
       </Page>
+      <ExportPopup
+        active={showExportPopup}
+        onClose={() => {
+          setShowExportPopup(false);
+        }}
+      />
     </FiltersContext.Provider>
   );
 }
