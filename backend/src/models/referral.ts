@@ -8,7 +8,7 @@ const referralSchema = new Schema(
       enum: ["Referred", "Viewing", "Pending", "Approved", "Denied", "Leased", "Canceled"],
       default: "Referred",
     },
-    renterCandidate: { type: Schema.Types.ObjectId, ref: "Renter" },
+    renterCandidate: { type: Schema.Types.ObjectId, ref: "Renter", required: true },
     unit: {
       type: Schema.Types.ObjectId,
       ref: "Unit",

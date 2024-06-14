@@ -13,6 +13,10 @@ import { createUnitValidators, updateUnitValidators } from "@/validators/units";
 
 const router = express.Router();
 
+router.get("/", requireUser, UnitController.getUnitsHandler);
+
+router.get("/export", requireUser, UnitController.exportUnitsHandler);
+
 router.get("/:id", requireUser, UnitController.getUnitHandler);
 
 router.post(
@@ -21,8 +25,6 @@ router.post(
   validateWith(createUnitValidators),
   UnitController.createUnitsHandler,
 );
-
-router.get("/", requireUser, UnitController.getUnitsHandler);
 
 router.put(
   "/:id",

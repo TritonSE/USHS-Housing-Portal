@@ -12,6 +12,7 @@ import {
   approveUnit,
   createUnit,
   deleteUnit,
+  exportUnits,
   getUnits,
   updateUnit,
 } from "@/services/units";
@@ -47,6 +48,15 @@ export const getUnitsHandler: RequestHandler = asyncHandler(async (req, res, _) 
   const units = await getUnits(req.query as FilterParams);
 
   res.status(200).json(units);
+});
+
+export const exportUnitsHandler: RequestHandler = asyncHandler(async (req, res, _) => {
+  const workbookBuffer = await exportUnits(req.query as FilterParams);
+
+  res.statusCode = 200;
+  res.setHeader("Content-Disposition", 'attachment; filename="ushs-data-export.xlsx"');
+  res.setHeader("Content-Type", "application/vnd.ms-excel");
+  res.end(workbookBuffer);
 });
 
 /**

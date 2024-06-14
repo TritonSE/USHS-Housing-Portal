@@ -11,7 +11,8 @@
     "module-alias": "^2.2.3",
     "mongodb": "^5.7.0",
     "mongoose": "^7.4.0",
-    "nodemailer": "^6.9.13"
+    "nodemailer": "^6.9.13",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz"
   },
   "name": "backend",
   "version": "1.0.0",

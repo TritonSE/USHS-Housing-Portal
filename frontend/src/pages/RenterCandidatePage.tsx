@@ -8,10 +8,9 @@ import { Loading } from "./Loading";
 
 import { UpdateReferralRequest, deleteReferral, updateReferral } from "@/api/referrals";
 import { RenterCandidate, editRenterCandidate, getRenterCandidate } from "@/api/renter-candidates";
-import { Referral } from "@/api/units";
+import { REFERRAL_STATUSES, Referral } from "@/api/units";
 import { Page } from "@/components";
 import { Button } from "@/components/Button";
-import { CustomCheckboxRadio, OptionLabel } from "@/components/ListingForm/CommonStyles";
 import { NavBar } from "@/components/NavBar";
 import { ReferralTableDropDown } from "@/components/ReferralTableDropDown";
 import { Table, TableCellContent } from "@/components/Table";
@@ -266,12 +265,6 @@ const XButton = styled.div`
   width: 10px;
 `;
 
-const CustomAuthorityInput = styled.input`
-  font-size: 15px;
-  padding: 2px 5px;
-  margin-top: 2px;
-`;
-
 type ReferralQuery = Record<string, Partial<UpdateReferralRequest>>;
 
 export function RenterCandidatePage() {
@@ -293,19 +286,6 @@ export function RenterCandidatePage() {
 
   const [currReferral, setCurrReferral] = useState<string>("");
 
-  const [currAuthority, setCurrAuthority] = useState<string>("");
-  const [customAuthority, setCustomAuthority] = useState<string | undefined>(undefined);
-
-  const REFERRAL_STATUSES = [
-    "Referred",
-    "Viewing",
-    "Pending",
-    "Approved",
-    "Denied",
-    "Leased",
-    "Canceled",
-  ];
-
   const fetchRenterCandidate = () => {
     if (id !== undefined) {
       setLoading(true);
@@ -314,10 +294,6 @@ export function RenterCandidatePage() {
           const { renter, referrals } = result.data;
           setRenterCandidate(renter);
           setRenterReferrals(referrals);
-          setCurrAuthority(renter.program);
-          if (renter.program !== "HACLA" && renter.program !== "LACDA") {
-            setCustomAuthority(renter.program);
-          }
         } else {
           // Go back to the referrals page if the renter is not found
           navigate("/referrals");
@@ -439,7 +415,6 @@ export function RenterCandidatePage() {
               if (isEditing) {
                 handleUpdateRenter();
                 handleUpdateReferrals();
-                setCustomAuthority("");
               }
               setIsEditing(!isEditing);
             }}
@@ -540,81 +515,17 @@ export function RenterCandidatePage() {
                     </InputSection>
                   </EditColumn>
                   <EditColumn>
-                    <InfoHeader>Housing Program:</InfoHeader>
-                    <div>
-                      <OptionLabel>
-                        <CustomCheckboxRadio
-                          type="radio"
-                          name="LACDA"
-                          value="LACDA"
-                          checked={currAuthority === "LACDA"}
-                          onChange={() => {
-                            setEditRenterQuery({
-                              ...editRenterQuery,
-                              program: "LACDA",
-                            });
-                            setCurrAuthority("LACDA");
-                          }}
-                        />
-                        LACDA
-                      </OptionLabel>
-
-                      <OptionLabel>
-                        <CustomCheckboxRadio
-                          type="radio"
-                          name="HACLA"
-                          value="HACLA"
-                          checked={currAuthority === "HACLA"}
-                          onChange={() => {
-                            setEditRenterQuery({
-                              ...editRenterQuery,
-                              program: "HACLA",
-                            });
-                            setCurrAuthority("HACLA");
-                          }}
-                        />
-                        HACLA
-                      </OptionLabel>
-
-                      <OptionLabel>
-                        <CustomCheckboxRadio
-                          type="radio"
-                          name="Other"
-                          value="Other"
-                          checked={
-                            currAuthority !== "HACLA" &&
-                            currAuthority !== "LACDA" &&
-                            customAuthority !== undefined
-                          }
-                          onChange={() => {
-                            setEditRenterQuery({
-                              ...editRenterQuery,
-                              program: customAuthority ?? "",
-                            });
-                            setCurrAuthority(customAuthority ?? "");
-                            setCustomAuthority(customAuthority ?? "");
-                          }}
-                        />
-                        Other:
-                        <CustomAuthorityInput
-                          onInput={(e) => {
-                            const customInput = (e.target as HTMLTextAreaElement).value;
-                            setEditRenterQuery({
-                              ...editRenterQuery,
-                              program: customInput,
-                            });
-                            setCurrAuthority(customInput);
-                            setCustomAuthority(customInput);
-                          }}
-                          defaultValue={
-                            renterCandidate.program !== "HACLA" &&
-                            renterCandidate.program !== "LACDA"
-                              ? renterCandidate.program
-                              : ""
-                          }
-                        />
-                      </OptionLabel>
-                    </div>
+                    <InputLabel>Housing Program:</InputLabel>
+                    <InputBox
+                      width="300px"
+                      defaultValue={renterCandidate.program}
+                      onInput={(e) => {
+                        setEditRenterQuery({
+                          ...editRenterQuery,
+                          program: (e.target as HTMLTextAreaElement).value,
+                        });
+                      }}
+                    />
                   </EditColumn>
                 </EditSection>
               </EditColumn>
