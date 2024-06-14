@@ -23,6 +23,14 @@ export const HeaderRequired = styled.em`
   letter-spacing: 0.4px;
 `;
 
+export const ClearAllFields = styled.h2`
+  margin-bottom: 32px;
+  font-size: 20px;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+`;
+
 export const MidSectionHeader = styled.h2`
   margin-bottom: 32px;
   font-size: 32px;

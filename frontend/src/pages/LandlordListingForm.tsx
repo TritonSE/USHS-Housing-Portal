@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 
+import { Unit } from "@/api/units";
 import { Page } from "@/components";
 import { DoneView } from "@/components/ListingForm/DoneView";
 import { PasswordView } from "@/components/ListingForm/PasswordView";
@@ -10,12 +11,14 @@ type FormState = "password" | "form" | "done";
 
 export function LandlordListingForm() {
   const [state, setState] = useState<FormState>("password");
+  const [initialValues, setInitialValues] = useState<Unit>();
 
   const goToForm = () => {
     setState("form");
   };
 
-  const goToDone = () => {
+  const goToDone = (unitData: Unit) => {
+    setInitialValues(unitData);
     setState("done");
   };
 
@@ -24,7 +27,13 @@ export function LandlordListingForm() {
       case "password":
         return <PasswordView handleNext={goToForm} />;
       case "form":
-        return <ListingFormComponents formType={"landlord"} handleAfterSubmit={goToDone} />;
+        return (
+          <ListingFormComponents
+            formType={"landlord"}
+            handleAfterSubmit={goToDone}
+            initialValues={initialValues}
+          />
+        );
       case "done":
         return <DoneView handleResubmit={goToForm} />;
     }

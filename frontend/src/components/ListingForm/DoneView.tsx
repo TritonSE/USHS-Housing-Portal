@@ -18,6 +18,7 @@ const Header = styled.div`
   color: ${({ theme }) => theme.colors.primary};
   width: 55vw;
   line-height: 150%;
+  text-align: center;
 `;
 
 const Message = styled.div`

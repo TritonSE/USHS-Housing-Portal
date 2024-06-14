@@ -342,7 +342,7 @@ const SectionBreak = styled.hr`
 type UnitDetailsLocationState = { filters: FilterParams; prevPage: string };
 
 export function UnitDetails() {
-  const { filters, prevPage } = useLocation().state as UnitDetailsLocationState;
+  const { filters, prevPage } = (useLocation().state || {}) as UnitDetailsLocationState;
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [unit, setUnit] = useState<Unit>();

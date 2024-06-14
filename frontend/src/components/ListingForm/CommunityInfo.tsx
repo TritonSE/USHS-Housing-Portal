@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import {
   CustomCheckboxRadio,
@@ -21,6 +21,13 @@ type CommunityInfoProps = {
 export const CommunityInfo = (props: CommunityInfoProps) => {
   const [otherText, setOtherText] = useState<string | undefined>(props.otherText);
   const otherCheckbox = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setOtherText(props.otherText);
+    if (!props.otherText && otherCheckbox.current) {
+      otherCheckbox.current.checked = false;
+    }
+  }, [props.otherText]);
 
   return (
     <Margin32>
