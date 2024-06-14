@@ -5,6 +5,7 @@ import * as XLSX from "xlsx";
 import { ReferralModel } from "@/models/referral";
 import { RenterModel } from "@/models/renter";
 import { Unit, UnitModel } from "@/models/units";
+import { UserModel } from "@/models/user";
 
 type UserReadOnlyFields = "approved" | "createdAt" | "updatedAt";
 
@@ -255,23 +256,34 @@ const sheetFromData = (data: Document[]) => {
 export const exportUnits = async (filters: FilterParams) => {
   const unitsData = await getUnits(filters);
 
-  const referralPromises = unitsData.map((unit) => ReferralModel.find({ unit: unit._id }));
-  const referralsData = (await Promise.all(referralPromises)).flat();
+  const unitIds = unitsData.map((unit) => unit._id);
+  const referralsData = await ReferralModel.find().where("unit").in(unitIds).exec();
 
-  const renterCandidatePromises = referralsData.map((referral) =>
-    RenterModel.find({ _id: referral.renterCandidate }),
-  );
-  const renterCandidates = (await Promise.all(renterCandidatePromises)).flat();
+  const renterCandidateIds = [
+    ...new Set(referralsData.map((referral) => referral.renterCandidate)),
+  ];
+  const renterCandidates = await RenterModel.find().where("_id").in(renterCandidateIds).exec();
+
+  const housingLocatorIds = [
+    ...new Set(referralsData.map((referral) => referral.assignedHousingLocator)),
+  ];
+  const referringStaffIds = [
+    ...new Set(referralsData.map((referral) => referral.assignedReferringStaff)),
+  ];
+  const staffIds = housingLocatorIds.concat(referringStaffIds);
+  const staffData = await UserModel.find().where("_id").in(staffIds).exec();
 
   // Generate Excel workbook
   const unitsSheet = sheetFromData(unitsData);
   const referralsSheet = sheetFromData(referralsData);
   const renterCandidatesSheet = sheetFromData(renterCandidates);
+  const staffSheet = sheetFromData(staffData);
 
   const workbook = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(workbook, unitsSheet, "Units");
   XLSX.utils.book_append_sheet(workbook, referralsSheet, "Referrals");
   XLSX.utils.book_append_sheet(workbook, renterCandidatesSheet, "Renter Candidates");
+  XLSX.utils.book_append_sheet(workbook, staffSheet, "Staff");
 
   return XLSX.write(workbook, { type: "buffer", bookType: "xlsx" }) as Buffer;
 };
