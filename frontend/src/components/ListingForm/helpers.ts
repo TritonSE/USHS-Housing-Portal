@@ -27,3 +27,8 @@ export const formatDateForInput = (date?: string): string => {
   if (!date) return "";
   return new Date(date).toISOString().slice(0, 10);
 };
+
+export const formatDateForDisplay = (date?: string): string => {
+  if (!date) return "";
+  return new Date(date).toLocaleDateString("en-US", { timeZone: "UTC" });
+};

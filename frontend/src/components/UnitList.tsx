@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 
+import { formatDateForDisplay } from "./ListingForm/helpers";
 import { Pagination } from "./Pagination";
 
 import { Unit } from "@/api/units";
@@ -177,7 +178,9 @@ export const UnitList = ({ units }: UnitListProps) => {
                     ) : unit.leasedStatus !== undefined ? (
                       <UnitItemWrapper>Leased</UnitItemWrapper>
                     ) : (
-                      <UnitItemWrapper>Not Available</UnitItemWrapper>
+                      <UnitItemWrapper>
+                        Not Available Until {formatDateForDisplay(unit.dateAvailable)}
+                      </UnitItemWrapper>
                     )}
                   </UnitItemWrapper>
                 </UnitTableRow>

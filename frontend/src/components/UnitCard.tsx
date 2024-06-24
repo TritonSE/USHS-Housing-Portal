@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 
 import { Button } from "./Button";
+import { formatDateForDisplay } from "./ListingForm/helpers";
 
 import { deleteFolder, getFileURLS } from "@/api/images";
 import { Unit, deleteUnit } from "@/api/units";
@@ -298,7 +299,9 @@ export const UnitCard = ({ unit, refreshUnits }: CardProps) => {
               ) : unit.leasedStatus !== undefined ? (
                 <AvailabilityText>Leased</AvailabilityText>
               ) : (
-                <AvailabilityText>Not Available</AvailabilityText>
+                <AvailabilityText>
+                  Not Available (until {formatDateForDisplay(unit.dateAvailable)})
+                </AvailabilityText>
               )}
             </AvailabilityRow>
           </ImageWrapper>

@@ -43,7 +43,7 @@ export type Unit = {
   updatedAt: string;
 };
 
-export const AVAILABILITY_OPTIONS = ["Available", "Leased"];
+export const AVAILABILITY_OPTIONS = ["Available", "Leased", "Not Available"];
 export type AvailableOptions = (typeof AVAILABILITY_OPTIONS)[number];
 
 export const HOUSING_AUTHORITY_OPTIONS = ["Any", "LACDA", "HACLA"];

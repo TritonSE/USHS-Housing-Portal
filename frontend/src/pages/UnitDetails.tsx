@@ -20,6 +20,7 @@ import { formatPhoneNumber } from "@/components/helpers";
 import { DataContext } from "@/contexts/DataContext";
 
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { formatDateForDisplay } from "@/components/ListingForm/helpers";
 
 const Section = styled.div`
   display: flex;
@@ -511,7 +512,7 @@ export function UnitDetails() {
   } else if (unit.leasedStatus === "removed") {
     availabilityText = "Removed from Market";
   } else {
-    availabilityText = "Not Available";
+    availabilityText = `Not Available Until ${formatDateForDisplay(unit.dateAvailable)}`;
   }
 
   //move data into an array
