@@ -7,7 +7,7 @@ const UnitCardLayout = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 55px;
+  gap: 22px;
 `;
 
 const HeaderText = styled.span`

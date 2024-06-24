@@ -100,6 +100,11 @@ export const FilterPanel = () => {
   const [housingAuthorityState, setHousingAuthorityState] = useState<number>(
     filters.housingAuthority ? HOUSING_AUTHORITY_OPTIONS.indexOf(filters.housingAuthority) : 0,
   );
+  const [otherHousingAuthorityState, setOtherHousingAuthorityState] = useState(
+    HOUSING_AUTHORITY_OPTIONS.includes(filters.housingAuthority ?? "")
+      ? ""
+      : filters.housingAuthority,
+  );
   const [accessibilityState, setAccessibilityState] = useState<Set<number>>(
     new Set(
       filters.accessibility
@@ -149,7 +154,8 @@ export const FilterPanel = () => {
   const applyFilters = () => {
     const newFilters = {
       availability: AVAILABILITY_OPTIONS[availabilityState],
-      housingAuthority: HOUSING_AUTHORITY_OPTIONS[housingAuthorityState],
+      housingAuthority:
+        otherHousingAuthorityState ?? HOUSING_AUTHORITY_OPTIONS[housingAuthorityState],
       accessibility: Array.from(accessibilityState).map((index) => ACCESSIBILITY_OPTIONS[index]),
 
       rentalCriteria: Array.from(rentalCriteriaState).map(
@@ -187,7 +193,7 @@ export const FilterPanel = () => {
     setAccessibilityState(new Set());
     setRentalCriteriaState(new Set());
     setAdditionalRulesState(new Set());
-    setBedBathState({ beds: 1, baths: 0.5 });
+    setBedBathState({ beds: 0, baths: 0.5 });
     setPriceState({ min: 0, max: 10000 });
     setSecurityDepositState({ min: 0, max: 10000 });
     setApplicationFeeState({ min: 0, max: 10000 });
@@ -251,6 +257,8 @@ export const FilterPanel = () => {
         options={HOUSING_AUTHORITY_OPTIONS}
         value={housingAuthorityState}
         setValue={setHousingAuthorityState}
+        otherValue={otherHousingAuthorityState}
+        setOtherValue={setOtherHousingAuthorityState}
       />
       <CheckboxFilter
         title="Accessibility"
