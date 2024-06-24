@@ -122,7 +122,7 @@ export const FilterPanel = () => {
     ),
   );
   const [bedBathState, setBedBathState] = useState({
-    beds: filters.beds ?? 1,
+    beds: filters.beds ?? 0,
     baths: filters.baths ?? 0.5,
   });
   const [priceState, setPriceState] = useState({
