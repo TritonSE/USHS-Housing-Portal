@@ -6,7 +6,7 @@ import { Button } from "./Button";
 
 import { SortDropDownComp } from "@/components/SortDropDown";
 import { DataContext } from "@/contexts/DataContext";
-import { FiltersContext } from "@/pages/Home";
+import { HomeContext } from "@/pages/Home";
 
 const AllFiltersContainer = styled.div`
   display: flex;
@@ -83,7 +83,7 @@ export type FilterDropdownProps = {
 };
 
 export const FilterDropdown = (props: FilterDropdownProps) => {
-  const { filters, setFilters } = useContext(FiltersContext);
+  const { filters, setFilters } = useContext(HomeContext);
   const navigate = useNavigate();
   const dataContext = useContext(DataContext);
 

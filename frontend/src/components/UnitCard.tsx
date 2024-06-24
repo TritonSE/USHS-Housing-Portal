@@ -8,7 +8,7 @@ import { formatDateForDisplay } from "./ListingForm/helpers";
 import { deleteFolder, getFileURLS } from "@/api/images";
 import { Unit, deleteUnit } from "@/api/units";
 import { DataContext } from "@/contexts/DataContext";
-import { FiltersContext } from "@/pages/Home";
+import { HomeContext } from "@/pages/Home";
 
 const UnitCardContainer = styled.div<{ pending: boolean }>`
   display: flex;
@@ -214,7 +214,7 @@ type CardProps = {
 
 export const UnitCard = ({ unit, refreshUnits }: CardProps) => {
   const { pathname } = useLocation();
-  const { filters } = useContext(FiltersContext);
+  const { filters, viewMode } = useContext(HomeContext);
   const [popup, setPopup] = useState<boolean>(false);
   const dataContext = useContext(DataContext);
 
@@ -280,7 +280,7 @@ export const UnitCard = ({ unit, refreshUnits }: CardProps) => {
     <>
       <Link
         to={`/unit/${unit._id}`}
-        state={{ filters, prevPage: pathname }}
+        state={{ filters, prevPage: pathname, homeViewMode: viewMode }}
         style={{ textDecoration: "none" }}
       >
         <UnitCardContainer pending={!unit.approved}>

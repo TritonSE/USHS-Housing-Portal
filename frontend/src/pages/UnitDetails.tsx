@@ -13,6 +13,7 @@ import { Page } from "@/components";
 import { Banner } from "@/components/Banner";
 import { Button } from "@/components/Button";
 import { HousingLocatorFields } from "@/components/ListingForm/HousingLocatorFields";
+import { formatDateForDisplay } from "@/components/ListingForm/helpers";
 import { ListingFormComponents } from "@/components/ListingFormComponents";
 import { NavBar } from "@/components/NavBar";
 import { ReferralTable } from "@/components/ReferralTable";
@@ -20,7 +21,6 @@ import { formatPhoneNumber } from "@/components/helpers";
 import { DataContext } from "@/contexts/DataContext";
 
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { formatDateForDisplay } from "@/components/ListingForm/helpers";
 
 const Section = styled.div`
   display: flex;
@@ -340,10 +340,11 @@ const SectionBreak = styled.hr`
   height: 1px;
   border: none;
 `;
-type UnitDetailsLocationState = { filters: FilterParams; prevPage: string };
+type UnitDetailsLocationState = { filters: FilterParams; homeViewMode: string; prevPage: string };
 
 export function UnitDetails() {
-  const { filters, prevPage } = (useLocation().state || {}) as UnitDetailsLocationState;
+  const { filters, homeViewMode, prevPage } = (useLocation().state ||
+    {}) as UnitDetailsLocationState;
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [unit, setUnit] = useState<Unit>();
@@ -567,7 +568,10 @@ export function UnitDetails() {
         <DetailsColumn>
           <Section>
             <TopRow>
-              <Link to={prevPage} state={filters}>
+              <Link
+                to={prevPage}
+                state={{ previousFilters: filters, previousViewMode: homeViewMode }}
+              >
                 <Button kind="secondary">
                   <PaddingInButton>
                     <img className="back-arrow" src="/back_arrow.svg" alt={"Back arrow"} />

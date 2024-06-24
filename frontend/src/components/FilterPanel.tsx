@@ -14,7 +14,7 @@ import {
   HOUSING_AUTHORITY_OPTIONS,
   RENTAL_CRITERIA_OPTIONS,
 } from "@/api/units";
-import { FiltersContext } from "@/pages/Home";
+import { HomeContext } from "@/pages/Home";
 
 const PanelBackground = styled.div`
   min-width: 284px;
@@ -92,7 +92,7 @@ const EndFilterGap = styled.div`
 `;
 
 export const FilterPanel = () => {
-  const { filters, setFilters } = useContext(FiltersContext);
+  const { filters, setFilters } = useContext(HomeContext);
 
   const [availabilityState, setAvailabilityState] = useState<number>(
     filters.availability ? AVAILABILITY_OPTIONS.indexOf(filters.availability) : 0,
@@ -102,7 +102,7 @@ export const FilterPanel = () => {
   );
   const [otherHousingAuthorityState, setOtherHousingAuthorityState] = useState(
     HOUSING_AUTHORITY_OPTIONS.includes(filters.housingAuthority ?? "")
-      ? ""
+      ? undefined
       : filters.housingAuthority,
   );
   const [accessibilityState, setAccessibilityState] = useState<Set<number>>(
@@ -190,6 +190,7 @@ export const FilterPanel = () => {
   const resetFilters = () => {
     setAvailabilityState(0);
     setHousingAuthorityState(0);
+    setOtherHousingAuthorityState(undefined);
     setAccessibilityState(new Set());
     setRentalCriteriaState(new Set());
     setAdditionalRulesState(new Set());

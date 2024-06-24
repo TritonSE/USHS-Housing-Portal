@@ -68,12 +68,13 @@ const SearchStateWrapper = styled.div`
   margin-bottom: 52px;
 `;
 
-export type FilterContextType = {
+export type HomeContextType = {
+  viewMode: string;
   filters: FilterParams;
   setFilters: (filters: FilterParams) => void;
 };
 
-export const FiltersContext = React.createContext({} as FilterContextType);
+export const HomeContext = React.createContext({} as HomeContextType);
 
 const PropertiesRow = styled.span`
   display: flex;
@@ -126,9 +127,11 @@ const UnitContent = styled.div`
   padding: 70px 60px;
 `;
 
+type HomeLocationState = { previousFilters: FilterParams; previousViewMode: string };
+
 export function Home() {
   const dataContext = useContext(DataContext);
-  const previousFilters = useLocation().state as FilterParams;
+  const { previousFilters, previousViewMode } = (useLocation().state || {}) as HomeLocationState;
   const [showExportPopup, setShowExportPopup] = useState(false);
   const [units, setUnits] = useState<Unit[]>([]);
   const [filters, setFilters] = useState<FilterParams>(
@@ -137,7 +140,7 @@ export function Home() {
       approved: "approved",
     },
   );
-  const [viewMode, setViewMode] = useState("card");
+  const [viewMode, setViewMode] = useState(previousViewMode ?? "card");
 
   const filterQuery = (filterParams: FilterParams) => {
     const query: GetUnitsParams = {
@@ -220,7 +223,7 @@ export function Home() {
   };
 
   return (
-    <FiltersContext.Provider value={{ filters, setFilters }}>
+    <HomeContext.Provider value={{ filters, setFilters, viewMode }}>
       <Page>
         <Helmet>
           <title>Home | USHS Housing Portal</title>
@@ -307,6 +310,6 @@ export function Home() {
           setShowExportPopup(false);
         }}
       />
-    </FiltersContext.Provider>
+    </HomeContext.Provider>
   );
 }

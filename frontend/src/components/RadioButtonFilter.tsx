@@ -14,7 +14,7 @@ export type RadioButtonFilterProps = {
   value: number;
   setValue(val: number): void;
   otherValue?: string;
-  setOtherValue?(val: string): void;
+  setOtherValue?(val: string | undefined): void;
 };
 
 export const RadioButtonFilter = (props: RadioButtonFilterProps) => {
