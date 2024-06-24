@@ -182,7 +182,7 @@ export const getUnits = async (filters: FilterParams) => {
   );
 
   const query: FilterQuery<Unit> = {
-    numBeds: { $gte: filters.beds ?? 1 },
+    numBeds: { $gte: filters.beds ?? 0 },
     numBaths: { $gte: filters.baths ?? 0.5 },
     monthlyRent: { $gte: minPrice, $lte: maxPrice },
     securityDeposit: { $gte: minSecurityDeposit, $lte: maxSecurityDeposit },
