@@ -2,6 +2,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
+    "email-templates": "^11.1.1",
     "envalid": "^7.3.1",
     "express": "^4.18.2",
     "express-validator": "^7.1.0",
@@ -12,6 +13,7 @@
     "mongodb": "^5.7.0",
     "mongoose": "^7.4.0",
     "nodemailer": "^6.9.13",
+    "pug": "^3.0.3",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz"
   },
   "name": "backend",
@@ -32,6 +34,7 @@
   "description": "",
   "devDependencies": {
     "@types/cors": "^2.8.13",
+    "@types/email-templates": "^10.0.4",
     "@types/express": "^4.17.17",
     "@types/http-errors": "^2.0.1",
     "@types/nodemailer": "^6.4.15",

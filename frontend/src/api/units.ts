@@ -43,7 +43,7 @@ export type Unit = {
   updatedAt: string;
 };
 
-export const AVAILABILITY_OPTIONS = ["Available", "Leased"];
+export const AVAILABILITY_OPTIONS = ["Available", "Leased", "Not Available"];
 export type AvailableOptions = (typeof AVAILABILITY_OPTIONS)[number];
 
 export const HOUSING_AUTHORITY_OPTIONS = ["Any", "LACDA", "HACLA"];
@@ -244,6 +244,22 @@ export async function getUnitReferrals(id: string): Promise<APIResult<Referral[]
   try {
     const response = await get(`/units/${id}/referrals`);
     const json = (await response.json()) as Referral[];
+    return { success: true, data: json };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+}
+
+type CheckFormPasswordResponse = {
+  success: boolean;
+};
+
+export async function checkFormPassword(
+  password: string,
+): Promise<APIResult<CheckFormPasswordResponse>> {
+  try {
+    const response = await post("/check-form-password", { password });
+    const json = (await response.json()) as CheckFormPasswordResponse;
     return { success: true, data: json };
   } catch (error) {
     return handleAPIError(error);

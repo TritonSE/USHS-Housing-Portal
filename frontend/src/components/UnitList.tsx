@@ -2,10 +2,11 @@ import { useContext, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 
+import { formatDateForDisplay } from "./ListingForm/helpers";
 import { Pagination } from "./Pagination";
 
 import { Unit } from "@/api/units";
-import { FiltersContext } from "@/pages/Home";
+import { HomeContext } from "@/pages/Home";
 
 const ENTRIES_PER_PAGE = 6;
 
@@ -42,6 +43,7 @@ const UnitTableRow = styled.div`
   height: 100px;
 
   padding-bottom: 17px;
+  padding-left: 17px;
   padding-top: 17px;
 
   border-bottom: 0.4px solid #cdcacacc;
@@ -134,7 +136,7 @@ export type UnitListProps = {
 
 export const UnitList = ({ units }: UnitListProps) => {
   const { pathname } = useLocation();
-  const { filters } = useContext(FiltersContext);
+  const { filters, viewMode } = useContext(HomeContext);
   const [pageNumber, setPageNumber] = useState<number>(1);
 
   return (
@@ -154,7 +156,7 @@ export const UnitList = ({ units }: UnitListProps) => {
             .map((unit: Unit, index) => (
               <Link
                 to={`/unit/${unit._id}`}
-                state={{ filters, prevPage: pathname }}
+                state={{ filters, prevPage: pathname, homeViewMode: viewMode }}
                 style={{ textDecoration: "none" }}
                 key={index}
               >
@@ -175,9 +177,13 @@ export const UnitList = ({ units }: UnitListProps) => {
                         <PendingWrapper>Pending</PendingWrapper>
                       </UnitItemWrapper>
                     ) : unit.leasedStatus !== undefined ? (
-                      <UnitItemWrapper>Leased</UnitItemWrapper>
+                      <UnitItemWrapper>
+                        <PendingWrapper>Leased</PendingWrapper>
+                      </UnitItemWrapper>
                     ) : (
-                      <UnitItemWrapper>Not Available</UnitItemWrapper>
+                      <UnitItemWrapper>
+                        Not Available Until {formatDateForDisplay(unit.dateAvailable)}
+                      </UnitItemWrapper>
                     )}
                   </UnitItemWrapper>
                 </UnitTableRow>

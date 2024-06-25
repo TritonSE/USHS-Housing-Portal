@@ -126,6 +126,7 @@ export const getUnits = async (filters: FilterParams) => {
 
   const avail = filters.availability ? (filters.availability === "Available" ? true : false) : true;
   const approved = filters.approved ? (filters.approved === "approved" ? true : false) : true;
+  const leasedStatus = filters.availability === "Leased" ? { $ne: null } : undefined;
 
   let sortingCriteria;
   switch (filters.sort) {
@@ -182,13 +183,14 @@ export const getUnits = async (filters: FilterParams) => {
   );
 
   const query: FilterQuery<Unit> = {
-    numBeds: { $gte: filters.beds ?? 1 },
+    numBeds: { $gte: filters.beds ?? 0 },
     numBaths: { $gte: filters.baths ?? 0.5 },
     monthlyRent: { $gte: minPrice, $lte: maxPrice },
     securityDeposit: { $gte: minSecurityDeposit, $lte: maxSecurityDeposit },
     applicationFeeCost: { $gte: minApplicationFee, $lte: maxApplicationFee },
     sqft: { $gte: minSize, $lte: maxSize },
     dateAvailable: { $gte: fromDate, $lte: toDate },
+    leasedStatus,
     approved,
   };
 

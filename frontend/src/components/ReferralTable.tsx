@@ -90,7 +90,7 @@ enum ReferralUpdateType {
 }
 
 export const ReferralTable = (props: ReferralTableProps) => {
-  const { currentUser, allReferringStaff } = useContext(DataContext);
+  const { currentUser, allReferringStaff, allHousingLocators } = useContext(DataContext);
   const [referrals, setReferrals] = useState<Referral[]>([]);
   const [popup, setPopup] = useState<boolean>(false);
 
@@ -155,10 +155,10 @@ export const ReferralTable = (props: ReferralTableProps) => {
           width="100%"
           placeholder="Search"
           onSelect={(value) => {
-            handleUpdate(referral, value as User, ReferralUpdateType.ReferringStaff);
+            handleUpdate(referral, value as User, ReferralUpdateType.HousingLocator);
           }}
           initialSelection={referral.assignedHousingLocator}
-          options={allReferringStaff}
+          options={allHousingLocators}
           isTableDropdown={true}
         />
       );

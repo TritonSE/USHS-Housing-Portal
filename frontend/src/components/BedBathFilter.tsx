@@ -77,7 +77,7 @@ export const BedBathFilter = (props: BedBathFilterProps) => {
           </Box>
           <AdjustButton
             onClick={() => {
-              if (props.value.beds > 1)
+              if (props.value.beds > 0)
                 props.setValue({
                   ...props.value,
                   beds: props.value.beds - 1,

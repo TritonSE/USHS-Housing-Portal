@@ -1,0 +1,15 @@
+doctype html
+html
+  head
+    block head
+      meta(charset="utf-8")
+      meta(name="viewport", content="width=device-width")
+  body
+    p Hello #{name},
+    p 
+      | This is an update regarding 
+      a(href=renterUrl) #{renterName}'s
+      |  referral (assigned to you) for the unit at: #{unitAddress}.
+    p Another referral for the same unit has been recently changed to the 'Leased' status. Thus, this unit may not be available anymore. Visit the 
+      a(href=unitUrl) unit's page
+      |  for more details.

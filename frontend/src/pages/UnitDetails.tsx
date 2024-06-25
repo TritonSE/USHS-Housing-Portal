@@ -13,6 +13,7 @@ import { Page } from "@/components";
 import { Banner } from "@/components/Banner";
 import { Button } from "@/components/Button";
 import { HousingLocatorFields } from "@/components/ListingForm/HousingLocatorFields";
+import { formatDateForDisplay } from "@/components/ListingForm/helpers";
 import { ListingFormComponents } from "@/components/ListingFormComponents";
 import { NavBar } from "@/components/NavBar";
 import { ReferralTable } from "@/components/ReferralTable";
@@ -339,10 +340,12 @@ const SectionBreak = styled.hr`
   height: 1px;
   border: none;
 `;
-type UnitDetailsLocationState = { filters: FilterParams; prevPage: string };
+
+type UnitDetailsLocationState = { filters: FilterParams; homeViewMode: string; prevPage: string };
 
 export function UnitDetails() {
-  const { filters, prevPage } = (useLocation().state || {}) as UnitDetailsLocationState;
+  const { filters, homeViewMode, prevPage } = (useLocation().state ||
+    {}) as UnitDetailsLocationState;
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [unit, setUnit] = useState<Unit>();
@@ -511,7 +514,7 @@ export function UnitDetails() {
   } else if (unit.leasedStatus === "removed") {
     availabilityText = "Removed from Market";
   } else {
-    availabilityText = "Not Available";
+    availabilityText = `Not Available Until ${formatDateForDisplay(unit.dateAvailable)}`;
   }
 
   //move data into an array
@@ -566,7 +569,10 @@ export function UnitDetails() {
         <DetailsColumn>
           <Section>
             <TopRow>
-              <Link to={prevPage} state={filters}>
+              <Link
+                to={prevPage}
+                state={{ previousFilters: filters, previousViewMode: homeViewMode }}
+              >
                 <Button kind="secondary">
                   <PaddingInButton>
                     <img className="back-arrow" src="/back_arrow.svg" alt={"Back arrow"} />

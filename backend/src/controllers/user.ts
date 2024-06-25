@@ -39,8 +39,7 @@ export const elevateUserHandler: RequestHandler = asyncHandler(async (req, res, 
   if (response === null) {
     res.status(404);
   } else {
-    const newUser = await getUserByID(id);
-    res.status(200).json(newUser);
+    res.status(200).json(response);
   }
 });
 
