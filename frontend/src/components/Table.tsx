@@ -84,7 +84,6 @@ export const Table = (props: TableProps) => {
               </TableRow>
             ))}
           <TableFooter>
-            {/* TODO: Replace this with new pagination when it is implemented */}
             <Pagination
               totalPages={Math.ceil(rows.length / rowsPerPage)}
               currPage={pageNumber}
