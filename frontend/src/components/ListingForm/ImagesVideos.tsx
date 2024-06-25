@@ -154,9 +154,7 @@ export const ImagesVideos = ({ unit_id, onChange }: ImagesVideosProps) => {
       .then(() => {
         handleGetFiles();
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch(console.error);
   };
 
   const handleFormChange = (event: React.ChangeEvent<HTMLInputElement>) => {

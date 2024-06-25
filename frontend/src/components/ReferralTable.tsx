@@ -101,9 +101,7 @@ export const ReferralTable = (props: ReferralTableProps) => {
           setReferrals(res.data);
         }
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch(console.error);
   };
 
   React.useEffect(getAllReferrals, []);
@@ -143,9 +141,7 @@ export const ReferralTable = (props: ReferralTableProps) => {
         break;
     }
 
-    updateReferral(request).catch((error) => {
-      console.log(error);
-    });
+    updateReferral(request).catch(console.error);
   };
 
   const HLSection = (referral: Referral) => {

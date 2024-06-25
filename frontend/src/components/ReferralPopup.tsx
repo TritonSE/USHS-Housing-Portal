@@ -185,7 +185,6 @@ type PopupProps = {
 
 export const ReferralPopup = ({ active, onClose, onSubmit, newCandidateOnly }: PopupProps) => {
   const [popup, setPopup] = useState<boolean>(false);
-  console.log(newCandidateOnly);
   const [addRC, setAddRC] = useState<boolean>(newCandidateOnly ?? false);
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [currentRC, setCurrentRC] = useState<RenterCandidate>();
@@ -206,9 +205,7 @@ export const ReferralPopup = ({ active, onClose, onSubmit, newCandidateOnly }: P
             setAllRCs(value.data);
           }
         })
-        .catch((error) => {
-          console.log(error);
-        });
+        .catch(console.error);
     }
   }, [popup]);
 
@@ -217,14 +214,11 @@ export const ReferralPopup = ({ active, onClose, onSubmit, newCandidateOnly }: P
       createReferral({ renterCandidateId, unit: id } as CreateReferralRequest)
         .then((value) => {
           if (value.success) {
-            console.log(value.data);
             onSubmit();
             onClose();
           }
         })
-        .catch((error) => {
-          console.log(error);
-        });
+        .catch(console.error);
     }
   };
 
@@ -250,9 +244,7 @@ export const ReferralPopup = ({ active, onClose, onSubmit, newCandidateOnly }: P
           }
         }
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch(console.error);
   };
 
   return (

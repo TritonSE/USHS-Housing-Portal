@@ -145,12 +145,10 @@ export function Profile() {
             dataContext.refetchData();
             setCurrentRS(undefined);
           } else {
-            console.log(value.error);
+            console.error(value.error);
           }
         })
-        .catch((error) => {
-          console.log(error);
-        });
+        .catch(console.error);
     }
   };
 

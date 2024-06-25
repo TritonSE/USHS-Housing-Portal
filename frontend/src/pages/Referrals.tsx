@@ -240,7 +240,7 @@ export function Referrals() {
               setReferrals(res.data);
             }
           })
-          .catch(console.log);
+          .catch(console.error);
       }
     } else {
       getAllReferrals()
@@ -249,7 +249,7 @@ export function Referrals() {
             setReferrals(res.data);
           }
         })
-        .catch(console.log);
+        .catch(console.error);
     }
   };
 
@@ -277,9 +277,7 @@ export function Referrals() {
           setSuccessfulRemovalPopup(true);
         }
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch(console.error);
   };
 
   return (
