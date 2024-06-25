@@ -5,7 +5,6 @@ import {
   OptionLabel,
   RadioCheckBoxContainer,
   RadioCheckboxCol,
-  Required,
 } from "@/components/ListingForm/CommonStyles";
 
 type UtilitiesProps = {
@@ -21,9 +20,7 @@ type UtilitiesProps = {
 export const Utilities = (props: UtilitiesProps) => {
   return (
     <Margin32>
-      <FieldHeader>
-        Utilities Included <Required>*</Required>
-      </FieldHeader>
+      <FieldHeader>Utilities Included</FieldHeader>
       <RadioCheckBoxContainer>
         <RadioCheckboxCol>
           <OptionLabel>
