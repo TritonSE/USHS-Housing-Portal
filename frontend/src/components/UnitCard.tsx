@@ -221,34 +221,19 @@ export const UnitCard = ({ unit, refreshUnits }: CardProps) => {
   const [coverImg, setCoverImg] = useState<string>();
 
   const deleteFiles = () => {
-    deleteFolder(unit._id, "images")
-      .then(() => {
-        console.log("success");
-      })
-      .catch(console.error);
-    deleteFolder(unit._id, "videos")
-      .then(() => {
-        console.log("success");
-      })
-      .catch(console.error);
-    deleteFolder(unit._id, "thumbnail")
-      .then(() => {
-        console.log("success");
-      })
-      .catch(console.error);
+    deleteFolder(unit._id, "images").catch(console.error);
+    deleteFolder(unit._id, "videos").catch(console.error);
+    deleteFolder(unit._id, "thumbnail").catch(console.error);
   };
 
   const handleDelete = () => {
     deleteUnit(unit._id)
-      .then((value) => {
-        if (value.success) console.log(value.data);
+      .then(() => {
         deleteFiles();
         setPopup(false);
         if (refreshUnits) refreshUnits();
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch(console.error);
   };
 
   //Use thumbnail if it exists, pull from images otherwise

@@ -204,9 +204,7 @@ export const HousingLocatorTable = () => {
           dataContext.refetchData();
         }
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch(console.error);
   };
 
   return (

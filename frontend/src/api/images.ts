@@ -141,7 +141,7 @@ export function uploadFiles(
             setUploadingState(`Uploading: ${progress.toFixed(0)}% done`);
           },
           (error) => {
-            console.log(error);
+            console.error(error);
           },
           () => {
             setUploadingState("Uploaded!");

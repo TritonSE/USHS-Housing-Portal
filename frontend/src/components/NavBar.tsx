@@ -143,13 +143,7 @@ export function NavBar({ page }: NavBarProps) {
   };
 
   const logOut = () => {
-    signOut(auth)
-      .then(() => {
-        console.log("Logged out successfully.");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    signOut(auth).catch(console.error);
   };
 
   const currUrl = window.location.href;
