@@ -11,4 +11,7 @@ export default cleanEnv(process.env, {
   PORT: str({ default: "8000" }),
   MONGODB_URI: str(),
   FRONTEND_ORIGIN: str(),
+  FRONTEND_URL: str(),
+  GMAILUSER: str(),
+  GMAILPASS: str(),
 });

@@ -340,6 +340,7 @@ const SectionBreak = styled.hr`
   height: 1px;
   border: none;
 `;
+
 type UnitDetailsLocationState = { filters: FilterParams; homeViewMode: string; prevPage: string };
 
 export function UnitDetails() {

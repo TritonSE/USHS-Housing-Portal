@@ -3,8 +3,10 @@ import { ObjectId } from "mongoose";
 
 import { ReferralModel } from "../models/referral";
 
-import { sendEmail } from "./email";
+import { sendReferralAssignmentEmail, sendReferralUnitLeasedEmail } from "./email";
 import { getUserByID } from "./user";
+
+import { User } from "@/models/user";
 
 export async function getUnitReferrals(id: string) {
   const referrals = await ReferralModel.find({ unit: id })
@@ -39,48 +41,46 @@ export async function editReferral(
   assignedReferringStaffId: string,
   status: string,
 ) {
-  const Ref = await ReferralModel.findById(id);
-  const updateHL = Ref?.assignedHousingLocator?.toString() !== assignedHousingLocatorId;
+  let referral = await ReferralModel.findById(id);
+  const updateHL = referral?.assignedHousingLocator?.toString() !== assignedHousingLocatorId;
   const setLeased =
     status === "Leased" &&
-    Ref?.status !== "Leased" &&
-    Ref?.status !== "Denied" &&
-    Ref?.status !== "Canceled";
-  await ReferralModel.findByIdAndUpdate(id, {
-    assignedHousingLocator: assignedHousingLocatorId,
-    assignedReferringStaff: assignedReferringStaffId,
-    status,
-  });
-  const referral = await ReferralModel.findById(id);
-  const HL = await getUserByID(referral?.assignedHousingLocator?.toString() ?? "");
+    referral?.status !== "Leased" &&
+    referral?.status !== "Denied" &&
+    referral?.status !== "Canceled";
+
+  referral = await ReferralModel.findByIdAndUpdate(
+    id,
+    {
+      assignedHousingLocator: assignedHousingLocatorId,
+      assignedReferringStaff: assignedReferringStaffId,
+      status,
+    },
+    { new: true },
+  )
+    .populate("renterCandidate")
+    .populate("assignedHousingLocator")
+    .populate("assignedReferringStaff");
+
+  const HL = referral?.assignedHousingLocator as unknown as User;
 
   if (updateHL) {
-    if (HL !== null) {
-      await sendEmail(
-        HL.email,
-        "Referral Update",
-        `You have been assigned a new referral. Please login to the portal to view the update.`,
-      );
+    if (HL !== null && referral !== null) {
+      void sendReferralAssignmentEmail(referral, HL);
     }
   }
+
   if (setLeased) {
+    // get all referrals for the leased unit
     const refs = await getUnitReferrals(referral?.unit.toString() ?? "");
-    const userPromises = [];
-    const emailPromises = [];
-    for (const ref of refs) {
-      if (!INACTIVE_REFERRAL_STATUSES.includes(ref.status)) {
-        userPromises.push(getUserByID(ref.assignedHousingLocator?.toString() ?? ""));
-      }
+    // filter only active referrals
+    const activeReferrals = refs.filter((ref) => !INACTIVE_REFERRAL_STATUSES.includes(ref.status));
+
+    for (const ref of activeReferrals) {
+      // assignedHousingLocator is populated in the getUnitReferrals call
+      const housingLocator = ref.assignedHousingLocator as unknown as User;
+      if (housingLocator) void sendReferralUnitLeasedEmail(ref, housingLocator);
     }
-    const users = await Promise.all(userPromises);
-    for (const user of users) {
-      if (user?.email) {
-        emailPromises.push(
-          sendEmail(user.email, "Referral Update", "One of your referrals has been leased."),
-        );
-      }
-    }
-    await Promise.all(emailPromises);
   }
 
   return referral;
