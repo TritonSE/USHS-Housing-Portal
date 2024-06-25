@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import { Textbox } from "./Textbox";
 
+import { checkFormPassword } from "@/api/units";
 import { Button } from "@/components/Button";
 
 const Wrapper = styled.div`
@@ -30,19 +31,19 @@ type PasswordViewProps = {
   handleNext: () => void;
 };
 
-const LANDLORD_FORM_PASSWORD = import.meta.env.VITE_APP_LANDLORD_FORM_PASSWORD as string;
-
 export function PasswordView({ handleNext: next }: PasswordViewProps) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | undefined>();
 
   const checkPassword = () => {
-    if (password === LANDLORD_FORM_PASSWORD) {
-      setError(undefined);
-      next();
-    } else {
-      setError("*Incorrect Password");
-    }
+    void checkFormPassword(password).then((res) => {
+      if (res.success) {
+        setError(undefined);
+        next();
+      } else {
+        setError("*Incorrect Password");
+      }
+    });
   };
 
   const handleKeyPress = (event: React.KeyboardEvent) => {

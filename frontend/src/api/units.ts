@@ -249,3 +249,19 @@ export async function getUnitReferrals(id: string): Promise<APIResult<Referral[]
     return handleAPIError(error);
   }
 }
+
+type CheckFormPasswordResponse = {
+  success: boolean;
+};
+
+export async function checkFormPassword(
+  password: string,
+): Promise<APIResult<CheckFormPasswordResponse>> {
+  try {
+    const response = await post("/check-form-password", { password });
+    const json = (await response.json()) as CheckFormPasswordResponse;
+    return { success: true, data: json };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+}

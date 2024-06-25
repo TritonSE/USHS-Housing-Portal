@@ -14,4 +14,5 @@ export default cleanEnv(process.env, {
   FRONTEND_URL: str(),
   GMAILUSER: str(),
   GMAILPASS: str(),
+  LANDLORD_FORM_PASSWORD: str(),
 });
