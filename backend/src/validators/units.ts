@@ -98,11 +98,7 @@ const createUnitSchema = [
     .withMessage("is required")
     .isArray({ min: 1 })
     .withMessage("cannot be empty"),
-  body("utilities")
-    .exists()
-    .withMessage("is required")
-    .isArray({ min: 1 })
-    .withMessage("cannot be empty"),
+  body("utilities").exists().withMessage("is required"),
   body("communityFeatures")
     .exists()
     .withMessage("is required")
