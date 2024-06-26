@@ -537,7 +537,7 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
         </TextContainer>
         <TextContainer>
           <Textbox
-            elementName="Area Code"
+            elementName="Zip Code"
             requiredField={true}
             name="zip"
             value={areaCode}
