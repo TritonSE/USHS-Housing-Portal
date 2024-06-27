@@ -161,7 +161,11 @@ export const ReferralTable = (props: ReferralTableProps) => {
     }
     return (
       <>
-        {referral.assignedHousingLocator.firstName + " " + referral.assignedHousingLocator.lastName}
+        {referral.assignedHousingLocator
+          ? referral.assignedHousingLocator.firstName +
+            " " +
+            referral.assignedHousingLocator.lastName
+          : "N/A"}
       </>
     );
   };
