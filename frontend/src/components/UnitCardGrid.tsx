@@ -36,7 +36,7 @@ export const UnitCardGrid = ({
               refreshUnits={() => {
                 refreshUnits(showPendingUnits ? "pending" : "approved");
               }}
-              key={index}
+              key={`${option.listingAddress}_${index}`}
             />
           ))}
         {units.length === 0 && <HeaderText>No matching units found</HeaderText>}

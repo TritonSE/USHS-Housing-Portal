@@ -369,7 +369,11 @@ export function RenterCandidatePage() {
     }
     return (
       <>
-        {referral.assignedHousingLocator.firstName + " " + referral.assignedHousingLocator.lastName}
+        {referral.assignedHousingLocator
+          ? referral.assignedHousingLocator.firstName +
+            " " +
+            referral.assignedHousingLocator.lastName
+          : "N/A"}
       </>
     );
   };
@@ -659,7 +663,11 @@ export function RenterCandidatePage() {
                             {unit.listingAddress}
                           </ListingAddressLink>,
                           assignedReferringStaff.firstName + " " + assignedReferringStaff.lastName,
-                          assignedHousingLocator.firstName + " " + assignedHousingLocator.lastName,
+                          assignedHousingLocator
+                            ? assignedHousingLocator.firstName +
+                              " " +
+                              assignedHousingLocator.lastName
+                            : "N/A",
                           status,
                           formatDate(updatedAt.toString()),
                           <DeleteIcon

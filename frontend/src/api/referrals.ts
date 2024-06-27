@@ -8,7 +8,7 @@ export type CreateReferralRequest = {
 
 export type UpdateReferralRequest = {
   id: string;
-  housingLocator: string;
+  housingLocator?: string;
   referringStaff: string;
   status: string;
 };

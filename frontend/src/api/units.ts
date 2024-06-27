@@ -234,7 +234,7 @@ export type Referral = {
   status: ReferralStatus;
   renterCandidate: RenterCandidate;
   unit: Unit;
-  assignedHousingLocator: User;
+  assignedHousingLocator?: User;
   assignedReferringStaff: User;
   updatedAt: string;
   createdAt: string;
