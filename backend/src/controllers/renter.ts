@@ -47,7 +47,7 @@ export const createRenterCandidateHandler: RequestHandler = asyncHandler(async (
   if (response !== null) {
     res.status(200).json(response);
   } else {
-    res.status(400).send("Renter Already Exists");
+    res.status(400).send("Error creating new Renter Candidate");
   }
 });
 
