@@ -1,3 +1,5 @@
+import createHttpError from "http-errors";
+
 import { ReferralModel } from "../models/referral";
 import { Renter, RenterModel } from "../models/renter";
 
@@ -29,14 +31,13 @@ export async function createRenterCandidate(
   phone?: string,
   email?: string,
 ) {
-  const query = { firstName, lastName, phone, email, uid, program, adults, children };
-  const renter = await RenterModel.findOne(query);
-  if (renter === null) {
-    const newRenter = await RenterModel.create(query);
-    return newRenter;
-  } else {
-    return null;
+  const renter = await RenterModel.findOne({ uid });
+  if (renter !== null) {
+    throw createHttpError(400, "Renter with that UID already exists");
   }
+  const newRenterQuery = { firstName, lastName, phone, email, uid, program, adults, children };
+  const newRenter = await RenterModel.create(newRenterQuery);
+  return newRenter;
 }
 
 export async function editRenterCandidate(id: string, editQuery: EditRenterCandidateBody) {

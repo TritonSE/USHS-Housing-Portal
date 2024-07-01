@@ -380,7 +380,7 @@ export const ReferralPopup = ({ active, onClose, onSubmit, newCandidateOnly }: P
 
                       <SubmitButton
                         type="submit"
-                        value={newCandidateOnly ? "Add Client" : "Add Referral"}
+                        value={newCandidateOnly ? "Add Renter Candidate" : "Add Referral"}
                       ></SubmitButton>
                     </ButtonsWrapper>
                   </FormWrapper>
