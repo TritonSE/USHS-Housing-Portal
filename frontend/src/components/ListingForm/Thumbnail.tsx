@@ -67,13 +67,17 @@ const XButton = styled.img`
 
 type ImagesVideosProps = {
   unit_id: string;
+  value: File[] | null;
   onChange: (thumbnail: File[] | null) => void;
 };
 
-export const Thumbnail = ({ unit_id, onChange }: ImagesVideosProps) => {
+export const Thumbnail = ({
+  unit_id,
+  value: newThumbnail,
+  onChange: setNewThumbnail,
+}: ImagesVideosProps) => {
   const [thumbnail, setThumbnail] = useState<FullMetadata>();
-  const [newThumbnail, setNewThumbnail] = useState<File[] | null>(null);
-
+  const [fileInputKey, setFileInputKey] = useState<number>(Date.now()); // To reset the input field
   const [uploadingState, setUploadingState] = useState<string>();
 
   const handleGetFiles = () => {
@@ -89,7 +93,9 @@ export const Thumbnail = ({ unit_id, onChange }: ImagesVideosProps) => {
   }, []);
 
   useEffect(() => {
-    onChange(newThumbnail);
+    if (newThumbnail === null || newThumbnail.length === 0) {
+      setFileInputKey(Date.now()); // reset the file input field
+    }
   }, [newThumbnail]);
 
   const handleDelete = (file: FullMetadata) => {
@@ -141,6 +147,7 @@ export const Thumbnail = ({ unit_id, onChange }: ImagesVideosProps) => {
           <img src="/upload.svg" alt="upload" />
           Add Files
           <input
+            key={fileInputKey}
             value={""}
             type="file"
             id="thumbnailId"

@@ -169,7 +169,7 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
   );
   const [errorMessage, setErrorMessage] = useState<string>("");
 
-  const [newFiles, setNewFiles] = useState<File[] | null>();
+  const [newFiles, setNewFiles] = useState<File[] | null>(null);
   const [thumbnail, setThumbnail] = useState<File[] | null>(null);
 
   const handleFirstName = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -423,7 +423,7 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
     setRentPerMonth("");
     setSecurityDeposit("");
     setThirdPartyPayment(undefined);
-    setHousingAuthority("LACDA");
+    setHousingAuthority(undefined);
     setHousingAuthorityOther(undefined);
     setApplicationFeeCost("");
     setDateAvailable("");
@@ -440,6 +440,8 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
     setPets([]);
     setSharingHousing("");
     setAdditionalCommentsLL("");
+    setNewFiles(null);
+    setThumbnail(null);
 
     if (props.formType === "housingLocator" || props.formType === "edit") {
       setWhereFindUnit("");
@@ -640,9 +642,17 @@ export function ListingFormComponents(props: ListingFormComponentsProps) {
           handler={handleAdditionalCommentsLL}
         />
 
-        <ImagesVideos unit_id={props.initialValues?._id ?? ""} onChange={setNewFiles} />
+        <ImagesVideos
+          unit_id={props.initialValues?._id ?? ""}
+          value={newFiles}
+          onChange={setNewFiles}
+        />
 
-        <Thumbnail unit_id={props.initialValues?._id ?? ""} onChange={setThumbnail} />
+        <Thumbnail
+          unit_id={props.initialValues?._id ?? ""}
+          value={thumbnail}
+          onChange={setThumbnail}
+        />
 
         {(props.formType === "housingLocator" || props.formType === "edit") && (
           <HousingLocatorFields

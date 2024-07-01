@@ -78,10 +78,11 @@ const Error = styled.div`
 
 type ImagesVideosProps = {
   unit_id: string;
+  value: File[] | null;
   onChange: (newFiles: File[] | null) => void;
 };
 
-export const ImagesVideos = ({ unit_id, onChange }: ImagesVideosProps) => {
+export const ImagesVideos = ({ unit_id, value, onChange }: ImagesVideosProps) => {
   const [allImages, setAllImages] = useState<FullMetadata[]>();
   const [allVideos, setAllVideos] = useState<FullMetadata[]>();
 
@@ -90,6 +91,8 @@ export const ImagesVideos = ({ unit_id, onChange }: ImagesVideosProps) => {
 
   const [newImages, setNewImages] = useState<File[]>([]);
   const [newVideos, setNewVideos] = useState<File[]>([]);
+
+  const [fileInputKey, setFileInputKey] = useState<number>(Date.now()); // To reset the input field
 
   const handleGetFiles = () => {
     getFileMetadata(unit_id, "images")
@@ -167,8 +170,18 @@ export const ImagesVideos = ({ unit_id, onChange }: ImagesVideosProps) => {
   };
 
   useEffect(() => {
-    onChange(newImages.concat(newVideos));
+    if (newImages.length > 0 || newVideos.length > 0) {
+      onChange(newImages.concat(newVideos));
+    }
   }, [newImages, newVideos]);
+
+  useEffect(() => {
+    if (value === null || value.length === 0) {
+      setFileInputKey(Date.now());
+      setNewImages([]);
+      setNewVideos([]);
+    }
+  }, [value]);
 
   return (
     <Margin32>
@@ -242,6 +255,7 @@ export const ImagesVideos = ({ unit_id, onChange }: ImagesVideosProps) => {
           <img src="/upload.svg" alt="upload" />
           Add Files
           <input
+            key={fileInputKey}
             value={""}
             type="file"
             id="formId"
