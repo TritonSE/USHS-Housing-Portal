@@ -144,7 +144,7 @@ export const ReferralTable = (props: ReferralTableProps) => {
     updateReferral(request).catch(console.error);
   };
 
-  const HLSection = (referral: Referral) => {
+  const renderHousingLocatorCell = (referral: Referral) => {
     if (currentUser?.isHousingLocator) {
       return (
         <UserDropdown
@@ -168,6 +168,22 @@ export const ReferralTable = (props: ReferralTableProps) => {
           : "N/A"}
       </>
     );
+  };
+
+  const renderStatusCell = (referral: Referral, status: string) => {
+    if (currentUser?.isHousingLocator) {
+      return (
+        <ReferralTableDropDown
+          key={`status-select-${referral._id}`}
+          onSelect={(value) => {
+            handleUpdate(referral, value, ReferralUpdateType.Status);
+          }}
+          values={REFERRAL_STATUSES}
+          defaultValue={status}
+        />
+      );
+    }
+    return status;
   };
 
   return (
@@ -218,15 +234,8 @@ export const ReferralTable = (props: ReferralTableProps) => {
               options={allReferringStaff}
               isTableDropdown={true}
             />,
-            HLSection(referral),
-            <ReferralTableDropDown
-              key={`status-select-${idx}`}
-              onSelect={(value) => {
-                handleUpdate(referral, value, ReferralUpdateType.Status);
-              }}
-              values={REFERRAL_STATUSES}
-              defaultValue={status}
-            />,
+            renderHousingLocatorCell(referral),
+            renderStatusCell(referral, status),
             <>{formatDate(updatedAt.toString())}</>,
           ];
         })}

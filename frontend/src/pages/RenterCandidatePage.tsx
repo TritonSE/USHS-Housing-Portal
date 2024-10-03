@@ -346,7 +346,7 @@ export function RenterCandidatePage() {
     return <Loading />;
   }
 
-  const HLSection = (referral: Referral) => {
+  const renderHousingLocatorCell = (referral: Referral) => {
     if (currentUser?.isHousingLocator) {
       return (
         <UserDropdown
@@ -376,6 +376,28 @@ export function RenterCandidatePage() {
           : "N/A"}
       </>
     );
+  };
+
+  const renderStatusCell = (referral: Referral, status: string) => {
+    if (currentUser?.isHousingLocator) {
+      return (
+        <ReferralTableDropDown
+          key={referral._id}
+          values={REFERRAL_STATUSES}
+          defaultValue={status}
+          onSelect={(newStatus) => {
+            setEditReferralQuery({
+              ...editReferralQuery,
+              [referral._id]: {
+                ...editReferralQuery[referral._id],
+                status: newStatus,
+              },
+            });
+          }}
+        />
+      );
+    }
+    return status;
   };
 
   return (
@@ -575,22 +597,8 @@ export function RenterCandidatePage() {
                             }}
                             isTableDropdown={true}
                           />,
-                          HLSection(referral),
-
-                          <ReferralTableDropDown
-                            key={idx}
-                            values={REFERRAL_STATUSES}
-                            defaultValue={status}
-                            onSelect={(newStatus) => {
-                              setEditReferralQuery({
-                                ...editReferralQuery,
-                                [referral._id]: {
-                                  ...editReferralQuery[referral._id],
-                                  status: newStatus,
-                                },
-                              });
-                            }}
-                          />,
+                          renderHousingLocatorCell(referral),
+                          renderStatusCell(referral, status),
                           formatDate(updatedAt.toString()),
                           <DeleteIcon
                             key={`delete-${idx}`}
