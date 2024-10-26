@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import { Pagination } from "./Pagination";
@@ -64,6 +64,11 @@ export type TableProps = {
 export const Table = (props: TableProps) => {
   const { columns, rows, rowsPerPage = 10 } = props;
   const [pageNumber, setPageNumber] = useState<number>(1);
+
+  useEffect(() => {
+    // Reset page number if data changes
+    setPageNumber(1);
+  }, [rows]);
 
   return (
     <TableContainer>
