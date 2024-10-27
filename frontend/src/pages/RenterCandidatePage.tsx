@@ -265,6 +265,14 @@ const XButton = styled.div`
   width: 10px;
 `;
 
+const REFERRING_STAFF_COLUMN_NAMES = [
+  "Unit",
+  "Referring Staff",
+  "Housing Locator",
+  "Status",
+  "Last Updated",
+];
+
 type ReferralQuery = Record<string, Partial<UpdateReferralRequest>>;
 
 export function RenterCandidatePage() {
@@ -283,6 +291,7 @@ export function RenterCandidatePage() {
   const [popup, setPopup] = useState(false);
   const [confirmPopup, setConfirmPopup] = useState(false);
   const [backPopup, setBackPopup] = useState(false);
+  const [columnNames, setColumnNames] = useState<string[]>(REFERRING_STAFF_COLUMN_NAMES);
 
   const [currReferral, setCurrReferral] = useState<string>("");
 
@@ -342,12 +351,47 @@ export function RenterCandidatePage() {
 
   useEffect(fetchRenterCandidate, []);
 
+  useEffect(() => {
+    if (currentUser?.isHousingLocator) {
+      setColumnNames([...REFERRING_STAFF_COLUMN_NAMES, "Delete"]);
+    } else {
+      setColumnNames(REFERRING_STAFF_COLUMN_NAMES);
+    }
+  }, [currentUser]);
+
   if (loading || !renterCandidate) {
     return <Loading />;
   }
 
-  const renderHousingLocatorCell = (referral: Referral) => {
-    if (currentUser?.isHousingLocator) {
+  const renderReferringStaffCell = (referral: Referral, editing: boolean) => {
+    if (editing) {
+      return (
+        <UserDropdown
+          width="200px"
+          placeholder="Search"
+          initialSelection={referral.assignedReferringStaff}
+          options={allReferringStaff}
+          onSelect={(referringStaff) => {
+            setEditReferralQuery({
+              ...editReferralQuery,
+              [referral._id]: {
+                ...editReferralQuery[referral._id],
+                referringStaff: referringStaff._id,
+              },
+            });
+          }}
+          isTableDropdown={true}
+        />
+      );
+    } else {
+      return (
+        referral.assignedReferringStaff.firstName + " " + referral.assignedReferringStaff.lastName
+      );
+    }
+  };
+
+  const renderHousingLocatorCell = (referral: Referral, editing: boolean) => {
+    if (currentUser?.isHousingLocator && editing) {
       return (
         <UserDropdown
           width="200px"
@@ -378,8 +422,8 @@ export function RenterCandidatePage() {
     );
   };
 
-  const renderStatusCell = (referral: Referral, status: string) => {
-    if (currentUser?.isHousingLocator) {
+  const renderStatusCell = (referral: Referral, status: string, editing: boolean) => {
+    if (currentUser?.isHousingLocator && editing) {
       return (
         <ReferralTableDropDown
           key={referral._id}
@@ -556,65 +600,6 @@ export function RenterCandidatePage() {
                 </EditSection>
               </EditColumn>
             </EditSection>
-            <TableContainer>
-              <Title>Current Referrals</Title>
-              <Table
-                columns={[
-                  "Unit",
-                  "Referring Staff",
-                  "Housing Locator",
-                  "Status",
-                  "Last Updated",
-                  "Delete",
-                ]}
-                rows={
-                  renterReferrals
-                    ? renterReferrals.map((referral, idx) => {
-                        const { unit, assignedReferringStaff, status, updatedAt } = referral;
-                        // return list of cells for each row
-                        return [
-                          <ListingAddressLink
-                            key={`listing-address-${idx}`}
-                            to={`/unit/${unit._id}`}
-                            state={{ prevPage: pathname }}
-                          >
-                            {unit.listingAddress}
-                          </ListingAddressLink>,
-                          <UserDropdown
-                            key={idx}
-                            width="200px"
-                            placeholder="Search"
-                            initialSelection={assignedReferringStaff}
-                            options={allReferringStaff}
-                            onSelect={(referringStaff) => {
-                              setEditReferralQuery({
-                                ...editReferralQuery,
-                                [referral._id]: {
-                                  ...editReferralQuery[referral._id],
-                                  referringStaff: referringStaff._id,
-                                },
-                              });
-                            }}
-                            isTableDropdown={true}
-                          />,
-                          renderHousingLocatorCell(referral),
-                          renderStatusCell(referral, status),
-                          formatDate(updatedAt.toString()),
-                          <DeleteIcon
-                            key={`delete-${idx}`}
-                            src="/trash-can.svg"
-                            onClick={() => {
-                              setPopup(true);
-                              setCurrReferral(referral._id);
-                            }}
-                          ></DeleteIcon>,
-                        ] as TableCellContent[];
-                      })
-                    : []
-                }
-                rowsPerPage={5}
-              />
-            </TableContainer>
           </>
         ) : (
           <>
@@ -640,61 +625,53 @@ export function RenterCandidatePage() {
                 <InfoText>{renterCandidate.program}</InfoText>
               </InfoColumn>
             </InfoRow>
-            <TableContainer>
-              <Title>Current Referrals</Title>
-              <Table
-                columns={[
-                  "Unit",
-                  "Referring Staff",
-                  "Housing Locator",
-                  "Status",
-                  "Last Updated",
-                  "Delete",
-                ]}
-                rows={
-                  renterReferrals
-                    ? renterReferrals.map((referral, idx) => {
-                        const {
-                          unit,
-                          assignedReferringStaff,
-                          assignedHousingLocator,
-                          status,
-                          updatedAt,
-                        } = referral;
-                        // return list of cells for each row
-                        return [
-                          <ListingAddressLink
-                            key={`listing-address-${idx}`}
-                            to={`/unit/${unit._id}`}
-                            state={{ prevPage: pathname }}
-                          >
-                            {unit.listingAddress}
-                          </ListingAddressLink>,
-                          assignedReferringStaff.firstName + " " + assignedReferringStaff.lastName,
-                          assignedHousingLocator
-                            ? assignedHousingLocator.firstName +
-                              " " +
-                              assignedHousingLocator.lastName
-                            : "N/A",
-                          status,
-                          formatDate(updatedAt.toString()),
-                          <DeleteIcon
-                            key={`delete-${idx}`}
-                            src="/trash-can.svg"
-                            onClick={() => {
-                              setPopup(true);
-                              setCurrReferral(referral._id);
-                            }}
-                          ></DeleteIcon>,
-                        ] as TableCellContent[];
-                      })
-                    : []
-                }
-                rowsPerPage={5}
-              />
-            </TableContainer>
           </>
         )}
+        <TableContainer>
+          <Title>Current Referrals</Title>
+          <Table
+            columns={columnNames}
+            rows={
+              renterReferrals
+                ? renterReferrals.map((referral, idx) => {
+                    const { unit, status, updatedAt } = referral;
+                    // return list of cells for each row
+                    const row = [
+                      <ListingAddressLink
+                        key={`listing-address-${idx}`}
+                        to={`/unit/${unit._id}`}
+                        state={{ prevPage: pathname }}
+                      >
+                        {unit.listingAddress}
+                      </ListingAddressLink>,
+
+                      renderReferringStaffCell(referral, isEditing),
+                      renderHousingLocatorCell(referral, isEditing),
+                      renderStatusCell(referral, status, isEditing),
+                      formatDate(updatedAt.toString()),
+                    ] as TableCellContent[];
+
+                    if (currentUser?.isHousingLocator) {
+                      row.push(
+                        <DeleteIcon
+                          key={`delete-${idx}`}
+                          src="/trash-can.svg"
+                          onClick={() => {
+                            setPopup(true);
+                            setCurrReferral(referral._id);
+                          }}
+                        />,
+                      );
+                    }
+
+                    return row;
+                  })
+                : []
+            }
+            rowsPerPage={5}
+          />
+        </TableContainer>
+
         {popup && (
           <>
             <Overlay />

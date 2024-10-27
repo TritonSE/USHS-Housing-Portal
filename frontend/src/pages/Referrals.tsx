@@ -17,7 +17,7 @@ import { Table, TableCellContent } from "@/components/Table";
 import { formatPhoneNumber } from "@/components/helpers";
 import { DataContext } from "@/contexts/DataContext";
 
-const TABLE_COLUMN_NAMES = [
+const REFERRING_STAFF_TABLE_COLUMN_NAMES = [
   "Name",
   "Email",
   "Phone Number",
@@ -25,7 +25,6 @@ const TABLE_COLUMN_NAMES = [
   "Referring Staff",
   "Status",
   "View",
-  "Delete",
 ];
 const ENTRIES_PER_PAGE = 6;
 
@@ -233,6 +232,7 @@ export function Referrals() {
   const [showNewClientPopup, setShowNewClientPopup] = useState<boolean>(false);
   const [successfulRemovalPopup, setSuccessfulRemovalPopup] = useState<boolean>(false);
   const [statusFilter, setStatusFilter] = useState<string>("");
+  const [columnNames, setColumnNames] = useState<string[]>(REFERRING_STAFF_TABLE_COLUMN_NAMES);
 
   const fetchReferrals = () => {
     if (filterMode === ReferralFilterOption.MY_REFERRALS) {
@@ -273,6 +273,14 @@ export function Referrals() {
   }, [referrals, searchValue, statusFilter]);
 
   useEffect(fetchReferrals, [filterMode, dataContext.currentUser]);
+
+  useEffect(() => {
+    if (dataContext.currentUser?.isHousingLocator) {
+      setColumnNames([...REFERRING_STAFF_TABLE_COLUMN_NAMES, "Delete"]);
+    } else {
+      setColumnNames(REFERRING_STAFF_TABLE_COLUMN_NAMES);
+    }
+  }, [dataContext.currentUser]);
 
   const handleDelete = (referral: Referral) => {
     deleteReferral(referral._id)
@@ -338,13 +346,12 @@ export function Referrals() {
           </FilterContainer>
         </TopRow>
         <Table
-          columns={TABLE_COLUMN_NAMES}
+          columns={columnNames}
           rows={
             filteredReferrals
               ? filteredReferrals.map((referral, idx) => {
                   const { renterCandidate, assignedReferringStaff, status } = referral;
-
-                  return [
+                  const row = [
                     renterCandidate.firstName + " " + renterCandidate.lastName,
                     renterCandidate.email,
                     formatPhoneNumber(renterCandidate.phone),
@@ -354,17 +361,24 @@ export function Referrals() {
                     <ViewButton key={`view-${idx}`} to={`/candidate/${renterCandidate._id}`}>
                       View
                     </ViewButton>,
-                    <DeleteIcon
-                      key={`delete-${idx}`}
-                      src="/trash-can.svg"
-                      onClick={() => {
-                        if (referral !== null) {
-                          setSelectedReferral(referral);
-                          setPopup(true);
-                        }
-                      }}
-                    />,
                   ] as TableCellContent[];
+
+                  if (dataContext.currentUser?.isHousingLocator) {
+                    row.push(
+                      <DeleteIcon
+                        key={`delete-${idx}`}
+                        src="/trash-can.svg"
+                        onClick={() => {
+                          if (referral !== null) {
+                            setSelectedReferral(referral);
+                            setPopup(true);
+                          }
+                        }}
+                      />,
+                    );
+                  }
+
+                  return row;
                 })
               : []
           }
