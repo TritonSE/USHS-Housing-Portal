@@ -12,6 +12,7 @@ import { CustomCheckboxRadio } from "@/components/ListingForm/CommonStyles";
 import { NavBar } from "@/components/NavBar";
 import { Page } from "@/components/Page";
 import { ReferralPopup } from "@/components/ReferralPopup";
+import { StatusDropdown } from "@/components/StatusDropDown";
 import { Table, TableCellContent } from "@/components/Table";
 import { formatPhoneNumber } from "@/components/helpers";
 import { DataContext } from "@/contexts/DataContext";
@@ -60,6 +61,7 @@ const AddButton = styled(Button)`
 const FilterContainer = styled.div`
   display: flex;
   flex-direction: row;
+  align-items: center;
   gap: 27px;
 `;
 
@@ -230,6 +232,7 @@ export function Referrals() {
   const [popup, setPopup] = useState<boolean>(false);
   const [showNewClientPopup, setShowNewClientPopup] = useState<boolean>(false);
   const [successfulRemovalPopup, setSuccessfulRemovalPopup] = useState<boolean>(false);
+  const [statusFilter, setStatusFilter] = useState<string>("");
 
   const fetchReferrals = () => {
     if (filterMode === ReferralFilterOption.MY_REFERRALS) {
@@ -262,9 +265,12 @@ export function Referrals() {
             referral.renterCandidate.lastName.toLowerCase().includes(searchValue.toLowerCase())
           );
         })
+        .filter((referral) => {
+          return statusFilter === "" || referral.status === statusFilter;
+        })
         .sort((a, b) => a.renterCandidate.firstName.localeCompare(b.renterCandidate.firstName)),
     );
-  }, [referrals, searchValue]);
+  }, [referrals, searchValue, statusFilter]);
 
   useEffect(fetchReferrals, [filterMode, dataContext.currentUser]);
 
@@ -309,6 +315,7 @@ export function Referrals() {
               />
               <RadioLabel htmlFor="all-referrals">All Referrals</RadioLabel>
             </RadioGroup>
+            <StatusDropdown value={statusFilter} setValue={setStatusFilter} />
             <SearchBarContainer>
               <SearchBarInput
                 placeholder="Search Client"
