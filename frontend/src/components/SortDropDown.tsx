@@ -30,7 +30,15 @@ export type SortDropDownCompProps = {
   setValue(selected: number): void;
 };
 
-const sortOptions = ["Price (High to Low)", "Price (Low to High)", "Newest", "Bedrooms", "Baths"];
+const sortOptions = [
+  "Price (High to Low)",
+  "Price (Low to High)",
+  "Newest",
+  "Bedrooms (High to Low)",
+  "Bedrooms (Low to High)",
+  "Baths (High to Low)",
+  "Baths (Low to High)",
+];
 
 export const SortDropDownComp = (props: SortDropDownCompProps) => {
   const [isActive, setIsActive] = useState(false);

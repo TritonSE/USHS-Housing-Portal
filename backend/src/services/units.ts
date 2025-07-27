@@ -145,11 +145,17 @@ export const getUnits = async (filters: FilterParams) => {
     case "2": // Newest
       sortingCriteria = "-createdAt";
       break;
-    case "3": // Bedrooms
+    case "3": // Bedrooms (High to Low)
       sortingCriteria = "-numBeds";
       break;
-    case "4": // Baths
+    case "4": // Bedrooms (Low to High)
+      sortingCriteria = "numBeds";
+      break;
+    case "5": // Baths (High to Low)
       sortingCriteria = "-numBaths";
+      break;
+    case "6": // Baths (Low to High)
+      sortingCriteria = "numBaths";
       break;
     default:
       sortingCriteria = "-monthlyRent";
