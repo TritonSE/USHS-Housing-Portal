@@ -91,12 +91,10 @@ export type FilterRangeInputProps = {
 export const FilterRangeInput = (props: FilterRangeInputProps) => {
   const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
-    // if (/^\d*$/.test(newValue)) {
     props.setValue({
       ...props.value,
-      [e.target.name]: newValue ?? 0,
+      [e.target.name]: newValue,
     });
-    // }
   };
 
   return (
