@@ -127,8 +127,14 @@ export const FilterPanel = () => {
     ),
   );
   const [bedBathState, setBedBathState] = useState({
-    beds: filters.beds ?? 0,
-    baths: filters.baths ?? 0.5,
+    beds: {
+      min: filters.minBeds ?? 0,
+      max: filters.maxBeds ?? 5,
+    },
+    baths: {
+      min: filters.minBaths ?? 0,
+      max: filters.maxBaths ?? 5,
+    },
   });
   const [priceState, setPriceState] = useState({
     min: filters.minPrice ?? 0,
@@ -156,7 +162,7 @@ export const FilterPanel = () => {
       availability: AVAILABILITY_OPTIONS[availabilityState],
       housingAuthority:
         otherHousingAuthorityState ?? HOUSING_AUTHORITY_OPTIONS[housingAuthorityState],
-      accessibility: Array.from(accessibilityState).map((index) => ACCESSIBILITY_OPTIONS[index]),
+      accessibility: Array.from(accessibilityState).map((option) => ACCESSIBILITY_OPTIONS[option]),
 
       rentalCriteria: Array.from(rentalCriteriaState).map(
         (index) => RENTAL_CRITERIA_OPTIONS[index],
@@ -165,8 +171,10 @@ export const FilterPanel = () => {
       additionalRules: Array.from(additionalRulesState).map(
         (index) => ADDITIONAL_RULES_OPTIONS[index],
       ),
-      beds: bedBathState.beds,
-      baths: bedBathState.baths,
+      minBeds: bedBathState.beds.min,
+      maxBeds: bedBathState.beds.max,
+      minBaths: bedBathState.baths.min,
+      maxBaths: bedBathState.baths.max,
       minPrice: priceState.min,
       maxPrice: priceState.max,
       minSecurityDeposit: securityDepositState.min,
@@ -194,7 +202,10 @@ export const FilterPanel = () => {
     setAccessibilityState(new Set());
     setRentalCriteriaState(new Set());
     setAdditionalRulesState(new Set());
-    setBedBathState({ beds: 0, baths: 0.5 });
+    setBedBathState({
+      beds: { min: 0, max: 5 },
+      baths: { min: 0, max: 5 },
+    });
     setPriceState({ min: 0, max: 10000 });
     setSecurityDepositState({ min: 0, max: 10000 });
     setApplicationFeeState({ min: 0, max: 10000 });
@@ -223,7 +234,7 @@ export const FilterPanel = () => {
         title="Price"
         min={0}
         max={10000}
-        price="price"
+        type="price"
         value={priceState}
         setValue={setPriceState}
       />
@@ -231,7 +242,7 @@ export const FilterPanel = () => {
         title="Security Deposit"
         min={0}
         max={10000}
-        price="price"
+        type="price"
         value={securityDepositState}
         setValue={setSecurityDepositState}
       />
@@ -239,7 +250,7 @@ export const FilterPanel = () => {
         title="Application Fee"
         min={0}
         max={10000}
-        price="price"
+        type="price"
         value={applicationFeeState}
         setValue={setApplicationFeeState}
       />
@@ -247,7 +258,7 @@ export const FilterPanel = () => {
         title="Size"
         min={0}
         max={10000}
-        price="sqft"
+        type="sqft"
         value={sizeState}
         setValue={setSizeState}
       />

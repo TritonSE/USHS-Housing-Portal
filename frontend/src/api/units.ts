@@ -94,8 +94,10 @@ export type FilterParams = {
   maxSize?: number;
   fromDate?: string;
   toDate?: string;
-  beds?: number;
-  baths?: number;
+  minBeds?: number;
+  maxBeds?: number;
+  minBaths?: number;
+  maxBaths?: number;
   sort?: string;
   approved?: "pending" | "approved";
 };
@@ -117,8 +119,10 @@ export type GetUnitsParams = {
   maxSize?: string;
   fromDate?: string;
   toDate?: string;
-  beds?: string;
-  baths?: string;
+  minBeds?: string;
+  maxBeds?: string;
+  minBaths?: string;
+  maxBaths?: string;
   sort?: string;
   approved?: "pending" | "approved";
 };

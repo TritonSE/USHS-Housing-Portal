@@ -8,7 +8,7 @@ const RangeRow = styled.div`
 `;
 
 const RangeInput = styled.input.attrs({
-  type: "text",
+  type: "number",
 })`
   width: 100%;
   padding: 5px;
@@ -73,7 +73,7 @@ const TextboxSuffix = styled.span`
   letter-spacing: 0.22px;
 `;
 
-export type FilterRangeInputType = "price" | "sqft";
+export type FilterRangeInputType = "price" | "sqft" | "number";
 
 export type FilterRangeInputValue = {
   min: number;
@@ -83,7 +83,7 @@ export type FilterRangeInputValue = {
 export type FilterRangeInputProps = {
   min: number;
   max: number;
-  price: FilterRangeInputType;
+  type: FilterRangeInputType;
   value: FilterRangeInputValue;
   setValue(val: FilterRangeInputValue): void;
 };
@@ -91,12 +91,12 @@ export type FilterRangeInputProps = {
 export const FilterRangeInput = (props: FilterRangeInputProps) => {
   const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
-    if (/^\d*$/.test(newValue)) {
-      props.setValue({
-        ...props.value,
-        [e.target.name]: newValue === "" ? 0 : parseInt(newValue),
-      });
-    }
+    // if (/^\d*$/.test(newValue)) {
+    props.setValue({
+      ...props.value,
+      [e.target.name]: newValue ?? 0,
+    });
+    // }
   };
 
   return (
@@ -104,18 +104,18 @@ export const FilterRangeInput = (props: FilterRangeInputProps) => {
       <RangeInputContainer>
         <RangeInputTitle>Min</RangeInputTitle>
         <TextBoxContainer>
-          {props.price === "price" && <TextboxPrefix>$</TextboxPrefix>}
+          {props.type === "price" && <TextboxPrefix>$</TextboxPrefix>}
           <RangeInput name="min" value={props.value.min} onChange={changeHandler} />
-          {props.price === "sqft" && <TextboxSuffix>sqft</TextboxSuffix>}
+          {props.type === "sqft" && <TextboxSuffix>sqft</TextboxSuffix>}
         </TextBoxContainer>
       </RangeInputContainer>
       <RangeDivider />
       <RangeInputContainer>
         <RangeInputTitle>Max</RangeInputTitle>
         <TextBoxContainer>
-          {props.price === "price" && <TextboxPrefix>$</TextboxPrefix>}
+          {props.type === "price" && <TextboxPrefix>$</TextboxPrefix>}
           <RangeInput name="max" value={props.value.max} onChange={changeHandler} />
-          {props.price === "sqft" && <TextboxSuffix>sqft</TextboxSuffix>}
+          {props.type === "sqft" && <TextboxSuffix>sqft</TextboxSuffix>}
         </TextBoxContainer>
       </RangeInputContainer>
     </RangeRow>
