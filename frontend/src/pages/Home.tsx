@@ -159,8 +159,10 @@ export function Home() {
       additionalRules: filterParams.additionalRules
         ? JSON.stringify(Array.from(filterParams.additionalRules))
         : undefined,
-      beds: filterParams.beds?.toString(),
-      baths: filterParams.baths?.toString(),
+      minBeds: filterParams.minBeds?.toString(),
+      maxBeds: filterParams.maxBeds?.toString(),
+      minBaths: filterParams.minBaths?.toString(),
+      maxBaths: filterParams.maxBaths?.toString(),
       minPrice: filterParams.minPrice?.toString(),
       maxPrice: filterParams.maxPrice?.toString(),
       minSecurityDeposit: filterParams.minSecurityDeposit?.toString(),

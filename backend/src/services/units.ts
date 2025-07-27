@@ -43,8 +43,10 @@ export type FilterParams = {
   maxSize?: string;
   fromDate?: string;
   toDate?: string;
-  beds?: string;
-  baths?: string;
+  minBeds?: string;
+  maxBeds?: string;
+  minBaths?: string;
+  maxBaths?: string;
   sort?: string;
   approved?: "pending" | "approved";
 };
@@ -119,6 +121,11 @@ export const getUnits = async (filters: FilterParams) => {
   const minSize = filters.minSize === "undefined" ? 0 : +(filters.minSize ?? 0);
   const maxSize = filters.maxSize === "undefined" ? 100000 : +(filters.maxSize ?? 100000);
 
+  const minBeds = filters.minBeds === "undefined" ? 0 : +(filters.minBeds ?? 0);
+  const maxBeds = filters.maxBeds === "undefined" ? 5 : +(filters.maxBeds ?? 5);
+  const minBaths = filters.minBaths === "undefined" ? 0 : +(filters.minBaths ?? 0);
+  const maxBaths = filters.maxBaths === "undefined" ? 5 : +(filters.maxBaths ?? 5);
+
   const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
   const fromDate = dateRegex.test(filters.fromDate ?? "") ? filters.fromDate : "1900-01-01";
   const toDate = dateRegex.test(filters.toDate ?? "") ? filters.toDate : "2100-01-01";
@@ -182,8 +189,8 @@ export const getUnits = async (filters: FilterParams) => {
   );
 
   const query: FilterQuery<Unit> = {
-    numBeds: { $gte: filters.beds ?? 0 },
-    numBaths: { $gte: filters.baths ?? 0.5 },
+    numBeds: { $gte: minBeds, $lte: maxBeds },
+    numBaths: { $gte: minBaths, $lte: maxBaths },
     monthlyRent: { $gte: minPrice, $lte: maxPrice },
     securityDeposit: { $gte: minSecurityDeposit, $lte: maxSecurityDeposit },
     applicationFeeCost: { $gte: minApplicationFee, $lte: maxApplicationFee },
