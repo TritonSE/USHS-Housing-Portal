@@ -6,7 +6,8 @@ import { getRenterCandidate } from "./renter";
 
 import env from "@/config/env";
 import { Referral } from "@/models/referral";
-import { UnitModel } from "@/models/units";
+import { Renter } from "@/models/renter";
+import { Unit, UnitModel } from "@/models/units";
 import { User } from "@/models/user";
 
 const transport = createTransport({
@@ -82,4 +83,31 @@ export function sendReferralAssignmentEmail(referral: Referral, recipient: User)
 
 export function sendReferralUnitLeasedEmail(referral: Referral, recipient: User) {
   return sendReferralInfoEmail(referral, recipient, "referral-unit-leased");
+}
+
+export async function sendNewReferralNotificationEmail(
+  referral: Referral,
+  unit: Unit,
+  createdBy: User,
+  renterCandidate: Renter,
+) {
+  const dateCreated = new Date(referral.createdAt).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  const createdByName = `${createdBy.firstName} ${createdBy.lastName}`;
+  const clientId = renterCandidate.uid;
+
+  return sendEmail(env.REFERRAL_NOTIFICATION_EMAIL, "new-referral", {
+    unitAddress: unit.listingAddress,
+    unitUrl: linkTo(`unit/${referral.unit.toString()}`),
+    dateCreated,
+    createdBy: createdByName,
+    clientId,
+    clientUrl: linkTo(`candidate/${referral.renterCandidate._id.toString()}`),
+  });
 }
