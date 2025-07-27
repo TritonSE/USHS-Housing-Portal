@@ -50,8 +50,8 @@ export const getUnitsHandler: RequestHandler = asyncHandler(async (req, res, _) 
   res.status(200).json(units);
 });
 
-export const exportUnitsHandler: RequestHandler = asyncHandler(async (req, res, _) => {
-  const workbookBuffer = await exportUnits(req.query as FilterParams);
+export const exportUnitsHandler: RequestHandler = asyncHandler(async (_req, res, _) => {
+  const workbookBuffer = await exportUnits();
 
   res.statusCode = 200;
   res.setHeader("Content-Disposition", 'attachment; filename="ushs-data-export.xlsx"');

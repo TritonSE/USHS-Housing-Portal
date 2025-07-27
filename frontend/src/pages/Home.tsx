@@ -208,8 +208,7 @@ export function Home() {
 
   const handleExportUnitData = () => {
     setShowExportPopup(true);
-    const query = filterQuery(filters);
-    exportUnits(query)
+    exportUnits()
       .then((response) => {
         if (response.success) {
           const url = window.URL.createObjectURL(response.data);
