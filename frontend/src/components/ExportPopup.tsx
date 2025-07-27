@@ -73,8 +73,8 @@ export const ExportPopup = ({ active, onClose }: PopupProps) => {
         <div>
           <HeadingWrapper>Data Exporting...</HeadingWrapper>
           <MessageWrapper>
-            Generating an Excel sheet with the currently filtered Units and associated Referrals and
-            Renter Candidates. The download will start shortly...
+            Generating an Excel sheet with all Units, Referrals, Renter Candidates, and Staff data.
+            The download will start shortly...
           </MessageWrapper>
         </div>
         <ButtonsWrapper>

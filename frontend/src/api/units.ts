@@ -150,10 +150,9 @@ export async function getUnits(params: GetUnitsParams): Promise<APIResult<Unit[]
   }
 }
 
-export async function exportUnits(params: GetUnitsParams): Promise<APIResult<Blob>> {
+export async function exportUnits(): Promise<APIResult<Blob>> {
   try {
-    const queryParams = new URLSearchParams(params);
-    const url = `/units/export?${queryParams.toString()}`;
+    const url = `/units/export`;
     const response = await get(url);
 
     const data = await response.blob();

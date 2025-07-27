@@ -267,25 +267,18 @@ const sheetFromData = (data: Document[]) => {
   return XLSX.utils.json_to_sheet(sanitizedData);
 };
 
-export const exportUnits = async (filters: FilterParams) => {
-  const unitsData = await getUnits(filters);
+export const exportUnits = async () => {
+  // Get all units without any filters
+  const unitsData = await UnitModel.find().exec();
 
-  const unitIds = unitsData.map((unit) => unit._id);
-  const referralsData = await ReferralModel.find().where("unit").in(unitIds).exec();
+  // Get all referrals
+  const referralsData = await ReferralModel.find().exec();
 
-  const renterCandidateIds = [
-    ...new Set(referralsData.map((referral) => referral.renterCandidate)),
-  ];
-  const renterCandidates = await RenterModel.find().where("_id").in(renterCandidateIds).exec();
+  // Get all renter candidates
+  const renterCandidates = await RenterModel.find().exec();
 
-  const housingLocatorIds = [
-    ...new Set(referralsData.map((referral) => referral.assignedHousingLocator)),
-  ];
-  const referringStaffIds = [
-    ...new Set(referralsData.map((referral) => referral.assignedReferringStaff)),
-  ];
-  const staffIds = housingLocatorIds.concat(referringStaffIds);
-  const staffData = await UserModel.find().where("_id").in(staffIds).exec();
+  // Get all staff/users
+  const staffData = await UserModel.find().exec();
 
   // Generate Excel workbook
   const unitsSheet = sheetFromData(unitsData);
