@@ -3,9 +3,15 @@ import { ObjectId } from "mongoose";
 
 import { ReferralModel } from "../models/referral";
 
-import { sendReferralAssignmentEmail, sendReferralUnitLeasedEmail } from "./email";
+import {
+  sendNewReferralNotificationEmail,
+  sendReferralAssignmentEmail,
+  sendReferralUnitLeasedEmail,
+} from "./email";
+import { getRenterCandidate } from "./renter";
 import { getUserByID } from "./user";
 
+import { UnitModel } from "@/models/units";
 import { User } from "@/models/user";
 
 export async function getUnitReferrals(id: string) {
@@ -29,6 +35,26 @@ export async function createReferral(
     assignedReferringStaff: referringStaff,
     assignedHousingLocator: isHL ? referringStaff : undefined,
   });
+
+  // Send notification email for new referral
+  try {
+    const [unitData, renterCandidateData, createdByUser] = await Promise.all([
+      UnitModel.findById(unit),
+      getRenterCandidate(renterCandidateId),
+      getUserByID(referringStaff as unknown as string),
+    ]);
+
+    if (unitData && renterCandidateData.renter && createdByUser) {
+      void sendNewReferralNotificationEmail(
+        referral,
+        unitData,
+        createdByUser,
+        renterCandidateData.renter,
+      );
+    }
+  } catch (error) {
+    console.error("Error sending new referral notification email:", error);
+  }
 
   return referral;
 }

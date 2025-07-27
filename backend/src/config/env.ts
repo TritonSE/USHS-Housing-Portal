@@ -15,4 +15,5 @@ export default cleanEnv(process.env, {
   GMAILUSER: str(),
   GMAILPASS: str(),
   LANDLORD_FORM_PASSWORD: str(),
+  REFERRAL_NOTIFICATION_EMAIL: str(),
 });

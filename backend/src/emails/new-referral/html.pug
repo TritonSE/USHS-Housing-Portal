@@ -1,0 +1,21 @@
+doctype html
+html
+  head
+    block head
+      meta(charset="utf-8")
+      meta(name="viewport", content="width=device-width")
+  body
+    p A new referral has been created. Please review and assign a Housing Locator to coordinate the referral process.
+    br
+    p
+      strong Unit Information: 
+      a(href=unitUrl) #{unitAddress}
+    p
+      strong Date Created: 
+      | #{dateCreated}
+    p
+      strong Created By: 
+      | #{createdBy}
+    p
+      strong Client ID: 
+      a(href=clientUrl) #{clientId} 
